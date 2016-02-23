@@ -27,7 +27,7 @@ RSpec.describe Question, type: :model do
     let(:question) { create(:question, :valid) }
     let(:other_question) { create(:question, :valid) }
 
-    context 'コメントの追加' do
+    describe 'コメントの追加' do
       let(:comment) { build(:comment, :valid_for_question) }
 
       before :each do
@@ -45,7 +45,7 @@ RSpec.describe Question, type: :model do
       end
     end
 
-    context 'リプライ' do
+    describe 'リプライ' do
       let(:reply) { build(:comment, :valid) }
 
       context 'リプライ時' do
@@ -76,6 +76,15 @@ RSpec.describe Question, type: :model do
       end
     end
 
+    describe '回答の要求' do
+      let(:owner) { question.user }
+      let(:user1) { create(:user, :valid) }
+      let(:user2) { create(:user, :valid) }
+
+      it '' do
+        question.assign(user1, user2)
+      end
+    end
 
     it '最古のコメントはルートコメント' do
       root = question.root

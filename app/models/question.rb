@@ -1,11 +1,17 @@
 class Question < ActiveRecord::Base
   belongs_to :user
   has_many :comments, inverse_of: :question
+  has_many :ask_users
+  has_many :asked, through: :ask_users, as: :user
 
   validates :title, :user,
             presence: true
 
   validate :require_head_comment
+
+  def assign(*users)
+    asked + users
+  end
 
   def require_head_comment
     errors.add(:comments, :at_least_one_comment) if comments.size == 0
