@@ -8,7 +8,7 @@ FactoryGirl.define do
 
     trait :valid_for_question do
       user { create(:user, :valid) }
-      markdown '# test'
+      markdown { "# #{SecureRandom.hex(4)}"}
     end
 
     trait :reply do

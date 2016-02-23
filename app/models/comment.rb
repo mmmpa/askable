@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   belongs_to :user #, inverse_of: :comments
   belongs_to :comment
-  #has_many :comments
+  has_many :comments
   belongs_to :question, inverse_of: :comments
 
   before_validation :render_markdown!
