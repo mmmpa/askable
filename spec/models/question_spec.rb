@@ -21,13 +21,5 @@ RSpec.describe Question, type: :model do
     it 'オーナーが必要' do
       expect(build(:question, :valid, user: nil).valid?).to be_falsey
     end
-
-    it '手動' do
-      user = create(:user, :valid)
-      q = Question.new(user: user, title: :title, comments_attributes:[
-        {user: user, markdown: 'a'}
-      ])
-      q.save!
-    end
   end
 end
