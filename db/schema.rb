@@ -11,28 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222191829) do
+ActiveRecord::Schema.define(version: 20160223034945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "asks", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.integer  "user_id",    null: false
-    t.integer  "comment_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "ask_users", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "question_id", null: false
+    t.integer  "state"
+    t.integer  "comment_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
+  add_index "ask_users", ["comment_id"], name: "index_ask_users_on_comment_id", using: :btree
+  add_index "ask_users", ["question_id"], name: "index_ask_users_on_question_id", using: :btree
+  add_index "ask_users", ["user_id", "question_id"], name: "index_ask_users_on_user_id_and_question_id", unique: true, using: :btree
+  add_index "ask_users", ["user_id"], name: "index_ask_users_on_user_id", using: :btree
+
   create_table "comments", force: :cascade do |t|
-    t.text     "html",       null: false
-    t.text     "markdown",   null: false
-    t.integer  "user_id",    null: false
+    t.text     "html",        null: false
+    t.text     "markdown",    null: false
+    t.integer  "user_id",     null: false
     t.integer  "comment_id"
-    t.integer  "ask_id",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "question_id", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
+
+  add_index "comments", ["comment_id"], name: "index_comments_on_comment_id", using: :btree
+  add_index "comments", ["question_id"], name: "index_comments_on_question_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "group_members", force: :cascade do |t|
     t.integer  "group_id",   null: false
@@ -42,6 +52,8 @@ ActiveRecord::Schema.define(version: 20160222191829) do
   end
 
   add_index "group_members", ["group_id", "user_id"], name: "index_group_members_on_group_id_and_user_id", unique: true, using: :btree
+  add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
+  add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",       null: false
@@ -49,6 +61,17 @@ ActiveRecord::Schema.define(version: 20160222191829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "groups", ["user_id"], name: "index_groups_on_user_id", using: :btree
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "title",      null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                null: false

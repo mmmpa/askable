@@ -4,9 +4,9 @@ class CreateComments < ActiveRecord::Migration
       t.text :html, null: false
       t.text :markdown, null: false
 
-      t.references :user, null: false
-      t.references :comment
-      t.references :ask, null: false
+      t.references :user, index: true, null: false
+      t.references :comment, index: true
+      t.references :question, index: true, null: false
 
       t.timestamps null: false
     end

@@ -1,9 +1,8 @@
 doctype html
 html
   head
-    title
-      | Askable
-    = stylesheet_link_tag    'application', media: 'all'
+    title Askable
+    = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
   body
     = yield

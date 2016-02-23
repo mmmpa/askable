@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user do
+  factory :owner do
     trait :valid do
       name { SecureRandom.hex(4) }
       login { SecureRandom.hex(4) }
