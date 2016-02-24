@@ -1,8 +1,8 @@
 
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-require 'coveralls'
-Coveralls.wear!
+#require "codeclimate-test-reporter"
+#CodeClimate::TestReporter.start
+#require 'coveralls'
+#Coveralls.wear!
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
@@ -22,11 +22,12 @@ else
   SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 end
 
+=begin
 SimpleCov.start 'rails' do
   add_filter '/lib/'
   add_filter '/spec/'
 end
-
+=end
 Dir[Rails.root.join('spec/supports/**/*.rb')].each { |f| require f }
 load "#{Rails.root}/db/schema.rb"
 load "#{Rails.root}/db/seeds.rb"

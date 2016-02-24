@@ -2,15 +2,15 @@ class Question < ActiveRecord::Base
   belongs_to :user
   has_many :comments, inverse_of: :question
   has_many :ask_users
-  has_many :asked, through: :ask_users, as: :user
+  has_many :users, through: :ask_users
 
   validates :title, :user,
             presence: true
 
   validate :require_head_comment
 
-  def assign(*users)
-    asked + users
+  def assign(*assigned)
+    users + assigned
   end
 
   def require_head_comment

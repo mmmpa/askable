@@ -30,18 +30,24 @@ RSpec.describe Question, type: :model do
     describe 'コメントの追加' do
       let(:comment) { build(:comment, :valid_for_question) }
 
-      before :each do
-        question.add_comment!(comment)
-        question.reload
-        comment.reload
+      context do
+        before :each do
+          question.add_comment!(comment)
+          question.reload
+          comment.reload
+        end
+
+        it 'コメント数の反映' do
+          expect(question.comments.size).to eq(2)
+        end
+
+        it 'コメントの確認' do
+          expect(question.comments[1].markdown).to eq(comment.markdown)
+        end
       end
 
-      it 'コメント数の反映' do
-        expect(question.comments.size).to eq(2)
-      end
-
-      it 'コメントの確認' do
-        expect(question.comments[1].markdown).to eq(comment.markdown)
+      it '不完全なコメントは追加できない' do
+        expect { question.add_comment!(Comment.new) }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
