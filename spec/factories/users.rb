@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :user do
     trait :valid do
-      name { SecureRandom.hex(4) }
-      login { SecureRandom.hex(4) }
-      email { "ex#{SecureRandom.hex(4)}@example.com" }
-      password { SecureRandom.hex(8) }
+      name { User.count }
+      login { "user#{User.count}" }
+      email { "ex#{User.count}@example.com" }
+      password { "password#{User.count}" }
     end
   end
 end

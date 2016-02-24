@@ -22,12 +22,12 @@ else
   SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
 end
 
-=begin
+
 SimpleCov.start 'rails' do
   add_filter '/lib/'
   add_filter '/spec/'
 end
-=end
+
 Dir[Rails.root.join('spec/supports/**/*.rb')].each { |f| require f }
 load "#{Rails.root}/db/schema.rb"
 load "#{Rails.root}/db/seeds.rb"
@@ -44,8 +44,14 @@ RSpec.configure do |config|
     FactoryGirl.sequences.clear
     FactoryGirl.find_definitions
   end
+
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
+
+  config.before :all do
+    create(:user, :valid)
+    create(:user, :valid)
+  end
 end

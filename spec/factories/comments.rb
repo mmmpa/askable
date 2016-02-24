@@ -2,12 +2,12 @@ FactoryGirl.define do
   factory :comment do
     trait :valid do
       markdown '# test'
-      user { create(:user, :valid) }
+      user { User.first }
       question { create(:question, :valid) }
     end
 
     trait :valid_for_question do
-      user { create(:user, :valid) }
+      user { User.first }
       markdown { "# #{SecureRandom.hex(4)}"}
     end
 

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   namespace :welcome do
     get 'new', to: 'users#new', as: :new_user
     post 'new', to: 'users#create'
-
   end
 
   scope :users do

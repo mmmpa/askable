@@ -84,8 +84,8 @@ RSpec.describe Question, type: :model do
 
     describe '回答の要求' do
       let(:owner) { question.user }
-      let(:user1) { create(:user, :valid) }
-      let(:user2) { create(:user, :valid) }
+      let(:user1) { User.first }
+      let(:user2) { User.second }
 
       it '' do
         question.assign(user1, user2)

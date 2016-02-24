@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'validation' do
-    let(:other) { create(:user, :valid) }
+    let(:other) { User.first }
 
     it 'メールアドレスが必要' do
       expect(build(:user, :valid, email: '').valid?).to be_falsey

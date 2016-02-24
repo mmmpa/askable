@@ -1,1 +1,26 @@
-@import 'primer/primer.scss'
+@import "./font-awesome/font-awesome"
+@import './primer/primer.scss'
+
+input.has-error
+  border-color: $brand-red
+.error-messages
+  margin: 10px 0
+  .error-message
+    margin: 5px 0
+    color: $brand-red
+    font-weight: bold
+
+.user-register
+  &.body
+    max-width: 400px
+    margin: 0 auto
+  &.input-section
+    margin: 0 0 20px
+  input
+    @extend .input-contrast, .input-block
+  &.submit-section
+    @extend .form-actions
+  &.submit
+    @extend .btn, .btn-primary
+  &.sending
+    @extend .btn
