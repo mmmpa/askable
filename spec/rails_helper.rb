@@ -43,8 +43,8 @@ RSpec.configure do |config|
     FactoryGirl.factories.clear
     FactoryGirl.sequences.clear
     FactoryGirl.find_definitions
-    create(:user, :valid)
-    create(:user, :valid)
+    create(:user, :valid, password: 'a' * 8)
+    create(:user, :valid, password: 'b' * 8)
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

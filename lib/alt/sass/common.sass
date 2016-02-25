@@ -29,6 +29,10 @@ $size-normal: 12px
   border-bottom: 0
   border-radius: 3px 3px 0 0
 
+%small-body
+  max-width: 400px
+  margin: 0 auto
+
 body
   padding: 0
   margin: 0
@@ -45,7 +49,39 @@ input.has-error
     font-weight: bold
     list-style: none
 
+.success-messages
+  margin: 10px 0
+  .success-message
+    margin: 5px 0
+    color: $brand-green
+    font-weight: bold
+    list-style: none
+
+.user-log-in
+  &.body
+    @extend %small-body
+  &.box-body
+    @extend %boxed-group
+    .inner
+      @extend %boxed-group-inner
+      &.form
+        padding: 20px 10px
+  &.log-in-title
+    @extend %boxed-group-title
+  &.input-section
+    margin: 0 0 20px
+  input
+    @extend .input-contrast, .input-block
+  &.submit-section
+    @extend .form-actions
+  &.submit
+    @extend .btn, .btn-primary
+  &.sending
+    @extend .btn
+
 .user-register
+  &.body
+    @extend %small-body
   &.registered-body,
   &.registering-body
     @extend %boxed-group
@@ -55,12 +91,12 @@ input.has-error
         padding: 20px 10px
   &.info-label
     font-size: $size-normal
+  &.link-section
+    padding-bottom: 10px
+    text-align: right
   &.registered-title,
   &.registering-title
     @extend %boxed-group-title
-  &.body
-    max-width: 400px
-    margin: 0 auto
   &.input-section
     margin: 0 0 20px
   input

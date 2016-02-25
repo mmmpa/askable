@@ -15,11 +15,7 @@ enum State{
   Success
 }
 
-interface S {
-  state:State
-}
-
-class Context extends Root<{},{}> {
+class Context extends Root {
   children(props) {
     return <Component {...props}/>;
   }
@@ -50,7 +46,7 @@ class Context extends Root<{},{}> {
 }
 
 
-class Component extends Node<{},{}> {
+class Component extends Node {
   constructor(props) {
     super(props);
     this.state = {
@@ -100,7 +96,7 @@ class Component extends Node<{},{}> {
       case State.Submitting:
         return <button className="user-register sending" disabled={true}>
           <Fa icon="spinner" animation="pulse"/>
-          Sending...
+          登録中
         </button>;
       case State.Success:
       case State.Waiting:
@@ -108,8 +104,8 @@ class Component extends Node<{},{}> {
       default:
         return <button className="user-register submit"
                        onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="paw"/>
-          Submit
+          <Fa icon="send-o"/>
+          登録する
         </button>;
     }
   }
@@ -157,6 +153,9 @@ class Component extends Node<{},{}> {
             <h1 className="user-register info-label">メールアドレス</h1>
             <p className="user-register info">{email}</p>
           </section>
+          <section className="user-register link-section">
+            <Fa icon="sign-in"/><a href="/in">ログインページヘ</a>
+          </section>
         </div>
       </section>
     </article>
@@ -177,10 +176,7 @@ class Component extends Node<{},{}> {
 
 class Welcome {
   static start(dom:HTMLElement) {
-    ReactDOM.render(
-      <Context />,
-      dom
-    );
+    ReactDOM.render(<Context />, dom);
   }
 }
 

@@ -1,14 +1,17 @@
+import {ILogIn} from "../../welcome-new-user/lib/services/strike-api";
 declare const request;
 declare const Promise;
 
 var jobs = Promise.resolve();
 
 const Uri = {
-  createUser: '/welcome/new'
+  createUser: '/welcome/new',
+  logIn: '/in'
 };
 
 export enum Api{
   CreateUser,
+  LogIn
 }
 
 export function strikeApi(api:Api, params:any):Promise {
@@ -29,6 +32,8 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
   switch (api) {
     case Api.CreateUser:
       return createUser;
+    case Api.LogIn:
+      return logIn;
     default:
       throw 'Api not exist'
   }
@@ -41,10 +46,9 @@ export interface ICreateUser {
   password:string
 }
 
-export interface ICreatedUser {
-  name:string,
+export interface ILogIn {
   login:string,
-  email:string
+  password:string
 }
 
 
@@ -52,6 +56,21 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request
     .post(Uri.createUser)
     .send({users: params})
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+function logIn(params:ILogIn, resolve, reject, queueResolve) {
+  request
+    .post(Uri.logIn)
+    .send({user_sessions: params})
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
       if (!!err) {

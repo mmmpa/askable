@@ -22,16 +22,19 @@ var Context = (function (_super) {
     Context.prototype.children = function (props) {
         return React.createElement(Component, React.__spread({}, props));
     };
+    Context.prototype.succeed = function () {
+        document.location = this.props.userPage;
+    };
     Context.prototype.submit = function (params) {
         var _this = this;
         this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.CreateUser, params)
-            .then(function (result) {
-            _this.setState({ result: result, errors: {}, state: State.Success });
+        strike_api_1.strikeApi(strike_api_1.Api.LogIn, params)
+            .then(function () {
+            _this.setState({ state: State.Success });
+            _this.succeed();
         })
-            .catch(function (result) {
-            var errors = result.errors;
-            _this.setState({ errors: errors, state: State.Fail });
+            .catch(function () {
+            _this.setState({ state: State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
@@ -52,82 +55,58 @@ var Component = (function (_super) {
     function Component(props) {
         _super.call(this, props);
         this.state = {
-            name: '',
             login: '',
-            email: '',
             password: ''
         };
     }
     Object.defineProperty(Component.prototype, "params", {
         get: function () {
-            var _a = this.state, name = _a.name, login = _a.login, email = _a.email, password = _a.password;
-            return { name: name, login: login, email: email, password: password };
+            var _a = this.state, login = _a.login, password = _a.password;
+            return { login: login, password: password };
         },
         enumerable: true,
         configurable: true
     });
-    Component.prototype.setStateHelper = function (key, value) {
-        var hash = {};
-        hash[key] = value;
-        this.setState(hash);
-    };
-    Component.prototype.writeInput = function (type, name, placeholder) {
-        var _this = this;
-        var errors = this.writeError(name);
-        var state = !!this.writeError(name) ? 'has-error' : 'calm';
-        return React.createElement("div", {"className": "input"}, React.createElement("input", React.__spread({"className": state}, { type: type, name: name, placeholder: placeholder }, {"value": this.state[name], "onChange": function (e) { _this.setStateHelper(name, e.target.value); }})), errors);
-    };
-    Component.prototype.writeError = function (name) {
-        if (!this.props.errors) {
-            return null;
+    Component.prototype.writeError = function () {
+        switch (this.props.state) {
+            case State.Fail:
+                return React.createElement("section", {"className": "user-log-in error-messages"}, React.createElement("p", {"className": "error-message"}, React.createElement(fa_1.default, {"icon": "ban"}), "ログインに失敗しました"));
+            case State.Success:
+                return React.createElement("section", {"className": "user-log-in success-messages"}, React.createElement("p", {"className": "success-message"}, React.createElement(fa_1.default, {"icon": "paw"}), "ログインに成功しました"));
+            case State.Submitting:
+            case State.Waiting:
+            default:
+                return null;
         }
-        var errors = this.props.errors[name];
-        if (!errors) {
-            return null;
-        }
-        return React.createElement("ul", {"className": "error-messages"}, errors.map(function (error) { return React.createElement("li", {"className": "error-message"}, error); }));
     };
     Component.prototype.writeSubmit = function () {
         var _this = this;
         switch (this.props.state) {
             case State.Submitting:
-                return React.createElement("button", {"className": "user-register sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "登録中");
+                return React.createElement("button", {"className": "user-log-in sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "認証中");
             case State.Success:
+                return null;
             case State.Waiting:
             case State.Fail:
             default:
-                return React.createElement("button", {"className": "user-register submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "send-o"}), "登録する");
+                return React.createElement("button", {"className": "user-log-in submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "sign-in"}), "ログインする");
         }
-    };
-    Component.prototype.writeForm = function () {
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registering-body"}, React.createElement("h1", {"className": "user-register registering-title"}, "登録内容を入力してください"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'name', '表示するなまえ')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'login', 'ログイン用ID')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'email', 'メールアドレス')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('password', 'password', 'パスワード')), React.createElement("section", {"className": "user-register submit-section"}, this.writeSubmit()))));
-    };
-    Component.prototype.writeResult = function () {
-        var _a = this.props.result || {}, name = _a.name, login = _a.login, email = _a.email;
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registered-body"}, React.createElement("h1", {"className": "user-register registered-title"}, "以下の内容で登録されました"), React.createElement("div", {"className": "inner"}, React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "表示するなまえ"), React.createElement("p", {"className": "user-register info"}, name)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "ログイン用ID"), React.createElement("p", {"className": "user-register info"}, login)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "メールアドレス"), React.createElement("p", {"className": "user-register info"}, email)), React.createElement("section", {"className": "user-register link-section"}, React.createElement(fa_1.default, {"icon": "sign-in"}), React.createElement("a", {"href": "/in"}, "ログインページヘ")))));
     };
     Component.prototype.render = function () {
-        switch (this.props.state) {
-            case State.Success:
-                return this.writeResult();
-            case State.Submitting:
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return this.writeForm();
-        }
+        var _this = this;
+        return React.createElement("article", {"className": "user-log-in body"}, React.createElement("section", {"className": "user-log-in box-body"}, React.createElement("h1", {"className": "user-log-in log-in-title"}, "ログイン"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-log-in input-section"}, React.createElement("input", {"type": "text", "name": "login", "value": this.state.login, "placeholder": "ログインID", "onChange": function (e) { return _this.setState({ login: e.target.value }); }})), React.createElement("section", {"className": "user-log-in input-section"}, React.createElement("input", {"type": "password", "name": "password", "value": this.state.password, "placeholder": "パスワード", "onChange": function (e) { return _this.setState({ password: e.target.value }); }})), this.writeError(), React.createElement("section", {"className": "user-log-in submit-section"}, this.writeSubmit()))));
     };
     return Component;
 })(eventer_1.Node);
-var Welcome = (function () {
-    function Welcome() {
+var LogIn = (function () {
+    function LogIn() {
     }
-    Welcome.start = function (dom) {
-        ReactDOM.render(React.createElement(Context, null), dom);
+    LogIn.start = function (dom, userPage) {
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { userPage: userPage })), dom);
     };
-    return Welcome;
+    return LogIn;
 })();
-window.Welcome = Welcome;
+window.LogIn = LogIn;
 
 },{"./lib/eventer":2,"./lib/fa":3,"./lib/services/strike-api":4}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
