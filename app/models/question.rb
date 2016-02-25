@@ -9,6 +9,17 @@ class Question < ActiveRecord::Base
 
   validate :require_head_comment
 
+  class << self
+    def create_by!(user, question_params)
+      comment_params = question_params.delete(:comment).merge!(user: user)
+      user_logins = question_params.delete(:assigned) || []
+      users = user_logins.uniq.map { |login| User.find_by(login: login) }.compact
+      question_params.merge!(user: user, users: users, comments: [Comment.new(comment_params)])
+
+      Question.create!(question_params)
+    end
+  end
+
   def assign(*assigned)
     users + assigned
   end

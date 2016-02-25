@@ -1,0 +1,8 @@
+div#new-question
+
+script src='/js/common/built.js'
+script src='/js/new-question/built.js'
+javascript:
+  var user = #{@user.to_json.html_safe};
+  var team = #{@team.to_json.html_safe};
+  NewQuestion.start(document.querySelector('#new-question'), user, team);

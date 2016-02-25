@@ -23,6 +23,26 @@ RSpec.describe Question, type: :model do
     end
   end
 
+  describe 'creation' do
+    it 'ユーザーによる作成' do
+      expect {
+        Question.create_by!(User.first, {title: 'q', comment: {markdown: '# test'}})
+      }.to change(Question, :count).by(1)
+    end
+
+    it 'ユーザーによる作成と依頼' do
+      expect {
+        Question.create_by!(
+          User.first,
+          {
+            title: 'q',
+            comment: {markdown: '# test'},
+            assigned: [User.second.login, 'not_exist']
+          })
+      }.to change(AskUser, :count).by(1)
+    end
+  end
+
   describe 'behavior' do
     let(:question) { create(:question, :valid) }
     let(:other_question) { create(:question, :valid) }
