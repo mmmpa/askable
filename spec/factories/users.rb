@@ -3,7 +3,7 @@ FactoryGirl.define do
     trait :valid do
       name { User.count }
       login { "user#{User.count}" }
-      email { "ex#{User.count}@example.com" }
+      email { "mmmpa.mmmpa+#{SecureRandom.hex(4)}@gmail.com" }
       password { "password#{User.count}" }
     end
   end

@@ -1,16 +1,63 @@
 @import "./font-awesome/font-awesome"
 @import './primer/primer.scss'
 
+$size-title: 18px
+$size-normal: 12px
+
+%boxed-group
+  position: relative
+  margin-bottom: 30px
+  border-radius: 3px
+
+%boxed-group-inner
+  padding: 1px 10px
+  font-size: 13px
+  color: #666
+  background: #fff
+  border: 1px solid #d8d8d8
+  border-bottom-right-radius: 3px
+  border-bottom-left-radius: 3px
+
+%boxed-group-title
+  display: block
+  padding: 9px 10px 10px
+  margin: 0
+  font-size: 14px
+  line-height: 17px
+  background-color: #f5f5f5
+  border: 1px solid #d8d8d8
+  border-bottom: 0
+  border-radius: 3px 3px 0 0
+
+body
+  padding: 0
+  margin: 0
+  overflow: scroll
+
 input.has-error
   border-color: $brand-red
+
 .error-messages
   margin: 10px 0
   .error-message
     margin: 5px 0
     color: $brand-red
     font-weight: bold
+    list-style: none
 
 .user-register
+  &.registered-body,
+  &.registering-body
+    @extend %boxed-group
+    .inner
+      @extend %boxed-group-inner
+      &.form
+        padding: 20px 10px
+  &.info-label
+    font-size: $size-normal
+  &.registered-title,
+  &.registering-title
+    @extend %boxed-group-title
   &.body
     max-width: 400px
     margin: 0 auto

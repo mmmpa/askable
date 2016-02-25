@@ -28,7 +28,7 @@ class Context extends Root<{},{}> {
     this.setState({state: State.Submitting});
     strikeApi(Api.CreateUser, params)
       .then((result)=> {
-        this.setState({result, errors:{}, state: State.Success});
+        this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
         let {errors} = result
@@ -114,25 +114,64 @@ class Component extends Node<{},{}> {
     }
   }
 
-  render() {
-    console.log(this.props)
+  writeForm() {
     return <article className="user-register body">
-      <section className="user-register input-section">
-        {this.writeInput('text', 'name', '表示するなまえ')}
-      </section>
-      <section className="user-register input-section">
-        {this.writeInput('text', 'login', 'ログイン用ID')}
-      </section>
-      <section className="user-register input-section">
-        {this.writeInput('text', 'email', 'メールアドレス')}
-      </section>
-      <section className="user-register input-section">
-        {this.writeInput('password', 'password', 'パスワード')}
-      </section>
-      <section className="user-register submit-section">
-        {this.writeSubmit()}
+      <section className="user-register registering-body">
+        <h1 className="user-register registering-title">登録内容を入力してください</h1>
+        <div className="inner form">
+          <section className="user-register input-section">
+            {this.writeInput('text', 'name', '表示するなまえ')}
+          </section>
+          <section className="user-register input-section">
+            {this.writeInput('text', 'login', 'ログイン用ID')}
+          </section>
+          <section className="user-register input-section">
+            {this.writeInput('text', 'email', 'メールアドレス')}
+          </section>
+          <section className="user-register input-section">
+            {this.writeInput('password', 'password', 'パスワード')}
+          </section>
+          <section className="user-register submit-section">
+            {this.writeSubmit()}
+          </section>
+        </div>
       </section>
     </article>
+  }
+
+  writeResult() {
+    let {name, login, email} = this.props.result || {};
+    return <article className="user-register body">
+      <section className="user-register registered-body">
+        <h1 className="user-register registered-title">以下の内容で登録されました</h1>
+        <div className="inner">
+          <section className="user-register info-section">
+            <h1 className="user-register info-label">表示するなまえ</h1>
+            <p className="user-register info">{name}</p>
+          </section>
+          <section className="user-register info-section">
+            <h1 className="user-register info-label">ログイン用ID</h1>
+            <p className="user-register info">{login}</p>
+          </section>
+          <section className="user-register info-section">
+            <h1 className="user-register info-label">メールアドレス</h1>
+            <p className="user-register info">{email}</p>
+          </section>
+        </div>
+      </section>
+    </article>
+  }
+
+  render() {
+    switch (this.props.state) {
+      case State.Success:
+        return this.writeResult();
+      case State.Submitting:
+      case State.Waiting:
+      case State.Fail:
+      default:
+        return this.writeForm();
+    }
   }
 }
 

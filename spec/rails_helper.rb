@@ -1,8 +1,8 @@
 
-#require "codeclimate-test-reporter"
-#CodeClimate::TestReporter.start
-#require 'coveralls'
-#Coveralls.wear!
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+require 'coveralls'
+Coveralls.wear!
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
@@ -43,15 +43,12 @@ RSpec.configure do |config|
     FactoryGirl.factories.clear
     FactoryGirl.sequences.clear
     FactoryGirl.find_definitions
+    create(:user, :valid)
+    create(:user, :valid)
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-
-  config.before :all do
-    create(:user, :valid)
-    create(:user, :valid)
-  end
 end

@@ -6,5 +6,9 @@ class User < ActiveRecord::Base
   end
 
   validates :name,
-    presence: true
+            presence: true
+
+  def as_json(options)
+    super(options.merge!(only: [:name, :login, :email]))
+  end
 end

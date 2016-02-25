@@ -1,10 +1,10 @@
 declare const request;
 declare const Promise;
 
-var promise = Promise.resolve();
+var jobs = Promise.resolve();
 
 const Uri = {
-  createUser: ''
+  createUser: '/welcome/new'
 };
 
 export enum Api{
@@ -13,11 +13,19 @@ export enum Api{
 
 export function strikeApi(api:Api, params:any):Promise {
   return new Promise((resolve, reject)=> {
-    detectFunction(api)(params, resolve, reject);
+    addJob(api, params, resolve, reject);
   });
 }
 
-function detectFunction(api:Api):(params, resolve, reject)=> void {
+function addJob(api, params, resolve, reject){
+  jobs = jobs.then(()=>{
+    return new Promise((queueResolve, _)=>{
+      detectFunction(api)(params, resolve, reject, queueResolve)
+    })
+  })
+}
+
+function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void {
   switch (api) {
     case Api.CreateUser:
       return createUser;
@@ -33,8 +41,14 @@ export interface ICreateUser {
   password:string
 }
 
-function createUser(params:ICreateUser, resolve, reject) {
-  console.log('request')
+export interface ICreatedUser {
+  name:string,
+  login:string,
+  email:string
+}
+
+
+function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request
     .post(Uri.createUser)
     .send({users: params})
@@ -45,9 +59,14 @@ function createUser(params:ICreateUser, resolve, reject) {
       } else {
         resolve(res.body);
       }
+      queueResolve();
     })
 }
 
-export function token():string {
-  return document.getElementsByName('csrf-token')[0].getAttribute('content');
+function token():string {
+  try{
+    return document.getElementsByName('csrf-token')[0].getAttribute('content');
+  }catch(ex){
+    return '';
+  }
 }

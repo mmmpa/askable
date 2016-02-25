@@ -99,9 +99,23 @@ var Component = (function (_super) {
                 return React.createElement("button", {"className": "user-register submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "paw"}), "Submit");
         }
     };
+    Component.prototype.writeForm = function () {
+        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registering-body"}, React.createElement("h1", {"className": "user-register registering-title"}, "登録内容を入力してください"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'name', '表示するなまえ')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'login', 'ログイン用ID')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'email', 'メールアドレス')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('password', 'password', 'パスワード')), React.createElement("section", {"className": "user-register submit-section"}, this.writeSubmit()))));
+    };
+    Component.prototype.writeResult = function () {
+        var _a = this.props.result || {}, name = _a.name, login = _a.login, email = _a.email;
+        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registered-body"}, React.createElement("h1", {"className": "user-register registered-title"}, "以下の内容で登録されました"), React.createElement("div", {"className": "inner"}, React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "表示するなまえ"), React.createElement("p", {"className": "user-register info"}, name)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "ログイン用ID"), React.createElement("p", {"className": "user-register info"}, login)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "メールアドレス"), React.createElement("p", {"className": "user-register info"}, email)))));
+    };
     Component.prototype.render = function () {
-        console.log(this.props);
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'name', '表示するなまえ')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'login', 'ログイン用ID')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'email', 'メールアドレス')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('password', 'password', 'パスワード')), React.createElement("section", {"className": "user-register submit-section"}, this.writeSubmit()));
+        switch (this.props.state) {
+            case State.Success:
+                return this.writeResult();
+            case State.Submitting:
+            case State.Waiting:
+            case State.Fail:
+            default:
+                return this.writeForm();
+        }
     };
     return Component;
 })(eventer_1.Node);
@@ -221,9 +235,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
 },{}],4:[function(require,module,exports){
-var promise = Promise.resolve();
+var jobs = Promise.resolve();
 var Uri = {
-    createUser: ''
+    createUser: '/welcome/new'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -231,10 +245,17 @@ var Uri = {
 var Api = exports.Api;
 function strikeApi(api, params) {
     return new Promise(function (resolve, reject) {
-        detectFunction(api)(params, resolve, reject);
+        addJob(api, params, resolve, reject);
     });
 }
 exports.strikeApi = strikeApi;
+function addJob(api, params, resolve, reject) {
+    jobs = jobs.then(function () {
+        return new Promise(function (queueResolve, _) {
+            detectFunction(api)(params, resolve, reject, queueResolve);
+        });
+    });
+}
 function detectFunction(api) {
     switch (api) {
         case Api.CreateUser:
@@ -243,8 +264,7 @@ function detectFunction(api) {
             throw 'Api not exist';
     }
 }
-function createUser(params, resolve, reject) {
-    console.log('request');
+function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
@@ -256,11 +276,16 @@ function createUser(params, resolve, reject) {
         else {
             resolve(res.body);
         }
+        queueResolve();
     });
 }
 function token() {
-    return document.getElementsByName('csrf-token')[0].getAttribute('content');
+    try {
+        return document.getElementsByName('csrf-token')[0].getAttribute('content');
+    }
+    catch (ex) {
+        return '';
+    }
 }
-exports.token = token;
 
 },{}]},{},[1]);
