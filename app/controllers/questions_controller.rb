@@ -8,7 +8,7 @@ class QuestionsController < ApplicationController
     q = Question.create_by!(user, question_params)
     render json: {id: q.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.errors}, status: 400
+    render json: {errors: e.record.errors}, status: 400
   end
 
   private
@@ -21,6 +21,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:questions).permit(:title, comment: [:markdown], assigned: {login: []})
+    params.require(:questions).permit(:title, :markdown, assigned: [])
   end
 end

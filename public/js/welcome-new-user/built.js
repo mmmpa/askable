@@ -238,11 +238,13 @@ exports.default = Fa;
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
+    createQuestion: '',
     logIn: '/in'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
-    Api[Api["LogIn"] = 1] = "LogIn";
+    Api[Api["createQuestion"] = 1] = "createQuestion";
+    Api[Api["LogIn"] = 2] = "LogIn";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -262,6 +264,8 @@ function detectFunction(api) {
     switch (api) {
         case Api.CreateUser:
             return createUser;
+        case Api.createQuestion:
+            return createQuestion;
         case Api.LogIn:
             return logIn;
         default:
@@ -272,6 +276,25 @@ function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
+        .set('X-CSRF-Token', token())
+        .end(function (err, res) {
+        if (!!err) {
+            reject(res.body);
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    });
+}
+function createQuestion(params, resolve, reject, queueResolve) {
+    request
+        .post(Uri.createUser)
+        .send({ questions: {
+            title: params.title,
+            comment: { markdown: params.markdown },
+            assigned: params.assigned
+        } })
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {

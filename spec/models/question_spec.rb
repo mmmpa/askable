@@ -26,7 +26,7 @@ RSpec.describe Question, type: :model do
   describe 'creation' do
     it 'ユーザーによる作成' do
       expect {
-        Question.create_by!(User.first, {title: 'q', comment: {markdown: '# test'}})
+        Question.create_by!(User.first, {title: 'q', markdown: '# test'})
       }.to change(Question, :count).by(1)
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Question, type: :model do
           User.first,
           {
             title: 'q',
-            comment: {markdown: '# test'},
+            markdown: '# test',
             assigned: [User.second.login, 'not_exist']
           })
       }.to change(AskUser, :count).by(1)

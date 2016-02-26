@@ -11,10 +11,12 @@ class Question < ActiveRecord::Base
 
   class << self
     def create_by!(user, question_params)
-      comment_params = question_params.delete(:comment).merge!(user: user)
+      comment = Comment.new(user: user, markdown: question_params.delete(:markdown))
+
       user_logins = question_params.delete(:assigned) || []
       users = user_logins.uniq.map { |login| User.find_by(login: login) }.compact
-      question_params.merge!(user: user, users: users, comments: [Comment.new(comment_params)])
+
+      question_params.merge!(user: user, users: users, comments: [comment])
 
       Question.create!(question_params)
     end

@@ -6,11 +6,13 @@ var jobs = Promise.resolve();
 
 const Uri = {
   createUser: '/welcome/new',
+  createQuestion: '',
   logIn: '/in'
 };
 
 export enum Api{
   CreateUser,
+  createQuestion,
   LogIn
 }
 
@@ -32,6 +34,8 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
   switch (api) {
     case Api.CreateUser:
       return createUser;
+    case Api.createQuestion:
+      return createQuestion;
     case Api.LogIn:
       return logIn;
     default:
@@ -46,6 +50,12 @@ export interface ICreateUser {
   password:string
 }
 
+export interface ICreateQuestion {
+  title:string,
+  markdown:string,
+  assigned:string[]
+}
+
 export interface ILogIn {
   login:string,
   password:string
@@ -56,6 +66,25 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request
     .post(Uri.createUser)
     .send({users: params})
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
+  request
+    .post(Uri.createUser)
+    .send({questions: {
+      title: params.title,
+      comment: {markdown: params.markdown},
+      assigned: params.assigned
+    }})
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
       if (!!err) {

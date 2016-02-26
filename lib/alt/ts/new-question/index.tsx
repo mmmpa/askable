@@ -40,7 +40,7 @@ class Context extends Root {
     document.location = this.props.userPage;
   }
 
-  submit(params:ILogIn) {
+  submit(params:INewQuestion) {
     this.setState({state: State.Submitting});
     strikeApi(Api.LogIn, params)
       .then(()=> {
