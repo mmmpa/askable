@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   def new
     @user = user
-    @team = team
+    @team = {users: User.all}
   end
 
   def create

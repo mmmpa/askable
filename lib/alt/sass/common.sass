@@ -3,6 +3,19 @@
 
 $size-title: 18px
 $size-normal: 12px
+$check-size: 16px
+
+$radius: 3px
+$border-color: #d8d8d8
+
+.input-input,
+.input-label
+  display: inline-block
+  white-space: nowrap
+  vertical-align: top
+  line-height: $check-size
+.input-input
+  padding-right: 5px
 
 a,
 label
@@ -18,9 +31,9 @@ label
   font-size: 13px
   color: #666
   background: #fff
-  border: 1px solid #d8d8d8
-  border-bottom-right-radius: 3px
-  border-bottom-left-radius: 3px
+  border: 1px solid $border-color
+  border-bottom-right-radius: $radius
+  border-bottom-left-radius: $radius
 
 %boxed-group-title
   display: block
@@ -29,12 +42,16 @@ label
   font-size: 14px
   line-height: 17px
   background-color: #f5f5f5
-  border: 1px solid #d8d8d8
+  border: 1px solid $border-color
   border-bottom: 0
-  border-radius: 3px 3px 0 0
+  border-radius: $radius $radius 0 0
 
 %small-body
   max-width: 400px
+  margin: 0 auto
+
+%normal-body
+  max-width: 900px
   margin: 0 auto
 
 body
@@ -60,6 +77,44 @@ input.has-error
     color: $brand-green
     font-weight: bold
     list-style: none
+
+.new-question
+  &.body
+    @extend %normal-body
+  &.editor-area
+    @extend .two-thirds, .column
+    overflow: hidden
+    input,
+    textarea
+      @extend .input-contrast, .input-block
+  &.assigning-area
+    @extend .one-third, .column
+    overflow: hidden
+  &.comment-area
+    margin: 10px 0
+    border: 1px solid $border-color
+    border-radius: $radius
+  &.team-members
+    @extend .menu
+    height: 346px
+    overflow-y: scroll
+  &.team-member
+    @extend .menu-item
+    input
+      width: $check-size
+      height: $check-size
+  &.preview-area
+    min-height: 346px
+    margin: 10px 0
+    border: 1px solid $border-color
+    padding: 10px
+    border-radius: $radius
+  &.blank-comment
+    color: $brand-gray-light
+  &.submit-section
+    @extend .form-actions
+  &.submit
+    @extend .btn, .btn-primary
 
 .user-log-in
   &.body
