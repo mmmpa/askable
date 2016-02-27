@@ -75,14 +75,16 @@ RSpec.describe Question, type: :model do
       before :each do
         question.assign!(User.second, User.third, User.fourth)
         question.reload
+        expect(question.not_yet_user).to include(User.second)
+        expect(question.not_yet_user).to include(User.third)
+        expect(question.not_yet_user).to include(User.fourth)
       end
 
       context '力になれません' do
         it do
           question.sorry_by(User.second)
           expect(question.not_yet_user).not_to include(User.second)
-          expect(question.not_yet_user).to include(User.third)
-          expect(question.not_yet_user).to include(User.fourth)
+          expect(question.responded_user).to include(User.second)
         end
       end
       context '知ってそうな人を教える'
