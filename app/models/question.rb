@@ -22,6 +22,15 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def creation_errors
+    base = errors.messages
+    base.delete(:comments)
+    if (markdown_error = comments.first.errors.messages[:markdown])
+      base.merge!(markdown: markdown_error)
+    end
+    base
+  end
+
   def assign(*assigned)
     users + assigned
   end

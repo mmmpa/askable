@@ -6,7 +6,7 @@ var jobs = Promise.resolve();
 
 const Uri = {
   createUser: '/welcome/new',
-  createQuestion: '',
+  createQuestion: '/users/me/q/new',
   logIn: '/in'
 };
 
@@ -79,12 +79,8 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
 
 function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
   request
-    .post(Uri.createUser)
-    .send({questions: {
-      title: params.title,
-      comment: {markdown: params.markdown},
-      assigned: params.assigned
-    }})
+    .post(Uri.createQuestion)
+    .send({questions: params})
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
       if (!!err) {

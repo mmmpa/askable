@@ -6,4 +6,5 @@ script src='/js/new-question/built.js'
 javascript:
   var user = #{@user.to_json.html_safe};
   var team = #{@team.to_json.html_safe};
-  NewQuestion.start(document.querySelector('#new-question'), user, team);
+  var questionPage = '#{question_path(question_id: ":questionId")}';
+  NewQuestion.start(document.querySelector('#new-question'), questionPage, user, team);

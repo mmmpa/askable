@@ -14412,19 +14412,21 @@ var Context = (function (_super) {
     Context.prototype.children = function (props) {
         return React.createElement(Component, React.__spread({}, props));
     };
-    Context.prototype.succeed = function () {
-        document.location = this.props.userPage;
+    Context.prototype.succeed = function (questionId) {
+        document.location = this.props.questionPage.replace(':questionId', questionId);
     };
     Context.prototype.submit = function (params) {
         var _this = this;
         this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.LogIn, params)
-            .then(function () {
+        strike_api_1.strikeApi(strike_api_1.Api.createQuestion, params)
+            .then(function (_a) {
+            var id = _a.id;
             _this.setState({ state: State.Success });
-            _this.succeed();
+            _this.succeed(id);
         })
-            .catch(function () {
-            _this.setState({ state: State.Fail });
+            .catch(function (_a) {
+            var errors = _a.errors;
+            _this.setState({ errors: errors, state: State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
@@ -14435,7 +14437,8 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: 'ready'
+            state: 'ready',
+            errors: {}
         };
     };
     return Context;
@@ -14447,7 +14450,8 @@ var Component = (function (_super) {
         this.state = {
             preview: false,
             markdown: '',
-            title: ''
+            title: '',
+            assigned: []
         };
     }
     Component.prototype.componentDidMount = function () {
@@ -14466,8 +14470,8 @@ var Component = (function (_super) {
     };
     Object.defineProperty(Component.prototype, "params", {
         get: function () {
-            var _a = this.state, login = _a.login, password = _a.password;
-            return { login: login, password: password };
+            var _a = this.state, title = _a.title, markdown = _a.markdown, assigned = _a.assigned;
+            return { title: title, markdown: markdown, assigned: assigned };
         },
         enumerable: true,
         configurable: true
@@ -14495,17 +14499,13 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Component.prototype.writeError = function () {
-        switch (this.props.state) {
-            case State.Fail:
-                return React.createElement("section", {"className": "new-question error-messages"}, React.createElement("p", {"className": "error-message"}, React.createElement(fa_1.default, {"icon": "ban"}), "ログインに失敗しました"));
-            case State.Success:
-                return React.createElement("section", {"className": "new-question success-messages"}, React.createElement("p", {"className": "success-message"}, React.createElement(fa_1.default, {"icon": "paw"}), "ログインに成功しました"));
-            case State.Submitting:
-            case State.Waiting:
-            default:
-                return null;
+    Component.prototype.writeError = function (errors) {
+        if (!errors || errors.length === 0) {
+            return null;
         }
+        return React.createElement("ul", {"className": "new-question error-messages"}, errors.map(function (error) {
+            return React.createElement("li", {"className": "error-message"}, error);
+        }));
     };
     Component.prototype.writeSubmit = function () {
         var _this = this;
@@ -14525,10 +14525,11 @@ var Component = (function (_super) {
     };
     Component.prototype.writeCommentArea = function () {
         var _this = this;
+        var errors = this.props.errors;
         var className = this.isPreview
             ? 'new-question entry-area hidden'
             : 'new-question entry-area';
-        return React.createElement("section", {"className": className}, React.createElement("section", {"className": "new-question title-area"}, React.createElement("input", {"type": "text", "name": "title", "placeholder": "タイトルを入力", "value": this.state.title, "onChange": function (e) { return _this.setState({ title: e.target.value }); }})), React.createElement("section", {"className": "new-question comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "質問内容をここに入力", "value": this.state.markdown, "onChange": function (e) { return _this.setState({ markdown: e.target.value }); }})));
+        return React.createElement("section", {"className": className}, React.createElement("section", {"className": "new-question title-area"}, React.createElement("input", {"type": "text", "name": "title", "placeholder": "タイトルを入力", "value": this.state.title, "onChange": function (e) { return _this.setState({ title: e.target.value }); }})), this.writeError(errors.title), React.createElement("section", {"className": "new-question comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "質問内容をここに入力", "value": this.state.markdown, "onChange": function (e) { return _this.setState({ markdown: e.target.value }); }})), this.writeError(errors.markdown));
     };
     Component.prototype.writePreviewArea = function () {
         if (!this.isPreview) {
@@ -14539,14 +14540,32 @@ var Component = (function (_super) {
         }
         return React.createElement("section", {"className": 'new-question preview-area'}, React.createElement("section", {"dangerouslySetInnerHTML": this.marked}));
     };
+    Component.prototype.isAssigned = function (userLogin) {
+        return _.includes(this.state.assigned, userLogin);
+    };
+    Component.prototype.assignUser = function (userLogin) {
+        var now = this.state.assigned.concat();
+        if (_.includes(now, userLogin)) {
+            _.remove(now, userLogin);
+        }
+        else {
+            now.push(userLogin);
+        }
+        this.setState({ assigned: now });
+    };
     Component.prototype.writeAssigner = function () {
-        var _a = this.props, User = _a.user, Team = _a.team;
-        return React.createElement("section", {"className": "new-question team-members"}, React.createElement("section", {"className": "new-question team-member-list"}, team.users.map(function (user) {
-            return React.createElement("label", {"className": "new-question team-member", "key": user.login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign"})), React.createElement("span", {"className": "input-label"}, user.name));
+        var _this = this;
+        var _a = this.props, user = _a.user, team = _a.team;
+        return React.createElement("section", {"className": "new-question team-members"}, React.createElement("section", {"className": "new-question team-member-list"}, team.users.map(function (_a) {
+            var login = _a.login, name = _a.name;
+            return React.createElement("label", {"className": "new-question team-member", "key": login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign", "checked": _this.isAssigned(login), "onChange": function () { return _this.assignUser(login); }})), React.createElement("span", {"className": "input-label"}, name));
         })));
     };
     Component.prototype.render = function () {
         var _this = this;
+        if (this.props.state === State.Success) {
+            return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question registered-body"}, React.createElement("p", {"className": "new-question registered-message"}, "投稿完了しました")));
+        }
         return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question box-body"}, React.createElement("h1", {"className": "new-question log-in-title"}, "質問する"), React.createElement("div", {"className": "columns"}, React.createElement("section", {"className": "new-question editor-area"}, React.createElement("section", {"className": "new-question tabs tabnav"}, React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(false), "onClick": function () { return _this.setState({ preview: false }); }}, React.createElement(fa_1.default, {"icon": "pencil"}), "コメントを書く"), React.createElement("a", {"className": this.detectTabClass(true), "onClick": function () { return _this.setState({ preview: true }); }}, React.createElement(fa_1.default, {"icon": "file-text-o"}), "プレビュー"))), React.createElement("div", {"className": "inner form"}, this.writeCommentArea(), this.writePreviewArea(), React.createElement("section", {"className": "new-question submit-section"}, this.writeSubmit()))), React.createElement("section", {"className": "new-question assigning-area"}, React.createElement("section", {"className": "new-question tabs tabnav"}, React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": "tabnav-tab selected"}, React.createElement(fa_1.default, {"icon": "hand-o-right"}), "回答をおねがいする"))), this.writeAssigner()))));
     };
     return Component;
@@ -14554,10 +14573,10 @@ var Component = (function (_super) {
 var NewQuestion = (function () {
     function NewQuestion() {
     }
-    NewQuestion.start = function (dom, userJson, teamJson) {
+    NewQuestion.start = function (dom, questionPage, userJson, teamJson) {
         var user = new user_1.default(userJson);
         var team = new team_1.default(teamJson);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { user: user, team: team })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionPage: questionPage, user: user, team: team })), dom);
     };
     return NewQuestion;
 })();
@@ -14697,7 +14716,7 @@ exports.default = User;
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
-    createQuestion: '',
+    createQuestion: '/users/me/q/new',
     logIn: '/in'
 };
 (function (Api) {
@@ -14748,12 +14767,8 @@ function createUser(params, resolve, reject, queueResolve) {
 }
 function createQuestion(params, resolve, reject, queueResolve) {
     request
-        .post(Uri.createUser)
-        .send({ questions: {
-            title: params.title,
-            comment: { markdown: params.markdown },
-            assigned: params.assigned
-        } })
+        .post(Uri.createQuestion)
+        .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {

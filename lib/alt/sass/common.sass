@@ -14,6 +14,7 @@ $border-color: #d8d8d8
   white-space: nowrap
   vertical-align: top
   line-height: $check-size
+
 .input-input
   padding-right: 5px
 
@@ -115,6 +116,10 @@ input.has-error
     @extend .form-actions
   &.submit
     @extend .btn, .btn-primary
+  &.sending
+    @extend .btn
+  &.registered-message
+    color: $brand-green
 
 .user-log-in
   &.body

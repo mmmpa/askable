@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     get 'index', to: 'questions#index'
 
     scope ':question_id' do
-      get '', to: 'questions#show'
+      get '', to: 'questions#show', as: :question
       patch 'sorry', to: 'questions#sorry'
       patch 'assign', to: 'questions#assigned'
       patch 'answer', to: 'questions#answer'

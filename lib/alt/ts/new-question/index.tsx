@@ -6,7 +6,7 @@ declare const Promise;
 
 import {Root, Node} from './lib/eventer'
 import Fa from './lib/fa'
-import {Api, strikeApi, ILogIn} from './lib/services/strike-api'
+import {Api, strikeApi, ICreateQuestion} from './lib/services/strike-api'
 import * as marked from 'marked'
 import User from "./lib/models/user";
 import Team from "./lib/models/team";
@@ -36,19 +36,19 @@ class Context extends Root {
     return <Component {...props}/>;
   }
 
-  succeed() {
-    document.location = this.props.userPage;
+  succeed(questionId) {
+    document.location = this.props.questionPage.replace(':questionId', questionId);
   }
 
-  submit(params:INewQuestion) {
+  submit(params:ICreateQuestion) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.LogIn, params)
-      .then(()=> {
+    strikeApi(Api.createQuestion, params)
+      .then(({id})=> {
         this.setState({state: State.Success});
-        this.succeed();
+        this.succeed(id);
       })
-      .catch(()=> {
-        this.setState({state: State.Fail});
+      .catch(({errors})=> {
+        this.setState({errors, state: State.Fail});
       });
   }
 
@@ -60,7 +60,8 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: 'ready',
+      errors: {}
     }
   }
 }
@@ -74,7 +75,8 @@ class Component extends Node {
     this.state = {
       preview: false,
       markdown: '',
-      title: ''
+      title: '',
+      assigned: []
     }
   }
 
@@ -93,9 +95,9 @@ class Component extends Node {
     this.setState({markdown: value});
   }
 
-  get params():ILogIn {
-    let {login, password} = this.state;
-    return {login, password};
+  get params():ICreateQuestion {
+    let {title, markdown, assigned} = this.state;
+    return {title, markdown, assigned};
   }
 
   get isPreview() {
@@ -112,29 +114,17 @@ class Component extends Node {
     return {__html};
   }
 
-  writeError() {
-    switch (this.props.state) {
-      case State.Fail:
-        return <section className="new-question error-messages">
-          <p className="error-message">
-            <Fa icon="ban"/>
-            ログインに失敗しました
-          </p>
-        </section>;
-      case State.Success:
-        return <section className="new-question success-messages">
-          <p className="success-message">
-            <Fa icon="paw"/>
-            ログインに成功しました
-          </p>
-        </section>;
-      case State.Submitting:
-      case State.Waiting:
-      default:
-        return null;
+  writeError(errors) {
+    if (!errors || errors.length === 0) {
+      return null
     }
-  }
 
+    return <ul className="new-question error-messages">
+      {errors.map((error)=>{
+        return <li className="error-message">{error}</li>
+        })}
+    </ul>
+  }
 
   writeSubmit() {
     switch (this.props.state) {
@@ -161,6 +151,7 @@ class Component extends Node {
   }
 
   writeCommentArea() {
+    let {errors} = this.props
     let className = this.isPreview
       ? 'new-question entry-area hidden'
       : 'new-question entry-area'
@@ -171,11 +162,13 @@ class Component extends Node {
                value={this.state.title}
                onChange={(e)=> this.setState({title: e.target.value})}/>
       </section>
+      {this.writeError(errors.title)}
       <section className="new-question comment-area">
         <textarea name="comment" ref="editor" placeholder="質問内容をここに入力"
                   value={this.state.markdown}
                   onChange={(e)=>this.setState({markdown: e.target.value})}/>
       </section>
+      {this.writeError(errors.markdown)}
     </section>
   }
 
@@ -195,18 +188,35 @@ class Component extends Node {
     </section>
   }
 
+  isAssigned(userLogin:string) {
+    return _.includes(this.state.assigned, userLogin)
+  }
+
+  assignUser(userLogin:string) {
+    let now = this.state.assigned.concat();
+    if (_.includes(now, userLogin)) {
+      _.remove(now, userLogin);
+    } else {
+      now.push(userLogin);
+    }
+    this.setState({assigned: now});
+  }
+
   writeAssigner() {
-    let {user:User, team:Team} = this.props;
+    let {user, team} = this.props;
 
     return <section className="new-question team-members">
       <section className="new-question team-member-list">
-        {team.users.map((user)=>{
-          return <label className="new-question team-member" key={user.login}>
+        {team.users.map(({login, name}:User)=>{
+
+          return <label className="new-question team-member" key={login}>
             <span className="input-input">
-              <input type="checkbox" name="assign"/>
+              <input type="checkbox" name="assign"
+                     checked={this.isAssigned(login)}
+                     onChange={()=> this.assignUser(login)}/>
             </span>
             <span className="input-label">
-              {user.name}
+              {name}
             </span>
           </label>
           })}
@@ -215,6 +225,14 @@ class Component extends Node {
   }
 
   render() {
+    if(this.props.state === State.Success){
+      return <article className="new-question body">
+        <section className="new-question registered-body">
+          <p className="new-question registered-message">投稿完了しました</p>
+        </section>
+      </article>
+    }
+
     return <article className="new-question body">
       <section className="new-question box-body">
         <h1 className="new-question log-in-title">質問する</h1>
@@ -260,10 +278,10 @@ class Component extends Node {
 }
 
 class NewQuestion {
-  static start(dom:HTMLElement, userJson, teamJson) {
+  static start(dom:HTMLElement, questionPage, userJson, teamJson) {
     let user = new User(userJson);
     let team = new Team(teamJson);
-    ReactDOM.render(<Context {...{user, team}}/>, dom);
+    ReactDOM.render(<Context {...{questionPage, user, team}}/>, dom);
   }
 }
 

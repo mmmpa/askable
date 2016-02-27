@@ -217,7 +217,7 @@ exports.default = Fa;
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
-    createQuestion: '',
+    createQuestion: '/users/me/q/new',
     logIn: '/in'
 };
 (function (Api) {
@@ -268,12 +268,8 @@ function createUser(params, resolve, reject, queueResolve) {
 }
 function createQuestion(params, resolve, reject, queueResolve) {
     request
-        .post(Uri.createUser)
-        .send({ questions: {
-            title: params.title,
-            comment: { markdown: params.markdown },
-            assigned: params.assigned
-        } })
+        .post(Uri.createQuestion)
+        .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {
