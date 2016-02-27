@@ -22,6 +22,45 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def responses
+    return [] if comments.size == 1
+    comments.order { created_at.desc }[0..comments.size - 2]
+  end
+
+  def respondable?(user)
+    users.include?(user) && not_yet_responded?(user)
+  end
+
+  def ask_for(target)
+    ask_users.where { user == target }.first
+  end
+
+  def sorry_by(user)
+    ask_for(user).responded!
+  end
+
+  def assign_by(user, *assigned)
+    assign!(*assigned)
+    ask_for(user).assigned!
+  end
+
+  def answer_by(user, new_comment_params)
+    reply_to!(root, Comment.new(new_comment_params.merge!(user: user)))
+    ask_for(user).answered!
+  end
+
+  def not_yet_user
+    users.joins { ask_users }.where { ask_users.state.in(AskUser.not_yet_status) }
+  end
+
+  def responded_user
+    users.joins { ask_users }.where { ask_users.state.in(AskUser.responded_status) }
+  end
+
+  def not_yet_responded?(user)
+    ask_for(user).requested?
+  end
+
   def creation_errors
     base = errors.messages
     base.delete(:comments)
@@ -31,8 +70,9 @@ class Question < ActiveRecord::Base
     base
   end
 
-  def assign(*assigned)
-    users + assigned
+  def assign!(*assigned)
+    assigned.each { |user| users << user }
+    save!
   end
 
   def require_head_comment

@@ -71,6 +71,24 @@ RSpec.describe Question, type: :model do
       end
     end
 
+    describe '依頼に応える' do
+      before :each do
+        question.assign!(User.second, User.third, User.fourth)
+        question.reload
+      end
+
+      context '力になれません' do
+        it do
+          question.sorry_by(User.second)
+          expect(question.not_yet_user).not_to include(User.second)
+          expect(question.not_yet_user).to include(User.third)
+          expect(question.not_yet_user).to include(User.fourth)
+        end
+      end
+      context '知ってそうな人を教える'
+      context '応える'
+    end
+
     describe 'リプライ' do
       let(:reply) { build(:comment, :valid) }
 

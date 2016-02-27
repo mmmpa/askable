@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   def show
-    render nothing: true
+    @question = question
   end
 
   def new
@@ -15,7 +15,27 @@ class QuestionsController < ApplicationController
     render json: {errors: e.record.creation_errors}, status: 400
   end
 
+  def sorry
+
+  end
+
+  def assign
+
+  end
+
+  def answer
+
+  end
+
+  def reply
+
+  end
+
   private
+  def question
+    Question.find(params[:question_id])
+  end
+
   def user
     UserSession.find.try(:user)
   end

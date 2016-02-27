@@ -45,6 +45,9 @@ RSpec.configure do |config|
     FactoryGirl.find_definitions
     create(:user, :valid, password: 'a' * 8)
     create(:user, :valid, password: 'b' * 8)
+    create(:user, :valid, password: 'c' * 8)
+    create(:user, :valid, password: 'd' * 8)
+    create(:user, :valid, password: 'e' * 8)
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

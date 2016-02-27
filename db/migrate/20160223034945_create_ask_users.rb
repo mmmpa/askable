@@ -3,7 +3,7 @@ class CreateAskUsers < ActiveRecord::Migration
     create_table :ask_users do |t|
       t.references :user, index: true, null: false
       t.references :question, index: true, null: false
-      t.integer :state
+      t.integer :state, null: false
       t.references :comment, index: true
 
       t.timestamps null: false

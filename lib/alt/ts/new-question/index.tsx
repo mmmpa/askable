@@ -243,7 +243,7 @@ class Component extends Node {
                 <a className={this.detectTabClass(false)}
                    onClick={()=> this.setState({preview: false})}>
                   <Fa icon="pencil"/>
-                  コメントを書く
+                  書く
                 </a>
                 <a className={this.detectTabClass(true)}
                    onClick={()=> this.setState({preview: true})}>

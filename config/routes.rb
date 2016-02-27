@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     scope ':question_id' do
       get '', to: 'questions#show', as: :question
       patch 'sorry', to: 'questions#sorry'
-      patch 'assign', to: 'questions#assigned'
+      patch 'assign', to: 'questions#assign'
       patch 'answer', to: 'questions#answer'
 
       scope :a do

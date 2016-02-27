@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  #include Askable
+  include AskRelative
 
   acts_as_authentic do |c|
     c.require_password_confirmation = false
