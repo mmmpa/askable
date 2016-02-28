@@ -1,0 +1,21 @@
+article.question-index.body
+  div.question-index.list-header
+  ul.question-index.list-body
+    - @questions.map do |q|
+      li.question-index.list-item
+        section.question-index.item-icon
+          i.fa.fa-smile-o
+        section.question-index.item-content
+          h1.question-index.item-title
+            a(href=(question_path(question_id: q.id)))= q.title
+          h2.question-index.item-author= q.author_name
+        section.question-index.item-status
+          div.assigned
+            i.fa.fa-hand-o-right
+            em= q.assigned_count
+          div.responded
+            i.fa.fa-check
+            em= q.responded_count
+          div.comments
+            i.fa.fa-comment
+            em= q.commented_count

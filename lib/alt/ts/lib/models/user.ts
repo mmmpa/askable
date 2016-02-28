@@ -1,5 +1,5 @@
 export default class User{
-  name;:string;
+  name:string;
   login:string;
 
   constructor(params){

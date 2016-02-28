@@ -78,17 +78,34 @@ RSpec.describe Question, type: :model do
         expect(question.not_yet_user).to include(User.second)
         expect(question.not_yet_user).to include(User.third)
         expect(question.not_yet_user).to include(User.fourth)
+        expect(question.not_yet_user).not_to include(User.fifth)
       end
 
       context '力になれません' do
-        it do
+        it '反応後はリストから外れる' do
           question.sorry_by(User.second)
           expect(question.not_yet_user).not_to include(User.second)
           expect(question.responded_user).to include(User.second)
         end
       end
-      context '知ってそうな人を教える'
-      context '応える'
+
+      context '知ってそうな人を教える' do
+        it '反応後はリストから外れ、新しい人がリストに入る' do
+          question.assign_by(User.second, User.fifth)
+          expect(question.not_yet_user).not_to include(User.second)
+          expect(question.responded_user).to include(User.second)
+          expect(question.not_yet_user).to include(User.fifth)
+        end
+      end
+
+      context '応える' do
+        it '反応後はリストから外れ、コメントが追加される' do
+          question.answer_by(User.second, build(:comment, :valid))
+          expect(question.not_yet_user).not_to include(User.second)
+          expect(question.responded_user).to include(User.second)
+          expect(question.comments.last.user).to eq(User.second)
+        end
+      end
     end
 
     describe 'リプライ' do

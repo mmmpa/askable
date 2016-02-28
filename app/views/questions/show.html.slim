@@ -1,15 +1,18 @@
 = stylesheet_link_tag '/css/codemirror.css', media: 'all'
 section.show-question.body
   section.show-question.root
-    h1.show-question.title= @question.title
-    section.show-question.comment= @question.root.html
-    - if @question.users.count != 0
-      section.show-question.assigned-users
-        ul.show-question.assigned-list
-          - @question.users.map do |user|
-            li= user.login
+    h1.show-question.title
+      i.fa.fa-fw.fa-question-circle
+      = @question.title
+    section.show-question.question-area
+      section.show-question.question.markdown-html== @question.root.html
+      - if @question.users.count != 0
+        section.show-question.assigned-users
+          ul.show-question.assigned-list
+            - @question.users.map do |user|
+              li= user.login
   div#response-to-question
-  - if @question.comments.count == 0
+  - if @question.responses.count == 0
     section.show-question.no-response
       p まだ回答はありません
   - else
@@ -21,7 +24,9 @@ section.show-question.body
             footer.show-question.response-owner= comment.user.name
 
 script src='/js/common/built.js'
-script src='/js/show-question/built.js'
+script src='/js/question-responder/built.js'
 javascript:
   var questionId = #{@question.id};
-  Responser.start(document.querySelector('#response-to-question'), questionId);
+  var user = #{@user.to_json.html_safe};
+  var team = #{@team.to_json.html_safe};
+  QuestionResponder.start(document.querySelector('#response-to-question'), questionId, user, team);

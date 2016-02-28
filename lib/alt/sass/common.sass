@@ -1,6 +1,8 @@
 @import "./font-awesome/font-awesome"
 @import './primer/primer.scss'
+@import './gfm/github-markdown'
 
+$size-big-title: 24px
 $size-title: 18px
 $size-normal: 12px
 $check-size: 16px
@@ -28,7 +30,7 @@ label
   border-radius: 3px
 
 %boxed-group-inner
-  padding: 1px 10px
+  padding: 1px 20px
   font-size: 13px
   color: #666
   background: #fff
@@ -38,7 +40,7 @@ label
 
 %boxed-group-title
   display: block
-  padding: 9px 10px 10px
+  padding: 14px 20px 15px
   margin: 0
   font-size: 14px
   line-height: 17px
@@ -55,6 +57,10 @@ label
   max-width: 900px
   margin: 0 auto
 
+%min-cell
+  width: 1px
+  white-space: nowrap
+
 body
   padding: 0
   margin: 0
@@ -62,6 +68,19 @@ body
 
 input.has-error
   border-color: $brand-red
+
+.markdown-html
+  @extend %markdown-body
+  line-height: 200%
+  letter-spacing: 1px
+  h1
+    font-size: $size-big-title
+  h2
+    font-size: $size-title
+  h3, h4, h5, h6
+    font-size: $size-normal
+  h4, h5, h6
+    font-weight: normal
 
 .error-messages
   margin: 10px 0
@@ -79,22 +98,103 @@ input.has-error
     font-weight: bold
     list-style: none
 
+.show-question
+  &.body
+    @extend %normal-body
+  &.title
+    @extend %boxed-group-title
+    font-size: $size-title
+  &.question-area
+    @extend %boxed-group-inner
+    padding: 20px
+  &.assigned-users
+    border-top: 1px solid $border-color
+    margin: 20px -20px 0
+  &.no-response
+    @extend .blankslate
+    margin: 20px 0 0
+    p
+      @extend h3
+      font-weight: 600
+
+.respond
+  &.body
+    margin: 20px 0 0 0
+  &.title
+    @extend %boxed-group-title
+    font-size: $size-title
+  &.response
+    @extend %boxed-group-inner
+    padding: 20px
+  &.response-type-area
+    .tabnav
+      padding-left: 20px
+      padding-right: 20px
+      margin: 0 -20px
+  &.sorry
+    @extend .btn, .btn-sm, .right, .btn-danger
+  &.responder-area
+    margin: 20px 0 0 0
+  &.submit-section
+    margin: 10px 0 0 0
+    @extend .form-actions
+  &.submit
+    @extend .btn, .btn-primary
+  &.sending
+    @extend .btn
+
+.question-index
+  &.body
+    @extend %normal-body
+  &.list-body
+    @extend .menu
+  &.list-item
+    @extend .menu-item
+  &.item-title
+    font-size: $size-title
+  &.item-author
+    font-size: $size-normal
+  &.item-icon
+    font-size: $size-title
+  &.item-icon,
+  &.item-content,
+  &.item-status
+    display: table-cell
+  &.item-icon,
+  &.item-status
+    @extend %min-cell
+  &.item-content
+    width: 100%
+    padding: 0 10px
+  &.item-status
+    div
+      font-size: $size-title
+      display: inline-block
+      padding-left: 10px
+      em
+        padding-left: 2px
+
 .new-question
   &.body
     @extend %normal-body
   &.editor-area
     @extend .two-thirds, .column
-    overflow: hidden
-    input,
-    textarea
-      @extend .input-contrast, .input-block
   &.assigning-area
     @extend .one-third, .column
     overflow: hidden
-  &.comment-area
-    margin: 10px 0
-    border: 1px solid $border-color
-    border-radius: $radius
+  &.blank-comment
+    color: $brand-gray-light
+  &.submit-section
+    @extend .form-actions
+    margin: 10px 0 0 0
+  &.submit
+    @extend .btn, .btn-primary
+  &.sending
+    @extend .btn
+  &.registered-message
+    color: $brand-green
+
+.assigner
   &.team-members
     @extend .menu
     height: 346px
@@ -104,22 +204,20 @@ input.has-error
     input
       width: $check-size
       height: $check-size
+
+.comment-editor
   &.preview-area
     min-height: 346px
-    margin: 10px 0
+    margin: 10px 0 0
     border: 1px solid $border-color
     padding: 10px
     border-radius: $radius
-  &.blank-comment
-    color: $brand-gray-light
-  &.submit-section
-    @extend .form-actions
-  &.submit
-    @extend .btn, .btn-primary
-  &.sending
-    @extend .btn
-  &.registered-message
-    color: $brand-green
+  &.comment-area
+    margin: 10px 0 0
+    border: 1px solid $border-color
+    border-radius: $radius
+  input
+    @extend .input-block
 
 .user-log-in
   &.body

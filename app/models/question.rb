@@ -22,6 +22,22 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def author_name
+    user.name
+  end
+
+  def commented_count
+    comments.size - 1
+  end
+
+  def assigned_count
+    users.size
+  end
+
+  def responded_count
+    responded_user.size
+  end
+
   def responses
     return [] if comments.size == 1
     comments.order { created_at.desc }[0..comments.size - 2]
@@ -44,8 +60,10 @@ class Question < ActiveRecord::Base
     ask_for(user).assigned!
   end
 
-  def answer_by(user, new_comment_params)
-    reply_to!(root, Comment.new(new_comment_params.merge!(user: user)))
+  def answer_by(user, new_comment)
+    comment = detect_comment(new_comment)
+    comment.user = user
+    reply_to!(root, comment)
     ask_for(user).answered!
   end
 
@@ -88,6 +106,15 @@ class Question < ActiveRecord::Base
     new_comment.comment = detect_reply_target(replied)
     comments << new_comment
     save!
+  end
+
+  def detect_comment(comment)
+    case comment
+      when Comment
+        comment
+      else
+        Comment.new(comment)
+    end
   end
 
   def detect_reply_target(replied)

@@ -1,6 +1,12 @@
 class QuestionsController < ApplicationController
+  def index
+    @questions = Question.order { created_at.desc }.all
+  end
+
   def show
     @question = question
+    @user = user
+    @team = {users: User.all}
   end
 
   def new

@@ -20,6 +20,8 @@ end
 
 
 group :default do
+  gem 'redcarpet'
+  gem "pygments.rb"
   gem 'authlogic'
   gem 'jquery-rails'
   gem 'kaminari'
@@ -33,6 +35,7 @@ group :default do
 end
 
 group :development, :test do
+  gem 'active_record_samplooper'
   gem 'tanemaki'
   gem 'spring-commands-rspec'
   gem 'factory_girl_rails'

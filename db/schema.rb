@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20160223034945) do
   create_table "ask_users", force: :cascade do |t|
     t.integer  "user_id",     null: false
     t.integer  "question_id", null: false
-    t.integer  "state"
+    t.integer  "state",       null: false
     t.integer  "comment_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -65,10 +65,11 @@ ActiveRecord::Schema.define(version: 20160223034945) do
   add_index "groups", ["user_id"], name: "index_groups_on_user_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.integer  "user_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",                      null: false
+    t.boolean  "completed",  default: false, null: false
+    t.integer  "user_id",                    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "questions", ["user_id"], name: "index_questions_on_user_id", using: :btree
