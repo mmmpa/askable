@@ -72,6 +72,9 @@ RSpec.describe Question, type: :model do
     end
 
     describe '依頼に応える' do
+      let(:question) { create(:question, :valid) }
+      let(:after_q) { Question.find(question.id) }
+
       before :each do
         question.assign!(User.second, User.third, User.fourth)
         question.reload
@@ -84,26 +87,26 @@ RSpec.describe Question, type: :model do
       context '力になれません' do
         it '反応後はリストから外れる' do
           question.sorry_by(User.second)
-          expect(question.not_yet_user).not_to include(User.second)
-          expect(question.responded_user).to include(User.second)
+          expect(after_q.not_yet_user).not_to include(User.second)
+          expect(after_q.responded_user).to include(User.second)
         end
       end
 
       context '知ってそうな人を教える' do
         it '反応後はリストから外れ、新しい人がリストに入る' do
           question.assign_by(User.second, User.fifth)
-          expect(question.not_yet_user).not_to include(User.second)
-          expect(question.responded_user).to include(User.second)
-          expect(question.not_yet_user).to include(User.fifth)
+          expect(after_q.not_yet_user).not_to include(User.second)
+          expect(after_q.responded_user).to include(User.second)
+          expect(after_q.not_yet_user).to include(User.fifth)
         end
       end
 
       context '応える' do
         it '反応後はリストから外れ、コメントが追加される' do
           question.answer_by(User.second, build(:comment, :valid))
-          expect(question.not_yet_user).not_to include(User.second)
-          expect(question.responded_user).to include(User.second)
-          expect(question.comments.last.user).to eq(User.second)
+          expect(after_q.not_yet_user).not_to include(User.second)
+          expect(after_q.responded_user).to include(User.second)
+          expect(after_q.comments.last.user).to eq(User.second)
         end
       end
     end
@@ -145,7 +148,7 @@ RSpec.describe Question, type: :model do
       let(:user2) { User.second }
 
       it '' do
-        question.assign(user1, user2)
+        question.assign!(user1, user2)
       end
     end
 

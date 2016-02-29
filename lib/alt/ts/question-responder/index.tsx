@@ -6,8 +6,9 @@ declare const Promise;
 
 import {Root, Node} from './lib/eventer'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateQuestion} from './lib/services/strike-api'
+import {Api, strikeApi, IAssign, IAnswer, IWait, ISorry} from './lib/services/strike-api'
 import CommentEditor from './lib/components/comment-editor'
+import Assigner from './lib/components/assigner'
 import User from "./lib/models/user";
 import Team from "./lib/models/team";
 
@@ -23,16 +24,32 @@ class Context extends Root {
     return <Component {...props}/>;
   }
 
-  succeed(questionId) {
-    document.location = this.props.questionPage.replace(':questionId', questionId);
+  succeed() {
+    location.reload();
   }
 
-  submit(params:ICreateQuestion) {
+  submitAnswer(params:IAnswer) {
+    this.submit(Api.AssignUserQuestion, params);
+  }
+
+  submitAssign(params:IAssign) {
+    this.submit(Api.AssignUserQuestion, params);
+  }
+
+  submitSorry() {
+    this.submit(Api.SorryQuestion);
+  }
+
+  submitWait() {
+    this.submit(Api.WaitAnswerQuestion);
+  }
+
+  submit(api:Api, params?:any) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.createQuestion, params)
-      .then(({id})=> {
+    strikeApi(api, params)
+      .then(()=> {
         this.setState({state: State.Success});
-        this.succeed(id);
+        this.succeed();
       })
       .catch(({errors})=> {
         this.setState({errors, state: State.Fail});
@@ -40,8 +57,19 @@ class Context extends Root {
   }
 
   listen(to) {
-    to('submit', (params)=> {
-      this.submit(params);
+    to('submitAnswer', (params)=> {
+      this.submitAnswer(params);
+    });
+
+    to('submitAssign', (params)=> {
+      this.submitAssign(params);
+    });
+
+    to('submitSorry', ()=> {
+      this.submitSorry();
+    });
+    to('submitWait', ()=> {
+      this.submitWait();
     });
   }
 
@@ -74,13 +102,25 @@ class Component extends Node {
   }
 
   writeResponder() {
-
     switch (this.state.mode) {
       case Mode.Answering:
         return this.writeAnswerArea()
+      case Mode.Assigning:
+        return this.writeAssignArea()
     }
   }
 
+  get answerParams():ICreateQuestion {
+    let {title, markdown, assigned} = this.state;
+    return {title, markdown, assigned};
+  }
+
+  get assignParams():ICreateQuestion {
+    let {title, markdown, assigned} = this.state;
+    return {title, markdown, assigned};
+  }
+
+\
   writeAnswerArea() {
     let {errors} = this.props;
     let {markdown} = this.state;
@@ -90,6 +130,37 @@ class Component extends Node {
         {this.writeSubmitAnswer()}
       </section>
     </section>
+  }
+
+  writeAssignArea() {
+    let {assigned} = this.state;
+    let {user, team} = this.props;
+    return <section>
+      <Assigner {...{assigned, user, team}} onChange={(state)=> this.setState(state)}/>
+      <section className="respond submit-section">
+        {this.writeSubmitAssign()}
+      </section>
+    </section>
+  }
+
+  writeSubmitAssign() {
+    switch (this.props.state) {
+      case State.Submitting:
+        return <button className="respond sending" disabled={true}>
+          <Fa icon="spinner" animation="pulse"/>
+          送信中
+        </button>;
+      case State.Success:
+        return null;
+      case State.Waiting:
+      case State.Fail:
+      default:
+        return <button className="respond submit"
+                       onClick={()=> this.dispatch('submitAssign', this.assignParams)}>
+          <Fa icon="hand-paper-o"/>
+          替わりにおねがいする
+        </button>;
+    }
   }
 
   writeSubmitAnswer() {
@@ -105,13 +176,12 @@ class Component extends Node {
       case State.Fail:
       default:
         return <button className="respond submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
+                       onClick={()=> this.dispatch('submitAnswer', this.answerParams)}>
           <Fa icon="hand-paper-o"/>
           この内容で回答する
         </button>;
     }
   }
-
 
   detectTabClass(mode:Mode) {
     return mode === this.state.mode
@@ -141,7 +211,11 @@ class Component extends Node {
         <section className="respond response">
           <section className="respond response-type-area">
             <div className="tabnav">
-              <a className="respond sorry" href="#">
+              <a className="respond sorry" onClick={()=> this.dispatch('submitWait')}>
+                <Fa icon="paw"/>
+                すこし待ってて
+              </a>
+              <a className="respond sorry" onClick={()=> this.dispatch('submitSorry')}>
                 <Fa icon="paw"/>
                 力になれません
               </a>
@@ -153,7 +227,7 @@ class Component extends Node {
                 </a>
                 <a className={this.detectTabClass(Mode.Assigning)}
                    onClick={()=> this.changeMode(Mode.Assigning)}>
-                  <Fa icon="hand-o-right"/>
+                  <Fa icon="group"/>
                   知ってそうな人を招待する
                 </a>
               </nav>

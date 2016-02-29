@@ -14384,6 +14384,7 @@ var eventer_1 = require('./lib/eventer');
 var fa_1 = require('./lib/fa');
 var strike_api_1 = require('./lib/services/strike-api');
 var comment_editor_1 = require('./lib/components/comment-editor');
+var assigner_1 = require('./lib/components/assigner');
 var user_1 = require("./lib/models/user");
 var team_1 = require("./lib/models/team");
 var State;
@@ -14401,17 +14402,28 @@ var Context = (function (_super) {
     Context.prototype.children = function (props) {
         return React.createElement(Component, React.__spread({}, props));
     };
-    Context.prototype.succeed = function (questionId) {
-        document.location = this.props.questionPage.replace(':questionId', questionId);
+    Context.prototype.succeed = function () {
+        location.reload();
     };
-    Context.prototype.submit = function (params) {
+    Context.prototype.submitAnswer = function (params) {
+        this.submit(strike_api_1.Api.AssignUserQuestion, params);
+    };
+    Context.prototype.submitAssign = function (params) {
+        this.submit(strike_api_1.Api.AssignUserQuestion, params);
+    };
+    Context.prototype.submitSorry = function () {
+        this.submit(strike_api_1.Api.SorryQuestion);
+    };
+    Context.prototype.submitWait = function () {
+        this.submit(strike_api_1.Api.WaitAnswerQuestion);
+    };
+    Context.prototype.submit = function (api, params) {
         var _this = this;
         this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.createQuestion, params)
-            .then(function (_a) {
-            var id = _a.id;
+        strike_api_1.strikeApi(api, params)
+            .then(function () {
             _this.setState({ state: State.Success });
-            _this.succeed(id);
+            _this.succeed();
         })
             .catch(function (_a) {
             var errors = _a.errors;
@@ -14420,8 +14432,17 @@ var Context = (function (_super) {
     };
     Context.prototype.listen = function (to) {
         var _this = this;
-        to('submit', function (params) {
-            _this.submit(params);
+        to('submitAnswer', function (params) {
+            _this.submitAnswer(params);
+        });
+        to('submitAssign', function (params) {
+            _this.submitAssign(params);
+        });
+        to('submitSorry', function () {
+            _this.submitSorry();
+        });
+        to('submitWait', function () {
+            _this.submitWait();
         });
     };
     Context.prototype.initialState = function (props) {
@@ -14453,13 +14474,50 @@ var Component = (function (_super) {
         switch (this.state.mode) {
             case Mode.Answering:
                 return this.writeAnswerArea();
+            case Mode.Assigning:
+                return this.writeAssignArea();
         }
     };
+    Object.defineProperty(Component.prototype, "answerParams", {
+        get: function () {
+            var _a = this.state, title = _a.title, markdown = _a.markdown, assigned = _a.assigned;
+            return { title: title, markdown: markdown, assigned: assigned };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Component.prototype, "assignParams", {
+        get: function () {
+            var _a = this.state, title = _a.title, markdown = _a.markdown, assigned = _a.assigned;
+            return { title: title, markdown: markdown, assigned: assigned };
+        },
+        enumerable: true,
+        configurable: true
+    });
     Component.prototype.writeAnswerArea = function () {
         var _this = this;
         var errors = this.props.errors;
         var markdown = this.state.markdown;
         return React.createElement("section", null, React.createElement(comment_editor_1.default, React.__spread({}, { errors: errors, markdown: markdown }, {"title": "not required", "onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAnswer()));
+    };
+    Component.prototype.writeAssignArea = function () {
+        var _this = this;
+        var assigned = this.state.assigned;
+        var _a = this.props, user = _a.user, team = _a.team;
+        return React.createElement("section", null, React.createElement(assigner_1.default, React.__spread({}, { assigned: assigned, user: user, team: team }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAssign()));
+    };
+    Component.prototype.writeSubmitAssign = function () {
+        var _this = this;
+        switch (this.props.state) {
+            case State.Submitting:
+                return React.createElement("button", {"className": "respond sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "送信中");
+            case State.Success:
+                return null;
+            case State.Waiting:
+            case State.Fail:
+            default:
+                return React.createElement("button", {"className": "respond submit", "onClick": function () { return _this.dispatch('submitAssign', _this.assignParams); }}, React.createElement(fa_1.default, {"icon": "hand-paper-o"}), "替わりにおねがいする");
+        }
     };
     Component.prototype.writeSubmitAnswer = function () {
         var _this = this;
@@ -14471,7 +14529,7 @@ var Component = (function (_super) {
             case State.Waiting:
             case State.Fail:
             default:
-                return React.createElement("button", {"className": "respond submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "hand-paper-o"}), "この内容で回答する");
+                return React.createElement("button", {"className": "respond submit", "onClick": function () { return _this.dispatch('submitAnswer', _this.answerParams); }}, React.createElement(fa_1.default, {"icon": "hand-paper-o"}), "この内容で回答する");
         }
     };
     Component.prototype.detectTabClass = function (mode) {
@@ -14487,7 +14545,7 @@ var Component = (function (_super) {
         if (this.props.state === State.Success) {
             return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond registered-body"}, React.createElement("p", {"className": "respond registered-message"}, "投稿完了しました")));
         }
-        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています"), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, React.createElement("a", {"className": "respond sorry", "href": "#"}, React.createElement(fa_1.default, {"icon": "paw"}), "力になれません"), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "hand-o-right"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
+        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています"), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, React.createElement("a", {"className": "respond sorry", "onClick": function () { return _this.dispatch('submitWait'); }}, React.createElement(fa_1.default, {"icon": "paw"}), "すこし待ってて"), React.createElement("a", {"className": "respond sorry", "onClick": function () { return _this.dispatch('submitSorry'); }}, React.createElement(fa_1.default, {"icon": "paw"}), "力になれません"), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
     };
     return Component;
 })(eventer_1.Node);
@@ -14503,7 +14561,60 @@ var QuestionResponder = (function () {
 })();
 window.QuestionResponder = QuestionResponder;
 
-},{"./lib/components/comment-editor":14,"./lib/eventer":15,"./lib/fa":16,"./lib/models/team":17,"./lib/models/user":18,"./lib/services/strike-api":19}],14:[function(require,module,exports){
+},{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/eventer":16,"./lib/fa":17,"./lib/models/team":18,"./lib/models/user":19,"./lib/services/strike-api":20}],14:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var fa_1 = require('../fa');
+var Assigner = (function (_super) {
+    __extends(Assigner, _super);
+    function Assigner(props) {
+        _super.call(this, props);
+        this.state = {
+            assigned: []
+        };
+    }
+    Assigner.prototype.isAssigned = function (userLogin) {
+        return _.includes(this.state.assigned, userLogin);
+    };
+    Assigner.prototype.isStateChanged = function (state) {
+        return this.state.assigned.join(',') !== state.assigned.join(',');
+    };
+    Assigner.prototype.componentDidUpdate = function (props, state) {
+        if (this.isStateChanged(state)) {
+            this.props.onChange(this.state);
+        }
+    };
+    Assigner.prototype.assignUser = function (userLogin) {
+        var now = this.state.assigned.concat();
+        if (_.includes(now, userLogin)) {
+            _.remove(now, userLogin);
+        }
+        else {
+            now.push(userLogin);
+        }
+        this.setState({ assigned: now });
+    };
+    Assigner.prototype.writeAssigner = function () {
+        var _this = this;
+        var _a = this.props, user = _a.user, team = _a.team;
+        return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, team.users.map(function (_a) {
+            var login = _a.login, name = _a.name;
+            return React.createElement("label", {"className": "assigner team-member", "key": login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign", "checked": _this.isAssigned(login), "onChange": function () { return _this.assignUser(login); }})), React.createElement("span", {"className": "input-label"}, name));
+        })));
+    };
+    Assigner.prototype.render = function () {
+        return React.createElement("article", {"className": "assigner body"}, React.createElement("section", {"className": "assigner tabs tabnav"}, React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": "tabnav-tab selected"}, React.createElement(fa_1.default, {"icon": "hand-o-right"}), "回答をおねがいする"))), this.writeAssigner());
+    };
+    return Assigner;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Assigner;
+
+},{"../eventer":16,"../fa":17}],15:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14617,7 +14728,7 @@ var CommentEditor = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentEditor;
 
-},{"../eventer":15,"../fa":16,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],15:[function(require,module,exports){
+},{"../eventer":16,"../fa":17,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],16:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14692,7 +14803,7 @@ var Root = (function (_super) {
 })(Node);
 exports.Root = Root;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14722,7 +14833,7 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var user_1 = require("./user");
 var Team = (function () {
     function Team(params) {
@@ -14736,7 +14847,7 @@ var Team = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Team;
 
-},{"./user":18}],18:[function(require,module,exports){
+},{"./user":19}],19:[function(require,module,exports){
 var User = (function () {
     function User(params) {
         this.name = params.name;
@@ -14747,17 +14858,25 @@ var User = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = User;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
     createQuestion: '/users/me/q/new',
-    logIn: '/in'
+    logIn: '/in',
+    answerQuestion: '/q/:question_id/answer',
+    assignUserQuestion: '/q/:question_id/assign',
+    waitAnswerQuestion: '/q/:question_id/wait',
+    sorryQuestion: '/q/:question_id/sorry'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
     Api[Api["createQuestion"] = 1] = "createQuestion";
     Api[Api["LogIn"] = 2] = "LogIn";
+    Api[Api["AnswerQuestion"] = 3] = "AnswerQuestion";
+    Api[Api["AssignUserQuestion"] = 4] = "AssignUserQuestion";
+    Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
+    Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14804,6 +14923,65 @@ function createQuestion(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createQuestion)
         .send({ questions: params })
+        .set('X-CSRF-Token', token())
+        .end(function (err, res) {
+        if (!!err) {
+            reject(res.body);
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    });
+}
+function answerQuestion(params, resolve, reject, queueResolve) {
+    var questionId = _.remove();
+    request
+        .patch(Uri.answerQuestion)
+        .send({ questions: params })
+        .set('X-CSRF-Token', token())
+        .end(function (err, res) {
+        if (!!err) {
+            reject(res.body);
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    });
+}
+function assignUserQuestion(params, resolve, reject, queueResolve) {
+    request
+        .patch(Uri.assignUserQuestion)
+        .send({ questions: params })
+        .set('X-CSRF-Token', token())
+        .end(function (err, res) {
+        if (!!err) {
+            reject(res.body);
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    });
+}
+function sorryQuestion(params, resolve, reject, queueResolve) {
+    request
+        .patch(Uri.sorryQuestion)
+        .set('X-CSRF-Token', token())
+        .end(function (err, res) {
+        if (!!err) {
+            reject(res.body);
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    });
+}
+function waitAnswerQuestion(params, resolve, reject, queueResolve) {
+    request
+        .patch(Uri.waitAnswerQuestion)
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {

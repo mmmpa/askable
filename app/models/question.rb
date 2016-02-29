@@ -14,11 +14,22 @@ class Question < ActiveRecord::Base
       comment = Comment.new(user: user, markdown: question_params.delete(:markdown))
 
       user_logins = question_params.delete(:assigned) || []
-      users = user_logins.uniq.map { |login| User.find_by(login: login) }.compact
+      users = call_assigned(*user_logins)
 
       question_params.merge!(user: user, users: users, comments: [comment])
 
       Question.create!(question_params)
+    end
+
+    def call_assigned(*users)
+      users.uniq.map { |user|
+        case user
+          when User
+            user
+          else
+            User.find_by(login: user)
+        end
+      }.compact
     end
   end
 
@@ -89,7 +100,7 @@ class Question < ActiveRecord::Base
   end
 
   def assign!(*assigned)
-    assigned.each { |user| users << user }
+    self.class.call_assigned(*assigned).each { |user| users << user }
     save!
   end
 

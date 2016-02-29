@@ -21,16 +21,32 @@ class QuestionsController < ApplicationController
     render json: {errors: e.record.creation_errors}, status: 400
   end
 
-  def sorry
+  def wait
+    question.wait_by(user)
+    render json: {id: question.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.errors}, status: 400
+  end
 
+  def sorry
+    question.sorry_by(user)
+    render json: {id: question.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.errors}, status: 400
   end
 
   def assign
-
+    question.assign_by(user, assign_params)
+    render json: {id: question.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.errors}, status: 400
   end
 
   def answer
-
+    question.answer_by(user, answer_params)
+    render json: {id: question.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.errors}, status: 400
   end
 
   def reply
@@ -48,6 +64,14 @@ class QuestionsController < ApplicationController
 
   def team
     []
+  end
+
+  def assign_params
+    params.require(:questions).permit(assigned: [])[:assigned]
+  end
+
+  def answer_params
+    params.require(:questions).permit(:markdown)
   end
 
   def question_params

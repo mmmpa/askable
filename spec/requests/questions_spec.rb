@@ -42,6 +42,56 @@ RSpec.describe "Questions", type: :request do
         expect(json[:errors]).to be_truthy
       end
     end
+  end
 
+  describe 'question response' do
+    let(:question) do
+      q = create(:question, :valid, user: User.second)
+      q.assign!(User.first, User.third, User.fourth)
+      q
+    end
+
+    context '力になれません' do
+      it '反応済みが増える' do
+        expect {
+          patch sorry_question_path(question.id)
+          expect(response).to have_http_status(201)
+        }.to change(question, :responded_count).by(1)
+      end
+    end
+
+    context '知っている人を教える' do
+      it '反応済みが増える' do
+        expect {
+          patch assign_question_path(question.id), questions: {assigned: [User.fifth.login]}
+          expect(response).to have_http_status(201)
+        }.to change(question, :responded_count).by(1)
+      end
+
+      it '回答者が増える' do
+        expect {
+          patch assign_question_path(question.id), questions: {assigned: [User.fifth.login]}
+          expect(response).to have_http_status(201)
+        }.to change(question, :assigned_count).by(1)
+
+        expect(question.users).to include(User.fifth)
+      end
+    end
+
+    context '回答する' do
+      it '反応済みが増える' do
+        expect {
+          patch answer_question_path(question.id), questions: {markdown: '# new comment'}
+          expect(response).to have_http_status(201)
+        }.to change(question, :responded_count).by(1)
+      end
+
+      it '回答が増える' do
+        expect {
+          patch answer_question_path(question.id), questions: {markdown: '# new comment'}
+          expect(response).to have_http_status(201)
+        }.to change(question.comments.where{user == User.first}, :size).by(1)
+      end
+    end
   end
 end

@@ -18,9 +18,9 @@ Rails.application.routes.draw do
 
     scope ':question_id' do
       get '', to: 'questions#show', as: :question
-      patch 'sorry', to: 'questions#sorry'
-      patch 'assign', to: 'questions#assign'
-      patch 'answer', to: 'questions#answer'
+      patch 'sorry', to: 'questions#sorry', as: :sorry_question
+      patch 'assign', to: 'questions#assign', as: :assign_question
+      patch 'answer', to: 'questions#answer', as: :answer_question
 
       scope :a do
         get 'new', to: 'comments#new'

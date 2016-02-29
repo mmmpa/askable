@@ -1,4 +1,8 @@
 import {ILogIn} from "../../welcome-new-user/lib/services/strike-api";
+import {IAnswer} from "../../new-question/lib/services/strike-api";
+import {IAssign} from "../../new-question/lib/services/strike-api";
+import {ISorry} from "../../new-question/lib/services/strike-api";
+import {IWait} from "../../new-question/lib/services/strike-api";
 declare const request;
 declare const Promise;
 
@@ -8,23 +12,31 @@ const Uri = {
   createUser: '/welcome/new',
   createQuestion: '/users/me/q/new',
   logIn: '/in'
+  answerQuestion: '/q/:question_id/answer',
+  assignUserQuestion: '/q/:question_id/assign',
+  waitAnswerQuestion: '/q/:question_id/wait',
+  sorryQuestion: '/q/:question_id/sorry'
 };
 
 export enum Api{
   CreateUser,
   createQuestion,
-  LogIn
+  LogIn,
+  AnswerQuestion,
+  AssignUserQuestion,
+  WaitAnswerQuestion,
+  SorryQuestion
 }
 
-export function strikeApi(api:Api, params:any):Promise {
+export function strikeApi(api:Api, params?:any):Promise {
   return new Promise((resolve, reject)=> {
     addJob(api, params, resolve, reject);
   });
 }
 
-function addJob(api, params, resolve, reject){
-  jobs = jobs.then(()=>{
-    return new Promise((queueResolve, _)=>{
+function addJob(api, params, resolve, reject) {
+  jobs = jobs.then(()=> {
+    return new Promise((queueResolve, _)=> {
       detectFunction(api)(params, resolve, reject, queueResolve)
     })
   })
@@ -61,6 +73,23 @@ export interface ILogIn {
   password:string
 }
 
+export interface IAssign {
+  assigned:string[],
+  questionId:number
+}
+
+export interface IAnswer {
+  markdown:string,
+  questionId:number
+}
+
+export interface IWait {
+  questionId:number
+}
+
+export interface ISorry {
+  questionId:number
+}
 
 function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request
@@ -92,6 +121,67 @@ function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
     })
 }
 
+function answerQuestion(params:IAnswer, resolve, reject, queueResolve) {
+  let questionId = _.remove()
+  request
+    .patch(Uri.answerQuestion)
+    .send({questions: params})
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+function assignUserQuestion(params:IAssign, resolve, reject, queueResolve) {
+
+  request
+    .patch(Uri.assignUserQuestion)
+    .send({questions: params})
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+function sorryQuestion(params:ISorry, resolve, reject, queueResolve) {
+  request
+    .patch(Uri.sorryQuestion)
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+function waitAnswerQuestion(params:IWait, resolve, reject, queueResolve) {
+  request
+    .patch(Uri.waitAnswerQuestion)
+    .set('X-CSRF-Token', token())
+    .end((err, res)=> {
+      if (!!err) {
+        reject(res.body);
+      } else {
+        resolve(res.body);
+      }
+      queueResolve();
+    })
+}
+
+
 function logIn(params:ILogIn, resolve, reject, queueResolve) {
   request
     .post(Uri.logIn)
@@ -108,9 +198,9 @@ function logIn(params:ILogIn, resolve, reject, queueResolve) {
 }
 
 function token():string {
-  try{
+  try {
     return document.getElementsByName('csrf-token')[0].getAttribute('content');
-  }catch(ex){
+  } catch (ex) {
     return '';
   }
 }

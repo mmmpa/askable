@@ -36,6 +36,7 @@ class Comment < ActiveRecord::Base
   end
 
   def render_markdown!
+    return if markdown.nil?
     self.html = self.class.render(markdown)
   end
 
