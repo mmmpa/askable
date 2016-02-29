@@ -28,20 +28,28 @@ class Context extends Root {
     location.reload();
   }
 
+  get questionId() {
+    return this.props.questionId;
+  }
+
   submitAnswer(params:IAnswer) {
-    this.submit(Api.AssignUserQuestion, params);
+    params.questionId = this.questionId;
+    this.submit(Api.AnswerQuestion, params);
   }
 
   submitAssign(params:IAssign) {
+    params.questionId = this.questionId;
     this.submit(Api.AssignUserQuestion, params);
   }
 
   submitSorry() {
-    this.submit(Api.SorryQuestion);
+    let {questionId} = this;
+    this.submit(Api.SorryQuestion, {questionId});
   }
 
   submitWait() {
-    this.submit(Api.WaitAnswerQuestion);
+    let {questionId} = this;
+    this.submit(Api.WaitAnswerQuestion, {questionId});
   }
 
   submit(api:Api, params?:any) {
@@ -120,7 +128,6 @@ class Component extends Node {
     return {title, markdown, assigned};
   }
 
-\
   writeAnswerArea() {
     let {errors} = this.props;
     let {markdown} = this.state;
@@ -134,16 +141,16 @@ class Component extends Node {
 
   writeAssignArea() {
     let {assigned} = this.state;
-    let {user, team} = this.props;
+    let {user, team, errors} = this.props;
     return <section>
-      <Assigner {...{assigned, user, team}} onChange={(state)=> this.setState(state)}/>
+      <Assigner {...{errors, assigned, user, team}} onChange={(state)=> this.setState(state)}/>
       <section className="respond submit-section">
         {this.writeSubmitAssign()}
       </section>
     </section>
   }
 
-  writeSubmitAssign() {
+  writeSubmit(text:string, onClick:()=>void) {
     switch (this.props.state) {
       case State.Submitting:
         return <button className="respond sending" disabled={true}>
@@ -155,32 +162,21 @@ class Component extends Node {
       case State.Waiting:
       case State.Fail:
       default:
-        return <button className="respond submit"
-                       onClick={()=> this.dispatch('submitAssign', this.assignParams)}>
+        return <button className="respond submit" onClick={onClick}>
           <Fa icon="hand-paper-o"/>
-          替わりにおねがいする
+          {text}
         </button>;
     }
   }
 
+  writeSubmitAssign() {
+    return this.writeSubmit('替わりにおねがいする',
+      ()=> this.dispatch('submitAssign', this.assignParams));
+  }
+
   writeSubmitAnswer() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="respond sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          送信中
-        </button>;
-      case State.Success:
-        return null;
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="respond submit"
-                       onClick={()=> this.dispatch('submitAnswer', this.answerParams)}>
-          <Fa icon="hand-paper-o"/>
-          この内容で回答する
-        </button>;
-    }
+    return this.writeSubmit('この内容で回答する',
+      ()=> this.dispatch('submitAnswer', this.answerParams));
   }
 
   detectTabClass(mode:Mode) {
@@ -192,6 +188,26 @@ class Component extends Node {
   changeMode(mode:Mode) {
     this.setState({mode})
   }
+
+  writebutton(text:string, name:string, icon:string, onClick:()=>void) {
+    switch (this.props.state) {
+      case State.Submitting:
+        return <button className={`respond ${name} sending`} disabled={true}>
+          <Fa icon="spinner" animation="pulse"/>
+          送信中
+        </button>;
+      case State.Success:
+        return null;
+      case State.Waiting:
+      case State.Fail:
+      default:
+        return <button className={`respond ${name}`} onClick={onClick}>
+          <Fa icon="paw"/>
+          {text}
+        </button>;
+    }
+  }
+
 
   render() {
     if (this.props.state === State.Success) {
@@ -211,14 +227,10 @@ class Component extends Node {
         <section className="respond response">
           <section className="respond response-type-area">
             <div className="tabnav">
-              <a className="respond sorry" onClick={()=> this.dispatch('submitWait')}>
-                <Fa icon="paw"/>
-                すこし待ってて
-              </a>
-              <a className="respond sorry" onClick={()=> this.dispatch('submitSorry')}>
-                <Fa icon="paw"/>
-                力になれません
-              </a>
+              {this.writebutton('力になれません', 'sorry', 'paw',
+                ()=> this.dispatch('submitSorry'))}
+              {this.writebutton('すこし待ってて', 'wait', 'clock-o',
+                ()=> this.dispatch('submitWait'))}
               <nav className="tabnav-tabs">
                 <a className={this.detectTabClass(Mode.Answering)}
                    onClick={()=> this.changeMode(Mode.Answering)}>

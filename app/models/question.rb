@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+  attr_accessor :assigned
+
   belongs_to :user
   has_many :comments, inverse_of: :question
   has_many :ask_users
@@ -67,6 +69,11 @@ class Question < ActiveRecord::Base
   end
 
   def assign_by(user, *assigned)
+    if assigned.nil? || assigned.size == 0
+      errors.add(:assigned, :at_least_one_assignee)
+      raise ActiveRecord::RecordInvalid, self
+    end
+
     assign!(*assigned)
     ask_for(user).assigned!
   end
@@ -93,10 +100,22 @@ class Question < ActiveRecord::Base
   def creation_errors
     base = errors.messages
     base.delete(:comments)
-    if (markdown_error = comments.first.errors.messages[:markdown])
+    if (markdown_error = comments.last.errors.messages[:markdown])
       base.merge!(markdown: markdown_error)
     end
     base
+  end
+
+  def answer_errors
+    base = {}
+    if (markdown_error = comments.last.errors.messages[:markdown])
+      base.merge!(markdown: markdown_error)
+    end
+    base
+  end
+
+  def assign_errors
+    errors
   end
 
   def assign!(*assigned)

@@ -11,11 +11,11 @@ var jobs = Promise.resolve();
 const Uri = {
   createUser: '/welcome/new',
   createQuestion: '/users/me/q/new',
-  logIn: '/in'
-  answerQuestion: '/q/:question_id/answer',
-  assignUserQuestion: '/q/:question_id/assign',
-  waitAnswerQuestion: '/q/:question_id/wait',
-  sorryQuestion: '/q/:question_id/sorry'
+  logIn: '/in',
+  answerQuestion: '/q/:questionId/answer',
+  assignUserQuestion: '/q/:questionId/assign',
+  waitAnswerQuestion: '/q/:questionId/wait',
+  sorryQuestion: '/q/:questionId/sorry'
 };
 
 export enum Api{
@@ -50,6 +50,14 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
       return createQuestion;
     case Api.LogIn:
       return logIn;
+    case Api.AnswerQuestion:
+      return answerQuestion;
+    case Api.AssignUserQuestion:
+      return assignUserQuestion;
+    case Api.WaitAnswerQuestion:
+      return waitAnswerQuestion;
+    case Api.SorryQuestion:
+      return sorryQuestion;
     default:
       throw 'Api not exist'
   }
@@ -122,9 +130,12 @@ function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
 }
 
 function answerQuestion(params:IAnswer, resolve, reject, queueResolve) {
-  let questionId = _.remove()
+  let questionId = params.questionId;
+  delete params.questionId;
+  let uri = Uri.answerQuestion.replace(':questionId', questionId);
+
   request
-    .patch(Uri.answerQuestion)
+    .patch(uri)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
@@ -138,9 +149,12 @@ function answerQuestion(params:IAnswer, resolve, reject, queueResolve) {
 }
 
 function assignUserQuestion(params:IAssign, resolve, reject, queueResolve) {
+  let questionId = params.questionId;
+  delete params.questionId;
+  let uri = Uri.assignUserQuestion.replace(':questionId', questionId);
 
   request
-    .patch(Uri.assignUserQuestion)
+    .patch(uri)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
@@ -154,8 +168,12 @@ function assignUserQuestion(params:IAssign, resolve, reject, queueResolve) {
 }
 
 function sorryQuestion(params:ISorry, resolve, reject, queueResolve) {
+  let questionId = params.questionId;
+  delete params.questionId;
+  let uri = Uri.sorryQuestion.replace(':questionId', questionId);
+
   request
-    .patch(Uri.sorryQuestion)
+    .patch(uri)
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
       if (!!err) {
@@ -168,8 +186,12 @@ function sorryQuestion(params:ISorry, resolve, reject, queueResolve) {
 }
 
 function waitAnswerQuestion(params:IWait, resolve, reject, queueResolve) {
+  let questionId = params.questionId;
+  delete params.questionId;
+  let uri = Uri.waitAnswerQuestion.replace(':questionId', questionId);
+
   request
-    .patch(Uri.waitAnswerQuestion)
+    .patch(uri)
     .set('X-CSRF-Token', token())
     .end((err, res)=> {
       if (!!err) {

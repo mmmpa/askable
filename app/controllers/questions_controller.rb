@@ -32,21 +32,21 @@ class QuestionsController < ApplicationController
     question.sorry_by(user)
     render json: {id: question.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors}, status: 400
+    render json: {errors: {}}, status: 400
   end
 
   def assign
-    question.assign_by(user, assign_params)
+    question.assign_by(user, *assign_params)
     render json: {id: question.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors}, status: 400
+    render json: {errors: e.record.assign_errors}, status: 400
   end
 
   def answer
     question.answer_by(user, answer_params)
     render json: {id: question.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors}, status: 400
+    render json: {errors: e.record.answer_errors}, status: 400
   end
 
   def reply

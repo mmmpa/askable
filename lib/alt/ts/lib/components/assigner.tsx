@@ -3,6 +3,7 @@ declare const ReactDOM;
 declare const _;
 import {Root, Node} from '../eventer'
 import Fa from '../fa'
+import ErrorMessages from './error-messages'
 import User from "../models/user";
 import Team from "../models/team";
 
@@ -61,6 +62,7 @@ export default class Assigner extends Node {
   }
 
   render() {
+    let {errors} = this.props;
     return <article className="assigner body">
       <section className="assigner tabs tabnav">
         <nav className="tabnav-tabs">
@@ -71,6 +73,7 @@ export default class Assigner extends Node {
         </nav>
       </section>
       {this.writeAssigner()}
+      <ErrorMessages name="assigned" {...{errors}}/>
     </article>
   }
 }

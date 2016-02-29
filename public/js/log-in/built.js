@@ -219,10 +219,10 @@ var Uri = {
     createUser: '/welcome/new',
     createQuestion: '/users/me/q/new',
     logIn: '/in',
-    answerQuestion: '/q/:question_id/answer',
-    assignUserQuestion: '/q/:question_id/assign',
-    waitAnswerQuestion: '/q/:question_id/wait',
-    sorryQuestion: '/q/:question_id/sorry'
+    answerQuestion: '/q/:questionId/answer',
+    assignUserQuestion: '/q/:questionId/assign',
+    waitAnswerQuestion: '/q/:questionId/wait',
+    sorryQuestion: '/q/:questionId/sorry'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -255,6 +255,14 @@ function detectFunction(api) {
             return createQuestion;
         case Api.LogIn:
             return logIn;
+        case Api.AnswerQuestion:
+            return answerQuestion;
+        case Api.AssignUserQuestion:
+            return assignUserQuestion;
+        case Api.WaitAnswerQuestion:
+            return waitAnswerQuestion;
+        case Api.SorryQuestion:
+            return sorryQuestion;
         default:
             throw 'Api not exist';
     }
@@ -290,9 +298,11 @@ function createQuestion(params, resolve, reject, queueResolve) {
     });
 }
 function answerQuestion(params, resolve, reject, queueResolve) {
-    var questionId = _.remove();
+    var questionId = params.questionId;
+    delete params.questionId;
+    var uri = Uri.answerQuestion.replace(':questionId', questionId);
     request
-        .patch(Uri.answerQuestion)
+        .patch(uri)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
@@ -306,8 +316,11 @@ function answerQuestion(params, resolve, reject, queueResolve) {
     });
 }
 function assignUserQuestion(params, resolve, reject, queueResolve) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var uri = Uri.assignUserQuestion.replace(':questionId', questionId);
     request
-        .patch(Uri.assignUserQuestion)
+        .patch(uri)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
@@ -321,8 +334,11 @@ function assignUserQuestion(params, resolve, reject, queueResolve) {
     });
 }
 function sorryQuestion(params, resolve, reject, queueResolve) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var uri = Uri.sorryQuestion.replace(':questionId', questionId);
     request
-        .patch(Uri.sorryQuestion)
+        .patch(uri)
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {
@@ -335,8 +351,11 @@ function sorryQuestion(params, resolve, reject, queueResolve) {
     });
 }
 function waitAnswerQuestion(params, resolve, reject, queueResolve) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var uri = Uri.waitAnswerQuestion.replace(':questionId', questionId);
     request
-        .patch(Uri.waitAnswerQuestion)
+        .patch(uri)
         .set('X-CSRF-Token', token())
         .end(function (err, res) {
         if (!!err) {
