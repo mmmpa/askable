@@ -123,13 +123,33 @@ input.has-error
   &.responded-users,
   &.not-yet-users
     @extend .one-half, .column
-    padding: 0px 20px
+    padding: 0 20px
   &.assigned-title
     font-size: $size-title
   &.assigned-user
     display: inline-block
     white-space: nowrap
     padding-right: 20px
+  &.responses
+    margin-top: 20px
+    border: 1px solid $border-color
+    border-radius: $radius
+    overflow: hidden
+  &.response-owner
+    @extend %boxed-group-title
+    border: 1px solid $border-color
+    border-width: 1px 0
+    margin: -1px 0 0 0
+    border-radius: 0
+  &.response-comment
+    padding: 20px
+  &.reply-to-reply-area
+    padding: 10px 20px
+    border-top: 1px dotted $border-color
+    overflow: hidden
+  &.reply-to-reply-button
+    @extend .btn, .btn-sm, .right, .btn-form
+
 .respond
   &.body
     margin: 20px 0 0 0
@@ -149,18 +169,31 @@ input.has-error
   &.wait
     @extend .btn, .btn-sm, .right, .btn-form
     margin-right: 5px
+  &.opener
+    margin: 20px 0 0 0
+    @extend .btn, .btn-block, .btn-form
   &.responder-area
     margin: 20px 0 0 0
   &.submit-section
     margin: 10px 0 0 0
     @extend .form-actions
   &.submit
+    margin: 10px 0 0 0
     @extend .btn, .btn-primary
   &.sending
     @extend .btn
   .assigner
     &.team-members
       height: 302px
+
+.reply-to-reply
+  &.submit
+    margin: 10px 0 0 0
+    @extend .btn, .btn-primary, .right
+  &.sending
+    margin: 10px 0 0 0
+    @extend .btn, .right
+
 .question-index
   &.body
     @extend %normal-body

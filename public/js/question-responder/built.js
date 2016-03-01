@@ -14492,7 +14492,7 @@ var Component = (function (_super) {
     Object.defineProperty(Component.prototype, "answerParams", {
         get: function () {
             var _a = this.state, title = _a.title, markdown = _a.markdown, assigned = _a.assigned;
-            return { title: title, markdown: markdown, assigned: assigned };
+            return { title: title, markdown: markdown, assigned: assigned, questionId: null };
         },
         enumerable: true,
         configurable: true
@@ -14500,7 +14500,7 @@ var Component = (function (_super) {
     Object.defineProperty(Component.prototype, "assignParams", {
         get: function () {
             var _a = this.state, title = _a.title, markdown = _a.markdown, assigned = _a.assigned;
-            return { title: title, markdown: markdown, assigned: assigned };
+            return { title: title, markdown: markdown, assigned: assigned, questionId: null };
         },
         enumerable: true,
         configurable: true
@@ -14557,22 +14557,51 @@ var Component = (function (_super) {
                 return React.createElement("button", {"className": "respond " + name, "onClick": onClick}, React.createElement(fa_1.default, {"icon": icon}), text);
         }
     };
+    Component.prototype.writeTitle = function () {
+        if (this.props.responded) {
+            return React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "reply "}), "回答する");
+        }
+        else {
+            return React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています");
+        }
+    };
+    Component.prototype.writeResponderButton = function () {
+        var _this = this;
+        if (this.props.responded) {
+            return null;
+        }
+        return [
+            this.writeButton('力になれません', 'sorry', 'paw', function () { return _this.dispatch('submitSorry'); }),
+            this.writeButton('すこし待ってて', 'wait', 'clock-o', function () { return _this.dispatch('submitWait'); })
+        ];
+    };
+    Component.prototype.writeOpener = function () {
+        var _this = this;
+        return React.createElement("article", {"className": "respond body"}, React.createElement("button", {"className": "respond opener", "onClick": function () { return _this.setState({ opened: true }); }}, React.createElement(fa_1.default, {"icon": "folder-open-o"}), "回答フォームを表示する"));
+    };
     Component.prototype.render = function () {
         var _this = this;
         if (this.props.state === State.Success) {
             return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond registered-body"}, React.createElement("p", {"className": "respond registered-message"}, "投稿完了しました")));
         }
-        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています"), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeButton('力になれません', 'sorry', 'paw', function () { return _this.dispatch('submitSorry'); }), this.writeButton('すこし待ってて', 'wait', 'clock-o', function () { return _this.dispatch('submitWait'); }), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
+        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, this.writeTitle(), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeResponderButton(), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
     };
     return Component;
 })(eventer_1.Node);
 var QuestionResponder = (function () {
     function QuestionResponder() {
     }
-    QuestionResponder.start = function (dom, questionId, userJson, teamJson, already) {
+    QuestionResponder.start = function (dom, questionId, userJson, teamJson, already, responded) {
         var user = new user_1.default(userJson);
         var team = new team_1.default(teamJson);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), dom);
+    };
+    QuestionResponder.opener = function (doms, questionId, userJson, teamJson, already, responded) {
+        _.each(doms, function (dom) {
+            dom.addEventListener('click', function (e) {
+                ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), e.target.parentNode);
+            });
+        });
     };
     return QuestionResponder;
 })();
@@ -14914,7 +14943,8 @@ var Uri = {
     answerQuestion: '/q/:questionId/answer',
     assignUserQuestion: '/q/:questionId/assign',
     waitAnswerQuestion: '/q/:questionId/wait',
-    sorryQuestion: '/q/:questionId/sorry'
+    sorryQuestion: '/q/:questionId/sorry',
+    replyToReply: '/q/:questionId/a/:commentId/res'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -14924,6 +14954,7 @@ var Uri = {
     Api[Api["AssignUserQuestion"] = 4] = "AssignUserQuestion";
     Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
     Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
+    Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14955,39 +14986,42 @@ function detectFunction(api) {
             return waitAnswerQuestion;
         case Api.SorryQuestion:
             return sorryQuestion;
+        case Api.ReplyToReply:
+            return replyToReply;
         default:
             throw 'Api not exist';
     }
+}
+function finalize(resolve, reject, queueResolve) {
+    return function (err, res) {
+        if (!!err) {
+            if (!res.body || !res.body.errors) {
+                console.log(err);
+                reject({ errors: { unknown: [err] } });
+            }
+            else {
+                reject(res.body);
+            }
+        }
+        else {
+            resolve(res.body);
+        }
+        queueResolve();
+    };
 }
 function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function createQuestion(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createQuestion)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function answerQuestion(params, resolve, reject, queueResolve) {
     var questionId = params.questionId;
@@ -14997,15 +15031,21 @@ function answerQuestion(params, resolve, reject, queueResolve) {
         .patch(uri)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
+}
+function replyToReply(params, resolve, reject, queueResolve) {
+    var questionId = params.questionId;
+    var commentId = params.commentId;
+    delete params.questionId;
+    delete params.targetId;
+    var uri = Uri.replyToReply
+        .replace(':questionId', questionId)
+        .replace(':commentId', commentId);
+    request
+        .post(uri)
+        .send({ questions: params })
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
 }
 function assignUserQuestion(params, resolve, reject, queueResolve) {
     var questionId = params.questionId;
@@ -15015,15 +15055,7 @@ function assignUserQuestion(params, resolve, reject, queueResolve) {
         .patch(uri)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function sorryQuestion(params, resolve, reject, queueResolve) {
     var questionId = params.questionId;
@@ -15032,15 +15064,7 @@ function sorryQuestion(params, resolve, reject, queueResolve) {
     request
         .patch(uri)
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function waitAnswerQuestion(params, resolve, reject, queueResolve) {
     var questionId = params.questionId;
@@ -15049,30 +15073,14 @@ function waitAnswerQuestion(params, resolve, reject, queueResolve) {
     request
         .patch(uri)
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function logIn(params, resolve, reject, queueResolve) {
     request
         .post(Uri.logIn)
         .send({ user_sessions: params })
         .set('X-CSRF-Token', token())
-        .end(function (err, res) {
-        if (!!err) {
-            reject(res.body);
-        }
-        else {
-            resolve(res.body);
-        }
-        queueResolve();
-    });
+        .end(finalize(resolve, reject, queueResolve));
 }
 function token() {
     try {

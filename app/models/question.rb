@@ -11,6 +11,8 @@ class Question < ActiveRecord::Base
 
   validate :require_head_comment
 
+  scope :index, -> { includes { [:users, :ask_users] }.order { created_at.desc } }
+
   class << self
     def create_by!(user, question_params)
       comment = Comment.new(user: user, markdown: question_params.delete(:markdown))
@@ -35,6 +37,18 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def comment_tree
+    responses.inject({}) { |a, comment|
+      a[comment.comment_id] ||= []
+      a[comment.comment_id].push(comment)
+      a
+    }.each_value { |replies|
+      replies.sort_by! { |reply|
+        reply.created_at
+      }.reverse!
+    }
+  end
+
   def author_name
     user.name
   end
@@ -44,11 +58,11 @@ class Question < ActiveRecord::Base
   end
 
   def assigned_count
-    users.size
+    users.count
   end
 
   def responded_count
-    responded_user.size
+    responded_user.count
   end
 
   def responses
@@ -56,8 +70,8 @@ class Question < ActiveRecord::Base
     comments.order { created_at.desc }[0..comments.size - 2]
   end
 
-  def respondable?(user)
-    users.include?(user) && not_yet_responded?(user)
+  def responded?(user)
+    users.include?(user) && !not_yet_responded?(user)
   end
 
   def ask_for(target)
@@ -98,12 +112,11 @@ class Question < ActiveRecord::Base
   # user_idsはサブクエリがのぞましい
   def users_with_respond_state(user_ids)
     users.where { id.in(user_ids) }
-      .select { ['users.*', count(ask_users.state).as(respond_state)] }
-      .group { id }
+      .select { ['users.*', ask_users.state.as(respond_state)] }
   end
 
   def not_yet_responded?(user)
-    ask_for(user).requested?
+    not_yet_user.include?(user)
   end
 
   def creation_errors
@@ -141,8 +154,19 @@ class Question < ActiveRecord::Base
     save!
   end
 
+  def reply_to_by!(user, replied, reply_params)
+    raise NotInTree unless comments.include?(replied)
+    reply = detect_comment(reply_params)
+    reply.user = user
+    reply.comment = detect_reply_target(replied)
+    comments << reply
+    save!
+    reply
+  end
+
   def reply_to!(replied, new_comment)
-    new_comment.comment = detect_reply_target(replied)
+    comment = detect_comment(new_comment)
+    comment.comment = detect_reply_target(replied)
     comments << new_comment
     save!
   end
@@ -180,6 +204,10 @@ class Question < ActiveRecord::Base
   end
 
   class NotAsked < StandardError
+
+  end
+
+  class NotInTree < StandardError
 
   end
 end

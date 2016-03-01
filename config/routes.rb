@@ -27,8 +27,8 @@ Rails.application.routes.draw do
         post 'new', to: 'comments#create'
 
         scope ':comment_id' do
-          get 'res', to: 'comments#res'
-          post 'res', to: 'comments#reply'
+          get 'res', to: 'questions#res'
+          post 'res', to: 'questions#reply'
         end
       end
     end

@@ -25,22 +25,48 @@ section.show-question.body
                   = detect_respond_icon(user.respond_state)
                   = user.login
   div#response-to-question
+    button.respond.opener
+      i.fa.fa-folder-open-o
+      | 回答フォームを開く
   - if @question.responses.count == 0
     section.show-question.no-response
       p まだ回答はありません
   - else
-    section.show-question.response-area
-      ul.show-question.responses
-        - @question.responses.map do |comment|
-          li.show-question.response
-            section.show-question.response-comment= comment.html
-            footer.show-question.response-owner= comment.user.name
-
+  section.show-question.response-area
+    ul.show-question.responses
+      - @question.comment_tree[@question.id].each do |comment|
+        li.show-question.response
+          = write_comment_tree(@question.comment_tree, comment) do |child, parent|
+            h1.show-question.response-owner
+              - if parent
+                i.fa.fa-reply
+                = "#{parent.user.name}さんへ#{child.user.name}さん曰く"
+              - else
+                i.fa.fa-graduation-cap
+                = "#{child.user.name}さん曰く"
+            section.show-question.response-comment.markdown-html= child.html.html_safe
+            div.show-question.reply-to-reply-area
+              button.show-question.reply-to-reply-button(data-id=child.id)
+                i.fa.fa-reply
+                | この回答に返信、もしくは補足する
+  div#response-to-question-foot
+    button.respond.opener
+      i.fa.fa-folder-open-o
+      | 回答フォームを開く
 script src='/js/common/built.js'
 script src='/js/question-responder/built.js'
+script src='/js/reply-to-reply/built.js'
 javascript:
   var questionId = #{@question.id};
   var user = #{@user.to_json.html_safe};
   var team = #{@team.to_json.html_safe};
   var assigned = #{@question.users.pluck(:login).to_json.html_safe};
-  QuestionResponder.start(document.querySelector('#response-to-question'), questionId, user, team, assigned);
+  var responded = #{@question.responded?(@user)};
+
+  QuestionResponder.opener(document.querySelectorAll('.respond.opener'), questionId, user, team, assigned, responded);
+
+  if(!responded){
+    QuestionResponder.start(document.querySelector('#response-to-question'), questionId, user, team, assigned, responded);
+  }
+
+  ReplyToReply.opener(document.querySelectorAll('.reply-to-reply-button'), questionId);

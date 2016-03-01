@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   def index
-    @questions = Question.order { created_at.desc }.all
+    @questions = Question.index
   end
 
   def show
@@ -50,12 +50,20 @@ class QuestionsController < ApplicationController
   end
 
   def reply
-
+    replied = question.reply_to_by!(user, comment, reply_params)
+    render json: {id: replied.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.answer_errors}, status: 400
   end
 
   private
+
   def question
     Question.find(params[:question_id])
+  end
+
+  def comment
+    Comment.find(params[:comment_id])
   end
 
   def user
@@ -64,6 +72,10 @@ class QuestionsController < ApplicationController
 
   def team
     []
+  end
+
+  def reply_params
+    params.require(:questions).permit(:markdown)
   end
 
   def assign_params

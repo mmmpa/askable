@@ -32,5 +32,4 @@ class AskUser < ActiveRecord::Base
   def initialize_value
     self.state ||= self.class.status[:requested]
   end
-
 end

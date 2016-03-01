@@ -1,3 +1,4 @@
+import {IAnswer} from "./lib/services/strike-api";
 declare const React;
 declare const ReactDOM;
 declare const _;
@@ -118,14 +119,14 @@ class Component extends Node {
     }
   }
 
-  get answerParams():ICreateQuestion {
+  get answerParams():IAnswer {
     let {title, markdown, assigned} = this.state;
-    return {title, markdown, assigned};
+    return {title, markdown, assigned, questionId: null};
   }
 
-  get assignParams():ICreateQuestion {
+  get assignParams():IAssign {
     let {title, markdown, assigned} = this.state;
-    return {title, markdown, assigned};
+    return {title, markdown, assigned, questionId: null};
   }
 
   writeAnswerArea() {
@@ -208,6 +209,40 @@ class Component extends Node {
     }
   }
 
+  writeTitle() {
+    if (this.props.responded) {
+      return <h1 className="respond title">
+        <Fa icon="reply "/>
+        回答する
+      </h1>
+    } else {
+      return <h1 className="respond title">
+        <Fa icon="graduation-cap "/>
+        回答をおねがいされています
+      </h1>
+    }
+  }
+
+  writeResponderButton() {
+    if (this.props.responded) {
+      return null;
+    }
+    return [
+      this.writeButton('力になれません', 'sorry', 'paw',
+        ()=> this.dispatch('submitSorry')),
+      this.writeButton('すこし待ってて', 'wait', 'clock-o',
+        ()=> this.dispatch('submitWait'))
+    ]
+  }
+
+  writeOpener() {
+    return <article className="respond body">
+      <button className="respond opener" onClick={()=> this.setState({opened: true})}>
+        <Fa icon="folder-open-o"/>
+        回答フォームを表示する
+      </button>
+    </article>
+  }
 
   render() {
     if (this.props.state === State.Success) {
@@ -220,17 +255,11 @@ class Component extends Node {
 
     return <article className="respond body">
       <section className="respond box-body">
-        <h1 className="respond title">
-          <Fa icon="graduation-cap "/>
-          回答をおねがいされています
-        </h1>
+        {this.writeTitle()}
         <section className="respond response">
           <section className="respond response-type-area">
             <div className="tabnav">
-              {this.writeButton('力になれません', 'sorry', 'paw',
-                ()=> this.dispatch('submitSorry'))}
-              {this.writeButton('すこし待ってて', 'wait', 'clock-o',
-                ()=> this.dispatch('submitWait'))}
+              {this.writeResponderButton()}
               <nav className="tabnav-tabs">
                 <a className={this.detectTabClass(Mode.Answering)}
                    onClick={()=> this.changeMode(Mode.Answering)}>
@@ -255,10 +284,18 @@ class Component extends Node {
 }
 
 class QuestionResponder {
-  static start(dom:HTMLElement, questionId, userJson, teamJson, already) {
+  static start(dom:HTMLElement, questionId, userJson, teamJson, already, responded) {
     let user = new User(userJson);
     let team = new Team(teamJson);
-    ReactDOM.render(<Context {...{questionId, user, team, already}}/>, dom);
+    ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, dom);
+  }
+
+  static opener(doms, questionId, userJson, teamJson, already, responded) {
+    _.each(doms, (dom)=> {
+      dom.addEventListener('click', (e)=> {
+        ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, e.target.parentNode);
+      });
+    });
   }
 }
 
