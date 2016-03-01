@@ -14526,7 +14526,10 @@ var AnchorColoring = (function () {
         });
     }
     AnchorColoring.prototype.reload = function (e) {
-        this.initialize();
+        var _this = this;
+        setTimeout(function () {
+            return _this.initialize();
+        }, 1);
     };
     AnchorColoring.prototype.color = function (target) {
         target.style.backgroundColor = this.selectedColor;
@@ -14545,16 +14548,16 @@ var AnchorColoring = (function () {
     AnchorColoring.prototype.clearAll = function () {
         var target;
         while (target = this.colored.shift()) {
-            console.log(target);
             this.clear(target, false);
         }
+        this.colored.push(this.anchored);
     };
     AnchorColoring.prototype.initialize = function () {
-        var _this = this;
+        this.clearAll();
         var target = this.doc.querySelector(location.hash);
         this.anchored = target;
         this.color(target);
-        setTimeout(function () { return _this.clearAll(); }, 1);
+        this.clearAll();
     };
     AnchorColoring.anchor = function (anchors) {
         new AnchorColoring(anchors);

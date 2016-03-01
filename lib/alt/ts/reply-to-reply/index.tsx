@@ -172,7 +172,8 @@ class AnchorColoring {
   }
 
   reload(e?) {
-    this.initialize();
+    setTimeout(()=>
+      this.initialize(),1);
   }
 
   color(target) {
@@ -193,17 +194,17 @@ class AnchorColoring {
   clearAll() {
     let target;
     while (target = this.colored.shift()) {
-      console.log(target)
       this.clear(target, false);
     }
+    this.colored.push(this.anchored)
   }
 
   initialize() {
+    this.clearAll();
     let target = this.doc.querySelector(location.hash);
     this.anchored = target;
     this.color(target);
-    setTimeout(()=> this.clearAll(), 1);
-
+    this.clearAll();
   }
 
   static anchor(anchors) {
