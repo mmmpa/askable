@@ -32,26 +32,28 @@ section.show-question.body
     section.show-question.no-response
       p まだ回答はありません
   - else
-  section.show-question.response-area
-    ul.show-question.responses
-      - @question.comment_tree[@question.id].each do |comment|
-        li.show-question.response
-          div(id="comment-#{comment.id}")
-            = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
-              div[id=("comment-#{child.id}" if parent)]
-                h1.show-question.response-owner
-                  - if parent
-                    - parents.map do |p|
-                      i.fa.fa-reply.reply-anchor(data-targetId=p.id)
-                    = "#{parent.user.name}さんへ#{child.user.name}さん曰く"
-                  - else
-                    i.fa.fa-graduation-cap
-                    = "#{child.user.name}さん曰く"
-                section.show-question.response-comment.markdown-html= child.html.html_safe
-                div.show-question.reply-to-reply-area
-                  button.show-question.reply-to-reply-button(data-id=child.id)
-                    i.fa.fa-reply
-                    | この回答に返信、もしくは補足する
+    section.show-question.response-area
+      ul.show-question.responses
+        - @question.comment_tree[@question.id].each do |comment|
+          li.show-question.response
+            div(id="comment-#{comment.id}")
+              = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
+                div[id=("comment-#{child.id}" if parent)]
+                  h1.show-question.response-owner
+                    - if parent
+                      - parents.map do |p|
+                        i.fa.fa-reply.reply-anchor(data-targetId=p.id)
+                      = "#{parent.user.name}さんへ#{child.user.name}さん曰く"
+                    - else
+                      i.fa.fa-graduation-cap
+                      = "#{child.user.name}さん曰く"
+                    a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
+                      i.fa.fa-link.
+                  section.show-question.response-comment.markdown-html= child.html.html_safe
+                  div.show-question.reply-to-reply-area
+                    button.show-question.reply-to-reply-button(data-id=child.id)
+                      i.fa.fa-reply
+                      | この回答に返信、もしくは補足する
   div#response-to-question-foot
     button.respond.opener
       i.fa.fa-folder-open-o
@@ -59,6 +61,7 @@ section.show-question.body
 script src='/js/common/built.js'
 script src='/js/question-responder/built.js'
 script src='/js/reply-to-reply/built.js'
+script src='/js/anchor-coloring/built.js'
 javascript:
   var doc = document;
   var questionId = #{@question.id};
@@ -74,4 +77,4 @@ javascript:
   }
 
   ReplyToReply.opener(doc.querySelectorAll('.reply-to-reply-button'), questionId);
-  AnchorColoring.anchor(doc.querySelectorAll('.reply-anchor'));
+  AnchorColoring.anchor(doc.querySelectorAll('.reply-anchor, .permalink'));

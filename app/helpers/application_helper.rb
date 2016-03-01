@@ -7,7 +7,7 @@ module ApplicationHelper
       when AskUser.status[:responded]
         %{<i class="fa fa-paw"></i>}.html_safe
       when AskUser.status[:assigned]
-        %{<i class="fa fa-groups"></i>}.html_safe
+        %{<i class="fa fa-group"></i>}.html_safe
       when AskUser.status[:wait]
         %{<i class="fa fa-clock-o"></i>}.html_safe
       else

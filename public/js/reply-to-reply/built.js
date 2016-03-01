@@ -14501,71 +14501,7 @@ var ReplyToReply = (function () {
     };
     return ReplyToReply;
 })();
-var AnchorColoring = (function () {
-    function AnchorColoring(anchors) {
-        var _this = this;
-        this.doc = document;
-        this.selectedColor = "#fff9ea";
-        this.clearColor = "#fff";
-        this.colored = [];
-        this.initialize();
-        _.each(anchors, function (anchor) {
-            var targetId = anchor.getAttribute('data-targetId');
-            var idSelector = "#comment-" + targetId;
-            var target = document.querySelector(idSelector);
-            anchor.addEventListener('click', function (e) {
-                location.href = idSelector;
-                _this.reload();
-            });
-            anchor.addEventListener('mouseover', function (e) {
-                _this.color(target);
-            });
-            anchor.addEventListener('mouseout', function (e) {
-                _this.clear(target);
-            });
-        });
-    }
-    AnchorColoring.prototype.reload = function (e) {
-        var _this = this;
-        setTimeout(function () {
-            return _this.initialize();
-        }, 1);
-    };
-    AnchorColoring.prototype.color = function (target) {
-        target.style.backgroundColor = this.selectedColor;
-        this.colored.push(target);
-    };
-    AnchorColoring.prototype.clear = function (target, remove) {
-        if (remove === void 0) { remove = true; }
-        if (target === this.anchored) {
-            return false;
-        }
-        target.style.backgroundColor = this.clearColor;
-        if (remove) {
-            _.remove(this.colored, target);
-        }
-    };
-    AnchorColoring.prototype.clearAll = function () {
-        var target;
-        while (target = this.colored.shift()) {
-            this.clear(target, false);
-        }
-        this.colored.push(this.anchored);
-    };
-    AnchorColoring.prototype.initialize = function () {
-        this.clearAll();
-        var target = this.doc.querySelector(location.hash);
-        this.anchored = target;
-        this.color(target);
-        this.clearAll();
-    };
-    AnchorColoring.anchor = function (anchors) {
-        new AnchorColoring(anchors);
-    };
-    return AnchorColoring;
-})();
 window.ReplyToReply = ReplyToReply;
-window.AnchorColoring = AnchorColoring;
 
 },{"./lib/components/comment-editor":14,"./lib/eventer":15,"./lib/fa":16,"./lib/services/strike-api":17}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {

@@ -147,6 +147,8 @@ input.has-error
     padding: 10px 20px
     border-top: 1px dotted $border-color
     overflow: hidden
+    .preview-area
+      min-height: 302px !important
   &.reply-to-reply-button
     @extend .btn, .btn-sm, .right, .btn-form
   &.response
@@ -155,10 +157,13 @@ input.has-error
       border-left: 1px dotted $border-color
       background: #fff
       .response-owner
-        background: none
+        //background: none
       .reply-anchor
         color: $brand-blue
         cursor: pointer
+    .permalink
+      @extend .right
+
 .respond
   &.body
     margin: 20px 0 0 0
@@ -187,13 +192,14 @@ input.has-error
     margin: 10px 0 0 0
     @extend .form-actions
   &.submit
-    margin: 10px 0 0 0
     @extend .btn, .btn-primary
   &.sending
     @extend .btn
   .assigner
     &.team-members
       height: 302px
+  .preview-area
+    min-height: 302px !important
 
 .reply-to-reply
   &.submit

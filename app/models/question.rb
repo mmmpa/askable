@@ -71,7 +71,9 @@ class Question < ActiveRecord::Base
   end
 
   def responded?(user)
-    users.include?(user) && !not_yet_responded?(user)
+    return true unless users.include?(user)
+
+    !not_yet_responded?(user)
   end
 
   def ask_for(target)
