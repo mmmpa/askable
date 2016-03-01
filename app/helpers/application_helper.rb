@@ -17,14 +17,14 @@ module ApplicationHelper
 
   def write_comment_tree(tree, root, &block)
     base = capture(root, &block)
-    children = write_comment_child(tree, root, tree[root.id], &block)
+    children = write_comment_child(tree, [root], tree[root.id], &block)
     base + children
   end
 
-  def write_comment_child(tree, parent, children, &block)
+  def write_comment_child(tree, parents, children, &block)
     return '' if children.nil?
     children.map { |child|
-      capture(child, parent, &block) + write_comment_child(tree, child, tree[child.id], &block)
+      %{<div class="wrap">#{capture(child, parents.first, parents, &block)}</div>} + write_comment_child(tree, parents + [child], tree[child.id], &block)
     }.join.html_safe
   end
 end

@@ -149,7 +149,16 @@ input.has-error
     overflow: hidden
   &.reply-to-reply-button
     @extend .btn, .btn-sm, .right, .btn-form
-
+  &.response
+    .wrap
+      margin: 0 0 0 40px
+      border-left: 1px dotted $border-color
+      background: #fff
+      .response-owner
+        background: none
+      .reply-anchor
+        color: $brand-blue
+        cursor: pointer
 .respond
   &.body
     margin: 20px 0 0 0

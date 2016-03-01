@@ -137,8 +137,81 @@ class ReplyToReply {
       });
     });
   }
+
+
+}
+
+class AnchorColoring {
+  doc = document;
+  selectedColor = "#fff9ea";
+  clearColor = "#fff";
+  colored = [];
+  anchored;
+
+  constructor(anchors) {
+    this.initialize();
+
+    _.each(anchors, (anchor)=> {
+      let targetId = anchor.getAttribute('data-targetId');
+      let idSelector = `#comment-${targetId}`;
+      let target = document.querySelector(idSelector);
+
+      anchor.addEventListener('click', (e)=> {
+        location.href = idSelector;
+        this.reload();
+      });
+
+      anchor.addEventListener('mouseover', (e)=> {
+        this.color(target)
+      });
+
+      anchor.addEventListener('mouseout', (e)=> {
+        this.clear(target)
+      });
+    });
+  }
+
+  reload(e?) {
+    this.initialize();
+  }
+
+  color(target) {
+    target.style.backgroundColor = this.selectedColor;
+    this.colored.push(target);
+  }
+
+  clear(target, remove = true) {
+    if (target === this.anchored) {
+      return false;
+    }
+    target.style.backgroundColor = this.clearColor;
+    if (remove) {
+      _.remove(this.colored, target);
+    }
+  }
+
+  clearAll() {
+    let target;
+    while (target = this.colored.shift()) {
+      console.log(target)
+      this.clear(target, false);
+    }
+  }
+
+  initialize() {
+    let target = this.doc.querySelector(location.hash);
+    this.anchored = target;
+    this.color(target);
+    setTimeout(()=> this.clearAll(), 1);
+
+  }
+
+  static anchor(anchors) {
+    new AnchorColoring(anchors)
+  }
 }
 
 window.ReplyToReply = ReplyToReply;
+window.AnchorColoring = AnchorColoring;
 
 
