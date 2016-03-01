@@ -40,11 +40,12 @@ export default class Assigner extends Node {
   }
 
   writeAssigner() {
-    let {user, team} = this.props;
-
+    let {user, team, already} = this.props;
+    let exclusion = already.concat(user.login)
+    let users = team.users.filter((user)=> !_.includes(exclusion, user.login));
     return <section className="assigner team-members">
       <section className="assigner team-member-list">
-        {team.users.map(({login, name}:User)=>{
+        {users.map(({login, name}:User)=>{
 
           return <label className="assigner team-member" key={login}>
             <span className="input-input">

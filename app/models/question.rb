@@ -64,11 +64,11 @@ class Question < ActiveRecord::Base
     ask_users.where { user == target }.first
   end
 
-  def sorry_by(user)
+  def sorry_by!(user)
     ask_for(user).responded!
   end
 
-  def assign_by(user, *assigned)
+  def assign_by!(user, *assigned)
     if assigned.nil? || assigned.size == 0
       errors.add(:assigned, :at_least_one_assignee)
       raise ActiveRecord::RecordInvalid, self
@@ -78,7 +78,7 @@ class Question < ActiveRecord::Base
     ask_for(user).assigned!
   end
 
-  def answer_by(user, new_comment)
+  def answer_by!(user, new_comment)
     comment = detect_comment(new_comment)
     comment.user = user
     reply_to!(root, comment)
@@ -86,11 +86,20 @@ class Question < ActiveRecord::Base
   end
 
   def not_yet_user
-    users.joins { ask_users }.where { ask_users.state.in(AskUser.not_yet_status) }
+    user_ids = ask_users.where { state.in(AskUser.not_yet_status) }.select { user_id }
+    users_with_respond_state(user_ids)
   end
 
   def responded_user
-    users.joins { ask_users }.where { ask_users.state.in(AskUser.responded_status) }
+    user_ids = ask_users.where { state.in(AskUser.responded_status) }.select { user_id }
+    users_with_respond_state(user_ids)
+  end
+
+  # user_idsはサブクエリがのぞましい
+  def users_with_respond_state(user_ids)
+    users.where { id.in(user_ids) }
+      .select { ['users.*', count(ask_users.state).as(respond_state)] }
+      .group { id }
   end
 
   def not_yet_responded?(user)
@@ -167,6 +176,10 @@ class Question < ActiveRecord::Base
   end
 
   class CannotReplyOtherQuestionComment < StandardError
+
+  end
+
+  class NotAsked < StandardError
 
   end
 end

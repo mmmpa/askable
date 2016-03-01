@@ -8,9 +8,22 @@ section.show-question.body
       section.show-question.question.markdown-html== @question.root.html
       - if @question.users.count != 0
         section.show-question.assigned-users
-          ul.show-question.assigned-list
-            - @question.users.map do |user|
-              li= user.login
+          section.show-question.not-yet-users
+            h1.show-question.assigned-title
+              i.fa.fa-hourglass-half
+              | 反応まち
+            ul.show-question.not-yet-list
+              - @question.not_yet_user.map do |user|
+                li.show-question.assigned-user= user.login
+          section.show-question.responded-users
+            h1.show-question.assigned-title
+              i.fa.fa-check
+              | 反応ずみ
+            ul.show-question.responded-list
+              - @question.responded_user.map do |user|
+                li.show-question.assigned-user
+                  = detect_respond_icon(user.respond_state)
+                  = user.login
   div#response-to-question
   - if @question.responses.count == 0
     section.show-question.no-response
@@ -29,4 +42,5 @@ javascript:
   var questionId = #{@question.id};
   var user = #{@user.to_json.html_safe};
   var team = #{@team.to_json.html_safe};
-  QuestionResponder.start(document.querySelector('#response-to-question'), questionId, user, team);
+  var assigned = #{@question.users.pluck(:login).to_json.html_safe};
+  QuestionResponder.start(document.querySelector('#response-to-question'), questionId, user, team, assigned);

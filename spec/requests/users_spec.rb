@@ -22,7 +22,7 @@ RSpec.describe "Users", type: :request do
 
       it '作成失敗でエラーメッセージが返る' do
         post welcome_new_user_path, users: attributes_for(:user, :valid, login: '')
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(400)
         expect(json[:errors]).to be_truthy
       end
     end

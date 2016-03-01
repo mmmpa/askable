@@ -21,3 +21,10 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        question:
+          attributes:
+            assigned:
+              at_least_one_assignee: at_least_one_assignee

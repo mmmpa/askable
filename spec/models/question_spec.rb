@@ -86,7 +86,7 @@ RSpec.describe Question, type: :model do
 
       context '力になれません' do
         it '反応後はリストから外れる' do
-          question.sorry_by(User.second)
+          question.sorry_by!(User.second)
           expect(after_q.not_yet_user).not_to include(User.second)
           expect(after_q.responded_user).to include(User.second)
         end
@@ -94,7 +94,7 @@ RSpec.describe Question, type: :model do
 
       context '知ってそうな人を教える' do
         it '反応後はリストから外れ、新しい人がリストに入る' do
-          question.assign_by(User.second, User.fifth)
+          question.assign_by!(User.second, User.fifth)
           expect(after_q.not_yet_user).not_to include(User.second)
           expect(after_q.responded_user).to include(User.second)
           expect(after_q.not_yet_user).to include(User.fifth)
@@ -103,7 +103,7 @@ RSpec.describe Question, type: :model do
 
       context '応える' do
         it '反応後はリストから外れ、コメントが追加される' do
-          question.answer_by(User.second, build(:comment, :valid))
+          question.answer_by!(User.second, build(:comment, :valid))
           expect(after_q.not_yet_user).not_to include(User.second)
           expect(after_q.responded_user).to include(User.second)
           expect(after_q.comments.last.user).to eq(User.second)

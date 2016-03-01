@@ -14514,8 +14514,8 @@ var Component = (function (_super) {
     Component.prototype.writeAssignArea = function () {
         var _this = this;
         var assigned = this.state.assigned;
-        var _a = this.props, user = _a.user, team = _a.team, errors = _a.errors;
-        return React.createElement("section", null, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, assigned: assigned, user: user, team: team }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAssign()));
+        var _a = this.props, user = _a.user, team = _a.team, errors = _a.errors, already = _a.already;
+        return React.createElement("section", null, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, assigned: assigned, user: user, team: team, already: already }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAssign()));
     };
     Component.prototype.writeSubmit = function (text, onClick) {
         switch (this.props.state) {
@@ -14545,7 +14545,7 @@ var Component = (function (_super) {
     Component.prototype.changeMode = function (mode) {
         this.setState({ mode: mode });
     };
-    Component.prototype.writebutton = function (text, name, icon, onClick) {
+    Component.prototype.writeButton = function (text, name, icon, onClick) {
         switch (this.props.state) {
             case State.Submitting:
                 return React.createElement("button", {"className": "respond " + name + " sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "送信中");
@@ -14554,7 +14554,7 @@ var Component = (function (_super) {
             case State.Waiting:
             case State.Fail:
             default:
-                return React.createElement("button", {"className": "respond " + name, "onClick": onClick}, React.createElement(fa_1.default, {"icon": "paw"}), text);
+                return React.createElement("button", {"className": "respond " + name, "onClick": onClick}, React.createElement(fa_1.default, {"icon": icon}), text);
         }
     };
     Component.prototype.render = function () {
@@ -14562,17 +14562,17 @@ var Component = (function (_super) {
         if (this.props.state === State.Success) {
             return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond registered-body"}, React.createElement("p", {"className": "respond registered-message"}, "投稿完了しました")));
         }
-        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています"), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writebutton('力になれません', 'sorry', 'paw', function () { return _this.dispatch('submitSorry'); }), this.writebutton('すこし待ってて', 'wait', 'clock-o', function () { return _this.dispatch('submitWait'); }), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
+        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, React.createElement("h1", {"className": "respond title"}, React.createElement(fa_1.default, {"icon": "graduation-cap "}), "回答をおねがいされています"), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeButton('力になれません', 'sorry', 'paw', function () { return _this.dispatch('submitSorry'); }), this.writeButton('すこし待ってて', 'wait', 'clock-o', function () { return _this.dispatch('submitWait'); }), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
     };
     return Component;
 })(eventer_1.Node);
 var QuestionResponder = (function () {
     function QuestionResponder() {
     }
-    QuestionResponder.start = function (dom, questionId, userJson, teamJson) {
+    QuestionResponder.start = function (dom, questionId, userJson, teamJson, already) {
         var user = new user_1.default(userJson);
         var team = new team_1.default(teamJson);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already })), dom);
     };
     return QuestionResponder;
 })();
@@ -14618,8 +14618,10 @@ var Assigner = (function (_super) {
     };
     Assigner.prototype.writeAssigner = function () {
         var _this = this;
-        var _a = this.props, user = _a.user, team = _a.team;
-        return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, team.users.map(function (_a) {
+        var _a = this.props, user = _a.user, team = _a.team, already = _a.already;
+        var exclusion = already.concat(user.login);
+        var users = team.users.filter(function (user) { return !_.includes(exclusion, user.login); });
+        return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, users.map(function (_a) {
             var login = _a.login, name = _a.name;
             return React.createElement("label", {"className": "assigner team-member", "key": login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign", "checked": _this.isAssigned(login), "onChange": function () { return _this.assignUser(login); }})), React.createElement("span", {"className": "input-label"}, name));
         })));

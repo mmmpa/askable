@@ -141,9 +141,9 @@ class Component extends Node {
 
   writeAssignArea() {
     let {assigned} = this.state;
-    let {user, team, errors} = this.props;
+    let {user, team, errors, already} = this.props;
     return <section>
-      <Assigner {...{errors, assigned, user, team}} onChange={(state)=> this.setState(state)}/>
+      <Assigner {...{errors, assigned, user, team, already}} onChange={(state)=> this.setState(state)}/>
       <section className="respond submit-section">
         {this.writeSubmitAssign()}
       </section>
@@ -189,7 +189,7 @@ class Component extends Node {
     this.setState({mode})
   }
 
-  writebutton(text:string, name:string, icon:string, onClick:()=>void) {
+  writeButton(text:string, name:string, icon:string, onClick:()=>void) {
     switch (this.props.state) {
       case State.Submitting:
         return <button className={`respond ${name} sending`} disabled={true}>
@@ -202,7 +202,7 @@ class Component extends Node {
       case State.Fail:
       default:
         return <button className={`respond ${name}`} onClick={onClick}>
-          <Fa icon="paw"/>
+          <Fa icon={icon}/>
           {text}
         </button>;
     }
@@ -227,9 +227,9 @@ class Component extends Node {
         <section className="respond response">
           <section className="respond response-type-area">
             <div className="tabnav">
-              {this.writebutton('力になれません', 'sorry', 'paw',
+              {this.writeButton('力になれません', 'sorry', 'paw',
                 ()=> this.dispatch('submitSorry'))}
-              {this.writebutton('すこし待ってて', 'wait', 'clock-o',
+              {this.writeButton('すこし待ってて', 'wait', 'clock-o',
                 ()=> this.dispatch('submitWait'))}
               <nav className="tabnav-tabs">
                 <a className={this.detectTabClass(Mode.Answering)}
@@ -255,10 +255,10 @@ class Component extends Node {
 }
 
 class QuestionResponder {
-  static start(dom:HTMLElement, questionId, userJson, teamJson) {
+  static start(dom:HTMLElement, questionId, userJson, teamJson, already) {
     let user = new User(userJson);
     let team = new Team(teamJson);
-    ReactDOM.render(<Context {...{questionId, user, team}}/>, dom);
+    ReactDOM.render(<Context {...{questionId, user, team, already}}/>, dom);
   }
 }
 

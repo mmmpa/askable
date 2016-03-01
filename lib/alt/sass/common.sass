@@ -10,6 +10,9 @@ $check-size: 16px
 $radius: 3px
 $border-color: #d8d8d8
 
+i.fa
+  margin-right: 0.2em
+
 .input-input,
 .input-label
   display: inline-block
@@ -107,16 +110,26 @@ input.has-error
   &.question-area
     @extend %boxed-group-inner
     padding: 20px
-  &.assigned-users
-    border-top: 1px solid $border-color
-    margin: 20px -20px 0
   &.no-response
     @extend .blankslate
     margin: 20px 0 0
     p
       @extend h3
       font-weight: 600
-
+  &.assigned-users
+    @extend .columns
+    border-top: 1px solid $border-color
+    margin: 20px -20px 0
+  &.responded-users,
+  &.not-yet-users
+    @extend .one-half, .column
+    padding: 0px 20px
+  &.assigned-title
+    font-size: $size-title
+  &.assigned-user
+    display: inline-block
+    white-space: nowrap
+    padding-right: 20px
 .respond
   &.body
     margin: 20px 0 0 0
@@ -148,7 +161,6 @@ input.has-error
   .assigner
     &.team-members
       height: 302px
-
 .question-index
   &.body
     @extend %normal-body

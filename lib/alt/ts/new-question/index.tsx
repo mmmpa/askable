@@ -116,7 +116,7 @@ class Component extends Node {
             </div>
           </section>
           <section className="new-question assigning-area">
-            <Assigner {...{user, team}} onChange={(state)=> this.setState(state)}/>
+            <Assigner {...{errors, user, team}} onChange={(state)=> this.setState(state)}/>
           </section>
         </div>
       </section>
