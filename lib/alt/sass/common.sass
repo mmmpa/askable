@@ -11,6 +11,17 @@ $radius: 3px
 $border-color: #d8d8d8
 $background-gray: #f5f5f5
 
+%submit-button
+  @extend .btn, .btn-primary
+
+%sending-button
+  @extend .btn
+
+button.submit
+  @extend %submit-button
+
+button.sending
+  @extend %sending-button
 
 %boxed-group
   position: relative
@@ -49,10 +60,13 @@ $background-gray: #f5f5f5
   width: 1px
   white-space: nowrap
 
+body
+  margin: 0
+  padding: 0
+
 .outer
   &.body
     padding: 20px
-
 
 .global-header
   &.wrapper
@@ -68,16 +82,18 @@ $background-gray: #f5f5f5
     line-height: 34px
     margin: 0
     padding: 0
+    a
+      color: #333
   .global-menu
     @extend .right
     li
       display: inline-block
       white-space: nowrap
+      padding-left: 10px
     .log-in
       @extend .btn, .bth-default
     .welcome
-      @extend .btn, .btn-primary
-
+      @extend %submit-button
 
 i.fa
   margin-right: 0.2em
@@ -189,7 +205,7 @@ input.has-error
       border-left: 1px dotted $border-color
       background: #fff
       .response-owner
-        //background: none
+      //background: none
       .reply-anchor
         color: $brand-blue
         cursor: pointer
@@ -223,10 +239,6 @@ input.has-error
   &.submit-section
     margin: 10px 0 0 0
     @extend .form-actions
-  &.submit
-    @extend .btn, .btn-primary
-  &.sending
-    @extend .btn
   .assigner
     &.team-members
       height: 302px
@@ -236,10 +248,10 @@ input.has-error
 .reply-to-reply
   &.submit
     margin: 10px 0 0 0
-    @extend .btn, .btn-primary, .right
+    @extend .right
   &.sending
     margin: 10px 0 0 0
-    @extend .btn, .right
+    @extend .right
 
 .question-index
   &.body
@@ -285,10 +297,6 @@ input.has-error
   &.submit-section
     @extend .form-actions
     margin: 10px 0 0 0
-  &.submit
-    @extend .btn, .btn-primary
-  &.sending
-    @extend .btn
   &.registered-message
     color: $brand-green
 
@@ -318,8 +326,6 @@ input.has-error
   input
     @extend .input-block
 
-
-
 .user-register
   &.body
     @extend %small-body
@@ -344,7 +350,21 @@ input.has-error
     @extend .input-contrast, .input-block
   &.submit-section
     @extend .form-actions
-  &.submit
-    @extend .btn, .btn-primary
-  &.sending
-    @extend .btn
+
+.user-log-in
+  &.body
+    @extend %small-body
+  &.box-body
+    @extend %boxed-group
+    .inner
+      @extend %boxed-group-inner
+      &.form
+        padding: 20px 10px
+  &.log-in-title
+    @extend %boxed-group-title
+  &.input-section
+    margin: 0 0 20px
+  input
+    @extend .input-contrast, .input-block
+  &.submit-section
+    @extend .form-actions

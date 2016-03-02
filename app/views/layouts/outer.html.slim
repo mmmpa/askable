@@ -8,15 +8,16 @@ html
     header.global-header.wrapper
       div.global-header.body
         h1.global-header.title
-          i.fa.fa-question-circle
-          | おしえてください
+          a[href="/"]
+            i.fa.fa-question-circle
+            | おしえてください
         ul.header.global-menu.outer
           li
-            button.global-menu.welcome
+            a.global-menu.welcome[href=welcome_new_user_path]
               i.fa.fa-pencil
               | 新規登録
           li
-            button.global-menu.log-in
+            a.global-menu.log-in[href=log_in_path]
               i.fa.fa-sign-in
               | ログイン
     article.outer.body

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # 最終行にconstraints失敗時のリダイレクトあり
   #
   scope constraints: Constraint::User.new do
+    get '/', to: redirect('/q/index')
     get '/', to: 'portal#portal', as: :portal
 
     scope :out do
@@ -65,5 +66,6 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/', to: redirect('/in')
   get '*path', to: redirect('/in')
 end
