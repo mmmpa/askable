@@ -2,8 +2,8 @@ class Question < ActiveRecord::Base
   attr_accessor :assigned
 
   belongs_to :user
-  has_many :comments, inverse_of: :question
-  has_many :ask_users
+  has_many :comments, inverse_of: :question, dependent: :delete_all
+  has_many :ask_users, dependent: :destroy
   has_many :users, through: :ask_users
 
   validates :title, :user,
@@ -82,6 +82,10 @@ class Question < ActiveRecord::Base
 
   def sorry_by!(user)
     ask_for(user).responded!
+  end
+
+  def wait_by!(user)
+    ask_for(user).wait!
   end
 
   def assign_by!(user, *assigned)

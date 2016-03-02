@@ -1,5 +1,5 @@
 class Comment < ActiveRecord::Base
-  belongs_to :user #, inverse_of: :comments
+  belongs_to :user , inverse_of: :comments
   belongs_to :comment
   has_many :comments
   belongs_to :question, inverse_of: :comments
@@ -28,6 +28,7 @@ class Comment < ActiveRecord::Base
   end
 
   def check_not_root_comment
+    pp question.destroyed?
     throw CannotDestroyRootComment if root?
   end
 

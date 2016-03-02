@@ -92,6 +92,15 @@ RSpec.describe Question, type: :model do
         end
       end
 
+      context 'ちょっと待って' do
+        it 'ステータスだけが変わる' do
+          question.wait_by!(User.second)
+          expect(after_q.not_yet_user).to include(User.second)
+          expect(after_q.responded_user).not_to include(User.second)
+          expect(after_q.not_yet_user.find(User.second.id).respond_state).to eq(AskUser.status[:wait])
+        end
+      end
+
       context '知ってそうな人を教える' do
         it '反応後はリストから外れ、新しい人がリストに入る' do
           question.assign_by!(User.second, User.fifth)

@@ -60,6 +60,15 @@ RSpec.describe "Questions", type: :request do
       end
     end
 
+    context 'ちょっとまって' do
+      it '反応済みはかわらない' do
+        expect {
+          patch wait_question_path(question.id)
+          expect(response).to have_http_status(201)
+        }.not_to change(question, :responded_count)
+      end
+    end
+
     context '知っている人を教える' do
       it '反応済みが増える' do
         expect {

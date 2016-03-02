@@ -6,7 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-if ENV['RAILS_ENV'] != 'production'
+if ENV['DEV_DATA']
+  User.destroy_all
+  Question.destroy_all
+
   ('a'..'g').to_a.each do |name|
     User.create!(
       name: name,
@@ -17,6 +20,8 @@ if ENV['RAILS_ENV'] != 'production'
   end
 
   5.times do |n|
-    Question.create_by!(User.sample, {title: n.to_s, markdown: "## title", assigned: [User.sample.login]})
+    owner = User.sample
+    assigned = User.sample(n - 1)
+    Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
   end
 end

@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title Welcome to おしえてください
+    = stylesheet_link_tag '/css/common.css', media: 'all'
+    = csrf_meta_tags
+  body
+    header.global-header.wrapper
+      div.global-header.body
+        h1.global-header.title
+          i.fa.fa-question-circle
+          | おしえてください
+        ul.header.global-menu.outer
+          li
+            button.global-menu.welcome
+              i.fa.fa-pencil
+              | 新規登録
+          li
+            button.global-menu.log-in
+              i.fa.fa-sign-in
+              | ログイン
+    article.outer.body
+      = yield

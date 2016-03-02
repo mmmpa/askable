@@ -1,4 +1,6 @@
 class Welcome::UsersController < ApplicationController
+  layout 'outer'
+
   def new
   end
 

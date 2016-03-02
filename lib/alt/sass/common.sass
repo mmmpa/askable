@@ -9,23 +9,8 @@ $check-size: 16px
 
 $radius: 3px
 $border-color: #d8d8d8
+$background-gray: #f5f5f5
 
-i.fa
-  margin-right: 0.2em
-
-.input-input,
-.input-label
-  display: inline-block
-  white-space: nowrap
-  vertical-align: top
-  line-height: $check-size
-
-.input-input
-  padding-right: 5px
-
-a,
-label
-  cursor: pointer
 
 %boxed-group
   position: relative
@@ -63,6 +48,53 @@ label
 %min-cell
   width: 1px
   white-space: nowrap
+
+.outer
+  &.body
+    padding: 20px
+
+
+.global-header
+  &.wrapper
+    background: $background-gray
+    border-bottom: $border-color
+  &.body
+    padding: 8px 0
+    @extend %normal-body
+    overflow: hidden
+  &.title
+    font-size: $size-title
+    float: left
+    line-height: 34px
+    margin: 0
+    padding: 0
+  .global-menu
+    @extend .right
+    li
+      display: inline-block
+      white-space: nowrap
+    .log-in
+      @extend .btn, .bth-default
+    .welcome
+      @extend .btn, .btn-primary
+
+
+i.fa
+  margin-right: 0.2em
+
+.input-input,
+.input-label
+  display: inline-block
+  white-space: nowrap
+  vertical-align: top
+  line-height: $check-size
+
+.input-input
+  padding-right: 5px
+
+a,
+label
+  cursor: pointer
 
 body
   padding: 0
@@ -286,27 +318,7 @@ input.has-error
   input
     @extend .input-block
 
-.user-log-in
-  &.body
-    @extend %small-body
-  &.box-body
-    @extend %boxed-group
-    .inner
-      @extend %boxed-group-inner
-      &.form
-        padding: 20px 10px
-  &.log-in-title
-    @extend %boxed-group-title
-  &.input-section
-    margin: 0 0 20px
-  input
-    @extend .input-contrast, .input-block
-  &.submit-section
-    @extend .form-actions
-  &.submit
-    @extend .btn, .btn-primary
-  &.sending
-    @extend .btn
+
 
 .user-register
   &.body

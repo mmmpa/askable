@@ -1,2 +1,0 @@
-class Owner < User
-end

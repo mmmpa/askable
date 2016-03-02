@@ -1,4 +1,6 @@
 class UserSessionsController < ApplicationController
+  layout 'outer'
+
   def new
   end
 
@@ -7,6 +9,10 @@ class UserSessionsController < ApplicationController
     render nothing: true, status: 201
   rescue
     render nothing: true, status: 401
+  end
+
+  def destroy
+
   end
 
   private

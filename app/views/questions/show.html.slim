@@ -14,7 +14,9 @@ section.show-question.body
               | 反応まち
             ul.show-question.not-yet-list
               - @question.not_yet_user.map do |user|
-                li.show-question.assigned-user= user.login
+                li.show-question.assigned-user
+                  = detect_respond_icon(user.respond_state)
+                  = user.login
           section.show-question.responded-users
             h1.show-question.assigned-title
               i.fa.fa-check
