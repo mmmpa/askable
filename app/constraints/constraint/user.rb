@@ -1,6 +1,5 @@
 class Constraint::User
   def matches?(request)
-    pp :const
     UserSession.controller = ControllerLike.new(request)
     !!UserSession.find.try(:user).tap{ UserSession.controller = nil }
   end

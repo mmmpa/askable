@@ -41,7 +41,7 @@ export default class Assigner extends Node {
 
   writeAssigner() {
     let {user, team, already} = this.props;
-    let exclusion = already.concat(user.login)
+    let exclusion = (already || []).concat(user.login)
     let users = team.users.filter((user)=> !_.includes(exclusion, user.login));
     return <section className="assigner team-members">
       <section className="assigner team-member-list">

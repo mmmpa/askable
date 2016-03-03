@@ -14648,7 +14648,7 @@ var Assigner = (function (_super) {
     Assigner.prototype.writeAssigner = function () {
         var _this = this;
         var _a = this.props, user = _a.user, team = _a.team, already = _a.already;
-        var exclusion = already.concat(user.login);
+        var exclusion = (already || []).concat(user.login);
         var users = team.users.filter(function (user) { return !_.includes(exclusion, user.login); });
         return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, users.map(function (_a) {
             var login = _a.login, name = _a.name;
@@ -14940,6 +14940,7 @@ var Uri = {
     createUser: '/welcome/new',
     createQuestion: '/users/me/q/new',
     logIn: '/in',
+    logOut: '/out',
     answerQuestion: '/q/:questionId/answer',
     assignUserQuestion: '/q/:questionId/assign',
     waitAnswerQuestion: '/q/:questionId/wait',
@@ -14955,6 +14956,7 @@ var Uri = {
     Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
     Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
     Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
+    Api[Api["LogOut"] = 8] = "LogOut";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14988,6 +14990,8 @@ function detectFunction(api) {
             return sorryQuestion;
         case Api.ReplyToReply:
             return replyToReply;
+        case Api.LogOut:
+            return logOut;
         default:
             throw 'Api not exist';
     }
@@ -15008,6 +15012,12 @@ function finalize(resolve, reject, queueResolve) {
         }
         queueResolve();
     };
+}
+function logOut(params, resolve, reject, queueResolve) {
+    request
+        .delete(Uri.logOut)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
 }
 function createUser(params, resolve, reject, queueResolve) {
     request

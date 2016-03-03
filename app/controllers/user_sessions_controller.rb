@@ -12,7 +12,8 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
-
+    UserSession.find.try(:destroy)
+    render nothing: true, status: 201
   end
 
   private

@@ -14471,7 +14471,7 @@ var Component = (function (_super) {
             return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question registered-body"}, React.createElement("p", {"className": "new-question registered-message"}, "投稿完了しました")));
         }
         var _a = this.props, errors = _a.errors, user = _a.user, team = _a.team;
-        return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question box-body"}, React.createElement("h1", {"className": "new-question log-in-title"}, "質問する"), React.createElement("div", {"className": "columns"}, React.createElement("section", {"className": "new-question editor-area"}, React.createElement(comment_editor_1.default, React.__spread({}, { errors: errors }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "new-question submit-section"}, this.writeSubmit()))), React.createElement("section", {"className": "new-question assigning-area"}, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, user: user, team: team }, {"onChange": function (state) { return _this.setState(state); }}))))));
+        return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question box-body"}, React.createElement("div", {"className": "columns"}, React.createElement("section", {"className": "new-question editor-area"}, React.createElement(comment_editor_1.default, React.__spread({}, { errors: errors }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "new-question submit-section"}, this.writeSubmit()))), React.createElement("section", {"className": "new-question assigning-area"}, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, user: user, team: team }, {"onChange": function (state) { return _this.setState(state); }}))))));
     };
     return Component;
 })(eventer_1.Node);
@@ -14528,7 +14528,7 @@ var Assigner = (function (_super) {
     Assigner.prototype.writeAssigner = function () {
         var _this = this;
         var _a = this.props, user = _a.user, team = _a.team, already = _a.already;
-        var exclusion = already.concat(user.login);
+        var exclusion = (already || []).concat(user.login);
         var users = team.users.filter(function (user) { return !_.includes(exclusion, user.login); });
         return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, users.map(function (_a) {
             var login = _a.login, name = _a.name;
@@ -14820,6 +14820,7 @@ var Uri = {
     createUser: '/welcome/new',
     createQuestion: '/users/me/q/new',
     logIn: '/in',
+    logOut: '/out',
     answerQuestion: '/q/:questionId/answer',
     assignUserQuestion: '/q/:questionId/assign',
     waitAnswerQuestion: '/q/:questionId/wait',
@@ -14835,6 +14836,7 @@ var Uri = {
     Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
     Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
     Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
+    Api[Api["LogOut"] = 8] = "LogOut";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14868,6 +14870,8 @@ function detectFunction(api) {
             return sorryQuestion;
         case Api.ReplyToReply:
             return replyToReply;
+        case Api.LogOut:
+            return logOut;
         default:
             throw 'Api not exist';
     }
@@ -14888,6 +14892,12 @@ function finalize(resolve, reject, queueResolve) {
         }
         queueResolve();
     };
+}
+function logOut(params, resolve, reject, queueResolve) {
+    request
+        .delete(Uri.logOut)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
 }
 function createUser(params, resolve, reject, queueResolve) {
     request

@@ -11,7 +11,17 @@ class Question < ActiveRecord::Base
 
   validate :require_head_comment
 
-  scope :index, -> { includes { [:users, :ask_users] }.order { created_at.desc } }
+  scope :index, -> {
+    includes { [:user] }
+      .joins { [ask_users] }
+      .select {
+      ['questions.*',
+       ask_users.count.as(:as_assigned_count),
+       %{(SELECT "ask_users"."id" WHERE "ask_users"."state" IN (#{AskUser.responded_status.join(',')})).count AS "as_responded_count"},
+      ] }
+      .group { id }
+      .order { created_at.desc }
+  }
 
   class << self
     def create_by!(user, question_params)
@@ -54,15 +64,27 @@ class Question < ActiveRecord::Base
   end
 
   def commented_count
-    comments.size - 1
+    if respond_to?(:as_commented_count)
+      as_commented_count - 1
+    else
+      comments.size - 1
+    end
   end
 
   def assigned_count
-    users.count
+    if respond_to?(:as_assigned_count)
+      as_assigned_count
+    else
+      users.count
+    end
   end
 
   def responded_count
-    responded_user.count
+    if respond_to?(:as_responded_count)
+      as_responded_count
+    else
+      responded_user.count
+    end
   end
 
   def responses
@@ -117,7 +139,8 @@ class Question < ActiveRecord::Base
 
   # user_idsはサブクエリがのぞましい
   def users_with_respond_state(user_ids)
-    users.where { id.in(user_ids) }
+    users
+      .where { id.in(user_ids) }
       .select { ['users.*', ask_users.state.as(respond_state)] }
   end
 

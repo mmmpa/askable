@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.2'
 gem 'pg', '~> 0.15'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -35,6 +35,9 @@ group :default do
 end
 
 group :development, :test do
+  gem 'brakeman'
+  gem 'rubocop', require: false
+  gem 'metric_fu', require: false
   gem 'active_record_samplooper'
   gem 'tanemaki'
   gem 'spring-commands-rspec'
@@ -42,9 +45,10 @@ group :development, :test do
 end
 
 group :development do
+  gem 'bullet'
+  gem 'rack-mini-profiler'
   gem 'annotate', require: false
   gem 'awesome_print'
-  gem 'brakeman', require: false
   gem 'hirb'
   gem 'hirb-unicode'
   gem 'pry-rails'

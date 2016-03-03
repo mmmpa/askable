@@ -1,8 +1,3 @@
-import {ILogIn} from "../../welcome-new-user/lib/services/strike-api";
-import {IAnswer} from "../../new-question/lib/services/strike-api";
-import {IAssign} from "../../new-question/lib/services/strike-api";
-import {ISorry} from "../../new-question/lib/services/strike-api";
-import {IWait} from "../../new-question/lib/services/strike-api";
 declare const request;
 declare const Promise;
 
@@ -12,6 +7,7 @@ const Uri = {
   createUser: '/welcome/new',
   createQuestion: '/users/me/q/new',
   logIn: '/in',
+  logOut: '/out',
   answerQuestion: '/q/:questionId/answer',
   assignUserQuestion: '/q/:questionId/assign',
   waitAnswerQuestion: '/q/:questionId/wait',
@@ -27,7 +23,8 @@ export enum Api{
   AssignUserQuestion,
   WaitAnswerQuestion,
   SorryQuestion,
-  ReplyToReply
+  ReplyToReply,
+  LogOut
 }
 
 export function strikeApi(api:Api, params?:any):Promise {
@@ -62,6 +59,8 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
       return sorryQuestion;
     case Api.ReplyToReply:
       return replyToReply;
+    case Api.LogOut:
+      return logOut;
     default:
       throw 'Api not exist'
   }
@@ -124,6 +123,14 @@ function finalize(resolve, reject, queueResolve):(a, b)=> void {
     queueResolve();
   }
 }
+
+function logOut(params:any, resolve, reject, queueResolve) {
+  request
+    .delete(Uri.logOut)
+    .set('X-CSRF-Token', token())
+    .end(finalize(resolve, reject, queueResolve))
+}
+
 
 function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request

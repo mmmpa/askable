@@ -219,6 +219,7 @@ var Uri = {
     createUser: '/welcome/new',
     createQuestion: '/users/me/q/new',
     logIn: '/in',
+    logOut: '/out',
     answerQuestion: '/q/:questionId/answer',
     assignUserQuestion: '/q/:questionId/assign',
     waitAnswerQuestion: '/q/:questionId/wait',
@@ -234,6 +235,7 @@ var Uri = {
     Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
     Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
     Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
+    Api[Api["LogOut"] = 8] = "LogOut";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -267,6 +269,8 @@ function detectFunction(api) {
             return sorryQuestion;
         case Api.ReplyToReply:
             return replyToReply;
+        case Api.LogOut:
+            return logOut;
         default:
             throw 'Api not exist';
     }
@@ -287,6 +291,12 @@ function finalize(resolve, reject, queueResolve) {
         }
         queueResolve();
     };
+}
+function logOut(params, resolve, reject, queueResolve) {
+    request
+        .delete(Uri.logOut)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
 }
 function createUser(params, resolve, reject, queueResolve) {
     request

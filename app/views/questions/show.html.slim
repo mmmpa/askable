@@ -1,9 +1,14 @@
+header.sub-header.wrapper
+  div.sub-header.body
+    h1.sub-header.title
+      i.fa.fa-question-circle
+      = @question.title
 = stylesheet_link_tag '/css/codemirror.css', media: 'all'
 section.show-question.body
   section.show-question.root
     h1.show-question.title
-      i.fa.fa-fw.fa-question-circle
-      = @question.title
+      i.fa.fa-fw.fa-bell-o
+      = "#{@question.author_name}曰く"
     section.show-question.question-area
       section.show-question.question.markdown-html== @question.root.html
       - if @question.users.count != 0
@@ -36,7 +41,7 @@ section.show-question.body
   - else
     section.show-question.response-area
       ul.show-question.responses
-        - @question.comment_tree[@question.id].each do |comment|
+        - @question.comment_tree[@question.root.id].each do |comment|
           li.show-question.response
             div(id="comment-#{comment.id}")
               = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
@@ -60,7 +65,7 @@ section.show-question.body
     button.respond.opener
       i.fa.fa-folder-open-o
       | 回答フォームを開く
-script src='/js/common/built.js'
+
 script src='/js/question-responder/built.js'
 script src='/js/reply-to-reply/built.js'
 script src='/js/anchor-coloring/built.js'

@@ -10,18 +10,19 @@ $check-size: 16px
 $radius: 3px
 $border-color: #d8d8d8
 $background-gray: #f5f5f5
+$background-gray-sub: #fafafa
 
-%submit-button
+button.submit,
+a.submit
   @extend .btn, .btn-primary
 
-%sending-button
+button.sending,
+a.sending
   @extend .btn
 
-button.submit
-  @extend %submit-button
-
-button.sending
-  @extend %sending-button
+button.default,
+a.default
+  @extend .btn, .btn-form
 
 %boxed-group
   position: relative
@@ -66,18 +67,54 @@ body
 
 .outer
   &.body
-    padding: 20px
+    padding: 20px 0 0 0
 
+.inner
+  &.body
+    padding: 20px 0 0 0
+
+.sub-header
+  &.wrapper
+    margin: -20px 0 20px 0
+    background: $background-gray-sub
+    border-bottom: 1px solid $border-color
+    &.with-nav
+      border: 0
+  &.body
+    @extend %normal-body
+  &.title
+    font-size: $size-title
+  .tabnav-tabs
+    margin-bottom: -1px
+  &.sub-nav
+    border-bottom: 1px solid $border-color
+    .tabnav-tab
+      padding: 7px 15px 8px
+  .selected
+    padding-top: 6px
+  .opened,
+  .asked
+    &.selected
+      border-top: 2px solid $brand-red
+  .requested
+    &.selected
+      border-top: 2px solid $brand-orange
+  .closed
+    &.selected
+      border-top: 2px solid $brand-green
+  .all
+    &.selected
+      border-top: 2px solid $brand-gray
 .global-header
   &.wrapper
     background: $background-gray
-    border-bottom: $border-color
+    border-bottom: 1px solid $border-color
   &.body
     padding: 8px 0
     @extend %normal-body
     overflow: hidden
   &.title
-    font-size: $size-title
+    font-size: $size-normal
     float: left
     line-height: 34px
     margin: 0
@@ -90,10 +127,12 @@ body
       display: inline-block
       white-space: nowrap
       padding-left: 10px
-    .log-in
-      @extend .btn, .bth-default
-    .welcome
-      @extend %submit-button
+  .block-link
+    display: inline-block
+    line-height: 34px
+    padding-left: 10px
+    i.fa
+      color: #333
 
 i.fa
   margin-right: 0.2em

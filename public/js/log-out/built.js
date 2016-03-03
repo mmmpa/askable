@@ -1,3 +1,28 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var strike_api_1 = require('./lib/services/strike-api');
+var LogOut = (function () {
+    function LogOut() {
+    }
+    LogOut.start = function (doms) {
+        _.each(doms, function (dom) {
+            dom.addEventListener('click', function (e) {
+                e.preventDefault();
+                strike_api_1.strikeApi(strike_api_1.Api.LogOut, {})
+                    .then(function () {
+                    location.reload();
+                })
+                    .catch(function (_a) {
+                    var errors = _a.errors;
+                    console.log(errors);
+                });
+            });
+        });
+    };
+    return LogOut;
+})();
+window.LogOut = LogOut;
+
+},{"./lib/services/strike-api":2}],2:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
@@ -163,4 +188,5 @@ function token() {
         return '';
     }
 }
-//# sourceMappingURL=strike-api.js.map
+
+},{}]},{},[1]);

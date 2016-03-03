@@ -105,7 +105,6 @@ class Component extends Node {
     let {errors, user, team} = this.props;
     return <article className="new-question body">
       <section className="new-question box-body">
-        <h1 className="new-question log-in-title">質問する</h1>
         <div className="columns">
           <section className="new-question editor-area">
             <CommentEditor {...{errors}} onChange={(state)=> this.setState(state)}/>

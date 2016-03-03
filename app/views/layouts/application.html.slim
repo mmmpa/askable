@@ -1,8 +1,45 @@
 doctype html
 html
   head
-    title Askable
+    title おしえてください
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
+    script src='/js/common/built.js'
   body
-    = yield
+    header.global-header.wrapper
+      div.global-header.body
+        h1.global-header.title
+          a[href="/"]
+            i.fa.fa-question-circle
+            | おしえてください
+        ul.header.global-menu.outer
+          li
+            a.global-menu.all.block-link[href=new_question_path]
+              i.fa.fa-plus-circle
+              | 質問する
+          li
+            a.global-menu.all.block-link[href=questions_path]
+              i.fa.fa-list-ul
+              | すべての質問
+          li
+            a.global-menu.ask.block-link[href=log_in_path]
+              i.fa.fa-question
+              | 質問した
+          li
+            a.global-menu.asked.block-link[href=log_in_path]
+              i.fa.fa-hand-o-right
+              | 質問された
+          li
+            a.global-menu.asked.block-link[href=log_in_path]
+              i.fa.fa-gear
+              | 設定
+          li
+            a.global-menu.log-out.block-link[href=log_in_path]
+              i.fa.fa-sign-out
+              | ログアウト
+    article.inner.body
+      = yield
+
+  script src='/js/log-out/built.js'
+javascript:
+  LogOut.start(document.querySelectorAll('.log-out'));

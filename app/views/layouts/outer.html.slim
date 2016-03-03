@@ -4,6 +4,7 @@ html
     title Welcome to おしえてください
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
+    script src='/js/common/built.js'
   body
     header.global-header.wrapper
       div.global-header.body
@@ -13,11 +14,11 @@ html
             | おしえてください
         ul.header.global-menu.outer
           li
-            a.global-menu.welcome[href=welcome_new_user_path]
+            a.global-menu.welcome.submit[href=welcome_new_user_path]
               i.fa.fa-pencil
               | 新規登録
           li
-            a.global-menu.log-in[href=log_in_path]
+            a.global-menu.log-in.default[href=log_in_path]
               i.fa.fa-sign-in
               | ログイン
     article.outer.body
