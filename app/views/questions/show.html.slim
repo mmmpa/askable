@@ -50,10 +50,10 @@ section.show-question.body
                     - if parent
                       - parents.map do |p|
                         i.fa.fa-reply.reply-anchor(data-targetId=p.id)
-                      = "#{parent.user.name}さんへ#{child.user.name}さん曰く"
+                      = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
                     - else
                       i.fa.fa-graduation-cap
-                      = "#{child.user.name}さん曰く"
+                      = "#{child.author_name}さん曰く"
                     a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
                       i.fa.fa-link.
                   section.show-question.response-comment.markdown-html= child.html.html_safe
@@ -65,7 +65,6 @@ section.show-question.body
     button.respond.opener
       i.fa.fa-folder-open-o
       | 回答フォームを開く
-
 script src='/js/question-responder/built.js'
 script src='/js/reply-to-reply/built.js'
 script src='/js/anchor-coloring/built.js'

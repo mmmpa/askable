@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+  include QuestionResponder
+
   attr_accessor :assigned
 
   belongs_to :user
@@ -11,17 +13,28 @@ class Question < ActiveRecord::Base
 
   validate :require_head_comment
 
+  #
+  # indexでの利用時にはカウント数をSQLで挿入しておく
+  #
   scope :index, -> {
     includes { [:user] }
-      .joins { [ask_users] }
+      .joins { [ask_users, comments] }
       .select {
       ['questions.*',
-       ask_users.count.as(:as_assigned_count),
-       %{(SELECT "ask_users"."id" WHERE "ask_users"."state" IN (#{AskUser.responded_status.join(',')})).count AS "as_responded_count"},
+       %q{COUNT(DISTINCT "comments"."id") AS as_commented_count},
+       %q{COUNT(DISTINCT "ask_users"."id") AS as_assigned_count},
+       %{(SELECT
+            COUNT(DISTINCT "ask_users"."id")
+            FROM "ask_users"
+            WHERE "ask_users"."question_id" = "questions"."id"
+              AND "ask_users"."state" IN (#{AskUser.responded_status.join(',')})
+          ) AS "as_responded_count"},
       ] }
       .group { id }
       .order { created_at.desc }
   }
+
+  scope :show, -> { includes(:comments).joins { user }.select { ["questions.*", user.name.as(:as_author_name)] } }
 
   class << self
     def create_by!(user, question_params)
@@ -48,7 +61,7 @@ class Question < ActiveRecord::Base
   end
 
   def comment_tree
-    responses.inject({}) { |a, comment|
+    @stored_tree ||= responses.inject({}) { |a, comment|
       a[comment.comment_id] ||= []
       a[comment.comment_id].push(comment)
       a
@@ -60,36 +73,24 @@ class Question < ActiveRecord::Base
   end
 
   def author_name
-    user.name
+    respond_to?(:as_author_name) ? as_author_name : user.name
   end
 
   def commented_count
-    if respond_to?(:as_commented_count)
-      as_commented_count - 1
-    else
-      comments.size - 1
-    end
+    respond_to?(:as_commented_count) ? as_commented_count - 1 : comments.size - 1
   end
 
   def assigned_count
-    if respond_to?(:as_assigned_count)
-      as_assigned_count
-    else
-      users.count
-    end
+    respond_to?(:as_assigned_count) ? as_assigned_count : users.size
   end
 
   def responded_count
-    if respond_to?(:as_responded_count)
-      as_responded_count
-    else
-      responded_user.count
-    end
+    respond_to?(:as_responded_count) ? as_responded_count : responded_user.size
   end
 
   def responses
     return [] if comments.size == 1
-    comments.order { created_at.desc }[0..comments.size - 2]
+    comments.with_author.order { created_at.desc }[0..comments.size - 2]
   end
 
   def responded?(user)
@@ -98,42 +99,17 @@ class Question < ActiveRecord::Base
     !not_yet_responded?(user)
   end
 
-  def ask_for(target)
-    ask_users.where { user == target }.first
-  end
-
-  def sorry_by!(user)
-    ask_for(user).responded!
-  end
-
-  def wait_by!(user)
-    ask_for(user).wait!
-  end
-
-  def assign_by!(user, *assigned)
-    if assigned.nil? || assigned.size == 0
-      errors.add(:assigned, :at_least_one_assignee)
-      raise ActiveRecord::RecordInvalid, self
-    end
-
-    assign!(*assigned)
-    ask_for(user).assigned!
-  end
-
-  def answer_by!(user, new_comment)
-    comment = detect_comment(new_comment)
-    comment.user = user
-    reply_to!(root, comment)
-    ask_for(user).answered!
+  def not_yet_responded?(user)
+    not_yet_user.include?(user)
   end
 
   def not_yet_user
-    user_ids = ask_users.where { state.in(AskUser.not_yet_status) }.select { user_id }
+    user_ids = ask_users.not_yet.select { user_id }
     users_with_respond_state(user_ids)
   end
 
   def responded_user
-    user_ids = ask_users.where { state.in(AskUser.responded_status) }.select { user_id }
+    user_ids = ask_users.responded.select { user_id }
     users_with_respond_state(user_ids)
   end
 
@@ -142,10 +118,6 @@ class Question < ActiveRecord::Base
     users
       .where { id.in(user_ids) }
       .select { ['users.*', ask_users.state.as(respond_state)] }
-  end
-
-  def not_yet_responded?(user)
-    not_yet_user.include?(user)
   end
 
   def creation_errors

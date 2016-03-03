@@ -12,6 +12,9 @@ class AskUser < ActiveRecord::Base
   belongs_to :question
   belongs_to :comment
 
+  scope :not_yet, -> { where { state.in(AskUser.not_yet_status) } }
+  scope :responded, -> { where { state.in(AskUser.responded_status) } }
+
   before_validation :initialize_value
 
   class << self

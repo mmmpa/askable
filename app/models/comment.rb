@@ -1,5 +1,5 @@
 class Comment < ActiveRecord::Base
-  belongs_to :user , inverse_of: :comments
+  belongs_to :user, inverse_of: :comments
   belongs_to :comment
   has_many :comments
   belongs_to :question, inverse_of: :comments
@@ -12,6 +12,8 @@ class Comment < ActiveRecord::Base
 
   #after_validation ->{pp self.errors}
 
+  scope :with_author, -> { joins { user }.select { ["comments.*", user.name.as(:as_author_name)] } }
+
   class Renderer < Redcarpet::Render::HTML
     def block_code(code, language)
       Pygments.highlight(code, lexer: language)
@@ -22,13 +24,17 @@ class Comment < ActiveRecord::Base
     attr_accessor :markdown
 
     def render(*args)
-      self.markdown ||= Redcarpet::Markdown.new(Renderer, autolink: true, tables: true, fenced_code_blocks:true)
+      self.markdown ||= Redcarpet::Markdown.new(Renderer, autolink: true, tables: true, fenced_code_blocks: true)
       markdown.render(*args)
     end
   end
 
+  def author_name
+    respond_to?(:as_author_name) ? as_author_name : user.name
+  end
+
   def check_not_root_comment
-    pp question.destroyed?
+    question.destroyed?
     throw CannotDestroyRootComment if root?
   end
 

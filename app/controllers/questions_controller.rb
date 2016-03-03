@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = question
+    @question = question_for_show
     @user = user
     @team = {users: User.all}
   end
@@ -57,6 +57,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def question_for_show
+    Question.show.find(params[:question_id])
+  end
 
   def question
     Question.find(params[:question_id])
