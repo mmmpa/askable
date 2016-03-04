@@ -1,5 +1,13 @@
 class Question < ActiveRecord::Base
   include QuestionResponder
+  include QuestionIndexer
+  include AsColumnWrapper
+
+  #
+  # opened: 回答受付中
+  # closed: 回答締め切り
+  #
+  enum state: {opened: 0, closed: 1}
 
   attr_accessor :assigned
 
@@ -13,30 +21,13 @@ class Question < ActiveRecord::Base
 
   validate :require_head_comment
 
-  #
-  # indexでの利用時にはカウント数をSQLで挿入しておく
-  #
-  scope :index, -> {
-    includes { [:user] }
-      .joins { [ask_users, comments] }
-      .select {
-      ['questions.*',
-       %q{COUNT(DISTINCT "comments"."id") AS as_commented_count},
-       %q{COUNT(DISTINCT "ask_users"."id") AS as_assigned_count},
-       %{(SELECT
-            COUNT(DISTINCT "ask_users"."id")
-            FROM "ask_users"
-            WHERE "ask_users"."question_id" = "questions"."id"
-              AND "ask_users"."state" IN (#{AskUser.responded_status.join(',')})
-          ) AS "as_responded_count"},
-      ] }
-      .group { id }
-      .order { created_at.desc }
-  }
-
   scope :show, -> { includes(:comments).joins { user }.select { ["questions.*", user.name.as(:as_author_name)] } }
 
+  before_validation :initialize_value
+
   class << self
+    alias_method :status, :states
+
     def create_by!(user, question_params)
       comment = Comment.new(user: user, markdown: question_params.delete(:markdown))
 
@@ -60,6 +51,10 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def initialize_value
+    self.state ||= self.class.status[:opened]
+  end
+
   def comment_tree
     @stored_tree ||= responses.inject({}) { |a, comment|
       a[comment.comment_id] ||= []
@@ -72,25 +67,9 @@ class Question < ActiveRecord::Base
     }
   end
 
-  def author_name
-    respond_to?(:as_author_name) ? as_author_name : user.name
-  end
-
-  def commented_count
-    respond_to?(:as_commented_count) ? as_commented_count - 1 : comments.size - 1
-  end
-
-  def assigned_count
-    respond_to?(:as_assigned_count) ? as_assigned_count : users.size
-  end
-
-  def responded_count
-    respond_to?(:as_responded_count) ? as_responded_count : responded_user.size
-  end
-
-  def responses
-    return [] if comments.size == 1
-    comments.with_author.order { created_at.desc }[0..comments.size - 2]
+  def assigned?(user)
+    result = as_or(:my_assigned) { users.include?(user) }
+    result == 0 ? false : !!result
   end
 
   def responded?(user)
@@ -101,6 +80,31 @@ class Question < ActiveRecord::Base
 
   def not_yet_responded?(user)
     not_yet_user.include?(user)
+  end
+
+  def author_name
+    as_or(:author_name) { user.name }
+  end
+
+  def commented_count
+    as_or(:commented_count) { comments.size } - 1
+  end
+
+  def assigned_count
+    as_or(:assigned_count) { users.size }
+  end
+
+  def responded_count
+    as_or(:responded_count) { responded_user.size }
+  end
+
+  def all_responded?
+    responded_count == assigned_count
+  end
+
+  def responses
+    return [] if comments.size == 1
+    comments.with_author.order { created_at.desc }[0..comments.size - 2]
   end
 
   def not_yet_user
@@ -152,23 +156,6 @@ class Question < ActiveRecord::Base
 
   def add_comment!(comment)
     comments << comment
-    save!
-  end
-
-  def reply_to_by!(user, replied, reply_params)
-    raise NotInTree unless comments.include?(replied)
-    reply = detect_comment(reply_params)
-    reply.user = user
-    reply.comment = detect_reply_target(replied)
-    comments << reply
-    save!
-    reply
-  end
-
-  def reply_to!(replied, new_comment)
-    comment = detect_comment(new_comment)
-    comment.comment = detect_reply_target(replied)
-    comments << new_comment
     save!
   end
 

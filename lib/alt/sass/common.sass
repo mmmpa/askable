@@ -306,6 +306,13 @@ input.has-error
     font-size: $size-normal
   &.item-icon
     font-size: $size-title
+    .fa.assigned
+      color: $brand-red
+    .fa.all-responded
+      color: $brand-gray-dark
+    .fa.opened
+      color: $brand-gray-light
+
   &.item-icon,
   &.item-content,
   &.item-status
@@ -323,7 +330,9 @@ input.has-error
       padding-left: 10px
       em
         padding-left: 2px
-
+  &.no-question
+    @extend .blankslate
+    margin: 20px 0 0
 .new-question
   &.body
     @extend %normal-body

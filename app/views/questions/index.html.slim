@@ -5,39 +5,42 @@ header.sub-header.wrapper.with-nav
       | 質問一覧
   div.sub-header.sub-nav
     nav.tabnav-tabs.sub-header.body
-      a.tabnav-tab.opened.selected
+      a.tabnav-tab.opened[href=opened_questions_path class=detect_index_tab_selected(opened_questions_path)]
         i.fa.fa-exclamation-triangle
         | 未解決
-      a.tabnav-tab.asked
+      a.tabnav-tab.asked[href=asked_questions_path class=detect_index_tab_selected(asked_questions_path)]
         i.fa.fa-hand-paper-o
         | 質問した
-      a.tabnav-tab.requested
+      a.tabnav-tab.requested[href=requested_questions_path class=detect_index_tab_selected(requested_questions_path)]
         i.fa.fa-hand-o-right
         | 質問されている
-      a.tabnav-tab.closed
+      a.tabnav-tab.closed[href=closed_questions_path class=detect_index_tab_selected(closed_questions_path)]
         i.fa.fa-thumbs-o-up
         | 解決済み
-      a.tabnav-tab.all
+      a.tabnav-tab.all[href=questions_path class=detect_index_tab_selected(questions_path)]
         i.fa.fa-list
         | すべて
 article.question-index.body
-  div.question-index.list-header
-  ul.question-index.list-body
-    - @questions.map do |q|
-      li.question-index.list-item
-        section.question-index.item-icon
-          i.fa.fa-smile-o
-        section.question-index.item-content
-          h1.question-index.item-title
-            a(href=(question_path(question_id: q.id)))= q.title
-          h2.question-index.item-author= q.author_name
-        section.question-index.item-status
-          div.assigned
-            i.fa.fa-hand-o-right
-            em= q.assigned_count
-          div.responded
-            i.fa.fa-check
-            em= q.responded_count
-          div.comments
-            i.fa.fa-comment
-            em= q.commented_count
+  - if @questions.to_a.size == 0
+    section.question-index.no-question
+      p 該当する質問がありません
+  - else
+    ul.question-index.list-body
+      - @questions.map do |q|
+        li.question-index.list-item
+          section.question-index.item-icon
+            i.fa[class=detect_question_index_icon(q, @user)]
+          section.question-index.item-content
+            h1.question-index.item-title
+              a(href=(question_path(question_id: q.id)))= q.title
+            h2.question-index.item-author= q.author_name
+          section.question-index.item-status
+            div.assigned
+              i.fa.fa-hand-o-right
+              em= q.assigned_count
+            div.responded
+              i.fa.fa-check
+              em= q.responded_count
+            div.comments
+              i.fa.fa-comment
+              em= q.commented_count

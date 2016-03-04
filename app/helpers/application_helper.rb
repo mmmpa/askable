@@ -27,4 +27,14 @@ module ApplicationHelper
       %{<div class="wrap">#{capture(child, parents.first, parents, &block)}</div>} + write_comment_child(tree, parents + [child], tree[child.id], &block)
     }.join.html_safe
   end
+
+  def detect_index_tab_selected(path)
+    request.fullpath == path ? 'selected' : ''
+  end
+
+  def detect_question_index_icon(q, user)
+    return 'fa-hand-o-right assigned' if q.assigned?(user)
+    return 'fa-smile-o all-responded' if q.all_responded?
+    q.opened? ? 'fa-meh-o opened' : 'fa-smile-o closed'
+  end
 end

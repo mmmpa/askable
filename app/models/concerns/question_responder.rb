@@ -37,5 +37,22 @@ module QuestionResponder
       reply_to!(root, comment)
       finish_ask(user, :answered!)
     end
+
+    def reply_to_by!(user, replied, reply_params)
+      raise NotInTree unless comments.include?(replied)
+      reply = detect_comment(reply_params)
+      reply.user = user
+      reply.comment = detect_reply_target(replied)
+      comments << reply
+      save!
+      reply
+    end
+
+    def reply_to!(replied, new_comment)
+      comment = detect_comment(new_comment)
+      comment.comment = detect_reply_target(replied)
+      comments << new_comment
+      save!
+    end
   end
 end

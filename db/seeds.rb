@@ -25,3 +25,11 @@ if ENV['DEV_DATA']
     Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
   end
 end
+
+if ENV['DEV_DATA'] || ENV['LARGE_DATA']
+  100.times do |n|
+    owner = User.sample
+    assigned = User.sample(n - 1)
+    Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
+  end
+end

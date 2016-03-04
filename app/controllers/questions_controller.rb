@@ -1,6 +1,26 @@
 class QuestionsController < ApplicationController
   def index
-    @questions = Question.index
+    @questions = Question.index(user)
+  end
+
+  def opened
+    @questions = Question.index(user).opened
+    render :index
+  end
+
+  def asked
+    @questions = Question.index(user).asked(user)
+    render :index
+  end
+
+  def requested
+    @questions = Question.index(user).requested(user)
+    render :index
+  end
+
+  def closed
+    @questions = Question.index(user).closed
+    render :index
   end
 
   def show
