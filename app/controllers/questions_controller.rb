@@ -1,25 +1,25 @@
 class QuestionsController < ApplicationController
   def index
-    @questions = Question.index(user)
+    @questions = Question.index(user).page(page).per(per)
   end
 
   def opened
-    @questions = Question.index(user).opened
+    @questions = Question.index(user).opened.page(page).per(per)
     render :index
   end
 
   def asked
-    @questions = Question.index(user).asked(user)
+    @questions = Question.index(user).asked(user).page(page).per(per)
     render :index
   end
 
   def requested
-    @questions = Question.index(user).requested(user)
+    @questions = Question.index(user).requested(user).page(page).per(per)
     render :index
   end
 
   def closed
-    @questions = Question.index(user).closed
+    @questions = Question.index(user).closed.page(page).per(per)
     render :index
   end
 
@@ -77,6 +77,14 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def per
+    20
+  end
+
+  def page
+    params[:page] || 1
+  end
 
   def question_for_show
     Question.show.find(params[:question_id])

@@ -7,6 +7,7 @@ module QuestionResponder
     end
 
     def finish_ask(asked_user, reaction)
+      touch
       target_ask = ask_for(asked_user)
       return unless target_ask
 

@@ -31,12 +31,12 @@ module QuestionIndexer
           ) AS "as_my_assigned"},
         ] }
         .group { id }
-        .order { created_at.desc }
+        .order { updated_at.desc }
     }
 
     scope :opened, -> { where { state.in(Question.status[:opened]) } }
     scope :closed, -> { where { state.in(Question.status[:closed]) } }
     scope :asked, ->(owner_user) { where { user == owner_user } }
-    scope :requested, ->(owner_user) { where { (ask_users.user_id == owner_user.id) & (ask_users.state.in(AskUser.not_yet_status)) } }
+    scope :requested, ->(owner_user) { where { ask_users.user_id == owner_user.id } }
   end
 end

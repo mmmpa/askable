@@ -13,7 +13,7 @@ header.sub-header.wrapper.with-nav
         | 質問した
       a.tabnav-tab.requested[href=requested_questions_path class=detect_index_tab_selected(requested_questions_path)]
         i.fa.fa-hand-o-right
-        | 質問されている
+        | 質問された
       a.tabnav-tab.closed[href=closed_questions_path class=detect_index_tab_selected(closed_questions_path)]
         i.fa.fa-thumbs-o-up
         | 解決済み
@@ -25,6 +25,8 @@ article.question-index.body
     section.question-index.no-question
       p 該当する質問がありません
   - else
+    section.question-index.pages.pagination
+      = paginate @questions
     ul.question-index.list-body
       - @questions.map do |q|
         li.question-index.list-item
@@ -44,3 +46,5 @@ article.question-index.body
             div.comments
               i.fa.fa-comment
               em= q.commented_count
+    section.question-index.pages
+      = paginate @questions
