@@ -284,13 +284,21 @@ class Component extends Node {
 }
 
 class QuestionResponder {
-  static start(dom:HTMLElement, questionId, userJson, teamJson, already, responded) {
-    let user = new User(userJson);
-    let team = new Team(teamJson);
+  static start(dom:HTMLElement, {closed, questionId, user, team, already, responded}) {
+    let user = new User(user);
+    let team = new Team(team);
     ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, dom);
   }
 
-  static opener(doms, questionId, userJson, teamJson, already, responded) {
+  static opener(doms, {closed, questionId, user, team, already, responded}) {
+    if (closed) {
+      _.each(doms, (dom)=> dom.parentNode.removeChild(dom));
+      return;
+    }
+
+    let user = new User(user);
+    let team = new Team(team);
+
     _.each(doms, (dom)=> {
       dom.addEventListener('click', (e)=> {
         ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, e.target.parentNode);

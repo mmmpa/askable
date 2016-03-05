@@ -12,7 +12,8 @@ const Uri = {
   assignUserQuestion: '/q/:questionId/assign',
   waitAnswerQuestion: '/q/:questionId/wait',
   sorryQuestion: '/q/:questionId/sorry',
-  replyToReply: '/q/:questionId/a/:commentId/res'
+  replyToReply: '/q/:questionId/a/:commentId/res',
+  finishQuestion: '/q/:questionId/finish'
 };
 
 export enum Api{
@@ -24,7 +25,8 @@ export enum Api{
   WaitAnswerQuestion,
   SorryQuestion,
   ReplyToReply,
-  LogOut
+  LogOut,
+  FinishQuestion
 }
 
 export function strikeApi(api:Api, params?:any):Promise {
@@ -61,6 +63,8 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
       return replyToReply;
     case Api.LogOut:
       return logOut;
+    case Api.FinishQuestion:
+      return finishQuestion;
     default:
       throw 'Api not exist'
   }
@@ -144,6 +148,17 @@ function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
   request
     .post(Uri.createQuestion)
     .send({questions: params})
+    .set('X-CSRF-Token', token())
+    .end(finalize(resolve, reject, queueResolve))
+}
+
+function finishQuestion(params:any, resolve, reject, queueResolve) {
+  let questionId = params.questionId;
+  delete params.questionId;
+  let uri = Uri.finishQuestion.replace(':questionId', questionId);
+
+  request
+    .patch(uri)
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }

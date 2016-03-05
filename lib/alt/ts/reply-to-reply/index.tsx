@@ -129,7 +129,12 @@ class Component extends Node {
 }
 
 class ReplyToReply {
-  static opener(doms, questionId) {
+  static opener(doms, {closed, questionId}) {
+    if (closed) {
+      _.each(doms, (dom)=> dom.parentNode.parentNode.removeChild(dom.parentNode));
+      return;
+    }
+
     _.each(doms, (dom)=> {
       let commentId = dom.getAttribute('data-id');
       dom.addEventListener('click', (e)=> {

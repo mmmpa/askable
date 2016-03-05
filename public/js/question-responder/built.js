@@ -14591,12 +14591,20 @@ var Component = (function (_super) {
 var QuestionResponder = (function () {
     function QuestionResponder() {
     }
-    QuestionResponder.start = function (dom, questionId, userJson, teamJson, already, responded) {
-        var user = new user_1.default(userJson);
-        var team = new team_1.default(teamJson);
+    QuestionResponder.start = function (dom, _a) {
+        var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
+        var user = new user_1.default(user);
+        var team = new team_1.default(team);
         ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), dom);
     };
-    QuestionResponder.opener = function (doms, questionId, userJson, teamJson, already, responded) {
+    QuestionResponder.opener = function (doms, _a) {
+        var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
+        if (closed) {
+            _.each(doms, function (dom) { return dom.parentNode.removeChild(dom); });
+            return;
+        }
+        var user = new user_1.default(user);
+        var team = new team_1.default(team);
         _.each(doms, function (dom) {
             dom.addEventListener('click', function (e) {
                 ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), e.target.parentNode);
@@ -14945,7 +14953,8 @@ var Uri = {
     assignUserQuestion: '/q/:questionId/assign',
     waitAnswerQuestion: '/q/:questionId/wait',
     sorryQuestion: '/q/:questionId/sorry',
-    replyToReply: '/q/:questionId/a/:commentId/res'
+    replyToReply: '/q/:questionId/a/:commentId/res',
+    finishQuestion: '/q/:questionId/finish'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -14957,6 +14966,7 @@ var Uri = {
     Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
     Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
     Api[Api["LogOut"] = 8] = "LogOut";
+    Api[Api["FinishQuestion"] = 9] = "FinishQuestion";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14992,6 +15002,8 @@ function detectFunction(api) {
             return replyToReply;
         case Api.LogOut:
             return logOut;
+        case Api.FinishQuestion:
+            return finishQuestion;
         default:
             throw 'Api not exist';
     }
@@ -15030,6 +15042,15 @@ function createQuestion(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createQuestion)
         .send({ questions: params })
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function finishQuestion(params, resolve, reject, queueResolve) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var uri = Uri.finishQuestion.replace(':questionId', questionId);
+    request
+        .patch(uri)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }

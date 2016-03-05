@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         patch 'assign', to: 'questions#assign', as: :assign_question
         patch 'answer', to: 'questions#answer', as: :answer_question
         patch 'wait', to: 'questions#wait', as: :wait_question
+        patch 'finish', to: 'questions#finish', as: :finish_question
 
         scope :a do
           get 'new', to: 'comments#new'

@@ -2,6 +2,26 @@ module QuestionResponder
   extend ActiveSupport::Concern
 
   included do
+    def owner?(owner)
+      user == owner
+    end
+
+    def finish_by!(owner)
+      raise NotOwner unless owner?(user)
+      closed!
+      save!
+    end
+
+    def assign!(*assigned)
+      self.class.call_assigned(*assigned).each { |user| users << user }
+      save!
+    end
+
+    def add_comment!(comment)
+      comments << comment
+      save!
+    end
+
     def ask_for(target)
       ask_users.not_yet.where { user == target }.first
     end

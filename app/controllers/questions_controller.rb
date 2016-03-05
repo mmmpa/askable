@@ -76,6 +76,13 @@ class QuestionsController < ApplicationController
     render json: {errors: e.record.answer_errors}, status: 400
   end
 
+  def finish
+    question.finish_by!(user)
+    render nothing: true, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: {}}, status: 400
+  end
+
   private
 
   def per

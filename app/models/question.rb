@@ -24,6 +24,12 @@ class Question < ActiveRecord::Base
   scope :show, -> { includes(:comments).joins { user }.select { ["questions.*", user.name.as(:as_author_name)] } }
 
   before_validation :initialize_value
+  before_save :check_not_yet_completed
+
+  def check_not_yet_completed
+    pp state_was, self.class.status[:opened]
+    raise AlreadyClosed unless self.class.status[state_was] == self.class.status[:opened]
+  end
 
   class << self
     alias_method :status, :states
@@ -56,7 +62,7 @@ class Question < ActiveRecord::Base
   end
 
   def comment_tree
-    @stored_tree ||= responses.inject({}) { |a, comment|
+    @stored_tree ||= responses.inject({root.id => []}) { |a, comment|
       a[comment.comment_id] ||= []
       a[comment.comment_id].push(comment)
       a
@@ -65,17 +71,6 @@ class Question < ActiveRecord::Base
         reply.created_at
       }.reverse!
     }
-  end
-
-  def assigned?(user)
-    result = as_or(:my_assigned) { users.include?(user) }
-    result == 0 ? false : !!result
-  end
-
-  def responded?(user)
-    return true unless users.include?(user)
-
-    !not_yet_responded?(user)
   end
 
   def not_yet_responded?(user)
@@ -107,6 +102,17 @@ class Question < ActiveRecord::Base
     comments.with_author.order { created_at.desc }[0..comments.size - 2]
   end
 
+  def assigned?(user)
+    result = as_or(:my_assigned) { users.include?(user) }
+    result == 0 ? false : !!result
+  end
+
+  def responded?(user)
+    return true unless users.include?(user)
+
+    !not_yet_responded?(user)
+  end
+
   def not_yet_user
     user_ids = ask_users.not_yet.select { user_id }
     users_with_respond_state(user_ids)
@@ -124,39 +130,8 @@ class Question < ActiveRecord::Base
       .select { ['users.*', ask_users.state.as(respond_state)] }
   end
 
-  def creation_errors
-    base = errors.messages
-    base.delete(:comments)
-    if (markdown_error = comments.last.errors.messages[:markdown])
-      base.merge!(markdown: markdown_error)
-    end
-    base
-  end
-
-  def answer_errors
-    base = {}
-    if (markdown_error = comments.last.errors.messages[:markdown])
-      base.merge!(markdown: markdown_error)
-    end
-    base
-  end
-
-  def assign_errors
-    errors
-  end
-
-  def assign!(*assigned)
-    self.class.call_assigned(*assigned).each { |user| users << user }
-    save!
-  end
-
   def require_head_comment
     errors.add(:comments, :at_least_one_comment) if comments.size == 0
-  end
-
-  def add_comment!(comment)
-    comments << comment
-    save!
   end
 
   def detect_comment(comment)
@@ -187,6 +162,10 @@ class Question < ActiveRecord::Base
     comment == root
   end
 
+  class NotOwner < StandardError
+
+  end
+
   class CannotReplyOtherQuestionComment < StandardError
 
   end
@@ -196,6 +175,10 @@ class Question < ActiveRecord::Base
   end
 
   class NotInTree < StandardError
+
+  end
+
+  class AlreadyClosed < StandardError
 
   end
 end

@@ -3,7 +3,7 @@ header.sub-header.wrapper
     h1.sub-header.title
       i.fa.fa-question-circle
       = @question.title
-= stylesheet_link_tag '/css/codemirror.css', media: 'all'
+      = stylesheet_link_tag '/css/codemirror.css', media: 'all'
 section.show-question.body
   section.show-question.root
     h1.show-question.title
@@ -31,10 +31,13 @@ section.show-question.body
                 li.show-question.assigned-user
                   = detect_respond_icon(user.respond_state)
                   = user.login
-  div#response-to-question
-    button.respond.opener
-      i.fa.fa-folder-open-o
-      | 回答フォームを開く
+      - if @question.owner?(@user)
+        section#question-finisher
+  - if @question.opened?
+    div#response-to-question
+      button.respond.opener
+        i.fa.fa-folder-open-o
+        | 回答フォームを開く
   - if @question.responses.count == 0
     section.show-question.no-response
       p まだ回答はありません
@@ -46,41 +49,50 @@ section.show-question.body
             div(id="comment-#{comment.id}")
               = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
                 div[id=("comment-#{child.id}" if parent)]
-                  h1.show-question.response-owner
-                    - if parent
-                      - parents.map do |p|
-                        i.fa.fa-reply.reply-anchor(data-targetId=p.id)
-                      = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
-                    - else
-                      i.fa.fa-graduation-cap
-                      = "#{child.author_name}さん曰く"
-                    a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
-                      i.fa.fa-link.
-                  section.show-question.response-comment.markdown-html= child.html.html_safe
-                  div.show-question.reply-to-reply-area
-                    button.show-question.reply-to-reply-button(data-id=child.id)
-                      i.fa.fa-reply
-                      | この回答に返信、もしくは補足する
-  div#response-to-question-foot
-    button.respond.opener
-      i.fa.fa-folder-open-o
-      | 回答フォームを開く
+                    h1.show-question.response-owner
+                      - if parent
+                        - parents.map do |p|
+                          i.fa.fa-reply.reply-anchor(data-targetId=p.id)
+                        = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
+                      - else
+                        i.fa.fa-graduation-cap
+                        = "#{child.author_name}さん曰く"
+                      a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
+                        i.fa.fa-link.
+                    section.show-question.response-comment.markdown-html= child.html.html_safe
+                    - if @question.opened?
+                      div.show-question.reply-to-reply-area
+                        button.show-question.reply-to-reply-button(data-id=child.id)
+                          i.fa.fa-reply
+                          | この回答に返信、もしくは補足する
+  - if @question.opened?
+    div#response-to-question-foot
+      button.respond.opener
+        i.fa.fa-folder-open-o
+        | 回答フォームを開く
 script src='/js/question-responder/built.js'
 script src='/js/reply-to-reply/built.js'
 script src='/js/anchor-coloring/built.js'
+script src='/js/question-finisher/built.js'
 javascript:
-  var doc = document;
-  var questionId = #{@question.id};
-  var user = #{@user.to_json.html_safe};
-  var team = #{@team.to_json.html_safe};
-  var assigned = #{@question.users.pluck(:login).to_json.html_safe};
-  var responded = #{@question.responded?(@user)};
+  (function () {
+    var doc = document;
+    var params = {
+      questionId: #{@question.id},
+      user: #{@user.to_json.html_safe},
+      team: #{@team.to_json.html_safe},
+      assigned: #{@question.users.pluck(:login).to_json.html_safe},
+      responded: #{@question.responded?(@user)},
+      owner: #{@question.owner?(@user)},
+      closed: #{@question.closed?}
+    };
+    QuestionFinisher.start(doc.querySelector('#question-finisher'), params);
+    QuestionResponder.opener(doc.querySelectorAll('.respond.opener'), params);
 
-  QuestionResponder.opener(doc.querySelectorAll('.respond.opener'), questionId, user, team, assigned, responded);
+    if (!params.responded) {
+      QuestionResponder.start(doc.querySelector('#response-to-question'), params);
+    }
 
-  if (!responded) {
-    QuestionResponder.start(doc.querySelector('#response-to-question'), questionId, user, team, assigned, responded);
-  }
-
-  ReplyToReply.opener(doc.querySelectorAll('.reply-to-reply-button'), questionId);
-  AnchorColoring.anchor(doc.querySelectorAll('.reply-anchor, .permalink'));
+    ReplyToReply.opener(doc.querySelectorAll('.reply-to-reply-button'), params);
+    AnchorColoring.anchor(doc.querySelectorAll('.reply-anchor, .permalink'));
+  })();
