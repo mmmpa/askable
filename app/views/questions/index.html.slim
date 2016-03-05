@@ -25,7 +25,7 @@ article.question-index.body
     section.question-index.no-question
       p 該当する質問がありません
   - else
-    section.question-index.pages.pagination
+    section.question-index.pager-area
       = paginate @questions
     ul.question-index.list-body
       - @questions.map do |q|
@@ -46,5 +46,5 @@ article.question-index.body
             div.comments
               i.fa.fa-comment
               em= q.commented_count
-    section.question-index.pages
+    section.question-index.pager-area
       = paginate @questions

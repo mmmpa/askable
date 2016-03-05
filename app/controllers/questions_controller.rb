@@ -79,7 +79,7 @@ class QuestionsController < ApplicationController
   private
 
   def per
-    20
+    10
   end
 
   def page
