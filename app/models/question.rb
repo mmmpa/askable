@@ -25,7 +25,7 @@ class Question < ActiveRecord::Base
   scope :show, -> { includes(:comments).joins { user }.select { ["questions.*", user.name.as(:as_author_name)] } }
 
   before_validation :initialize_value
-  before_save :check_not_yet_completed
+  before_validation :check_not_yet_completed
 
   def check_not_yet_completed
     raise AlreadyClosed if self.class.status[state_was] == self.class.status[:closed]
@@ -51,7 +51,7 @@ class Question < ActiveRecord::Base
           when User
             user
           else
-            User.find_by(login: user)
+            User.find_by(login: user) || (raise ActiveRecord::RecordNotFound)
         end
       }.compact
     end
@@ -150,10 +150,10 @@ class Question < ActiveRecord::Base
       when Comment
         comments.find(replied.id)
       else
-        comments.find(id)
+        comments.find(replied)
     end
   rescue
-    raise CannotReplyOtherQuestionComment
+    raise NotInTree
   end
 
   def root
@@ -165,10 +165,6 @@ class Question < ActiveRecord::Base
   end
 
   class NotOwner < StandardError
-
-  end
-
-  class CannotReplyOtherQuestionComment < StandardError
 
   end
 

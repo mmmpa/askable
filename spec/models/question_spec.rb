@@ -37,27 +37,81 @@ RSpec.describe Question, type: :model do
           {
             title: 'q',
             markdown: '# test',
-            assigned: [User.second.login, 'not_exist']
+            assigned: [User.second.login]
           })
       }.to change(AskUser, :count).by(1)
     end
   end
 
+  describe 'エラーメッセージの整形' do
+    context 'create時' do
+      it 'コメントのエラーが展開される' do
+        begin
+        Question.create_by!(
+          User.first,
+          {
+            title: 'q',
+            markdown: '',
+            assigned: [User.second.login]
+          })
+        rescue => e
+          expect(e.record.creation_errors[:markdown]).to be_truthy
+        end
+      end
+    end
+
+    context 'コメント時' do
+      let(:question) { create(:question, :valid) }
+      let(:after_q) { Question.find(question.id) }
+
+     it 'コメントのエラーが展開される' do
+        begin
+        question.answer_by!(User.second, build(:comment, :valid, markdown: ''))
+        rescue => e
+          expect(e.record.answer_errors[:markdown]).to be_truthy
+        end
+      end
+    end
+
+    context '招待時' do
+      let(:question) { create(:question, :valid) }
+      let(:after_q) { Question.find(question.id) }
+
+      it 'そのまま' do
+        question.assign!(User.third)
+        begin
+          question.assign_by!(User.second)
+        rescue => e
+          expect(e.record.assign_errors).to eq(e.record.errors)
+        end
+      end
+    end
+
+  end
+
   describe 'question responder' do
     let(:question) { create(:question, :valid) }
     let(:other_question) { create(:question, :valid) }
+    let(:after_q) { Question.find(question.id) }
 
     context '質問の終了' do
       before :each do
+        expect(question.opened?).to be_truthy
       end
 
       it '質問主は終了できる' do
-
-        
+        question.finish_by!(User.first)
+        expect(after_q.closed?).to be_truthy
       end
 
-      it '質問主以外は終了できない' do end
-      it '終了後は保存ができない' do end
+      it '質問主以外は終了できない' do
+        expect{question.finish_by!(User.second)}.to raise_error(Question::NotOwner)
+      end
+
+      it '終了後は保存ができない' do
+        question.finish_by!(User.first)
+        expect{after_q.save!}.to raise_error(Question::AlreadyClosed)
+      end
     end
 
     describe 'コメントの追加' do
@@ -121,6 +175,14 @@ RSpec.describe Question, type: :model do
           expect(after_q.responded_user).to include(User.second)
           expect(after_q.not_yet_user).to include(User.fifth)
         end
+
+        it '知ってそうな人を提示しないとエラー' do
+          expect{question.assign_by!(User.second)}.to raise_error(ActiveRecord::RecordInvalid)
+       end
+
+        it '不正なloginでエラー' do
+          expect{question.assign_by!(User.second, 'not_exist')}.to raise_error(ActiveRecord::RecordNotFound)
+       end
       end
 
       context '応える' do
@@ -138,7 +200,7 @@ RSpec.describe Question, type: :model do
 
       context 'リプライ時' do
         before :each do
-          question.reply_to!(question.root, reply)
+          question.reply_to_by!(User.second, question.root, reply)
         end
 
         it 'クエスチョンのコメント数に反映' do
@@ -155,11 +217,12 @@ RSpec.describe Question, type: :model do
       end
 
       it 'クエスチョンに含まれないコメントへのリプライはできない' do
-        expect { question.reply_to!(other_question.root, reply) }.to raise_error(Question::CannotReplyOtherQuestionComment)
+        expect { question.reply_to_by!(User.second, other_question.root, reply) }.to raise_error(Question::NotInTree)
       end
 
       it 'idでもリプライできる' do
-        question.reply_to!(question.root.id, reply)
+        question.save!
+        question.reply_to_by!(User.second, question.root.id, build(:comment, :valid))
         expect(question.root.comments.size).to eq(1)
       end
     end
