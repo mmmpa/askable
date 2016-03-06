@@ -19,11 +19,54 @@ RSpec.describe "Questions", type: :request do
     q[10].assign!(User.first)
     q[11].assign!(User.first)
     q[0].finish_by!(User.first)
+    q[2].answer_by!(User.first, {markdown: 'test'})
     @q = q
   end
 
   after :all do
     q.each(&:destroy)
+  end
+
+  describe 'display' do
+    context '質問を表示' do
+      context 'コメントがないときのマーク' do
+        it 'コメントのない質問' do
+          get question_path(q[1].id)
+          expect(response).to have_http_status(200)
+          expect(response.body).to have_tag('.show-question.no-response')
+          expect(response.body).not_to have_tag('.show-question.response')
+        end
+
+        it 'コメントがある質問' do
+          get question_path(q[2].id)
+          expect(response).to have_http_status(200)
+          expect(response.body).not_to have_tag('.show-question.no-response')
+          expect(response.body).to have_tag('.show-question.response')
+        end
+
+        it '終了した場合はマークを出さない' do
+          get question_path(q[0].id)
+          expect(response).to have_http_status(200)
+          expect(response.body).not_to have_tag('.show-question.no-response')
+          expect(response.body).not_to have_tag('.show-question.response')
+          expect(response.body).to have_tag('.show-question.closed')
+        end
+      end
+
+      context '終了したマーク' do
+        it '終了した質問' do
+          get question_path(q[0].id)
+          expect(response).to have_http_status(200)
+          expect(response.body).to have_tag('.show-question.closed')
+        end
+
+        it '終了していない質問' do
+          get question_path(q[1].id)
+          expect(response).to have_http_status(200)
+          expect(response.body).not_to have_tag('.show-question.closed')
+        end
+      end
+    end
   end
 
   describe 'indexing' do
@@ -103,12 +146,23 @@ RSpec.describe "Questions", type: :request do
       q
     end
 
+    let(:no_assigned_question) do
+      q = create(:question, :valid, user: User.second)
+      q.assign!(User.third, User.fourth)
+      q
+    end
+
     context '力になれません' do
       it '反応済みが増える' do
         expect {
           patch sorry_question_path(question.id)
           expect(response).to have_http_status(201)
         }.to change(question, :responded_count).by(1)
+      end
+
+      it 'おねがいされていないとエラー' do
+        patch sorry_question_path(no_assigned_question.id)
+        expect(response).to have_http_status(400)
       end
     end
 
@@ -118,6 +172,11 @@ RSpec.describe "Questions", type: :request do
           patch wait_question_path(question.id)
           expect(response).to have_http_status(201)
         }.not_to change(question, :responded_count)
+      end
+
+      it 'おねがいされていないとエラー' do
+        patch wait_question_path(no_assigned_question.id)
+        expect(response).to have_http_status(400)
       end
     end
 
@@ -142,6 +201,11 @@ RSpec.describe "Questions", type: :request do
         patch assign_question_path(question.id), questions: {assigned: []}
         expect(response).to have_http_status(400)
       end
+
+      it '存在しないloginだとエラー' do
+        patch assign_question_path(question.id), questions: {assigned: ['not']}
+        expect(response).to have_http_status(400)
+      end
     end
 
     context '回答する' do
@@ -158,6 +222,13 @@ RSpec.describe "Questions", type: :request do
           expect(response).to have_http_status(201)
         }.to change(question.comments.where { user == User.first }, :size).by(1)
       end
+
+      it '不正なパラメーターでエラー' do
+        expect {
+          patch answer_question_path(question.id), questions: {markdown: ''}
+          expect(response).to have_http_status(400)
+        }.not_to change(question, :responded_count)
+      end
     end
 
     context 'コメントにリプライする' do
@@ -166,6 +237,13 @@ RSpec.describe "Questions", type: :request do
           post reply_question_path(question_id: question.id, comment_id: question.root.id), questions: {markdown: '# new comment'}
           expect(response).to have_http_status(201)
         }.to change(question.comments.where { user == User.first }, :size).by(1)
+      end
+
+      it '不正なパラメーターでエラー' do
+        expect {
+          post reply_question_path(question_id: question.id, comment_id: question.root.id), questions: {markdown: ''}
+          expect(response).to have_http_status(400)
+        }.not_to change(question.comments.where { user == User.first }, :size)
       end
     end
 

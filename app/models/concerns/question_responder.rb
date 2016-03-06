@@ -21,6 +21,14 @@ module QuestionResponder
       ask_users.not_yet.where { user == target }.first
     end
 
+    def finish_ask!(asked_user, reaction)
+      touch
+      target_ask = ask_for(asked_user)
+      raise Question::NotAsked unless target_ask
+
+      target_ask.send(reaction)
+    end
+
     def finish_ask(asked_user, reaction)
       touch
       target_ask = ask_for(asked_user)
@@ -30,11 +38,11 @@ module QuestionResponder
     end
 
     def sorry_by!(user)
-      finish_ask(user, :responded!)
+      finish_ask!(user, :responded!)
     end
 
     def wait_by!(user)
-      finish_ask(user, :wait!)
+      finish_ask!(user, :wait!)
     end
 
     def assign_by!(user, *assigned)

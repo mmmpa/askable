@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
-  rescue_from ActionController::ParameterMissing, with: -> { render json: {errors: {}}, status: 400 }
-  rescue_from Question::NotOwner, with: -> { render json: {errors: {}}, status: 400 }
+  rescue_from ActionController::ParameterMissing, with: -> { render json: {errors: {global: 'Invalid'}}, status: 400 }
+  rescue_from Question::NotOwner, with: -> { render json: {errors: {global: 'Not Asked'}}, status: 400 }
+  rescue_from Question::NotAsked, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
+  rescue_from ActiveRecord::RecordNotFound, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
 
   def index
     @questions = Question.index(user).page(page).per(per)
@@ -29,12 +31,12 @@ class QuestionsController < ApplicationController
   def show
     @question = question_for_show
     @user = user
-    @team = {users: User.all}
+    @team = team
   end
 
   def new
     @user = user
-    @team = {users: User.all}
+    @team = team
   end
 
   def create
@@ -47,22 +49,16 @@ class QuestionsController < ApplicationController
   def wait
     question.wait_by!(user)
     render json: {id: question.id}, status: 201
-  rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors}, status: 400
   end
 
   def sorry
     question.sorry_by!(user)
     render json: {id: question.id}, status: 201
-  rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: {}}, status: 400
   end
 
   def assign
     question.assign_by!(user, *assign_params)
     render json: {id: question.id}, status: 201
-  rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.assign_errors}, status: 400
   end
 
   def answer
@@ -82,10 +78,6 @@ class QuestionsController < ApplicationController
   def finish
     question.finish_by!(user)
     render nothing: true, status: 201
-  rescue Question::NotOwner => e
-    render json: {errors: {}}, status: 400
-  rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: {}}, status: 400
   end
 
   private
@@ -115,7 +107,7 @@ class QuestionsController < ApplicationController
   end
 
   def team
-    []
+    {users: User.all}
   end
 
   def reply_params
