@@ -21,10 +21,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   succeed(questionId) {
     document.location = this.props.questionPage.replace(':questionId', questionId);
   }
@@ -127,7 +123,9 @@ class NewQuestion {
   static start(dom:HTMLElement, questionPage, userJson, teamJson) {
     let user = new User(userJson);
     let team = new Team(teamJson);
-    ReactDOM.render(<Context {...{questionPage, user, team}}/>, dom);
+    ReactDOM.render(<Context {...{questionPage, user, team}}>
+      <Component/>
+    </Context>, dom);
   }
 }
 

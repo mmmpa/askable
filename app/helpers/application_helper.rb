@@ -33,6 +33,7 @@ module ApplicationHelper
   end
 
   def detect_question_index_icon(q, user)
+    return 'fa-thumbs-o-up closed' if q.closed?
     return 'fa-hand-o-right assigned' if q.assigned?(user)
     return 'fa-smile-o all-responded' if q.all_responded?
     q.opened? ? 'fa-meh-o opened' : 'fa-smile-o closed'

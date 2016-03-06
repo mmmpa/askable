@@ -7,7 +7,7 @@ RSpec.describe AskUser, type: :model do
     end
 
     it '反応済み' do
-      expect(AskUser.responded_status).to match_array([1, 2, 3])
+      expect(AskUser.responded_status).to match_array([1, 2, 3, 5])
     end
   end
 end

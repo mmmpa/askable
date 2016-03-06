@@ -21,10 +21,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   succeed() {
     location.reload();
   }
@@ -104,7 +100,9 @@ class QuestionFinisher {
       dom.parentNode.removeChild(dom);
       return;
     }
-    ReactDOM.render(<Context {...{questionId}}/>, dom);
+    ReactDOM.render(<Context {...{questionId}}>
+      <Component/>
+    </Context>, dom);
   }
 }
 

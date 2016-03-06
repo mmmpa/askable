@@ -2,10 +2,6 @@ module QuestionResponder
   extend ActiveSupport::Concern
 
   included do
-    def owner?(owner)
-      user == owner
-    end
-
     def finish_by!(owner)
       raise NotOwner unless owner?(user)
       closed!
@@ -57,6 +53,7 @@ module QuestionResponder
       comment.user = user
       reply_to!(root, comment)
       finish_ask(user, :answered!)
+      comment
     end
 
     def reply_to_by!(user, replied, reply_params)

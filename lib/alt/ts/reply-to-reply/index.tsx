@@ -21,10 +21,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   succeed() {
     location.reload();
   }
@@ -138,7 +134,9 @@ class ReplyToReply {
     _.each(doms, (dom)=> {
       let commentId = dom.getAttribute('data-id');
       dom.addEventListener('click', (e)=> {
-        ReactDOM.render(<Context {...{commentId, questionId}}/>, e.target.parentNode);
+        ReactDOM.render(<Context {...{commentId, questionId}}>
+          <Component/>
+        </Context>, e.target.parentNode);
       });
     });
   }

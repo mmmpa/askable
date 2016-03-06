@@ -16,7 +16,8 @@ Rails.application.routes.draw do
       get 'index/opened', to: 'questions#opened', as: :opened_questions
       get 'index/asked', to: 'questions#asked', as: :asked_questions
       get 'index/requested', to: 'questions#requested', as: :requested_questions
-      get 'index/closed', to: 'questions#closed', as: :closed_questions
+      get 'index/closed', to: 'questions#close
+d', as: :closed_questions
 
       scope ':question_id' do
         get '', to: 'questions#show', as: :question

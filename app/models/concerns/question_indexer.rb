@@ -7,7 +7,7 @@ module QuestionIndexer
     #
     scope :index, ->(viewer) {
       includes { user }.
-        joins { [ask_users, comments] }
+        joins { [ask_users.outer, comments.outer] }
         .select {
         ['questions.*',
          %q{COUNT(DISTINCT "comments"."id") AS as_commented_count},

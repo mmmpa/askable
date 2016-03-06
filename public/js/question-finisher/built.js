@@ -19,9 +19,6 @@ var Context = (function (_super) {
     function Context() {
         _super.apply(this, arguments);
     }
-    Context.prototype.children = function (props) {
-        return React.createElement(Component, React.__spread({}, props));
-    };
     Context.prototype.succeed = function () {
         location.reload();
     };
@@ -95,7 +92,7 @@ var QuestionFinisher = (function () {
             dom.parentNode.removeChild(dom);
             return;
         }
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId }), React.createElement(Component, null)), dom);
     };
     return QuestionFinisher;
 })();
@@ -170,7 +167,8 @@ var Root = (function (_super) {
     };
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
-        return this.children(props);
+        delete props.children;
+        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
     };
     return Root;
 })(Node);

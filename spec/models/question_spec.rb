@@ -43,9 +43,22 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  describe 'behavior' do
+  describe 'question responder' do
     let(:question) { create(:question, :valid) }
     let(:other_question) { create(:question, :valid) }
+
+    context '質問の終了' do
+      before :each do
+      end
+
+      it '質問主は終了できる' do
+
+        
+      end
+
+      it '質問主以外は終了できない' do end
+      it '終了後は保存ができない' do end
+    end
 
     describe 'コメントの追加' do
       let(:comment) { build(:comment, :valid_for_question) }
@@ -160,6 +173,241 @@ RSpec.describe Question, type: :model do
         question.assign!(user1, user2)
       end
     end
+  end
+
+  describe 'sql optimization' do
+    let(:q) { @q }
+    let(:index) { Question.index(User.first) }
+
+    before :all do
+      # クエスチョンの作成
+      q1 = create(:question, :valid)
+      q2 = create(:question, :valid)
+      q3 = create(:question, :valid)
+      q4 = create(:question, :valid)
+
+      # 回答をお願い
+      q1.assign!(User.second, User.third, User.fourth, User.fifth)
+      q2.assign!(User.second, User.third, User.fourth)
+      q3.assign!(User.second)
+      #q4.assign!()
+
+      # コメントの追加
+      q1.answer_by!(User.all[5], build(:comment, :valid))
+      q2.answer_by!(User.all[6], build(:comment, :valid))
+      q2.answer_by!(User.all[5], build(:comment, :valid))
+      q3.answer_by!(User.all[6], build(:comment, :valid))
+      q3.answer_by!(User.all[5], build(:comment, :valid))
+      q3.answer_by!(User.all[6], build(:comment, :valid))
+      q4.answer_by!(User.all[5], build(:comment, :valid))
+      q4.answer_by!(User.all[6], build(:comment, :valid))
+
+      # レスポンス
+      q1.answer_by!(User.second, build(:comment, :valid))
+      q1.sorry_by!(User.third)
+      q2.answer_by!(User.second, build(:comment, :valid))
+      q3.answer_by!(User.second, build(:comment, :valid))
+
+      @q = [nil, q1, q2, q3, q4]
+    end
+
+    after :all do
+      @q.compact.each(&:destroy!)
+    end
+
+    it '質問主の名前の挿入' do
+      (1..4).to_a.each do |n|
+        index_q = index.find(q[n].id)
+        expect(index_q.author_name).to eq(q[n].user.name)
+      end
+    end
+
+    it 'コメント数の挿入' do
+      (1..4).to_a.each do |n|
+        index_q = index.find(q[n].id)
+        expect(index_q.commented_count).to eq(q[n].responses.size)
+      end
+    end
+
+    it 'おねがいされている人数の挿入' do
+      (1..4).to_a.each do |n|
+        index_q = index.find(q[n].id)
+        expect(index_q.assigned_count).to eq(q[n].users.size)
+      end
+    end
+
+    it '反応済みの人数の挿入' do
+      (1..4).to_a.each do |n|
+        index_q = index.find(q[n].id)
+        expect(index_q.responded_count).to eq(q[n].responded_user.size)
+      end
+    end
+  end
+
+  describe 'relation' do
+    let(:q) { @q }
+
+    before :all do
+      q = create(:question, :valid)
+      q.assign!(User.second, User.third, User.fourth)
+      q.sorry_by!(User.second)
+      @q = q
+    end
+
+    after :all do
+      @q.destroy!
+    end
+
+    describe 'ユーザーリストを得る' do
+      context 'お願いされている' do
+        it do
+          expect(q.users).to match_array([User.second, User.third, User.fourth])
+        end
+      end
+
+      context '反応済み' do
+        it do
+          expect(q.responded_user).to match_array([User.second])
+        end
+      end
+
+      context '反応していない' do
+        it do
+          expect(q.not_yet_user).to match_array([User.third, User.fourth])
+        end
+      end
+    end
+
+    describe 'ユーザーを調べる' do
+      context 'お願いされている' do
+        it do
+          expect(q.assigned?(User.second)).to be_truthy
+        end
+
+        it do
+          expect(q.assigned?(User.first)).to be_falsey
+        end
+      end
+
+      context '反応済み' do
+        it do
+          expect(q.responded?(User.second)).to be_truthy
+        end
+
+        it do
+          expect(q.responded?(User.third)).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe 'behavior' do
+    let(:question) { create(:question, :valid) }
+    let(:other_question) { create(:question, :valid) }
+    let(:after_q) { Question.find(question.id) }
+
+    context '質問主かどうか' do
+      it '質問主である' do
+        expect(question.owner?(User.first)).to be_truthy
+      end
+
+      it '質問主でない' do
+        expect(question.owner?(User.second)).to be_falsey
+      end
+    end
+
+    context 'Commentがインスタンスかどうか判断してnewする' do
+      it 'Hashはnewされる' do
+        params = attributes_for(:comment, :valid)
+
+        expect(question.detect_comment(params)).to be_a(Comment)
+      end
+
+      it 'Commentはそのまま帰る' do
+        comment = build(:comment, :valid)
+        expect(question.detect_comment(comment)).to eq(comment)
+      end
+    end
+
+    context '全員反応済みかどうか' do
+      it '反応済みである' do
+        question.assign!(User.second)
+        question.sorry_by!(User.second)
+        expect(after_q.all_responded?).to be_truthy
+      end
+
+      it '反応済みでない' do
+        question.assign!(User.second)
+        expect(after_q.all_responded?).to be_falsey
+      end
+    end
+
+    context '質問本文であるか' do
+      it '本文である' do
+        question.answer_by!(User.second, build(:comment, :valid))
+        expect(after_q.root?(after_q.comments.first)).to be_truthy
+      end
+
+      it '本文ではない' do
+        question.answer_by!(User.second, build(:comment, :valid))
+        expect(after_q.root?(after_q.responses.first)).to be_falsey
+      end
+    end
+
+    context '全コメントのツリーを形成する' do
+      let(:q) { @q }
+      let(:a) { @a }
+      let(:r) { @r }
+      let(:comment_tree) { q.comment_tree }
+
+      before :all do
+        q = create(:question, :valid)
+        a1 = q.answer_by!(User.second, build(:comment, :valid))
+        a2 = q.answer_by!(User.second, build(:comment, :valid))
+        a3 = q.answer_by!(User.second, build(:comment, :valid))
+        r1 = q.reply_to_by!(User.third, a1, build(:comment, :valid))
+        r2 = q.reply_to_by!(User.third, a1, build(:comment, :valid))
+        r3 = q.reply_to_by!(User.third, a2, build(:comment, :valid))
+        r4 = q.reply_to_by!(User.fourth, r3, build(:comment, :valid))
+
+        @a = [nil, a1, a2, a3]
+        @r = [nil, r1, r2, r3]
+        @q = q
+      end
+
+      after :all do
+        @q.destroy!
+      end
+
+      it do
+        expect(comment_tree[q.root.id].size).to eq(3)
+      end
+
+      it do
+        expect(comment_tree[a[1].id].size).to eq(2)
+      end
+
+      it do
+        expect(comment_tree[a[2].id].size).to eq(1)
+      end
+
+      it do
+        expect(comment_tree[a[3].id]).to be_nil
+      end
+
+      it do
+        expect(comment_tree[r[3].id].size).to eq(1)
+      end
+
+      it do
+        expect(comment_tree[r[1].id]).to be_nil
+      end
+
+      it do
+        expect(comment_tree[r[2].id]).to be_nil
+      end
+    end
+
 
     it '最古のコメントはルートコメント' do
       root = question.root

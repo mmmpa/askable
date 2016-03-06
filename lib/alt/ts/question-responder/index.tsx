@@ -21,10 +21,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   succeed() {
     location.reload();
   }
@@ -287,7 +283,9 @@ class QuestionResponder {
   static start(dom:HTMLElement, {closed, questionId, user, team, already, responded}) {
     let user = new User(user);
     let team = new Team(team);
-    ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, dom);
+    ReactDOM.render(<Context {...{questionId, user, team, already, responded}}>
+      <Component/>
+    </Context>, dom);
   }
 
   static opener(doms, {closed, questionId, user, team, already, responded}) {
@@ -301,7 +299,9 @@ class QuestionResponder {
 
     _.each(doms, (dom)=> {
       dom.addEventListener('click', (e)=> {
-        ReactDOM.render(<Context {...{questionId, user, team, already, responded}}/>, e.target.parentNode);
+        ReactDOM.render(<Context {...{questionId, user, team, already, responded}}>
+          <Component/>
+        </Context>, e.target.parentNode);
       });
     });
   }

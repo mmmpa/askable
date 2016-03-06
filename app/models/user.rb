@@ -9,6 +9,6 @@ class User < ActiveRecord::Base
             presence: true
 
   def as_json(options)
-    super(options.merge!(only: [:name, :login, :email]))
+    super(options.merge!(only: [:name, :login]))
   end
 end

@@ -16,10 +16,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   succeed() {
     document.location = this.props.userPage;
   }
@@ -133,7 +129,9 @@ class Component extends Node {
 
 class LogIn {
   static start(dom:HTMLElement, userPage:string) {
-    ReactDOM.render(<Context {...{userPage}}/>, dom);
+    ReactDOM.render(<Context {...{userPage}}>
+      <Component/>
+    </Context>, dom);
   }
 }
 

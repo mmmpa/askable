@@ -37,6 +37,7 @@ RSpec.configure do |config|
   config.order = :random
   config.include RSpecHtmlMatchers
   config.include FactoryGirl::Syntax::Methods
+  config.example_status_persistence_file_path = "#{Rails.root}/log/examples.txt"
 
   config.before :all do
     FactoryGirl.reload
@@ -48,6 +49,8 @@ RSpec.configure do |config|
     create(:user, :valid, password: 'c' * 8)
     create(:user, :valid, password: 'd' * 8)
     create(:user, :valid, password: 'e' * 8)
+    create(:user, :valid, password: 'f' * 8)
+    create(:user, :valid, password: 'g' * 8)
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

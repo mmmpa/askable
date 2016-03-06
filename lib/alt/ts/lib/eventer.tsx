@@ -65,7 +65,8 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
 
   render() {
     let props = _.merge(_.clone(this.props), this.state);
-    return this.children(props);
+    delete props.children;
+    return React.cloneElement(this.props.children || <div>blank</div>, props);
   }
 }
 

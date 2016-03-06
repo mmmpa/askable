@@ -35,7 +35,7 @@ class Comment < ActiveRecord::Base
 
   def check_not_root_comment
     question.destroyed?
-    throw CannotDestroyRootComment if root?
+    raise CannotDestroyRootComment if root?
   end
 
   def root?

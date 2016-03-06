@@ -14399,9 +14399,6 @@ var Context = (function (_super) {
     function Context() {
         _super.apply(this, arguments);
     }
-    Context.prototype.children = function (props) {
-        return React.createElement(Component, React.__spread({}, props));
-    };
     Context.prototype.succeed = function () {
         location.reload();
     };
@@ -14595,7 +14592,7 @@ var QuestionResponder = (function () {
         var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
         var user = new user_1.default(user);
         var team = new team_1.default(team);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded }), React.createElement(Component, null)), dom);
     };
     QuestionResponder.opener = function (doms, _a) {
         var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
@@ -14607,7 +14604,7 @@ var QuestionResponder = (function () {
         var team = new team_1.default(team);
         _.each(doms, function (dom) {
             dom.addEventListener('click', function (e) {
-                ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded })), e.target.parentNode);
+                ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded }), React.createElement(Component, null)), e.target.parentNode);
             });
         });
     };
@@ -14881,7 +14878,8 @@ var Root = (function (_super) {
     };
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
-        return this.children(props);
+        delete props.children;
+        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
     };
     return Root;
 })(Node);

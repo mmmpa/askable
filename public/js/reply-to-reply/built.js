@@ -14396,9 +14396,6 @@ var Context = (function (_super) {
     function Context() {
         _super.apply(this, arguments);
     }
-    Context.prototype.children = function (props) {
-        return React.createElement(Component, React.__spread({}, props));
-    };
     Context.prototype.succeed = function () {
         location.reload();
     };
@@ -14500,7 +14497,7 @@ var ReplyToReply = (function () {
         _.each(doms, function (dom) {
             var commentId = dom.getAttribute('data-id');
             dom.addEventListener('click', function (e) {
-                ReactDOM.render(React.createElement(Context, React.__spread({}, { commentId: commentId, questionId: questionId })), e.target.parentNode);
+                ReactDOM.render(React.createElement(Context, React.__spread({}, { commentId: commentId, questionId: questionId }), React.createElement(Component, null)), e.target.parentNode);
             });
         });
     };
@@ -14691,7 +14688,8 @@ var Root = (function (_super) {
     };
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
-        return this.children(props);
+        delete props.children;
+        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
     };
     return Root;
 })(Node);

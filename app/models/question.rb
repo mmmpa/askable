@@ -1,6 +1,7 @@
 class Question < ActiveRecord::Base
   include QuestionResponder
   include QuestionIndexer
+  include QuestionErrorArranger
   include AsColumnWrapper
 
   #
@@ -27,8 +28,7 @@ class Question < ActiveRecord::Base
   before_save :check_not_yet_completed
 
   def check_not_yet_completed
-    pp state_was, self.class.status[:opened]
-    raise AlreadyClosed unless self.class.status[state_was] == self.class.status[:opened]
+    raise AlreadyClosed if self.class.status[state_was] == self.class.status[:closed]
   end
 
   class << self
@@ -61,11 +61,13 @@ class Question < ActiveRecord::Base
     self.state ||= self.class.status[:opened]
   end
 
+  def owner?(owner)
+    user == owner
+  end
+
   def comment_tree
-    @stored_tree ||= responses.inject({root.id => []}) { |a, comment|
-      a[comment.comment_id] ||= []
-      a[comment.comment_id].push(comment)
-      a
+    @stored_tree ||= responses.group_by { |comment|
+      comment.comment_id
     }.each_value { |replies|
       replies.sort_by! { |reply|
         reply.created_at

@@ -16,10 +16,6 @@ enum State{
 }
 
 class Context extends Root {
-  children(props) {
-    return <Component {...props}/>;
-  }
-
   submit(params:ICreateUser) {
     this.setState({state: State.Submitting});
     strikeApi(Api.CreateUser, params)
@@ -154,7 +150,8 @@ class Component extends Node {
             <p className="user-register info">{email}</p>
           </section>
           <section className="user-register link-section">
-            <Fa icon="sign-in"/><a href="/in">ログインページヘ</a>
+            <Fa icon="sign-in"/>
+            <a href="/in">ログインページヘ</a>
           </section>
         </div>
       </section>
@@ -176,7 +173,9 @@ class Component extends Node {
 
 class Welcome {
   static start(dom:HTMLElement) {
-    ReactDOM.render(<Context />, dom);
+    ReactDOM.render(<Context>
+      <Component/>
+    </Context>, dom);
   }
 }
 

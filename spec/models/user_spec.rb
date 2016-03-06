@@ -28,4 +28,12 @@ RSpec.describe User, type: :model do
       expect(build(:user, :valid, name: '').valid?).to be_falsey
     end
   end
+
+  describe 'behavior' do
+    let(:json) { JSON.parse(User.first.to_json).deep_symbolize_keys! }
+
+    it '公開情報は表示名とidのみ' do
+      expect(json.keys).to match_array([:name, :login])
+    end
+  end
 end

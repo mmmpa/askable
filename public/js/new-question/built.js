@@ -14399,9 +14399,6 @@ var Context = (function (_super) {
     function Context() {
         _super.apply(this, arguments);
     }
-    Context.prototype.children = function (props) {
-        return React.createElement(Component, React.__spread({}, props));
-    };
     Context.prototype.succeed = function (questionId) {
         document.location = this.props.questionPage.replace(':questionId', questionId);
     };
@@ -14481,7 +14478,7 @@ var NewQuestion = (function () {
     NewQuestion.start = function (dom, questionPage, userJson, teamJson) {
         var user = new user_1.default(userJson);
         var team = new team_1.default(teamJson);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionPage: questionPage, user: user, team: team })), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionPage: questionPage, user: user, team: team }), React.createElement(Component, null)), dom);
     };
     return NewQuestion;
 })();
@@ -14753,7 +14750,8 @@ var Root = (function (_super) {
     };
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
-        return this.children(props);
+        delete props.children;
+        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
     };
     return Root;
 })(Node);
