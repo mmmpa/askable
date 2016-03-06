@@ -47,13 +47,13 @@ RSpec.describe Question, type: :model do
     context 'create時' do
       it 'コメントのエラーが展開される' do
         begin
-        Question.create_by!(
-          User.first,
-          {
-            title: 'q',
-            markdown: '',
-            assigned: [User.second.login]
-          })
+          Question.create_by!(
+            User.first,
+            {
+              title: 'q',
+              markdown: '',
+              assigned: [User.second.login]
+            })
         rescue => e
           expect(e.record.creation_errors[:markdown]).to be_truthy
         end
@@ -64,9 +64,9 @@ RSpec.describe Question, type: :model do
       let(:question) { create(:question, :valid) }
       let(:after_q) { Question.find(question.id) }
 
-     it 'コメントのエラーが展開される' do
+      it 'コメントのエラーが展開される' do
         begin
-        question.answer_by!(User.second, build(:comment, :valid, markdown: ''))
+          question.answer_by!(User.second, build(:comment, :valid, markdown: ''))
         rescue => e
           expect(e.record.answer_errors[:markdown]).to be_truthy
         end
@@ -105,12 +105,12 @@ RSpec.describe Question, type: :model do
       end
 
       it '質問主以外は終了できない' do
-        expect{question.finish_by!(User.second)}.to raise_error(Question::NotOwner)
+        expect { question.finish_by!(User.second) }.to raise_error(Question::NotOwner)
       end
 
       it '終了後は保存ができない' do
         question.finish_by!(User.first)
-        expect{after_q.save!}.to raise_error(Question::AlreadyClosed)
+        expect { after_q.save! }.to raise_error(Question::AlreadyClosed)
       end
     end
 
@@ -177,12 +177,12 @@ RSpec.describe Question, type: :model do
         end
 
         it '知ってそうな人を提示しないとエラー' do
-          expect{question.assign_by!(User.second)}.to raise_error(ActiveRecord::RecordInvalid)
-       end
+          expect { question.assign_by!(User.second) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
 
         it '不正なloginでエラー' do
-          expect{question.assign_by!(User.second, 'not_exist')}.to raise_error(ActiveRecord::RecordNotFound)
-       end
+          expect { question.assign_by!(User.second, 'not_exist') }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
 
       context '応える' do

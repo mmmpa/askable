@@ -1,4 +1,7 @@
 class QuestionsController < ApplicationController
+  rescue_from ActionController::ParameterMissing, with: -> { render json: {errors: {}}, status: 400 }
+  rescue_from Question::NotOwner, with: -> { render json: {errors: {}}, status: 400 }
+
   def index
     @questions = Question.index(user).page(page).per(per)
   end
@@ -79,6 +82,8 @@ class QuestionsController < ApplicationController
   def finish
     question.finish_by!(user)
     render nothing: true, status: 201
+  rescue Question::NotOwner => e
+    render json: {errors: {}}, status: 400
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: {}}, status: 400
   end

@@ -10,6 +10,54 @@ RSpec.describe "Questions", type: :request do
     authlogic_login(User.first)
   end
 
+  let(:q) { @q }
+
+  before :all do
+    q = []
+    8.times { q.push create(:question, :valid) }
+    7.times { q.push create(:question, :valid, user: User.second) }
+    q[10].assign!(User.first)
+    q[11].assign!(User.first)
+    q[0].finish_by!(User.first)
+    @q = q
+  end
+
+  after :all do
+    q.each(&:destroy)
+  end
+
+  describe 'indexing' do
+    it 'すべての質問を表示（上限10）' do
+      get questions_path
+      expect(response.body).to have_tag('.question-index.list-item', count: 10)
+    end
+
+    it 'すべての質問を表示（上限10）' do
+      get questions_path, page: 2
+      expect(response.body).to have_tag('.question-index.list-item', count: 5)
+    end
+
+    it '受付中の質問を表示' do
+      get opened_questions_path, page: 2
+      expect(response.body).to have_tag('.question-index.list-item', count: 4)
+    end
+
+    it '自分がした質問を表示' do
+      get asked_questions_path
+      expect(response.body).to have_tag('.question-index.list-item', count: 8)
+    end
+
+    it '自分が質問されている質問を表示' do
+      get requested_questions_path
+      expect(response.body).to have_tag('.question-index.list-item', count: 2)
+    end
+
+    it '終了した質問を表示' do
+      get closed_questions_path
+      expect(response.body).to have_tag('.question-index.list-item', count: 1)
+    end
+  end
+
   describe 'question creation' do
     it '質問作成ページを表示' do
       get new_question_path
@@ -42,6 +90,10 @@ RSpec.describe "Questions", type: :request do
         expect(json[:errors]).to be_truthy
       end
     end
+  end
+
+  describe 'display question' do
+
   end
 
   describe 'question response' do
@@ -85,6 +137,11 @@ RSpec.describe "Questions", type: :request do
 
         expect(question.users).to include(User.fifth)
       end
+
+      it '人が空だとエラー' do
+        patch assign_question_path(question.id), questions: {assigned: []}
+        expect(response).to have_http_status(400)
+      end
     end
 
     context '回答する' do
@@ -99,7 +156,31 @@ RSpec.describe "Questions", type: :request do
         expect {
           patch answer_question_path(question.id), questions: {markdown: '# new comment'}
           expect(response).to have_http_status(201)
-        }.to change(question.comments.where{user == User.first}, :size).by(1)
+        }.to change(question.comments.where { user == User.first }, :size).by(1)
+      end
+    end
+
+    context 'コメントにリプライする' do
+      it '反応済みが増える' do
+        expect {
+          post reply_question_path(question_id: question.id, comment_id: question.root.id), questions: {markdown: '# new comment'}
+          expect(response).to have_http_status(201)
+        }.to change(question.comments.where { user == User.first }, :size).by(1)
+      end
+    end
+
+    context '質問を終わらせる' do
+      it 'ステータスが変わる' do
+        question = create(:question, :valid)
+        patch finish_question_path(question_id: question.id)
+        expect(response).to have_http_status(201)
+        question.reload
+        expect(question.closed?).to be_truthy
+      end
+
+      it 'オーナーでないとエラー' do
+        patch finish_question_path(question_id: question.id)
+        expect(response).to have_http_status(400)
       end
     end
   end
