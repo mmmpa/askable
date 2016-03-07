@@ -13,18 +13,60 @@ RSpec.describe "Questions", type: :request do
   let(:q) { @q }
 
   before :all do
+    Question.destroy_all
+    
     q = []
     8.times { q.push create(:question, :valid) }
     7.times { q.push create(:question, :valid, user: User.second) }
     q[10].assign!(User.first)
     q[11].assign!(User.first)
+    q[11].assign!(User.third)
     q[0].finish_by!(User.first)
     q[2].answer_by!(User.first, {markdown: 'test'})
+    q[11].answer_by!(User.first, {markdown: 'test'})
     @q = q
   end
 
   after :all do
     q.each(&:destroy)
+  end
+
+  describe 'helper' do
+    context '各種アイコンの表示' do
+      it '質問ページ' do
+        q = create(:question, :valid)
+        q.assign!(User.second, User.third, User.fourth, User.fifth)
+        q.sorry_by!(User.second)
+        q.wait_by!(User.third)
+        q.answer_by!(User.fourth, {markdown: '# answered'})
+        q.assign_by!(User.fifth, User.all[5])
+
+        get question_path(q.id)
+        expect(response.body).to have_tag('.show-question.responded-list .fa-assigned')
+        expect(response.body).to have_tag('.show-question.not-yet-list .fa-waited')
+        expect(response.body).to have_tag('.show-question.responded-list .fa-answered')
+        expect(response.body).to have_tag('.show-question.responded-list .fa-sorryed')
+      end
+
+
+      it 'インデックスページ' do
+        get questions_path
+        expect(response.body).to have_tag('.question-index.item-icon .fa-assigned')
+        expect(response.body).to have_tag('.question-index.item-icon .fa-all-responded')
+        expect(response.body).to have_tag('.question-index.item-icon .fa-opened')
+
+        expect(response.body).to have_tag('.question-index.item-icon .fa-closed')
+      end
+    end
+
+    it 'コメントに対するリプライの描画' do |variable|
+      q = create(:question, :valid)
+      q.answer_by!(User.fourth, {markdown: '# answered'})
+      q.reply_to_by!(User.fourth, q.responses.first, {markdown: '# answered'})
+
+      get question_path(q.id)
+      expect(response.body).to have_tag('.show-question.response .wrap')
+    end
   end
 
   describe 'display' do

@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  include AskRelative
+  include AskUserRelative
+  include GroupUserRelative
 
   acts_as_authentic do |c|
     c.require_password_confirmation = false

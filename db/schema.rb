@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223034945) do
+ActiveRecord::Schema.define(version: 20160307061530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,22 +44,34 @@ ActiveRecord::Schema.define(version: 20160223034945) do
   add_index "comments", ["question_id"], name: "index_comments_on_question_id", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
-  create_table "group_members", force: :cascade do |t|
+  create_table "group_questions", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "group_questions", ["group_id", "question_id"], name: "index_group_questions_on_group_id_and_question_id", unique: true, using: :btree
+  add_index "group_questions", ["group_id"], name: "index_group_questions_on_group_id", using: :btree
+  add_index "group_questions", ["question_id"], name: "index_group_questions_on_question_id", using: :btree
+
+  create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   null: false
     t.integer  "user_id",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_index "group_members", ["group_id", "user_id"], name: "index_group_members_on_group_id_and_user_id", unique: true, using: :btree
-  add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
-  add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
+  add_index "group_users", ["group_id", "user_id"], name: "index_group_users_on_group_id_and_user_id", unique: true, using: :btree
+  add_index "group_users", ["group_id"], name: "index_group_users_on_group_id", using: :btree
+  add_index "group_users", ["user_id"], name: "index_group_users_on_user_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.integer  "user_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",        null: false
+    t.string   "description", null: false
+    t.integer  "user_id",     null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "groups", ["user_id"], name: "index_groups_on_user_id", using: :btree

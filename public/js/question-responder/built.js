@@ -14534,10 +14534,10 @@ var Component = (function (_super) {
         var _this = this;
         return this.writeSubmit('この内容で回答する', function () { return _this.dispatch('submitAnswer', _this.answerParams); });
     };
-    Component.prototype.detectTabClass = function (mode) {
+    Component.prototype.detectTabClass = function (base, mode) {
         return mode === this.state.mode
-            ? 'tabnav-tab selected'
-            : 'tabnav-tab';
+            ? base + " tabnav-tab selected"
+            : base + " tabnav-tab";
     };
     Component.prototype.changeMode = function (mode) {
         this.setState({ mode: mode });
@@ -14581,7 +14581,7 @@ var Component = (function (_super) {
         if (this.props.state === State.Success) {
             return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond registered-body"}, React.createElement("p", {"className": "respond registered-message"}, "投稿完了しました")));
         }
-        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, this.writeTitle(), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeResponderButton(), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass(Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
+        return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, this.writeTitle(), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeResponderButton(), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass('respond answer-tab', Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass('respond assign-tab', Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
     };
     return Component;
 })(eventer_1.Node);

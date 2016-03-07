@@ -1,4 +1,5 @@
 class Question < ActiveRecord::Base
+  include GroupQuestionRelative
   include QuestionResponder
   include QuestionIndexer
   include QuestionErrorArranger

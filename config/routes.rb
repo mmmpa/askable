@@ -3,9 +3,8 @@ Rails.application.routes.draw do
   # 最終行にconstraints失敗時のリダイレクトあり
   #
   scope constraints: Constraint::User.new do
-    get '/', to: redirect('/q/index')
-    #get '/', to: 'portal#portal', as: :portal
-    delete 'out', to: 'user_sessions#destroy'
+    #get '/', to: redirect('/q/index')
+    get '/', to: 'portal#portal', as: :portal
 
     scope :out do
       delete '', to: 'user_sessions#destroy', as: :log_out
@@ -74,6 +73,8 @@ Rails.application.routes.draw do
     get '', to: 'user_sessions#new', as: :log_in
     post '', to: 'user_sessions#create'
   end
+
+  delete 'out', to: 'user_sessions#destroy'
 
   get '/', to: redirect('/in')
   get '*path', to: redirect('/in')

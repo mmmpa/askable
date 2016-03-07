@@ -1,4 +1,4 @@
-module AskRelative
+module AskUserRelative
   extend ActiveSupport::Concern
 
   included do

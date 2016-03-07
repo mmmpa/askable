@@ -219,6 +219,14 @@ input.has-error
   &.not-yet-users
     @extend .one-half, .column
     padding: 0 20px
+    .fa.fa-sorryed
+      @extend .fa-paw
+    .fa.fa-assigned
+      @extend .fa-group
+    .fa.fa-answered
+      @extend .fa-thumbs-o-up
+    .fa.fa-waited
+      @extend .fa-clock-o
   &.assigned-title
     font-size: $size-title
   &.assigned-user
@@ -359,13 +367,17 @@ input.has-error
     font-size: $size-normal
   &.item-icon
     font-size: $size-title
-    .fa.assigned
+    .fa.fa-assigned
+      @extend .fa-hand-o-right
       color: $brand-red
-    .fa.all-responded
+    .fa.fa-all-responded
+      @extend .fa-smile-o
       color: $brand-gray-dark
-    .fa.opened
+    .fa.fa-opened
+      @extend .fa-meh-o
       color: $brand-gray-light
-
+    .fa.fa-closed
+      @extend .fa-thumbs-o-up
   &.item-icon,
   &.item-content,
   &.item-status

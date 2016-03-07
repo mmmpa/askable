@@ -51,7 +51,6 @@ class Context extends Root {
   }
 }
 
-
 class Component extends Node {
   constructor(props) {
     super(props);

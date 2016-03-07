@@ -9,13 +9,22 @@
 if ENV['DEV_DATA']
   User.destroy_all
   Question.destroy_all
+  Group.destroy_all
 
   ('a'..'g').to_a.each do |name|
     User.create!(
-      name: name,
+      name: "user_name_#{name}",
       login: name * 4,
       email: "mmmpa.mmmpa+#{name}@gmail.com",
       password: name * 8
+    ) rescue nil
+  end
+
+  ('a'..'c').to_a.each do |name|
+    Group.create!(
+      name: "group_name_#{name}",
+      user: User.find_by(name: name * 4),
+      description: 'デスクリプショん'
     ) rescue nil
   end
 

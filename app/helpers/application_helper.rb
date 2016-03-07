@@ -1,15 +1,14 @@
 module ApplicationHelper
   def detect_respond_icon(state)
-    p state
     case state
       when AskUser.status[:answered]
-        %{<i class="fa fa-thumbs-o-up"></i>}.html_safe
+        %q{<i class="fa fa-answered"></i>}.html_safe
       when AskUser.status[:responded]
-        %{<i class="fa fa-paw"></i>}.html_safe
+        %q{<i class="fa fa-sorryed"></i>}.html_safe
       when AskUser.status[:assigned]
-        %{<i class="fa fa-group"></i>}.html_safe
+        %q{<i class="fa fa-assigned"></i>}.html_safe
       when AskUser.status[:wait]
-        %{<i class="fa fa-clock-o"></i>}.html_safe
+        %q{<i class="fa fa-waited"></i>}.html_safe
       else
         nil
     end
@@ -33,9 +32,15 @@ module ApplicationHelper
   end
 
   def detect_question_index_icon(q, user)
-    return 'fa-thumbs-o-up closed' if q.closed?
-    return 'fa-hand-o-right assigned' if q.assigned?(user)
-    return 'fa-smile-o all-responded' if q.all_responded?
-    q.opened? ? 'fa-meh-o opened' : 'fa-smile-o closed'
+    case
+      when q.closed?
+        'fa-closed'
+      when q.assigned?(user)
+        'fa-assigned'
+      when q.all_responded?
+        'fa-all-responded'
+      else
+        'fa-opened'
+    end
   end
 end

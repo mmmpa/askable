@@ -25,7 +25,7 @@ section.show-question.body
               - @question.not_yet_user.map do |user|
                 li.show-question.assigned-user
                   = detect_respond_icon(user.respond_state)
-                  = user.login
+                  = user.name
           section.show-question.responded-users
             h1.show-question.assigned-title
               i.fa.fa-check
@@ -34,7 +34,7 @@ section.show-question.body
               - @question.responded_user.map do |user|
                 li.show-question.assigned-user
                   = detect_respond_icon(user.respond_state)
-                  = user.login
+                  = user.name
       - if @question.owner?(@user)
         section#question-finisher
   - if @question.opened?
@@ -86,7 +86,7 @@ javascript:
       questionId: #{@question.id},
       user: #{@user.to_json.html_safe},
       team: #{@team.to_json.html_safe},
-      assigned: #{@question.users.pluck(:login).to_json.html_safe},
+      already: #{@question.users.pluck(:login).to_json.html_safe},
       responded: #{@question.responded?(@user)},
       owner: #{@question.owner?(@user)},
       closed: #{@question.closed?}

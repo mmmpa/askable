@@ -18,5 +18,22 @@ RSpec.describe "UserSessions", type: :request do
         expect(response).to have_http_status(401)
       end
     end
+
+    context 'ログアウト' do
+      before :each do
+        authlogic_login(User.first)
+      end
+
+      it 'ログアウト成功で201' do
+        delete log_out_path
+        expect(response).to have_http_status(201)
+      end
+
+      it 'ログアウト失敗でも201' do
+        delete log_out_path
+        delete log_out_path
+        expect(response).to have_http_status(201)
+      end
+    end
   end
 end

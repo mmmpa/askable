@@ -176,10 +176,10 @@ class Component extends Node {
       ()=> this.dispatch('submitAnswer', this.answerParams));
   }
 
-  detectTabClass(mode:Mode) {
+  detectTabClass(base:string, mode:Mode) {
     return mode === this.state.mode
-      ? 'tabnav-tab selected'
-      : 'tabnav-tab'
+      ? `${base} tabnav-tab selected`
+      : `${base} tabnav-tab`
   }
 
   changeMode(mode:Mode) {
@@ -257,12 +257,12 @@ class Component extends Node {
             <div className="tabnav">
               {this.writeResponderButton()}
               <nav className="tabnav-tabs">
-                <a className={this.detectTabClass(Mode.Answering)}
+                <a className={this.detectTabClass('respond answer-tab', Mode.Answering)}
                    onClick={()=> this.changeMode(Mode.Answering)}>
                   <Fa icon="thumbs-o-up"/>
                   回答する
                 </a>
-                <a className={this.detectTabClass(Mode.Assigning)}
+                <a className={this.detectTabClass('respond assign-tab', Mode.Assigning)}
                    onClick={()=> this.changeMode(Mode.Assigning)}>
                   <Fa icon="group"/>
                   知ってそうな人を招待する

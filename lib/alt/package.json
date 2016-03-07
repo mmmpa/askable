@@ -4,7 +4,7 @@
   "description": "note",
   "main": "index.js",
   "scripts": {
-    "build": "watchify --extension=js ./ts_built/index.js -o ./ts_built/built.js -v",
+    "build": "watchify --extension=js ./built/index.js -o ./out/built.js -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
