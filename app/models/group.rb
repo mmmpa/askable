@@ -3,7 +3,11 @@ class Group < ActiveRecord::Base
   has_many :group_questions
   has_many :questions, through: :group_questions
   has_many :group_users
-  has_many :users, through: :group_users, inverse_of: :groups
+  has_many :users, through: :group_users, inverse_of: :raw_groups
+
+  def members
+    users.joins { group_users }.where { group_users.state == GroupUser.status[:accepted] }
+  end
 
   def all_members
     [user] + users
@@ -16,7 +20,12 @@ class Group < ActiveRecord::Base
 
   def add_by!(member, target)
     member_or_die!(member)
+    raise AlreadyInvited if invited?(target)
     users << target
+  end
+
+  def invited?(target)
+    users.include?(target)
   end
 
   def remove_by!(member, target)
@@ -41,11 +50,20 @@ class Group < ActiveRecord::Base
   end
 
   def member?(member)
-    users.include?(member)
+    members.include?(member)
   end
 
   def mine?(question)
     questions.include?(question)
+  end
+
+  def add_question(question)
+    member_or_die!(question.user)
+    questions << question
+  end
+
+  class AlreadyInvited < StandardError
+
   end
 
   class NotOwner < StandardError

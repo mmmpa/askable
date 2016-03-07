@@ -1,53 +1,62 @@
 class GroupKeeper
-  attr_accessor :group, :question
+  attr_accessor :group, :question, :user
 
   class << self
     def call(**options)
       new(**options)
     end
 
-    def create_in_by!(group, user, question_params)
+    def create_in_question!(group, user, question_params)
       keeper = new(group: group, user: user)
-      keeper.create_by!(user, question_params)
+      keeper.create_question!(user, question_params)
     end
   end
 
   def initialize(**options)
-    self.group = options.group || (raise GroupRequired)
-    self.user = options.user || (raise UserRequired)
-    self.question = options.question
+    self.group = options[:group] || (raise GroupRequired)
+    self.user = options[:user] || (raise UserRequired)
+    self.question = options[:question]
 
-    member_or_die!
-    mine_or_die!
-  end
-
-  def mine_or_die!
-    return unless question
-    group.mine_or_die!(question)
-    true
-  end
-
-  def member_or_die!
-    return unless user
     group.member_or_die!(user)
-    true
+    group.mine_or_die!(question) if question
   end
 
-  def create_by!(user, question_params)
+  def index
+    group.questions
+  end
+
+  def create_question!(question_params)
     Question.transaction do
       q = Question.create_by!(user, question_params)
-      group.questions << q
+      group.add_question(q)
+      q
     end
-
-    q
   end
 
-  def method_missing(name, *args)
-    return super unless question.respond_to?(name)
-
-    question.send(name, *args)
+  def sorry_question!
+    question.sorry_by!(user)
   end
 
+  def wait_question!
+    question.wait_by!(user)
+  end
+
+  def assign_question!(*assigned)
+    assigned.each do |member|
+      group.member_or_die!(member)
+    end
+    question.assign_by!(user, *assigned)
+  end
+
+  def answer_question!(new_comment)
+    question.answer_by!(user, new_comment)
+  end
+
+  def reply_to_question!(replied, reply_params)
+    group.mine_or_die!(replied)
+    question.reply_to_by!(user, replied, reply_params)
+  end
+  
   class GroupRequired < StandardError
 
   end

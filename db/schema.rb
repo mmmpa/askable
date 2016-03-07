@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20160307061530) do
   create_table "group_users", force: :cascade do |t|
     t.integer  "group_id",   null: false
     t.integer  "user_id",    null: false
+    t.integer  "state",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
