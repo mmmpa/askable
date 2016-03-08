@@ -37,6 +37,8 @@ RSpec.describe Group, type: :model do
   end
 
   describe 'メンバー' do
+    let!(:member_count) { group.all_members.size }
+
     context 'メンバーリスト' do
       it 'オーナーを含んだ全員' do
         expect(group.all_members).to match_array([User.first, User.second, User.all[6]])
@@ -46,23 +48,23 @@ RSpec.describe Group, type: :model do
     context '招待' do
       it 'メンバーであれば招待できる' do
         expect(group.add_by!(User.second, User.fourth)).to be_truthy
-        expect(after_g.users.size).to eq(3)
+        expect(after_g.users.size).to eq(member_count + 1)
       end
 
       it 'メンバーでなければ招待できない' do
         expect { group.add_by!(User.fourth, User.fourth) }.to raise_error(Group::NotMember)
-        expect(after_g.users.size).to eq(2)
+        expect(after_g.users.size).to eq(member_count)
       end
 
       it '招待済みだと招待できない' do
         group2.add_by!(User.second, User.fifth)
-        expect{group2.add_by!(User.second, User.fifth)}.to raise_error(Group::AlreadyInvited)
+        expect { group2.add_by!(User.second, User.fifth) }.to raise_error(Group::AlreadyInvited)
       end
 
       it 'ブロックされていると招待できない' do
         group2.add_by!(User.second, User.fifth)
         User.fifth.invitations.first.blocked!
-        expect{group2.add_by!(User.second, User.fifth)}.to raise_error(Group::AlreadyInvited)
+        expect { group2.add_by!(User.second, User.fifth) }.to raise_error(Group::AlreadyInvited)
       end
     end
 
@@ -82,22 +84,27 @@ RSpec.describe Group, type: :model do
     context '削除' do
       it '本人であれば削除できる' do
         expect(group.remove_by!(User.second, User.second)).to be_truthy
-        expect(after_g.users.size).to eq(1)
+        expect(after_g.users.size).to eq(member_count - 1)
       end
 
       it 'オーナーであれば削除できる' do
         expect(group.remove_by!(User.first, User.second)).to be_truthy
-        expect(after_g.users.size).to eq(1)
+        expect(after_g.users.size).to eq(member_count - 1)
+      end
+
+      it 'オーナーは削除できない' do
+        expect { group.remove_by!(User.first, User.first) }.to raise_error(Group::IsOwner)
+        expect(after_g.users.size).to eq(member_count)
       end
 
       it 'メンバーは削除できない' do
         expect { group.remove_by!(User.all[6], User.second) }.to raise_error(Group::NotOwner)
-        expect(after_g.users.size).to eq(2)
+        expect(after_g.users.size).to eq(member_count)
       end
 
       it 'メンバー以外も削除できない' do
         expect { group.remove_by!(User.third, User.second) }.to raise_error(Group::NotOwner)
-        expect(after_g.users.size).to eq(2)
+        expect(after_g.users.size).to eq(member_count)
       end
     end
 

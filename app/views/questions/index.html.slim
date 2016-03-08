@@ -27,16 +27,16 @@ article.question-index.body
   - else
     section.question-index.pager-area
       = paginate @questions
-    ul.question-index.list-body
+    ul.question-index.normal-list.list-body
       - @questions.map do |q|
-        li.question-index.list-item
-          section.question-index.item-icon
+        li.question-index.normal-list.list-item
+          section.question-index.normal-list.item-icon
             i.fa[class=detect_question_index_icon(q, @user)]
-          section.question-index.item-content
-            h1.question-index.item-title
+          section.question-index.normal-list.item-content
+            h1.question-index.normal-list.item-title
               a(href=(question_path(question_id: q.id)))= q.title
-            h2.question-index.item-author= q.author_name
-          section.question-index.item-status
+            h2.question-index.normal-list.item-author= q.author_name
+          section.question-index.normal-list.item-status
             div.assigned
               i.fa.fa-hand-o-right
               em= q.assigned_count

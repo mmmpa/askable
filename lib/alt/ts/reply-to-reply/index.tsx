@@ -11,7 +11,7 @@ import {Api, strikeApi, IReplyToReply} from './lib/services/strike-api'
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
 import User from "./lib/models/user";
-import Team from "./lib/models/team";
+import Group from "./lib/models/group";
 
 enum State{
   Waiting,
@@ -33,12 +33,20 @@ class Context extends Root {
     return this.props.questionId;
   }
 
-  submit(params:IReplyToReply) {
-    params.commentId = this.commentId;
-    params.questionId = this.questionId;
+  get groupId() {
+    return this.props.groupId;
+  }
 
+  setBase(params){
+    params.groupId = this.groupId;
+    params.questionId = this.questionId;
+    params.commentId = this.commentId;
+    return params;
+  }
+
+  submit(params:IReplyToReply) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.ReplyToReply, params)
+    strikeApi(Api.ReplyToReply, this.setBase(params))
       .then(()=> {
         this.setState({state: State.Success});
         this.succeed();
@@ -125,7 +133,7 @@ class Component extends Node {
 }
 
 class ReplyToReply {
-  static opener(doms, {closed, questionId}) {
+  static opener(doms, {closed, questionId, groupId}) {
     if (closed) {
       _.each(doms, (dom)=> dom.parentNode.parentNode.removeChild(dom.parentNode));
       return;
@@ -134,7 +142,7 @@ class ReplyToReply {
     _.each(doms, (dom)=> {
       let commentId = dom.getAttribute('data-id');
       dom.addEventListener('click', (e)=> {
-        ReactDOM.render(<Context {...{commentId, questionId}}>
+        ReactDOM.render(<Context {...{commentId, questionId, groupId}}>
           <Component/>
         </Context>, e.target.parentNode);
       });

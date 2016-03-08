@@ -11,7 +11,7 @@ import {Api, strikeApi, IAssign, IAnswer, IWait, ISorry} from './lib/services/st
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
 import User from "./lib/models/user";
-import Team from "./lib/models/team";
+import Group from "./lib/models/group";
 
 enum State{
   Waiting,
@@ -29,24 +29,30 @@ class Context extends Root {
     return this.props.questionId;
   }
 
-  submitAnswer(params:IAnswer) {
+  get groupId() {
+    return this.props.groupId;
+  }
+
+  setBase(params){
+    params.groupId = this.groupId;
     params.questionId = this.questionId;
-    this.submit(Api.AnswerQuestion, params);
+    return params;
+  }
+
+  submitAnswer(params:IAnswer) {
+    this.submit(Api.AnswerQuestion, this.setBase(params));
   }
 
   submitAssign(params:IAssign) {
-    params.questionId = this.questionId;
-    this.submit(Api.AssignUserQuestion, params);
+    this.submit(Api.AssignUserQuestion, this.setBase(params));
   }
 
   submitSorry() {
-    let {questionId} = this;
-    this.submit(Api.SorryQuestion, {questionId});
+    this.submit(Api.SorryQuestion, this.setBase({}));
   }
 
   submitWait() {
-    let {questionId} = this;
-    this.submit(Api.WaitAnswerQuestion, {questionId});
+    this.submit(Api.WaitAnswerQuestion, this.setBase({}));
   }
 
   submit(api:Api, params?:any) {
@@ -138,9 +144,9 @@ class Component extends Node {
 
   writeAssignArea() {
     let {assigned} = this.state;
-    let {user, team, errors, already} = this.props;
+    let {user, group, errors, already} = this.props;
     return <section>
-      <Assigner {...{errors, assigned, user, team, already}} onChange={(state)=> this.setState(state)}/>
+      <Assigner {...{errors, assigned, user, group, already}} onChange={(state)=> this.setState(state)}/>
       <section className="respond submit-section">
         {this.writeSubmitAssign()}
       </section>
@@ -280,33 +286,29 @@ class Component extends Node {
 }
 
 class QuestionResponder {
-  static start(dom:HTMLElement, {closed, questionId, user, team, already, responded}) {
+  static start(dom:HTMLElement, {closed, questionId, user, group, already, responded, groupId}) {
     let user = new User(user);
-    let team = new Team(team);
-    ReactDOM.render(<Context {...{questionId, user, team, already, responded}}>
+    let group = new Group(group);
+    ReactDOM.render(<Context {...{questionId, user, group, already, responded, groupId}}>
       <Component/>
     </Context>, dom);
   }
 
-  static opener(doms, {closed, questionId, user, team, already, responded}) {
+  static opener(doms, params) {
     if (closed) {
       _.each(doms, (dom)=> dom.parentNode.removeChild(dom));
       return;
     }
 
-    let user = new User(user);
-    let team = new Team(team);
-
     _.each(doms, (dom)=> {
       dom.addEventListener('click', (e)=> {
-        ReactDOM.render(<Context {...{questionId, user, team, already, responded}}>
-          <Component/>
-        </Context>, e.target.parentNode);
+        this.start(e.target.parentNode, params);
       });
     });
   }
 }
 
 window.QuestionResponder = QuestionResponder;
+
 
 

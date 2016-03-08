@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
     scope 'g/:group_id', constraints: Constraint::Group.new do
       scope :q do
+        get 'index/opened', to: 'questions#opened', as: :group_portal
         get 'index', to: 'questions#index', as: :questions
         get 'index/opened', to: 'questions#opened', as: :opened_questions
         get 'index/asked', to: 'questions#asked', as: :asked_questions

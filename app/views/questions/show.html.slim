@@ -83,9 +83,10 @@ javascript:
   (function () {
     var doc = document;
     var params = {
+      groupId: #{@group.id},
       questionId: #{@question.id},
       user: #{@user.to_json.html_safe},
-      team: #{@team.to_json.html_safe},
+      group: #{@group.to_json.html_safe},
       already: #{@question.users.pluck(:login).to_json.html_safe},
       responded: #{@question.responded?(@user)},
       owner: #{@question.owner?(@user)},

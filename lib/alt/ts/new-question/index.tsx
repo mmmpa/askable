@@ -10,7 +10,7 @@ import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
 import {Api, strikeApi, ICreateQuestion} from './lib/services/strike-api'
 import User from "./lib/models/user";
-import Team from "./lib/models/team";
+import Group from "./lib/models/group";
 
 
 enum State{
@@ -25,7 +25,17 @@ class Context extends Root {
     document.location = this.props.questionPage.replace(':questionId', questionId);
   }
 
+  get groupId() {
+    return this.props.groupId;
+  }
+
+  setBase(params){
+    params.groupId = this.groupId;
+  }
+
   submit(params:ICreateQuestion) {
+    this.setBase(params);
+
     this.setState({state: State.Submitting});
     strikeApi(Api.createQuestion, params)
       .then(({id})=> {
@@ -97,7 +107,7 @@ class Component extends Node {
       </article>
     }
 
-    let {errors, user, team} = this.props;
+    let {errors, user, group} = this.props;
     return <article className="new-question body">
       <section className="new-question box-body">
         <div className="columns">
@@ -110,7 +120,7 @@ class Component extends Node {
             </div>
           </section>
           <section className="new-question assigning-area">
-            <Assigner {...{errors, user, team}} onChange={(state)=> this.setState(state)}/>
+            <Assigner {...{errors, user, group}} onChange={(state)=> this.setState(state)}/>
           </section>
         </div>
       </section>
@@ -119,15 +129,13 @@ class Component extends Node {
 }
 
 class NewQuestion {
-  static start(dom:HTMLElement, questionPage, userJson, teamJson) {
-    let user = new User(userJson);
-    let team = new Team(teamJson);
-    ReactDOM.render(<Context {...{questionPage, user, team}}>
+  static start(dom:HTMLElement, {questionPage, user, group, groupId}) {
+    let user = new User(user);
+    let group = new Group(group);
+    ReactDOM.render(<Context {...{questionPage, user, group, groupId}}>
       <Component/>
     </Context>, dom);
   }
 }
 
 window.NewQuestion = NewQuestion;
-
-

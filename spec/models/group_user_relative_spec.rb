@@ -58,4 +58,8 @@ RSpec.describe GroupUserRelative, type: :model do
   it 'メンバーがいないグループも含まれるように(outer join)' do
     expect(User.fourth.groups.size).to eq(1)
   end
+
+  it 'groupsには自分がオーナーのグループ' do
+    expect(User.first.my_groups.pluck(:id)).to eq([@g[1].id, @g[2].id, @g[3].id, @g[4].id, @g[5].id, @g[6].id])
+  end
 end

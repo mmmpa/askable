@@ -29,10 +29,22 @@ var Context = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Context.prototype, "groupId", {
+        get: function () {
+            return this.props.groupId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Context.prototype.setBase = function (params) {
+        params.groupId = this.groupId;
+        params.questionId = this.questionId;
+        return params;
+    };
     Context.prototype.submit = function () {
         var _this = this;
         this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.FinishQuestion, { questionId: this.questionId })
+        strike_api_1.strikeApi(strike_api_1.Api.FinishQuestion, this.setBase({}))
             .then(function () {
             _this.setState({ state: State.Success });
             _this.succeed();
@@ -84,7 +96,7 @@ var QuestionFinisher = (function () {
     function QuestionFinisher() {
     }
     QuestionFinisher.start = function (dom, _a) {
-        var closed = _a.closed, questionId = _a.questionId;
+        var closed = _a.closed, questionId = _a.questionId, groupId = _a.groupId;
         if (!dom) {
             return;
         }
@@ -92,7 +104,7 @@ var QuestionFinisher = (function () {
             dom.parentNode.removeChild(dom);
             return;
         }
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId }), React.createElement(Component, null)), dom);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, groupId: groupId }), React.createElement(Component, null)), dom);
     };
     return QuestionFinisher;
 })();
@@ -208,15 +220,15 @@ exports.default = Fa;
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
-    createQuestion: '/users/me/q/new',
     logIn: '/in',
     logOut: '/out',
-    answerQuestion: '/q/:questionId/answer',
-    assignUserQuestion: '/q/:questionId/assign',
-    waitAnswerQuestion: '/q/:questionId/wait',
-    sorryQuestion: '/q/:questionId/sorry',
-    replyToReply: '/q/:questionId/a/:commentId/res',
-    finishQuestion: '/q/:questionId/finish'
+    createQuestion: '/g/:groupId/users/me/q/new',
+    answerQuestion: '/g/:groupId/q/:questionId/answer',
+    assignUserQuestion: '/g/:groupId/q/:questionId/assign',
+    waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
+    sorryQuestion: '/g/:groupId/q/:questionId/sorry',
+    replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
+    finishQuestion: '/g/:groupId/q/:questionId/finish'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -287,6 +299,19 @@ function finalize(resolve, reject, queueResolve) {
         queueResolve();
     };
 }
+function normalize(uri, params) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var groupId = params.groupId;
+    delete params.groupId;
+    var commentId = params.commentId;
+    delete params.commentId;
+    var normalized = uri
+        .replace(':questionId', questionId)
+        .replace(':commentId', commentId)
+        .replace(':groupId', groupId);
+    return { params: params, normalized: normalized };
+}
 function logOut(params, resolve, reject, queueResolve) {
     request
         .delete(Uri.logOut)
@@ -301,70 +326,55 @@ function createUser(params, resolve, reject, queueResolve) {
         .end(finalize(resolve, reject, queueResolve));
 }
 function createQuestion(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.createQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .post(Uri.createQuestion)
+        .post(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function finishQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.finishQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.finishQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function answerQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.answerQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.answerQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function replyToReply(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    var commentId = params.commentId;
-    delete params.questionId;
-    delete params.targetId;
-    var uri = Uri.replyToReply
-        .replace(':questionId', questionId)
-        .replace(':commentId', commentId);
+    var _a = normalize(Uri.replyToReply, params), normalized = _a.normalized, params = _a.params;
     request
-        .post(uri)
+        .post(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function assignUserQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.assignUserQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.assignUserQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function sorryQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.sorryQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.sorryQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function waitAnswerQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.waitAnswerQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.waitAnswerQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }

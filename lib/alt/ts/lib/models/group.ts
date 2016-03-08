@@ -1,6 +1,6 @@
 import User from "./user";
 
-export default class Team {
+export default class Group {
   name:string = '';
   users:User[] = [];
 

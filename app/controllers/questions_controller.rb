@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include InsideController
+
   rescue_from ActionController::ParameterMissing, with: -> { render json: {errors: {global: 'Invalid'}}, status: 400 }
   rescue_from Question::NotOwner, with: -> { render json: {errors: {global: 'Not Asked'}}, status: 400 }
   rescue_from Question::NotAsked, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
@@ -31,13 +33,9 @@ class QuestionsController < ApplicationController
 
   def show
     @question = question_for_show
-    @user = user
-    @team = group
   end
 
   def new
-    @user = user
-    @team = group
   end
 
   def create
@@ -93,27 +91,6 @@ class QuestionsController < ApplicationController
 
   def question_for_show
     keeper.q.show.find(params[:question_id])
-  end
-
-  def question
-    return nil unless params[:question_id]
-    Question.find(params[:question_id])
-  end
-
-  def comment
-    Comment.find(params[:comment_id])
-  end
-
-  def user
-    UserSession.find.try(:user)
-  end
-
-  def group
-    Group.find(params[:group_id])
-  end
-
-  def keeper
-    GroupKeeper.(user: user, group: group, question: question)
   end
 
   def reply_params

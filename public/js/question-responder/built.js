@@ -14386,7 +14386,7 @@ var strike_api_1 = require('./lib/services/strike-api');
 var comment_editor_1 = require('./lib/components/comment-editor');
 var assigner_1 = require('./lib/components/assigner');
 var user_1 = require("./lib/models/user");
-var team_1 = require("./lib/models/team");
+var group_1 = require("./lib/models/group");
 var State;
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
@@ -14409,21 +14409,29 @@ var Context = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Context.prototype.submitAnswer = function (params) {
+    Object.defineProperty(Context.prototype, "groupId", {
+        get: function () {
+            return this.props.groupId;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Context.prototype.setBase = function (params) {
+        params.groupId = this.groupId;
         params.questionId = this.questionId;
-        this.submit(strike_api_1.Api.AnswerQuestion, params);
+        return params;
+    };
+    Context.prototype.submitAnswer = function (params) {
+        this.submit(strike_api_1.Api.AnswerQuestion, this.setBase(params));
     };
     Context.prototype.submitAssign = function (params) {
-        params.questionId = this.questionId;
-        this.submit(strike_api_1.Api.AssignUserQuestion, params);
+        this.submit(strike_api_1.Api.AssignUserQuestion, this.setBase(params));
     };
     Context.prototype.submitSorry = function () {
-        var questionId = this.questionId;
-        this.submit(strike_api_1.Api.SorryQuestion, { questionId: questionId });
+        this.submit(strike_api_1.Api.SorryQuestion, this.setBase({}));
     };
     Context.prototype.submitWait = function () {
-        var questionId = this.questionId;
-        this.submit(strike_api_1.Api.WaitAnswerQuestion, { questionId: questionId });
+        this.submit(strike_api_1.Api.WaitAnswerQuestion, this.setBase({}));
     };
     Context.prototype.submit = function (api, params) {
         var _this = this;
@@ -14511,8 +14519,8 @@ var Component = (function (_super) {
     Component.prototype.writeAssignArea = function () {
         var _this = this;
         var assigned = this.state.assigned;
-        var _a = this.props, user = _a.user, team = _a.team, errors = _a.errors, already = _a.already;
-        return React.createElement("section", null, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, assigned: assigned, user: user, team: team, already: already }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAssign()));
+        var _a = this.props, user = _a.user, group = _a.group, errors = _a.errors, already = _a.already;
+        return React.createElement("section", null, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, assigned: assigned, user: user, group: group, already: already }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("section", {"className": "respond submit-section"}, this.writeSubmitAssign()));
     };
     Component.prototype.writeSubmit = function (text, onClick) {
         switch (this.props.state) {
@@ -14589,22 +14597,20 @@ var QuestionResponder = (function () {
     function QuestionResponder() {
     }
     QuestionResponder.start = function (dom, _a) {
-        var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
+        var closed = _a.closed, questionId = _a.questionId, user = _a.user, group = _a.group, already = _a.already, responded = _a.responded, groupId = _a.groupId;
         var user = new user_1.default(user);
-        var team = new team_1.default(team);
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded }), React.createElement(Component, null)), dom);
+        var group = new group_1.default(group);
+        ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, group: group, already: already, responded: responded, groupId: groupId }), React.createElement(Component, null)), dom);
     };
-    QuestionResponder.opener = function (doms, _a) {
-        var closed = _a.closed, questionId = _a.questionId, user = _a.user, team = _a.team, already = _a.already, responded = _a.responded;
+    QuestionResponder.opener = function (doms, params) {
+        var _this = this;
         if (closed) {
             _.each(doms, function (dom) { return dom.parentNode.removeChild(dom); });
             return;
         }
-        var user = new user_1.default(user);
-        var team = new team_1.default(team);
         _.each(doms, function (dom) {
             dom.addEventListener('click', function (e) {
-                ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, user: user, team: team, already: already, responded: responded }), React.createElement(Component, null)), e.target.parentNode);
+                _this.start(e.target.parentNode, params);
             });
         });
     };
@@ -14612,7 +14618,7 @@ var QuestionResponder = (function () {
 })();
 window.QuestionResponder = QuestionResponder;
 
-},{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/eventer":17,"./lib/fa":18,"./lib/models/team":19,"./lib/models/user":20,"./lib/services/strike-api":21}],14:[function(require,module,exports){
+},{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/eventer":17,"./lib/fa":18,"./lib/models/group":19,"./lib/models/user":20,"./lib/services/strike-api":21}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14652,12 +14658,12 @@ var Assigner = (function (_super) {
     };
     Assigner.prototype.writeAssigner = function () {
         var _this = this;
-        var _a = this.props, user = _a.user, team = _a.team, already = _a.already;
+        var _a = this.props, user = _a.user, group = _a.group, already = _a.already;
         var exclusion = (already || []).concat(user.login);
-        var users = team.users.filter(function (user) { return !_.includes(exclusion, user.login); });
-        return React.createElement("section", {"className": "assigner team-members"}, React.createElement("section", {"className": "assigner team-member-list"}, users.map(function (_a) {
+        var users = group.users.filter(function (user) { return !_.includes(exclusion, user.login); });
+        return React.createElement("section", {"className": "assigner group-members"}, React.createElement("section", {"className": "assigner group-member-list"}, users.map(function (_a) {
             var login = _a.login, name = _a.name;
-            return React.createElement("label", {"className": "assigner team-member", "key": login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign", "checked": _this.isAssigned(login), "onChange": function () { return _this.assignUser(login); }})), React.createElement("span", {"className": "input-label"}, name));
+            return React.createElement("label", {"className": "assigner group-member", "key": login}, React.createElement("span", {"className": "input-input"}, React.createElement("input", {"type": "checkbox", "name": "assign", "checked": _this.isAssigned(login), "onChange": function () { return _this.assignUser(login); }})), React.createElement("span", {"className": "input-label"}, name));
         })));
     };
     Assigner.prototype.render = function () {
@@ -14917,17 +14923,17 @@ exports.default = Fa;
 
 },{}],19:[function(require,module,exports){
 var user_1 = require("./user");
-var Team = (function () {
-    function Team(params) {
+var Group = (function () {
+    function Group(params) {
         this.name = '';
         this.users = [];
         this.name = params.name || '';
         this.users = params.users.map(function (user) { return new user_1.default(user); });
     }
-    return Team;
+    return Group;
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Team;
+exports.default = Group;
 
 },{"./user":20}],20:[function(require,module,exports){
 var User = (function () {
@@ -14944,15 +14950,15 @@ exports.default = User;
 var jobs = Promise.resolve();
 var Uri = {
     createUser: '/welcome/new',
-    createQuestion: '/users/me/q/new',
     logIn: '/in',
     logOut: '/out',
-    answerQuestion: '/q/:questionId/answer',
-    assignUserQuestion: '/q/:questionId/assign',
-    waitAnswerQuestion: '/q/:questionId/wait',
-    sorryQuestion: '/q/:questionId/sorry',
-    replyToReply: '/q/:questionId/a/:commentId/res',
-    finishQuestion: '/q/:questionId/finish'
+    createQuestion: '/g/:groupId/users/me/q/new',
+    answerQuestion: '/g/:groupId/q/:questionId/answer',
+    assignUserQuestion: '/g/:groupId/q/:questionId/assign',
+    waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
+    sorryQuestion: '/g/:groupId/q/:questionId/sorry',
+    replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
+    finishQuestion: '/g/:groupId/q/:questionId/finish'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -15023,6 +15029,19 @@ function finalize(resolve, reject, queueResolve) {
         queueResolve();
     };
 }
+function normalize(uri, params) {
+    var questionId = params.questionId;
+    delete params.questionId;
+    var groupId = params.groupId;
+    delete params.groupId;
+    var commentId = params.commentId;
+    delete params.commentId;
+    var normalized = uri
+        .replace(':questionId', questionId)
+        .replace(':commentId', commentId)
+        .replace(':groupId', groupId);
+    return { params: params, normalized: normalized };
+}
 function logOut(params, resolve, reject, queueResolve) {
     request
         .delete(Uri.logOut)
@@ -15037,70 +15056,55 @@ function createUser(params, resolve, reject, queueResolve) {
         .end(finalize(resolve, reject, queueResolve));
 }
 function createQuestion(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.createQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .post(Uri.createQuestion)
+        .post(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function finishQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.finishQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.finishQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function answerQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.answerQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.answerQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function replyToReply(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    var commentId = params.commentId;
-    delete params.questionId;
-    delete params.targetId;
-    var uri = Uri.replyToReply
-        .replace(':questionId', questionId)
-        .replace(':commentId', commentId);
+    var _a = normalize(Uri.replyToReply, params), normalized = _a.normalized, params = _a.params;
     request
-        .post(uri)
+        .post(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function assignUserQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.assignUserQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.assignUserQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .send({ questions: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function sorryQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.sorryQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.sorryQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
 function waitAnswerQuestion(params, resolve, reject, queueResolve) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var uri = Uri.waitAnswerQuestion.replace(':questionId', questionId);
+    var _a = normalize(Uri.waitAnswerQuestion, params), normalized = _a.normalized, params = _a.params;
     request
-        .patch(uri)
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }

@@ -3,5 +3,43 @@ header.sub-header.wrapper
     h1.sub-header.title
       i.fa.fa-map-o
       | ポータル
-article.portal
-  section.portal.team
+article.portal.body
+  section.portal.information-area
+    - if @information.size == 0
+      section.portal.no-information
+        p お知らせはありません
+    - else
+      h1.portal.information-header おしらせ
+      section.portal.information-table-area
+        ul.portal.information-table
+          - @information.each do |information|
+            li.portal.information-table-item= 情報
+  - writer = write_group_table do |groups|
+    - if groups.size == 0
+      section.portal.no-group
+        p グループはありません。
+    - else
+      section.portal.group-list-area
+        ul.portal.normal-list.list-body
+          - groups.each do |group|
+            li.portal.normal-list.list-item
+              section.portal.normal-list.item-icon
+                i.fa.fa-link
+              section.portal.normal-list.item-content
+                h1.portal.normal-list.item-title
+                  a(href=group_portal_path(group_id: group.id))= group.name
+                h2.portal.normal-list.item-author= group.description
+              section.portal.normal-list.item-status
+                div.opened
+                  i.fa.fa-exclamation-triangle
+                  em= group.opened_count
+                div.members
+                  i.fa.fa-group
+                  em= group.member_count
+
+  section.portal.group.mine
+    h1.portal.group-table-header 自分が作成したグループ
+    = writer.(@user.my_groups)
+  section.portal.group
+    h1.portal.group-table-header 参加中のグループ
+    = writer.(@user.groups)

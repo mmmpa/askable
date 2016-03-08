@@ -11,6 +11,8 @@ if ENV['DEV_DATA']
   Question.destroy_all
   Group.destroy_all
 
+  question_numbers = [15, 5, 12, 20, 13, 12, 0, 1]
+
   ('a'..'g').to_a.each do |name|
     User.create!(
       name: "user_name_#{name}",
@@ -20,25 +22,26 @@ if ENV['DEV_DATA']
     )
   end
 
-  ('a'..'c').to_a.each do |name|
-    Group.create!(
+  ('a'..'c').to_a.each_with_index do |name, index|
+    owner = User.find_by(login: name * 4)
+
+    g = Group.create!(
       name: "group_name_#{name}",
-      user: User.find_by(login: name * 4),
+      user: owner,
       description: 'デスクリプショん'
     )
-  end
 
-  5.times do |n|
-    owner = User.sample
-    assigned = User.sample(n - 1)
-    Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
-  end
-end
+    2.times do
+      g.add_by!(owner, User.sample) rescue nil
+    end
 
-if ENV['DEV_DATA'] || ENV['LARGE_DATA']
-  100.times do |n|
-    owner = User.sample
-    assigned = User.sample(n - 1)
-    Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
+    GroupUser.all.each(&:accepted!)
+
+    question_numbers[index].times do |n|
+      owner = g.users.sample
+      assigned = g.users.sample(n - 1)
+      q = Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
+      g.add_question(q)
+    end
   end
 end

@@ -14,6 +14,12 @@ module ApplicationHelper
     end
   end
 
+  def write_group_table(&block)
+    ->(group){
+      capture(group, &block)
+    }
+  end
+
   def write_comment_tree(tree, root, &block)
     base = capture(root, &block)
     children = write_comment_child(tree, [root], tree[root.id], &block)

@@ -5,7 +5,7 @@ import {Root, Node} from '../eventer'
 import Fa from '../fa'
 import ErrorMessages from './error-messages'
 import User from "../models/user";
-import Team from "../models/team";
+import Group from "../models/group";
 
 export default class Assigner extends Node {
   constructor(props) {
@@ -40,14 +40,14 @@ export default class Assigner extends Node {
   }
 
   writeAssigner() {
-    let {user, team, already} = this.props;
+    let {user, group, already} = this.props;
     let exclusion = (already || []).concat(user.login)
-    let users = team.users.filter((user)=> !_.includes(exclusion, user.login));
-    return <section className="assigner team-members">
-      <section className="assigner team-member-list">
+    let users = group.users.filter((user)=> !_.includes(exclusion, user.login));
+    return <section className="assigner group-members">
+      <section className="assigner group-member-list">
         {users.map(({login, name}:User)=>{
 
-          return <label className="assigner team-member" key={login}>
+          return <label className="assigner group-member" key={login}>
             <span className="input-input">
               <input type="checkbox" name="assign"
                      checked={this.isAssigned(login)}

@@ -11,7 +11,7 @@ import {Api, strikeApi, IAssign, IAnswer, IWait, ISorry} from './lib/services/st
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
 import User from "./lib/models/user";
-import Team from "./lib/models/team";
+import Group from "./lib/models/group";
 
 enum State{
   Waiting,
@@ -29,9 +29,19 @@ class Context extends Root {
     return this.props.questionId;
   }
 
+  get groupId() {
+    return this.props.groupId;
+  }
+
+  setBase(params){
+    params.groupId = this.groupId;
+    params.questionId = this.questionId;
+    return params;
+  }
+
   submit() {
     this.setState({state: State.Submitting});
-    strikeApi(Api.FinishQuestion, {questionId: this.questionId})
+    strikeApi(Api.FinishQuestion, this.setBase({}))
       .then(()=> {
         this.setState({state: State.Success});
         this.succeed();
@@ -92,7 +102,7 @@ class Component extends Node {
 }
 
 class QuestionFinisher {
-  static start(dom:HTMLElement, {closed, questionId}) {
+  static start(dom:HTMLElement, {closed, questionId, groupId}) {
     if (!dom) {
       return;
     }
@@ -100,7 +110,7 @@ class QuestionFinisher {
       dom.parentNode.removeChild(dom);
       return;
     }
-    ReactDOM.render(<Context {...{questionId}}>
+    ReactDOM.render(<Context {...{questionId, groupId}}>
       <Component/>
     </Context>, dom);
   }

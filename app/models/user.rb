@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validates :name,
             presence: true
 
-  def as_json(options)
+  def as_json(options = {})
     super(options.merge!(only: [:name, :login]))
   end
 end

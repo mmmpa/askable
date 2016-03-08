@@ -5,15 +5,15 @@ var jobs = Promise.resolve();
 
 const Uri = {
   createUser: '/welcome/new',
-  createQuestion: '/users/me/q/new',
   logIn: '/in',
   logOut: '/out',
-  answerQuestion: '/q/:questionId/answer',
-  assignUserQuestion: '/q/:questionId/assign',
-  waitAnswerQuestion: '/q/:questionId/wait',
-  sorryQuestion: '/q/:questionId/sorry',
-  replyToReply: '/q/:questionId/a/:commentId/res',
-  finishQuestion: '/q/:questionId/finish'
+  createQuestion: '/g/:groupId/users/me/q/new',
+  answerQuestion: '/g/:groupId/q/:questionId/answer',
+  assignUserQuestion: '/g/:groupId/q/:questionId/assign',
+  waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
+  sorryQuestion: '/g/:groupId/q/:questionId/sorry',
+  replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
+  finishQuestion: '/g/:groupId/q/:questionId/finish'
 };
 
 export enum Api{
@@ -128,6 +128,21 @@ function finalize(resolve, reject, queueResolve):(a, b)=> void {
   }
 }
 
+function normalize(uri, params) {
+  let questionId = params.questionId;
+  delete params.questionId;
+  let groupId = params.groupId;
+  delete params.groupId;
+  let commentId = params.commentId;
+  delete params.commentId;
+  let normalized = uri
+    .replace(':questionId', questionId)
+    .replace(':commentId', commentId)
+    .replace(':groupId', groupId);
+
+  return {params, normalized};
+}
+
 function logOut(params:any, resolve, reject, queueResolve) {
   request
     .delete(Uri.logOut)
@@ -145,82 +160,68 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
 }
 
 function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
+  let {normalized, params} = normalize(Uri.createQuestion, params);
+
   request
-    .post(Uri.createQuestion)
+    .post(normalized)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function finishQuestion(params:any, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let uri = Uri.finishQuestion.replace(':questionId', questionId);
+  let {normalized, params} = normalize(Uri.finishQuestion, params);
 
   request
-    .patch(uri)
+    .patch(normalized)
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function answerQuestion(params:IAnswer, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let uri = Uri.answerQuestion.replace(':questionId', questionId);
+  let {normalized, params} = normalize(Uri.answerQuestion, params);
 
   request
-    .patch(uri)
+    .patch(normalized)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function replyToReply(params:IReplyToReply, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  let commentId = params.commentId;
-  delete params.questionId;
-  delete params.targetId;
-  let uri = Uri.replyToReply
-    .replace(':questionId', questionId)
-    .replace(':commentId', commentId);
+  let {normalized, params} = normalize(Uri.replyToReply, params);
 
   request
-    .post(uri)
+    .post(normalized)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function assignUserQuestion(params:IAssign, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let uri = Uri.assignUserQuestion.replace(':questionId', questionId);
+  let {normalized, params} = normalize(Uri.assignUserQuestion, params);
 
   request
-    .patch(uri)
+    .patch(normalized)
     .send({questions: params})
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function sorryQuestion(params:ISorry, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let uri = Uri.sorryQuestion.replace(':questionId', questionId);
+  let {normalized, params} = normalize(Uri.sorryQuestion, params);
 
   request
-    .patch(uri)
+    .patch(normalized)
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
 
 function waitAnswerQuestion(params:IWait, resolve, reject, queueResolve) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let uri = Uri.waitAnswerQuestion.replace(':questionId', questionId);
+  let {normalized, params} = normalize(Uri.waitAnswerQuestion, params);
 
   request
-    .patch(uri)
+    .patch(normalized)
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
