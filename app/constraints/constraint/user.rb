@@ -1,7 +1,11 @@
 class Constraint::User
   def matches?(request)
+    !!user(request)
+  end
+
+  def user(request)
     UserSession.controller = ControllerLike.new(request)
-    !!UserSession.find.try(:user).tap{ UserSession.controller = nil }
+    UserSession.find.try(:user).tap{ UserSession.controller = nil }
   end
 
   class ControllerLike

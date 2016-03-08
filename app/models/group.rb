@@ -2,7 +2,7 @@ class Group < ActiveRecord::Base
   belongs_to :user, inverse_of: :own_groups
   has_many :group_questions
   has_many :questions, through: :group_questions
-  has_many :group_users
+  has_many :group_users, dependent: :delete_all
   has_many :users, through: :group_users, inverse_of: :raw_groups
 
   def members
@@ -50,7 +50,7 @@ class Group < ActiveRecord::Base
   end
 
   def member?(member)
-    members.include?(member)
+    owner?(member) || members.include?(member)
   end
 
   def mine?(question)

@@ -1,0 +1,47 @@
+class GroupKeeperQuestionProxy
+  attr_accessor :group, :question, :user
+
+  def initialize(**options)
+    self.group = options[:group]
+    self.user = options[:user]
+    self.question = options[:question]
+
+    group.mine_or_die!(question) if question
+  end
+
+  def create!(question_params)
+    Question.transaction do
+      q = Question.create_by!(user, question_params)
+      group.add_question(q)
+      q
+    end
+  end
+
+  def index
+    group.questions.index(user)
+  end
+
+  def sorry!
+    question.sorry_by!(user)
+  end
+
+  def wait!
+    question.wait_by!(user)
+  end
+
+  def assign!(*assigned)
+    assigned.each do |member|
+      group.member_or_die!(member)
+    end
+    question.assign_by!(user, *assigned)
+  end
+
+  def answer!(new_comment)
+    question.answer_by!(user, new_comment)
+  end
+
+  def reply_to!(replied, reply_params)
+    group.mine_or_die!(replied.question)
+    question.reply_to_by!(user, replied, reply_params)
+  end
+end

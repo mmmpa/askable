@@ -11,20 +11,31 @@ RSpec.describe "Questions", type: :request do
   end
 
   let(:q) { @q }
+  let(:g) { @g }
 
   before :all do
     Question.destroy_all
-    
+
+    g = create(:group, :valid)
+    keeper = GroupKeeper.(user: User.first, group: g)
+    keeper.add!(User.second, User.third, User.fourth, User.fifth, User.all[5], User.all[6])
+    GroupUser.all.each(&:accepted!)
+
+    keeper2 = GroupKeeper.(user: User.second, group: g)
+
     q = []
-    8.times { q.push create(:question, :valid) }
-    7.times { q.push create(:question, :valid, user: User.second) }
+    8.times { q.push keeper.q.create!(title: 'title', markdown: 'content') }
+    7.times { q.push keeper2.q.create!(title: 'title', markdown: 'content') }
+
     q[10].assign!(User.first)
     q[11].assign!(User.first)
     q[11].assign!(User.third)
     q[0].finish_by!(User.first)
     q[2].answer_by!(User.first, {markdown: 'test'})
     q[11].answer_by!(User.first, {markdown: 'test'})
+
     @q = q
+    @g = g
   end
 
   after :all do
@@ -41,7 +52,7 @@ RSpec.describe "Questions", type: :request do
         q.answer_by!(User.fourth, {markdown: '# answered'})
         q.assign_by!(User.fifth, User.all[5])
 
-        get question_path(q.id)
+        get question_path(group_id: g.id, question_id: q.id)
         expect(response.body).to have_tag('.show-question.responded-list .fa-assigned')
         expect(response.body).to have_tag('.show-question.not-yet-list .fa-waited')
         expect(response.body).to have_tag('.show-question.responded-list .fa-answered')
@@ -50,7 +61,7 @@ RSpec.describe "Questions", type: :request do
 
 
       it 'インデックスページ' do
-        get questions_path
+        get questions_path(group_id: g.id)
         expect(response.body).to have_tag('.question-index.item-icon .fa-assigned')
         expect(response.body).to have_tag('.question-index.item-icon .fa-all-responded')
         expect(response.body).to have_tag('.question-index.item-icon .fa-opened')
@@ -64,7 +75,7 @@ RSpec.describe "Questions", type: :request do
       q.answer_by!(User.fourth, {markdown: '# answered'})
       q.reply_to_by!(User.fourth, q.responses.first, {markdown: '# answered'})
 
-      get question_path(q.id)
+      get question_path(group_id: g.id, question_id: q.id)
       expect(response.body).to have_tag('.show-question.response .wrap')
     end
   end
@@ -73,21 +84,21 @@ RSpec.describe "Questions", type: :request do
     context '質問を表示' do
       context 'コメントがないときのマーク' do
         it 'コメントのない質問' do
-          get question_path(q[1].id)
+          get question_path(group_id: g.id, question_id: q[1].id)
           expect(response).to have_http_status(200)
           expect(response.body).to have_tag('.show-question.no-response')
           expect(response.body).not_to have_tag('.show-question.response')
         end
 
         it 'コメントがある質問' do
-          get question_path(q[2].id)
+          get question_path(group_id: g.id, question_id: q[2].id)
           expect(response).to have_http_status(200)
           expect(response.body).not_to have_tag('.show-question.no-response')
           expect(response.body).to have_tag('.show-question.response')
         end
 
         it '終了した場合はマークを出さない' do
-          get question_path(q[0].id)
+          get question_path(group_id: g.id, question_id: q[0].id)
           expect(response).to have_http_status(200)
           expect(response.body).not_to have_tag('.show-question.no-response')
           expect(response.body).not_to have_tag('.show-question.response')
@@ -97,13 +108,13 @@ RSpec.describe "Questions", type: :request do
 
       context '終了したマーク' do
         it '終了した質問' do
-          get question_path(q[0].id)
+          get question_path(group_id: g.id, question_id: q[0].id)
           expect(response).to have_http_status(200)
           expect(response.body).to have_tag('.show-question.closed')
         end
 
         it '終了していない質問' do
-          get question_path(q[1].id)
+          get question_path(group_id: g.id, question_id: q[1].id)
           expect(response).to have_http_status(200)
           expect(response.body).not_to have_tag('.show-question.closed')
         end
@@ -113,46 +124,46 @@ RSpec.describe "Questions", type: :request do
 
   describe 'indexing' do
     it 'すべての質問を表示（上限10）' do
-      get questions_path
+      get questions_path(group_id: g.id)
       expect(response.body).to have_tag('.question-index.list-item', count: 10)
     end
 
     it 'すべての質問を表示（上限10）' do
-      get questions_path, page: 2
+      get questions_path(group_id: g.id), page: 2
       expect(response.body).to have_tag('.question-index.list-item', count: 5)
     end
 
     it '受付中の質問を表示' do
-      get opened_questions_path, page: 2
+      get opened_questions_path(group_id: g.id), page: 2
       expect(response.body).to have_tag('.question-index.list-item', count: 4)
     end
 
     it '自分がした質問を表示' do
-      get asked_questions_path
+      get asked_questions_path(group_id: g.id)
       expect(response.body).to have_tag('.question-index.list-item', count: 8)
     end
 
     it '自分が質問されている質問を表示' do
-      get requested_questions_path
+      get requested_questions_path(group_id: g.id)
       expect(response.body).to have_tag('.question-index.list-item', count: 2)
     end
 
     it '終了した質問を表示' do
-      get closed_questions_path
+      get closed_questions_path(group_id: g.id)
       expect(response.body).to have_tag('.question-index.list-item', count: 1)
     end
   end
 
   describe 'question creation' do
     it '質問作成ページを表示' do
-      get new_question_path
+      get new_question_path(group_id: g.id)
       expect(response).to have_http_status(200)
     end
 
     context '質問作成' do
       it '回答依頼をしない質問' do
         params = {title: SecureRandom.hex(4), markdown: SecureRandom.hex(4)}
-        post new_question_path, questions: params
+        post new_question_path(group_id: g.id), questions: params
         expect(response).to have_http_status(201)
         expect(Question.find(json[:id]).title).to eq(params[:title])
       end
@@ -163,14 +174,14 @@ RSpec.describe "Questions", type: :request do
           markdown: SecureRandom.hex(4),
           assigned: [User.second.login]
         }
-        post new_question_path, questions: params
+        post new_question_path(group_id: g.id), questions: params
         expect(response).to have_http_status(201)
         expect(Question.find(json[:id]).title).to eq(params[:title])
         expect(Question.find(json[:id]).users).to include(User.second)
       end
 
       it '作成失敗でエラーメッセージが返る' do
-        post new_question_path, questions: {title: '', markdown: ''}
+        post new_question_path(group_id: g.id), questions: {title: '', markdown: ''}
         expect(response).to have_http_status(400)
         expect(json[:errors]).to be_truthy
       end
@@ -197,13 +208,13 @@ RSpec.describe "Questions", type: :request do
     context '力になれません' do
       it '反応済みが増える' do
         expect {
-          patch sorry_question_path(question.id)
+          patch sorry_question_path(group_id: g.id, question_id: question.id)
           expect(response).to have_http_status(201)
         }.to change(question, :responded_count).by(1)
       end
 
       it 'おねがいされていないとエラー' do
-        patch sorry_question_path(no_assigned_question.id)
+        patch sorry_question_path(group_id: g.id, question_id: no_assigned_question.id)
         expect(response).to have_http_status(400)
       end
     end
@@ -211,13 +222,13 @@ RSpec.describe "Questions", type: :request do
     context 'ちょっとまって' do
       it '反応済みはかわらない' do
         expect {
-          patch wait_question_path(question.id)
+          patch wait_question_path(group_id: g.id, question_id: question.id)
           expect(response).to have_http_status(201)
         }.not_to change(question, :responded_count)
       end
 
       it 'おねがいされていないとエラー' do
-        patch wait_question_path(no_assigned_question.id)
+        patch wait_question_path(group_id: g.id, question_id: no_assigned_question.id)
         expect(response).to have_http_status(400)
       end
     end
@@ -225,14 +236,14 @@ RSpec.describe "Questions", type: :request do
     context '知っている人を教える' do
       it '反応済みが増える' do
         expect {
-          patch assign_question_path(question.id), questions: {assigned: [User.fifth.login]}
+          patch assign_question_path(group_id: g.id, question_id: question.id), questions: {assigned: [User.fifth.login]}
           expect(response).to have_http_status(201)
         }.to change(question, :responded_count).by(1)
       end
 
       it '回答者が増える' do
         expect {
-          patch assign_question_path(question.id), questions: {assigned: [User.fifth.login]}
+          patch assign_question_path(group_id: g.id, question_id: question.id), questions: {assigned: [User.fifth.login]}
           expect(response).to have_http_status(201)
         }.to change(question, :assigned_count).by(1)
 
@@ -240,12 +251,12 @@ RSpec.describe "Questions", type: :request do
       end
 
       it '人が空だとエラー' do
-        patch assign_question_path(question.id), questions: {assigned: []}
+        patch assign_question_path(group_id: g.id, question_id: question.id), questions: {assigned: []}
         expect(response).to have_http_status(400)
       end
 
       it '存在しないloginだとエラー' do
-        patch assign_question_path(question.id), questions: {assigned: ['not']}
+        patch assign_question_path(group_id: g.id, question_id: question.id), questions: {assigned: ['not']}
         expect(response).to have_http_status(400)
       end
     end
@@ -253,21 +264,21 @@ RSpec.describe "Questions", type: :request do
     context '回答する' do
       it '反応済みが増える' do
         expect {
-          patch answer_question_path(question.id), questions: {markdown: '# new comment'}
+          patch answer_question_path(group_id: g.id, question_id: question.id), questions: {markdown: '# new comment'}
           expect(response).to have_http_status(201)
         }.to change(question, :responded_count).by(1)
       end
 
       it '回答が増える' do
         expect {
-          patch answer_question_path(question.id), questions: {markdown: '# new comment'}
+          patch answer_question_path(group_id: g.id, question_id: question.id), questions: {markdown: '# new comment'}
           expect(response).to have_http_status(201)
         }.to change(question.comments.where { user == User.first }, :size).by(1)
       end
 
       it '不正なパラメーターでエラー' do
         expect {
-          patch answer_question_path(question.id), questions: {markdown: ''}
+          patch answer_question_path(group_id: g.id, question_id: question.id), questions: {markdown: ''}
           expect(response).to have_http_status(400)
         }.not_to change(question, :responded_count)
       end
@@ -276,14 +287,14 @@ RSpec.describe "Questions", type: :request do
     context 'コメントにリプライする' do
       it '反応済みが増える' do
         expect {
-          post reply_question_path(question_id: question.id, comment_id: question.root.id), questions: {markdown: '# new comment'}
+          post reply_question_path(group_id: g.id, question_id: question.id, comment_id: question.root.id), questions: {markdown: '# new comment'}
           expect(response).to have_http_status(201)
         }.to change(question.comments.where { user == User.first }, :size).by(1)
       end
 
       it '不正なパラメーターでエラー' do
         expect {
-          post reply_question_path(question_id: question.id, comment_id: question.root.id), questions: {markdown: ''}
+          post reply_question_path(group_id: g.id, question_id: question.id, comment_id: question.root.id), questions: {markdown: ''}
           expect(response).to have_http_status(400)
         }.not_to change(question.comments.where { user == User.first }, :size)
       end
@@ -292,14 +303,14 @@ RSpec.describe "Questions", type: :request do
     context '質問を終わらせる' do
       it 'ステータスが変わる' do
         question = create(:question, :valid)
-        patch finish_question_path(question_id: question.id)
+        patch finish_question_path(group_id: g.id, question_id: question.id)
         expect(response).to have_http_status(201)
         question.reload
         expect(question.closed?).to be_truthy
       end
 
       it 'オーナーでないとエラー' do
-        patch finish_question_path(question_id: question.id)
+        patch finish_question_path(group_id: g.id, question_id: question.id)
         expect(response).to have_http_status(400)
       end
     end

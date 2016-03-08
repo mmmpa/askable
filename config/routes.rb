@@ -6,62 +6,61 @@ Rails.application.routes.draw do
     #get '/', to: redirect('/q/index')
     get '/', to: 'portal#portal', as: :portal
 
-    scope :out do
-      delete '', to: 'user_sessions#destroy', as: :log_out
-    end
+    scope 'g/:group_id' , constraints: Constraint::Group.new do
+      scope :q do
+        get 'index', to: 'questions#index', as: :questions
+        get 'index/opened', to: 'questions#opened', as: :opened_questions
+        get 'index/asked', to: 'questions#asked', as: :asked_questions
+        get 'index/requested', to: 'questions#requested', as: :requested_questions
+        get 'index/closed', to: 'questions#closed', as: :closed_questions
 
-    scope :q do
-      get 'index', to: 'questions#index', as: :questions
-      get 'index/opened', to: 'questions#opened', as: :opened_questions
-      get 'index/asked', to: 'questions#asked', as: :asked_questions
-      get 'index/requested', to: 'questions#requested', as: :requested_questions
-      get 'index/closed', to: 'questions#closed', as: :closed_questions
+        scope ':question_id' do
+          get '', to: 'questions#show', as: :question
+          patch 'sorry', to: 'questions#sorry', as: :sorry_question
+          patch 'assign', to: 'questions#assign', as: :assign_question
+          patch 'answer', to: 'questions#answer', as: :answer_question
+          patch 'wait', to: 'questions#wait', as: :wait_question
+          patch 'finish', to: 'questions#finish', as: :finish_question
 
-      scope ':question_id' do
-        get '', to: 'questions#show', as: :question
-        patch 'sorry', to: 'questions#sorry', as: :sorry_question
-        patch 'assign', to: 'questions#assign', as: :assign_question
-        patch 'answer', to: 'questions#answer', as: :answer_question
-        patch 'wait', to: 'questions#wait', as: :wait_question
-        patch 'finish', to: 'questions#finish', as: :finish_question
+          scope :a do
+            get 'new', to: 'comments#new'
+            post 'new', to: 'comments#create'
 
-        scope :a do
-          get 'new', to: 'comments#new'
-          post 'new', to: 'comments#create'
-
-          scope ':comment_id' do
-            get 'res', to: 'questions#res'
-            post 'res', to: 'questions#reply', as: :reply_question
+            scope ':comment_id' do
+              get 'res', to: 'questions#res'
+              post 'res', to: 'questions#reply', as: :reply_question
+            end
           end
         end
       end
-    end
 
-    scope :users do
-      scope :me do
-        get '', to: 'users#show', as: :user
-        get 'edit', to: 'users#edit', as: :edit_user
-        patch 'edit', to: 'users#update'
-        delete '', to: 'users#destroy'
+      scope :users do
+        scope :me do
+          get '', to: 'users#show', as: :user
+          get 'edit', to: 'users#edit', as: :edit_user
+          patch 'edit', to: 'users#update'
+          delete '', to: 'users#destroy'
 
-        scope :q do
-          get 'index', to: 'questions#user_index'
-          get 'new', to: 'questions#new', as: :new_question
-          post 'new', to: 'questions#create'
-        end
+          scope :q do
+            get 'index', to: 'questions#user_index'
+            get 'new', to: 'questions#new', as: :new_question
+            post 'new', to: 'questions#create'
+          end
 
-        scope :a do
-          get 'index', to: 'comments#user_index', as: :comments
+          scope :a do
+            get 'index', to: 'comments#user_index', as: :comments
+          end
+
+          scope ':login' do
+            get '', to: 'users#show'
+          end
         end
       end
 
-      scope ':login' do
-        get '', to: 'users#show'
-      end
+      get '/', to: 'portal#portal'
     end
 
-    get '/', to: redirect('/q/index')
-    get '*path', to: redirect('/q/index')
+    get '*path', to: redirect('/')
   end
 
   namespace :welcome do
@@ -74,7 +73,7 @@ Rails.application.routes.draw do
     post '', to: 'user_sessions#create'
   end
 
-  delete 'out', to: 'user_sessions#destroy'
+  delete 'out', to: 'user_sessions#destroy', as: :log_out
 
   get '/', to: redirect('/in')
   get '*path', to: redirect('/in')
