@@ -17,15 +17,15 @@ if ENV['DEV_DATA']
       login: name * 4,
       email: "mmmpa.mmmpa+#{name}@gmail.com",
       password: name * 8
-    ) rescue nil
+    )
   end
 
   ('a'..'c').to_a.each do |name|
     Group.create!(
       name: "group_name_#{name}",
-      user: User.find_by(name: name * 4),
+      user: User.find_by(login: name * 4),
       description: 'デスクリプショん'
-    ) rescue nil
+    )
   end
 
   5.times do |n|

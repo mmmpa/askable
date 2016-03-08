@@ -15,7 +15,7 @@ module GroupUserRelative
     end
 
     def groups
-      Group.joins { [user, group_users] }.where { (user == my { self }) | ((group_users.user == my { self }) & (group_users.state == GroupUser.status[:accepted])) }
+      Group.joins { [user.outer, group_users.outer] }.where { (user == my { self }) | ((group_users.user == my { self }) & (group_users.state == GroupUser.status[:accepted])) }.uniq
     end
   end
 end

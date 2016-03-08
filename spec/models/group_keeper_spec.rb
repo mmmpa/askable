@@ -131,7 +131,7 @@ RSpec.describe GroupKeeper, type: :model do
     let(:keeper2) { GroupKeeper.(group: group, user: User.fifth, question: q1) }
 
     before :each do
-      keeper.q.assign!(User.fifth)
+      keeper.q.assign!(User.fifth.login)
     end
 
     context '知っている人を紹介' do
@@ -139,12 +139,12 @@ RSpec.describe GroupKeeper, type: :model do
 
       it 'メンバーだと紹介できる' do
         expect {
-          keeper.q.assign!(User.all[6])
+          keeper.q.assign!(User.all[6].login)
         }.to change(q1.users, :size).by(1)
       end
 
       it 'メンバー以外だとエラー' do
-        expect { keeper.q.assign!(User.third) }.to raise_error(Group::NotMember)
+        expect { keeper.q.assign!(User.third.login) }.to raise_error(Group::NotMember)
       end
     end
 

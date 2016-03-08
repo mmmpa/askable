@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe GroupUserRelative, type: :model do
   before :all do
+    Group.destroy_all
+
     g1 = create(:group, :valid)
     g2 = create(:group, :valid)
     g3 = create(:group, :valid)
@@ -11,6 +13,7 @@ RSpec.describe GroupUserRelative, type: :model do
     g7 = create(:group, :valid, user: User.third)
     g8 = create(:group, :valid, user: User.third)
     g9 = create(:group, :valid, user: User.third)
+    g10 = create(:group, :valid, user: User.fourth)
 
     g1.add_by!(User.first, User.second)
     g2.add_by!(User.first, User.second)
@@ -50,5 +53,9 @@ RSpec.describe GroupUserRelative, type: :model do
 
   it 'groupsには自分がオーナーのグループも含む' do
     expect(User.first.groups.pluck(:id)).to eq(@g.compact.map(&:id))
+  end
+
+  it 'メンバーがいないグループも含まれるように(outer join)' do
+    expect(User.fourth.groups.size).to eq(1)
   end
 end

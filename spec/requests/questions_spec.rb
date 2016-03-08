@@ -12,6 +12,8 @@ RSpec.describe "Questions", type: :request do
 
   let(:q) { @q }
   let(:g) { @g }
+  let(:keeper) {@keeper}
+  let(:keeper2) {@keeper2}
 
   before :all do
     Question.destroy_all
@@ -36,6 +38,8 @@ RSpec.describe "Questions", type: :request do
 
     @q = q
     @g = g
+    @keeper = keeper
+    @keeper2 = keeper2
   end
 
   after :all do
@@ -45,7 +49,7 @@ RSpec.describe "Questions", type: :request do
   describe 'helper' do
     context '各種アイコンの表示' do
       it '質問ページ' do
-        q = create(:question, :valid)
+        q = keeper.q.create!(title: 'title', markdown: 'content')
         q.assign!(User.second, User.third, User.fourth, User.fifth)
         q.sorry_by!(User.second)
         q.wait_by!(User.third)
@@ -71,7 +75,7 @@ RSpec.describe "Questions", type: :request do
     end
 
     it 'コメントに対するリプライの描画' do |variable|
-      q = create(:question, :valid)
+      q = keeper.q.create!(title: 'title', markdown: 'content')
       q.answer_by!(User.fourth, {markdown: '# answered'})
       q.reply_to_by!(User.fourth, q.responses.first, {markdown: '# answered'})
 
@@ -194,13 +198,13 @@ RSpec.describe "Questions", type: :request do
 
   describe 'question response' do
     let(:question) do
-      q = create(:question, :valid, user: User.second)
+      q = keeper2.q.create!(title: 'title', markdown: 'content')
       q.assign!(User.first, User.third, User.fourth)
       q
     end
 
     let(:no_assigned_question) do
-      q = create(:question, :valid, user: User.second)
+      q = keeper2.q.create!(title: 'title', markdown: 'content')
       q.assign!(User.third, User.fourth)
       q
     end
@@ -245,6 +249,7 @@ RSpec.describe "Questions", type: :request do
         expect {
           patch assign_question_path(group_id: g.id, question_id: question.id), questions: {assigned: [User.fifth.login]}
           expect(response).to have_http_status(201)
+          question.reload
         }.to change(question, :assigned_count).by(1)
 
         expect(question.users).to include(User.fifth)
@@ -302,7 +307,8 @@ RSpec.describe "Questions", type: :request do
 
     context '質問を終わらせる' do
       it 'ステータスが変わる' do
-        question = create(:question, :valid)
+        question = keeper.q.create!(title: 'title', markdown: 'content')
+
         patch finish_question_path(group_id: g.id, question_id: question.id)
         expect(response).to have_http_status(201)
         question.reload

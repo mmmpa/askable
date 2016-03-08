@@ -3,80 +3,81 @@ class QuestionsController < ApplicationController
   rescue_from Question::NotOwner, with: -> { render json: {errors: {global: 'Not Asked'}}, status: 400 }
   rescue_from Question::NotAsked, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
   rescue_from ActiveRecord::RecordNotFound, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
+  rescue_from Group::NotMember, with: -> { render json: {errors: {global: 'Not Member'}}, status: 400 }
 
   def index
-    @questions = Question.index(user).page(page).per(per)
+    @questions = keeper.q.index.page(page).per(per)
   end
 
   def opened
-    @questions = Question.index(user).opened.page(page).per(per)
+    @questions = keeper.q.index.opened.page(page).per(per)
     render :index
   end
 
   def asked
-    @questions = Question.index(user).asked(user).page(page).per(per)
+    @questions = keeper.q.index.asked(user).page(page).per(per)
     render :index
   end
 
   def requested
-    @questions = Question.index(user).requested(user).page(page).per(per)
+    @questions = keeper.q.index.requested(user).page(page).per(per)
     render :index
   end
 
   def closed
-    @questions = Question.index(user).closed.page(page).per(per)
+    @questions = keeper.q.index.closed.page(page).per(per)
     render :index
   end
 
   def show
     @question = question_for_show
     @user = user
-    @team = team
+    @team = group
   end
 
   def new
     @user = user
-    @team = team
+    @team = group
   end
 
   def create
-    q = Question.create_by!(user, question_params)
+    q = keeper.q.create!(question_params)
     render json: {id: q.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.creation_errors}, status: 400
   end
 
   def wait
-    question.wait_by!(user)
+    keeper.q.wait!
     render json: {id: question.id}, status: 201
   end
 
   def sorry
-    question.sorry_by!(user)
+    keeper.q.sorry!
     render json: {id: question.id}, status: 201
   end
 
   def assign
-    question.assign_by!(user, *assign_params)
+    keeper.q.assign!(*assign_params)
     render json: {id: question.id}, status: 201
   end
 
   def answer
-    question.answer_by!(user, answer_params)
+    keeper.q.answer!(answer_params)
     render json: {id: question.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.answer_errors}, status: 400
   end
 
   def reply
-    replied = question.reply_to_by!(user, comment, reply_params)
+    replied = keeper.q.reply_to!(comment, reply_params)
     render json: {id: replied.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.answer_errors}, status: 400
   end
 
   def finish
-    question.finish_by!(user)
+    keeper.q.finish!
     render nothing: true, status: 201
   end
 
@@ -91,10 +92,11 @@ class QuestionsController < ApplicationController
   end
 
   def question_for_show
-    Question.show.find(params[:question_id])
+    keeper.q.show.find(params[:question_id])
   end
 
   def question
+    return nil unless params[:question_id]
     Question.find(params[:question_id])
   end
 
@@ -106,8 +108,12 @@ class QuestionsController < ApplicationController
     UserSession.find.try(:user)
   end
 
-  def team
-    {users: User.all}
+  def group
+    Group.find(params[:group_id])
+  end
+
+  def keeper
+    GroupKeeper.(user: user, group: group, question: question)
   end
 
   def reply_params

@@ -21,6 +21,14 @@ class GroupKeeperQuestionProxy
     group.questions.index(user)
   end
 
+  def show
+    group.questions.show
+  end
+
+  def finish!
+    question.finish_by!(user)
+  end
+
   def sorry!
     question.sorry_by!(user)
   end
@@ -30,10 +38,11 @@ class GroupKeeperQuestionProxy
   end
 
   def assign!(*assigned)
-    assigned.each do |member|
+    users = call_out(*assigned).each do |member|
       group.member_or_die!(member)
     end
-    question.assign_by!(user, *assigned)
+
+    question.assign_by!(user, *users)
   end
 
   def answer!(new_comment)
@@ -43,5 +52,12 @@ class GroupKeeperQuestionProxy
   def reply_to!(replied, reply_params)
     group.mine_or_die!(replied.question)
     question.reply_to_by!(user, replied, reply_params)
+  end
+
+  def call_out(*assigned)
+    assigned.map do |login|
+      return login if User === login
+      group.members.find_by(login: login) || (raise Group::NotMember)
+    end
   end
 end
