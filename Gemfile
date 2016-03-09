@@ -56,7 +56,7 @@ group :development do
   gem 'quiet_assets'
   gem 'rails_best_practices'
   gem 'rails-erd'
-  gem 'rb-readline'
+  #gem 'rb-readline'
 end
 
 group :test do

@@ -18,9 +18,18 @@ feature '回答する' do
   let!(:my_comment_count) { question.comments.where { user == User.first }.size }
   let!(:assigned_count) { question.assigned_count }
   let!(:responses_count) { question.responses.count }
+  let(:group) { create(:group, :valid) }
+
+  before :each do
+    [User.second, User.third, User.fourth, User.fifth].each do |user|
+      group.add_by!(User.first, user)
+    end
+    GroupUser.all.each(&:accepted!)
+    group.add_question(question)
+  end
 
   scenario '力になれません' do
-    visit question_path(question.id)
+    visit question_path(group_id: group.id, question_id: question.id)
     take_ss('無入力')
 
     first('.respond.sorry').click
@@ -33,7 +42,7 @@ feature '回答する' do
   end
 
   scenario 'ちょっとまってください' do
-    visit question_path(question.id)
+    visit question_path(group_id: group.id, question_id: question.id)
     take_ss('無入力')
 
     first('.respond.wait').click
@@ -46,7 +55,7 @@ feature '回答する' do
   end
 
   scenario '知ってる人を紹介する' do
-    visit question_path(question.id)
+    visit question_path(group_id: group.id, question_id: question.id)
     take_ss('無入力')
 
     now = all('.not-yet-list li').size
@@ -54,11 +63,11 @@ feature '回答する' do
     first('.respond.assign-tab').click
     take_ss('クリック')
 
-    expect(all('.assigner.team-member', text: User.first.name).size).to eq(0)
-    expect(all('.assigner.team-member', text: User.third.name).size).to eq(0)
-    expect(all('.assigner.team-member', text: User.fourth.name).size).to eq(0)
+    expect(all('.assigner.group-member', text: User.first.name).size).to eq(0)
+    expect(all('.assigner.group-member', text: User.third.name).size).to eq(0)
+    expect(all('.assigner.group-member', text: User.fourth.name).size).to eq(0)
 
-    first('.assigner.team-member').click
+    first('.assigner.group-member').click
     take_ss('選択済み')
 
     first('.respond.submit').click
@@ -72,7 +81,7 @@ feature '回答する' do
   end
 
   scenario '返答する' do
-    visit question_path(question.id)
+    visit question_path(group_id: group.id, question_id: question.id)
     take_ss('無入力')
 
     now = all('.not-yet-list li').size
@@ -95,7 +104,7 @@ feature '回答する' do
   scenario 'リプライする' do
     question.reply_to_by!(User.third, question.root, {markdown: '#test'})
 
-    visit question_path(question.id)
+    visit question_path(group_id: group.id, question_id: question.id)
     take_ss('無入力')
 
     now = all('.not-yet-list li').size

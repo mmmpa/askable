@@ -14,14 +14,14 @@ RSpec.describe GroupKeeper, type: :model do
 
   before :each do
     group.add_by!(User.first, User.second)
-    group.add_by!(User.first, User.all[6])
+    group.add_by!(User.first, User.seventh)
     group.add_by!(User.first, User.fifth)
     group2.add_by!(User.second, User.third)
 
     User.second.invitations.each(&:accepted!)
     User.third.invitations.each(&:accepted!)
     User.fifth.invitations.each(&:accepted!)
-    User.all[6].invitations.each(&:accepted!)
+    User.seventh.invitations.each(&:accepted!)
 
     group.add_question(q1)
     group2.add_question(q2)
@@ -139,7 +139,7 @@ RSpec.describe GroupKeeper, type: :model do
 
       it 'メンバーだと紹介できる' do
         expect {
-          keeper.q.assign!(User.all[6].login)
+          keeper.q.assign!(User.seventh.login)
         }.to change(q1.users, :size).by(1)
       end
 
@@ -172,7 +172,7 @@ RSpec.describe GroupKeeper, type: :model do
     it 'リプライ' do
       responses_size = q1.responses.size
       expect {
-        GroupKeeper.(group: group, user: User.all[6], question: q1).q.reply_to!(q1.root, attributes_for(:comment, :valid))
+        GroupKeeper.(group: group, user: User.seventh, question: q1).q.reply_to!(q1.root, attributes_for(:comment, :valid))
       }.not_to change(q1.responded_user, :size)
       expect(q1.responses.size).to eq(responses_size + 1)
     end

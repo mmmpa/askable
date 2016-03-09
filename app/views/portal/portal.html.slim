@@ -2,7 +2,7 @@ header.sub-header.wrapper
   div.sub-header.body
     h1.sub-header.title
       i.fa.fa-map-o
-      | ポータル
+      = "#{@user.name} [#{@user.login}]"
 article.portal.body
   section.portal.information-area
     - if @information.size == 0
@@ -17,7 +17,7 @@ article.portal.body
   - writer = write_group_table do |groups|
     - if groups.size == 0
       section.portal.no-group
-        p グループはありません。
+        p グループはありません
     - else
       section.portal.group-list-area
         ul.portal.normal-list.list-body

@@ -20,7 +20,7 @@ RSpec.describe "Questions", type: :request do
 
     g = create(:group, :valid)
     keeper = GroupKeeper.(user: User.first, group: g)
-    keeper.add!(User.second, User.third, User.fourth, User.fifth, User.all[5], User.all[6])
+    keeper.add!(User.second, User.third, User.fourth, User.fifth, User.sixth, User.seventh)
     GroupUser.all.each(&:accepted!)
 
     keeper2 = GroupKeeper.(user: User.second, group: g)
@@ -54,7 +54,7 @@ RSpec.describe "Questions", type: :request do
         q.sorry_by!(User.second)
         q.wait_by!(User.third)
         q.answer_by!(User.fourth, {markdown: '# answered'})
-        q.assign_by!(User.fifth, User.all[5])
+        q.assign_by!(User.fifth, User.sixth)
 
         get question_path(group_id: g.id, question_id: q.id)
         expect(response.body).to have_tag('.show-question.responded-list .fa-assigned')

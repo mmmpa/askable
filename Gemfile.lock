@@ -273,7 +273,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     rake (10.5.0)
-    rb-readline (0.5.3)
     redcard (1.1.0)
     redcarpet (3.3.4)
     reek (2.2.1)
@@ -446,7 +445,6 @@ DEPENDENCIES
   rails (= 4.2.5.2)
   rails-erd
   rails_best_practices
-  rb-readline
   redcarpet
   rspec
   rspec-html-matchers

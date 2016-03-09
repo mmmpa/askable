@@ -6,6 +6,14 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+p :seeding
+
+User.new(login: 'a', name: 'system', password: SecureRandom.uuid, email: 'a').save(validate: false)
+User.new(login: 'b', name: 'information', password: SecureRandom.uuid, email: 'b').save(validate: false)
+User.new(login: 'c', name: 'error', password: SecureRandom.uuid, email: 'c').save(validate: false)
+User.new(login: 'd', name: 'invitation', password: SecureRandom.uuid, email: 'd').save(validate: false)
+User.new(login: 'z', name: '退会ユーザー', password: SecureRandom.uuid, email: 'e').save(validate: false)
+
 if ENV['DEV_DATA']
   User.destroy_all
   Question.destroy_all

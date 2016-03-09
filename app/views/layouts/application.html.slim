@@ -9,24 +9,10 @@ html
     header.global-header.wrapper
       div.global-header.body
         h1.global-header.title
-          a[href=group_portal_path]= @group.name
+          a[href="/"]
+            i.fa.fa-question-circle
+            | おしえてください
         ul.header.global-menu.outer
-          li
-            a.global-menu.all.block-link[href=new_question_path]
-              i.fa.fa-plus-circle
-              | 質問する
-          li
-            a.global-menu.all.block-link[href=opened_questions_path]
-              i.fa.fa-exclamation-triangle
-              | 未解決
-          li
-            a.global-menu.ask.block-link[href=asked_questions_path]
-              i.fa.fa-hand-paper-o
-              | 質問した
-          li
-            a.global-menu.asked.block-link[href=requested_questions_path]
-              i.fa.fa-hand-o-right
-              | 質問された
           li
             a.global-menu.asked.block-link[href=log_in_path]
               i.fa.fa-gear
@@ -36,8 +22,33 @@ html
               i.fa.fa-sign-out
               | ログアウト
     article.inner.body
+      header.sub-header.wrapper.with-nav
+        div.sub-header.body
+          h1.sub-header.title
+            i.fa.fa-group
+            a[href=group_portal_path]= @group.name
+          h2.sub-header.description= @group.description
+        div.sub-header.sub-nav
+          nav.tabnav-tabs.sub-header.body
+            a.tabnav-tab.opened[href=new_question_path class=detect_index_tab_selected(new_question_path)]
+              i.fa.fa-plus-circle
+              | 質問する
+            a.tabnav-tab.opened[href=opened_questions_path class=detect_index_tab_selected(opened_questions_path)]
+              i.fa.fa-exclamation-triangle
+              | 未解決
+            a.tabnav-tab.asked[href=asked_questions_path class=detect_index_tab_selected(asked_questions_path)]
+              i.fa.fa-hand-paper-o
+              | 質問した
+            a.tabnav-tab.requested[href=requested_questions_path class=detect_index_tab_selected(requested_questions_path)]
+              i.fa.fa-hand-o-right
+              | 質問された
+            a.tabnav-tab.closed[href=closed_questions_path class=detect_index_tab_selected(closed_questions_path)]
+              i.fa.fa-thumbs-o-up
+              | 解決済み
+            a.tabnav-tab.all[href=questions_path class=detect_index_tab_selected(questions_path)]
+              i.fa.fa-list
+              | すべて
       = yield
-
   script src='/js/log-out/built.js'
 javascript:
   LogOut.start(document.querySelectorAll('.log-out'));

@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   include QuestionIndexer
   include QuestionErrorArranger
   include AsColumnWrapper
+  include PrettyDate
 
   #
   # opened: 回答受付中
@@ -92,6 +93,14 @@ class Question < ActiveRecord::Base
     as_or(:assigned_count) { users.size }
   end
 
+  def comment_html
+    as_or(:comment_html) { root.html[0..300] }
+  end
+
+  def description
+    comment_html.gsub(/<.+?>/, '').gsub(/<[^>]*\Z/, '')
+  end
+
   def responded_count
     as_or(:responded_count) { responded_user.size }
   end
@@ -163,6 +172,10 @@ class Question < ActiveRecord::Base
 
   def root?(comment)
     comment == root
+  end
+
+  class CannotReply < StandardError
+
   end
 
   class NotOwner < StandardError

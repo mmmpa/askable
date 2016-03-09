@@ -1,18 +1,16 @@
-header.sub-header.wrapper
-  div.sub-header.body
-    h1.sub-header.title
-      i.fa.fa-question-circle
-      = @question.title
-      = stylesheet_link_tag '/css/codemirror.css', media: 'all'
 section.show-question.body
   - if @question.closed?
     section.show-question.closed.flash
       p この質問は終了しています
 
   section.show-question.root
-    h1.show-question.title
-      i.fa.fa-fw.fa-bell-o
-      = "#{@question.author_name}曰く"
+    header.show-question.header
+      h1.show-question.author
+        = @question.author_name
+        time= @question.pretty_date
+      h1.show-question.title
+        i.fa.fa-fw.fa-question-circle
+        = @question.title
     section.show-question.question-area
       section.show-question.question.markdown-html== @question.root.html
       - if @question.users.count != 0
@@ -63,7 +61,8 @@ section.show-question.body
                         i.fa.fa-graduation-cap
                         = "#{child.author_name}さん曰く"
                       a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
-                        i.fa.fa-link.
+                        i.fa.fa-link
+                        time= child.pretty_date
                     section.show-question.response-comment.markdown-html= child.html.html_safe
                     - if @question.opened?
                       div.show-question.reply-to-reply-area

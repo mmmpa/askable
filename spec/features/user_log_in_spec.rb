@@ -14,9 +14,8 @@ feature 'ログイン' do
     find('.user-log-in button').click
     take_ss('送信')
 
-    sleep 1
+    take_ss('ログイン成功', 1)
     expect(all('.user-log-in').size).to eq(0)
-    take_ss('ログイン成功')
   end
 
   scenario 'ログイン（エラー）' do
@@ -38,9 +37,8 @@ feature 'ログイン' do
     find('.user-log-in input[name="password"]').set('a' * 8)
     find('.user-log-in button').click
 
-    sleep 1
+    take_ss('ログイン成功', 1)
     expect(all('.user-log-in').size).to eq(0)
-    take_ss('ログイン成功')
   end
 end
 

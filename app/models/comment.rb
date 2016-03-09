@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  include PrettyDate
+
   belongs_to :user, inverse_of: :comments
   belongs_to :comment
   has_many :comments

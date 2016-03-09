@@ -1,4 +1,3 @@
-
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 require 'coveralls'
@@ -28,12 +27,14 @@ SimpleCov.start 'rails' do
   add_filter '/spec/'
 end
 
-Dir[Rails.root.join('spec/supports/**/*.rb')].each { |f| require f }
 load "#{Rails.root}/db/schema.rb"
 load "#{Rails.root}/db/seeds.rb"
+Dir[Rails.root.join('spec/supports/**/*.rb')].each(&method(:require))
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+
+
   config.order = :random
   config.include RSpecHtmlMatchers
   config.include FactoryGirl::Syntax::Methods
@@ -44,13 +45,15 @@ RSpec.configure do |config|
     FactoryGirl.factories.clear
     FactoryGirl.sequences.clear
     FactoryGirl.find_definitions
-    create(:user, :valid, password: 'a' * 8)
-    create(:user, :valid, password: 'b' * 8)
-    create(:user, :valid, password: 'c' * 8)
-    create(:user, :valid, password: 'd' * 8)
-    create(:user, :valid, password: 'e' * 8)
-    create(:user, :valid, password: 'f' * 8)
-    create(:user, :valid, password: 'g' * 8)
+
+    #
+    # supports/user_override.rb 参照
+    #
+    User.init_for_test
+  end
+
+  config.after :each do
+    authlogic_logout
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

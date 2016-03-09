@@ -10,6 +10,11 @@ module QuestionIndexer
         joins { [ask_users.outer, comments.outer] }
         .select {
         ['questions.*',
+         %q{(SELECT substr("comments"."html", 0, 300)
+            FROM "comments"
+            WHERE "comments"."question_id" = "questions"."id"
+            LIMIT 1
+          ) AS "as_comment_html"},
          %q{COUNT(DISTINCT "comments"."id") AS as_commented_count},
          %q{(SELECT
             COUNT(DISTINCT "ask_users"."id")

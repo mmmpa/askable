@@ -1,25 +1,3 @@
-header.sub-header.wrapper.with-nav
-  div.sub-header.body
-    h1.sub-header.title
-      i.fa.fa-list
-      | 質問一覧
-  div.sub-header.sub-nav
-    nav.tabnav-tabs.sub-header.body
-      a.tabnav-tab.opened[href=opened_questions_path class=detect_index_tab_selected(opened_questions_path)]
-        i.fa.fa-exclamation-triangle
-        | 未解決
-      a.tabnav-tab.asked[href=asked_questions_path class=detect_index_tab_selected(asked_questions_path)]
-        i.fa.fa-hand-paper-o
-        | 質問した
-      a.tabnav-tab.requested[href=requested_questions_path class=detect_index_tab_selected(requested_questions_path)]
-        i.fa.fa-hand-o-right
-        | 質問された
-      a.tabnav-tab.closed[href=closed_questions_path class=detect_index_tab_selected(closed_questions_path)]
-        i.fa.fa-thumbs-o-up
-        | 解決済み
-      a.tabnav-tab.all[href=questions_path class=detect_index_tab_selected(questions_path)]
-        i.fa.fa-list
-        | すべて
 article.question-index.body
   - if @questions.to_a.size == 0
     section.question-index.no-question
@@ -35,7 +13,7 @@ article.question-index.body
           section.question-index.normal-list.item-content
             h1.question-index.normal-list.item-title
               a(href=(question_path(question_id: q.id)))= q.title
-            h2.question-index.normal-list.item-author= q.author_name
+            h2.question-index.normal-list.item-description= q.description
           section.question-index.normal-list.item-status
             div.assigned
               i.fa.fa-hand-o-right

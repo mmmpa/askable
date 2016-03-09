@@ -12,12 +12,12 @@ RSpec.describe Group, type: :model do
 
   before :each do
     group.add_by!(User.first, User.second)
-    group.add_by!(User.first, User.all[6])
+    group.add_by!(User.first, User.seventh)
     group2.add_by!(User.second, User.third)
 
     User.second.invitations.each(&:accepted!)
     User.third.invitations.each(&:accepted!)
-    User.all[6].invitations.each(&:accepted!)
+    User.seventh.invitations.each(&:accepted!)
   end
 
   describe '問題' do
@@ -41,7 +41,7 @@ RSpec.describe Group, type: :model do
 
     context 'メンバーリスト' do
       it 'オーナーを含んだ全員' do
-        expect(group.all_members).to match_array([User.first, User.second, User.all[6]])
+        expect(group.all_members).to match_array([User.first, User.second, User.seventh])
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe Group, type: :model do
       end
 
       it 'メンバーは削除できない' do
-        expect { group.remove_by!(User.all[6], User.second) }.to raise_error(Group::NotOwner)
+        expect { group.remove_by!(User.seventh, User.second) }.to raise_error(Group::NotOwner)
         expect(after_g.users.size).to eq(member_count)
       end
 

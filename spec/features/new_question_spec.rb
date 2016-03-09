@@ -8,9 +8,17 @@ feature 'クエスチョン投稿' do
 
   let!(:question_size) { Question.count }
   let!(:ask_size) { AskUser.count }
+  let(:group) { create(:group, :valid) }
+
+  before :each do
+    [User.second, User.third, User.fourth, User.fifth].each do |user|
+      group.add_by!(User.first, user)
+    end
+    GroupUser.all.each(&:accepted!)
+  end
 
   scenario 'アサインなし投稿' do
-    visit new_question_path
+    visit new_question_path(group_id: group.id)
     take_ss('無入力')
 
     find('.new-question input[name="title"]').set(SecureRandom.hex(4))
@@ -29,12 +37,12 @@ feature 'クエスチョン投稿' do
   end
 
   scenario 'アサインあり投稿' do
-    visit new_question_path
+    visit new_question_path(group_id: group.id)
     take_ss('無入力')
 
     find('.new-question input[name="title"]').set(SecureRandom.hex(4))
     find('.new-question .CodeMirror').send_keys(SecureRandom.hex(4))
-    all('.new-question .team-member input').first.click
+    all('.new-question .group-member input').first.click
 
     take_ss('入力済み')
 
@@ -49,7 +57,7 @@ feature 'クエスチョン投稿' do
   end
 
   scenario '投稿エラー' do
-    visit new_question_path
+    visit new_question_path(group_id: group.id)
     take_ss('無入力')
 
     find('.new-question button').click

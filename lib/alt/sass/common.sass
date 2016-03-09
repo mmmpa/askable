@@ -86,6 +86,10 @@ body
     padding: 20px 0
     font-size: $size-title
     margin: 0
+  &.description
+    margin: -5px 0 0 0
+    padding: 0 0 20px
+    font-size: $size-normal
   .tabnav-tabs
     margin-bottom: -1px
   &.sub-nav
@@ -201,6 +205,10 @@ input.has-error
     @extend h3
     font-weight: 600
 
+.no-group
+  margin: 0 0 20px
+  border-radius: 0 0 $radius $radius
+
 .portal
   &.body
     @extend %normal-body
@@ -210,11 +218,20 @@ input.has-error
   &.information-area,
   &.group-list-area
     margin-bottom: 20px
+
 .show-question
   &.body
     @extend %normal-body
-  &.title
+  &.header
     @extend %boxed-group-title
+  &.author
+    margin: 0 0 10px 0
+    font-size: $size-normal
+    time
+      font-weight: normal
+      margin-left: 10px
+  &.title
+    margin: 0
     font-size: $size-title
   &.question-area
     @extend %boxed-group-inner
@@ -279,6 +296,8 @@ input.has-error
         cursor: pointer
     .permalink
       @extend .right
+      time
+        font-weight: normal
 
 .finish
   &.body
@@ -296,6 +315,10 @@ input.has-error
     font-size: $size-title
   &.item-author
     font-size: $size-normal
+  &.item-description
+    font-weight: normal
+    font-size: $size-normal
+    line-height: 150%
   &.item-icon
     font-size: $size-title
     .fa.fa-assigned

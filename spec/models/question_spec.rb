@@ -256,14 +256,14 @@ RSpec.describe Question, type: :model do
       #q4.assign!()
 
       # コメントの追加
-      q1.answer_by!(User.all[5], build(:comment, :valid))
-      q2.answer_by!(User.all[6], build(:comment, :valid))
-      q2.answer_by!(User.all[5], build(:comment, :valid))
-      q3.answer_by!(User.all[6], build(:comment, :valid))
-      q3.answer_by!(User.all[5], build(:comment, :valid))
-      q3.answer_by!(User.all[6], build(:comment, :valid))
-      q4.answer_by!(User.all[5], build(:comment, :valid))
-      q4.answer_by!(User.all[6], build(:comment, :valid))
+      q1.answer_by!(User.sixth, build(:comment, :valid))
+      q2.answer_by!(User.seventh, build(:comment, :valid))
+      q2.answer_by!(User.sixth, build(:comment, :valid))
+      q3.answer_by!(User.seventh, build(:comment, :valid))
+      q3.answer_by!(User.sixth, build(:comment, :valid))
+      q3.answer_by!(User.seventh, build(:comment, :valid))
+      q4.answer_by!(User.sixth, build(:comment, :valid))
+      q4.answer_by!(User.seventh, build(:comment, :valid))
 
       # レスポンス
       q1.answer_by!(User.second, build(:comment, :valid))
