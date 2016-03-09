@@ -17,12 +17,12 @@ module InsideController
     end
 
     def user
-      UserSession.find.try(:user)
+      RequestStore.store[:current_user] || UserSession.find.try(:user)
     end
 
     def group
       return nil unless params[:group_id]
-      Group.find(params[:group_id])
+      RequestStore.store[:current_group] || Group.find(params[:group_id])
     end
 
     def keeper

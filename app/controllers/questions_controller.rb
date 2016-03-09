@@ -7,6 +7,16 @@ class QuestionsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: -> { render json: {errors: {global: 'Not Found'}}, status: 400 }
   rescue_from Group::NotMember, with: -> { render json: {errors: {global: 'Not Member'}}, status: 400 }
 
+  before_action -> {
+    mess_bus.listen('end', ->(message) { pp message })
+    mess_bus.tell(:on_user_created)
+    static_mess_bus.tell_after_all(:on_user_created)
+  }
+
+  after_action -> {
+    mess_bus.tell('end', '終わったよ')
+  }
+
   def index
     @questions = keeper.q.index.page(page).per(per)
   end

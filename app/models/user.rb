@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include SpecialUser
   include AskUserRelative
   include GroupUserRelative
 
@@ -8,6 +9,8 @@ class User < ActiveRecord::Base
 
   validates :name,
             presence: true
+
+  after_create -> { static_mess_bus.tell_after_all(:on_user_created, self) }
 
   def as_json(options = {})
     super(options.merge!(only: [:name, :login]))

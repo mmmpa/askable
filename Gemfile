@@ -20,6 +20,7 @@ end
 
 
 group :default do
+  gem "request_store"
   gem 'redcarpet'
   gem "pygments.rb"
   gem 'authlogic'

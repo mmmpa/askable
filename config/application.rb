@@ -16,6 +16,8 @@ module Askable
     config.active_record.raise_in_transactional_callbacks = true
     config.time_zone = 'Tokyo'
 
+    config.eager_load_paths  += Dir["#{config.root}/app/mess_buses/"]
+
     I18n.enforce_available_locales = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :en

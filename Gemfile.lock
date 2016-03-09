@@ -446,6 +446,7 @@ DEPENDENCIES
   rails-erd
   rails_best_practices
   redcarpet
+  request_store
   rspec
   rspec-html-matchers
   rspec-rails

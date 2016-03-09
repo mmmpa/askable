@@ -4,6 +4,6 @@ class Constraint::Group < Constraint::User
   end
 
   def group(request)
-    Group.find(request.params[:group_id]) rescue nil
+    RequestStore.store[:current_group] = Group.find(request.params[:group_id]) rescue nil
   end
 end

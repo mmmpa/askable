@@ -6,8 +6,7 @@ module QuestionIndexer
     # indexでの利用時にはカウント数を挿入しておく
     #
     scope :index, ->(viewer) {
-      includes { user }.
-        joins { [ask_users.outer, comments.outer] }
+      joins { [ask_users.outer, comments.outer] }
         .select {
         ['questions.*',
          %q{(SELECT substr("comments"."html", 0, 300)
