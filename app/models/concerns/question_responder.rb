@@ -27,6 +27,7 @@ module QuestionResponder
       raise Question::NotAsked unless target_ask
 
       target_ask.send(reaction)
+      static_mess_bus.tell(:on_all_assignee_responded, self, user) if not_yet_user.size == 0
     end
 
     def finish_ask(asked_user, reaction)

@@ -2,6 +2,8 @@ module SpecialUser
   extend ActiveSupport::Concern
 
   included do |klass|
+    scope :normal, -> { where { length(login) >= 3 } }
+
     class << klass
       def system
         find_by(login: 'a')

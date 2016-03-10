@@ -23,6 +23,10 @@ if ENV['DEV_DATA']
     group.destroy unless group.user.try(:system?)
   end
 
+  GroupUser.all.each do |group|
+    group.destroy unless group.user.try(:system?)
+  end
+
   Question.destroy_all
 
   question_numbers = [15, 5, 12, 20, 13, 12, 0, 1]
@@ -42,11 +46,11 @@ if ENV['DEV_DATA']
     g = Group.create!(
       name: "group_name_#{name}",
       user: owner,
-      description: 'デスクリプショん'
+      description: "デスクリプショん #{SecureRandom.uuid} #{SecureRandom.uuid}"
     )
 
     2.times do
-      g.add_by!(owner, User.sample) rescue nil
+      g.add_by!(owner, user_sample) rescue nil
     end
 
     GroupUser.where { group == g }.each(&:accepted!)
@@ -57,6 +61,15 @@ if ENV['DEV_DATA']
       q = Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
       g.add_question(q)
     end
+
+    g = Group.create!(
+      name: "no_member_group_name_#{name}",
+      user: owner,
+      description: "デスクリプショん #{SecureRandom.uuid} #{SecureRandom.uuid}"
+    )
   end
 end
 
+def user_sample(*args)
+  User.normal.sample(*args)
+end

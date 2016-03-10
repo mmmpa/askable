@@ -1,37 +1,75 @@
 class Group < ActiveRecord::Base
   include SpecialGroup
+  include AsColumnWrapper
 
-  belongs_to :user, inverse_of: :own_groups
+  belongs_to :user, inverse_of: :my_groups
+
+  #
+  # 問題関連
+  #
   has_many :group_questions
   has_many :questions, through: :group_questions
+  has_many :group_opened_questions, class_name: GroupQuestion
+  has_many :opened_questions, -> { where { state == Question.status[:opened] } }, through: :group_opened_questions, source: :question
+  has_many :group_closed_questions, class_name: GroupQuestion
+  has_many :closed_questions, -> { where { state == Question.status[:closed] } }, through: :group_closed_questions, source: :question
+
+  #
+  # メンバー関連
+  #
   has_many :group_users, dependent: :delete_all
-  has_many :users, through: :group_users, inverse_of: :raw_groups
+  has_many :users, through: :group_users, inverse_of: :groups
+  has_many :group_members, -> { where { state == GroupUser.status[:accepted] } }, class_name: GroupUser
+  has_many :members, -> { normal }, through: :group_members, source: :user
+
+  #
+  # indexでの利用時にはカウント数を挿入しておく
+  #
+  scope :index, -> {
+    joins { [group_users.outer, questions.outer] }
+      .select {
+      ['groups.*',
+       %{(SELECT
+            COUNT(DISTINCT "group_users"."id")
+            FROM "group_users"
+            WHERE "group_users"."state" = #{GroupUser.status[:accepted]}
+              AND "group_users"."group_id" = "groups"."id"
+          ) AS "as_member_count"},
+       %{(SELECT
+            COUNT(DISTINCT "questions"."id")
+            FROM "questions"
+            LEFT OUTER JOIN "group_questions"
+              ON "group_questions"."question_id" = "questions"."id"
+            WHERE "questions"."state" = #{Question.status[:opened]}
+              AND "group_questions"."group_id" = "groups"."id"
+        ) AS "as_opened_count"},
+      ] }
+      .group { id }
+      .order { updated_at.desc }
+  }
 
   before_create :be_member
 
   def as_json(options = {})
-    options.merge!(only: [:name], methods: [:users])
-    super(options)
+    options.merge!(only: [:name])
+    super(options).merge!(users: members)
   end
 
   def be_member
     users << user
-  end
-
-  def members
-    users.joins { group_users }.where { group_users.state == GroupUser.status[:accepted] }
+    group_users.last.state = GroupUser.status[:accepted]
   end
 
   def member_count
-    users.joins { group_users }.where { group_users.state == GroupUser.status[:accepted] }.count
+    as_or(:member_count) { members.count }
   end
 
   def opened_count
-    questions.where { state.in(Question.status[:opened]) }.count
+    as_or(:opened_count) { opened_questions.count }
   end
 
   def all_members
-    users
+    members
   end
 
   def update_by!(owner, params)
