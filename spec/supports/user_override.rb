@@ -14,6 +14,8 @@ class User
       User.test_store.push FactoryGirl.create(:user, :valid, password: 'e' * 8)
       User.test_store.push FactoryGirl.create(:user, :valid, password: 'f' * 8)
       User.test_store.push FactoryGirl.create(:user, :valid, password: 'g' * 8)
+
+      GroupUser.destroy_all
     end
 
     def first

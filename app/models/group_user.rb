@@ -18,4 +18,17 @@ class GroupUser < ActiveRecord::Base
   def initialize_value
     self.state ||= self.class.status[:invited]
   end
+
+  def accept!
+    accepted!
+    static_mess_bus.tell(:on_invitation_accepted, group, user)
+  end
+
+  def reject!
+    destroy!
+  end
+
+  def block!
+    blocked!
+  end
 end

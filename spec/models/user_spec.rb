@@ -36,4 +36,11 @@ RSpec.describe User, type: :model do
       expect(json.keys).to match_array([:name, :login])
     end
   end
+
+  describe 'creation' do
+    it '作成後は自動的にはじめてのグループに招待される' do
+      user = create(:user, :valid)
+      expect(user.invitations.size).to eq(1)
+    end
+  end
 end

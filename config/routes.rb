@@ -5,6 +5,12 @@ Rails.application.routes.draw do
   scope constraints: Constraint::User.new do
     get '/', to: 'portal#portal', as: :portal
 
+    scope 'i/:invitation_id' do
+      patch 'accept', to: 'invitations#accept', as: :accept_invitation
+      patch 'reject', to: 'invitations#reject', as: :reject_invitation
+      patch 'block', to: 'invitations#block', as: :block_invitation
+    end
+
     scope 'g/:group_id', constraints: Constraint::Group.new do
       scope :q do
         get 'index/opened', to: 'questions#opened', as: :group_portal

@@ -6,7 +6,7 @@ class AskUser < ActiveRecord::Base
   # assigned: 他のメンバーを紹介。respondと同意。
   # timeout: 回答せずに質問が終了した場合。
   #
-  enum state: {requested: 0, answered: 1, responded: 2, assigned: 3, wait: 4, timeout: 5}
+  enum state: {requested: 0, answered: 1, responded: 2, assigned: 3, waited: 4, timeouted: 5}
 
 
   belongs_to :user
@@ -22,18 +22,44 @@ class AskUser < ActiveRecord::Base
     alias_method :status, :states
 
     def not_yet_status
-      [status[:requested], status[:wait]]
+      [status[:requested], status[:waited]]
     end
 
     def responded_status
       cloned = status.clone
       cloned.delete(:requested)
-      cloned.delete(:wait)
+      cloned.delete(:waited)
       cloned.each_value.inject([]) { |a, value| a << value }
     end
   end
 
   def initialize_value
     self.state ||= self.class.status[:requested]
+  end
+
+  def answer!
+    answered!
+  end
+
+  def respond!
+    responded!
+    question.reply_to_by!(User.system, question.root, Comment.new(use_raw: true, markdown: "#{user.name}さんは力になれないそうです"))
+  end
+
+  def assign!
+    assigned!
+    question.reply_to_by!(User.system, question.root, Comment.new(use_raw: true, markdown: "#{user.name}さんが回答者を紹介してくれました"))
+  end
+
+  def wait!
+    was = state
+    waited!
+    if self.class.status[was] == self.class.status[:requested]
+      question.reply_to_by!(User.system, question.root, Comment.new(use_raw: true, markdown: "#{user.name}さんは少し待ってほしいそうです"))
+    end
+  end
+
+  def timeout!
+    timeouted!
   end
 end

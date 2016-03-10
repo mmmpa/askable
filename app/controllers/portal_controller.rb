@@ -5,6 +5,12 @@ class PortalController < ApplicationController
 
   def portal
     @user = user
-    @information = []
+    @information = information
+  end
+
+  private
+
+  def information
+    UserInformation.(user).information
   end
 end

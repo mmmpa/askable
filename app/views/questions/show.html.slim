@@ -1,3 +1,5 @@
+= stylesheet_link_tag '/css/codemirror.css', media: 'all'
+
 section.show-question.body
   - if @question.closed?
     section.show-question.closed.flash
@@ -48,27 +50,34 @@ section.show-question.body
     section.show-question.response-area
       ul.show-question.responses
         - @question.comment_tree[@question.root.id].each do |comment|
-          li.show-question.response
-            div(id="comment-#{comment.id}")
-              = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
-                div[id=("comment-#{child.id}" if parent)]
-                    h1.show-question.response-owner
-                      - if parent
-                        - parents.map do |p|
-                          i.fa.fa-reply.reply-anchor(data-targetId=p.id)
-                        = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
-                      - else
-                        i.fa.fa-graduation-cap
-                        = "#{child.author_name}さん曰く"
-                      a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
-                        i.fa.fa-link
-                        time= child.pretty_date
-                    section.show-question.response-comment.markdown-html= child.html.html_safe
-                    - if @question.opened?
-                      div.show-question.reply-to-reply-area
-                        button.show-question.reply-to-reply-button(data-id=child.id)
-                          i.fa.fa-reply
-                          | この回答に返信、もしくは補足する
+          - if comment.user.system?
+            li.show-question.from-system
+              section.show-question.system-message
+                i.fa.fa-bullhorn
+                time= comment.pretty_date
+                = comment.html
+          - else
+            li.show-question.response
+              div(id="comment-#{comment.id}")
+                = write_comment_tree(@question.comment_tree, comment) do |child, parent, parents|
+                  div[id=("comment-#{child.id}" if parent)]
+                      h1.show-question.response-owner
+                        - if parent
+                          - parents.map do |p|
+                            i.fa.fa-reply.reply-anchor(data-targetId=p.id)
+                          = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
+                        - else
+                          i.fa.fa-graduation-cap
+                          = "#{child.author_name}さん曰く"
+                        a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
+                          i.fa.fa-link
+                          time= child.pretty_date
+                      section.show-question.response-comment.markdown-html= child.html.html_safe
+                      - if @question.opened?
+                        div.show-question.reply-to-reply-area
+                          button.show-question.reply-to-reply-button(data-id=child.id)
+                            i.fa.fa-reply
+                            | この回答に返信、もしくは補足する
   - if @question.opened?
     div#response-to-question-foot
       button.respond.opener

@@ -1,6 +1,8 @@
 class Comment < ActiveRecord::Base
   include PrettyDate
 
+  attr_accessor :use_raw
+
   belongs_to :user, inverse_of: :comments
   belongs_to :comment
   has_many :comments
@@ -46,7 +48,7 @@ class Comment < ActiveRecord::Base
 
   def render_markdown!
     return if markdown.nil?
-    self.html = self.class.render(markdown)
+    self.html = !!use_raw ? markdown : self.class.render(markdown)
   end
 
   class CannotDestroyRootComment < StandardError

@@ -14836,7 +14836,10 @@ var Uri = {
     waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
     sorryQuestion: '/g/:groupId/q/:questionId/sorry',
     replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
-    finishQuestion: '/g/:groupId/q/:questionId/finish'
+    finishQuestion: '/g/:groupId/q/:questionId/finish',
+    acceptInvitation: '/i/:invitationId/accept',
+    rejectInvitation: '/i/:invitationId/reject',
+    blockInvitation: '/i/:invitationId/block'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -14849,6 +14852,9 @@ var Uri = {
     Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
     Api[Api["LogOut"] = 8] = "LogOut";
     Api[Api["FinishQuestion"] = 9] = "FinishQuestion";
+    Api[Api["AcceptInvitation"] = 10] = "AcceptInvitation";
+    Api[Api["RejectInvitation"] = 11] = "RejectInvitation";
+    Api[Api["BlockInvitation"] = 12] = "BlockInvitation";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -14886,6 +14892,12 @@ function detectFunction(api) {
             return logOut;
         case Api.FinishQuestion:
             return finishQuestion;
+        case Api.AcceptInvitation:
+            return acceptInvitation;
+        case Api.RejectInvitation:
+            return rejectInvitation;
+        case Api.BlockInvitation:
+            return blockInvitation;
         default:
             throw 'Api not exist';
     }
@@ -14914,7 +14926,10 @@ function normalize(uri, params) {
     delete params.groupId;
     var commentId = params.commentId;
     delete params.commentId;
+    var invitationId = params.invitationId;
+    delete params.invitationId;
     var normalized = uri
+        .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)
         .replace(':groupId', groupId);
@@ -14930,6 +14945,27 @@ function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function acceptInvitation(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.acceptInvitation, params), normalized = _a.normalized, params = _a.params;
+    request
+        .patch(normalized)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function blockInvitation(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.blockInvitation, params), normalized = _a.normalized, params = _a.params;
+    request
+        .patch(normalized)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function rejectInvitation(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.rejectInvitation, params), normalized = _a.normalized, params = _a.params;
+    request
+        .patch(normalized)
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }

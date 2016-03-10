@@ -38,7 +38,7 @@ module QuestionResponder
     end
 
     def sorry_by!(user)
-      finish_ask!(user, :responded!)
+      finish_ask!(user, :respond!)
     end
 
     def wait_by!(user)
@@ -52,17 +52,18 @@ module QuestionResponder
       end
 
       assign!(*assigned)
-      finish_ask(user, :assigned!)
+      finish_ask(user, :assign!)
     end
 
     def answer_by!(user, new_comment)
       reply = reply_to_by!(user, root, new_comment)
-      finish_ask(user, :answered!)
+      finish_ask(user, :answer!)
       reply
     end
 
     def reply_to_by!(user, replied, reply_params)
       replied_comment = detect_reply_target(replied)
+      raise Question::CannotReply if replied_comment.user.system?
       raise Question::NotInTree unless comments.include?(replied_comment)
       reply = detect_comment(reply_params)
       reply.user = user

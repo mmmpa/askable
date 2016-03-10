@@ -3,7 +3,7 @@ class StaticBus
 
   listen :on_user_created
 
-  def on_user_created
-    pp [:created]
+  def on_user_created(user)
+    Group.first_group.add_by!(User.system, user)
   end
 end

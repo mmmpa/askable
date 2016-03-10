@@ -13,7 +13,10 @@ article.portal.body
       section.portal.information-table-area
         ul.portal.information-table
           - @information.each do |information|
-            li.portal.information-table-item= 情報
+            li.portal.information-table-item(class=information.type)
+              time= information.pretty_date
+              section.message= information.message
+              div.controller(data-id=information.id)
   - writer = write_group_table do |groups|
     - if groups.size == 0
       section.portal.no-group
@@ -43,3 +46,7 @@ article.portal.body
   section.portal.group
     h1.portal.group-table-header 参加中のグループ
     = writer.(@user.groups)
+
+script src='/js/invitation-reactor/built.js'
+javascript:
+  InvitationReactor.start(document.querySelectorAll('.invitation .controller'))

@@ -164,7 +164,7 @@ RSpec.describe Question, type: :model do
           question.wait_by!(User.second)
           expect(after_q.not_yet_user).to include(User.second)
           expect(after_q.responded_user).not_to include(User.second)
-          expect(after_q.not_yet_user.find(User.second.id).respond_state).to eq(AskUser.status[:wait])
+          expect(after_q.not_yet_user.find(User.second.id).respond_state).to eq(AskUser.status[:waited])
         end
       end
 

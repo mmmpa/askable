@@ -60,6 +60,10 @@ module MessBus
         RequestStore.store[:current_static_mess_bus] = []
       end
 
+      def told_in_this_request
+        RequestStore.store[:current_static_mess_bus]
+      end
+
       def tell(name, *params)
         statics.each do |static_hub|
           static_hub.tell(name, *params)
@@ -67,13 +71,13 @@ module MessBus
       end
 
       def tell_after_all(name, *params)
-        RequestStore.store[:current_static_mess_bus].push({name: name, params: params})
+        told_in_this_request.push({name: name, params: params})
       rescue => e
         Rails.logger.error e
       end
 
       def finish
-        RequestStore.store[:current_static_mess_bus].each do |told|
+        told_in_this_request.each do |told|
           tell(told[:name], *told[:params])
         end
       rescue => e
@@ -159,20 +163,16 @@ module MessBus
         end
 
         def tell(name, *params)
-          target = new(name, *params)
+          target = new
           return unless target.respond_to?(name)
           target.send(name, *params)
         rescue => e
           begin
-            target(e, name, *params).send(callbacks[name.to_sym] || :on_any_error, e, name, *params)
+            target.send(callbacks[name.to_sym] || :on_any_error, e, name, *params)
           rescue
             Rails.logger.error e
           end
         end
-      end
-
-      def initialize(*)
-
       end
 
       klass.callbacks = {}

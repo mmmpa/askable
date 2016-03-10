@@ -165,7 +165,7 @@ RSpec.describe GroupKeeper, type: :model do
     it 'ちょっとまって' do
       expect {
         keeper2.q.wait!
-      }.to change(q1.ask_users.where { state == AskUser.status[:wait] }, :size).by(1)
+      }.to change(q1.ask_users.where { state == AskUser.status[:waited] }, :size).by(1)
     end
 
 

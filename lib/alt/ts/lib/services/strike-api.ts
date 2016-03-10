@@ -13,7 +13,10 @@ const Uri = {
   waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
   sorryQuestion: '/g/:groupId/q/:questionId/sorry',
   replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
-  finishQuestion: '/g/:groupId/q/:questionId/finish'
+  finishQuestion: '/g/:groupId/q/:questionId/finish',
+  acceptInvitation: '/i/:invitationId/accept',
+  rejectInvitation: '/i/:invitationId/reject',
+  blockInvitation: '/i/:invitationId/block'
 };
 
 export enum Api{
@@ -26,7 +29,10 @@ export enum Api{
   SorryQuestion,
   ReplyToReply,
   LogOut,
-  FinishQuestion
+  FinishQuestion,
+  AcceptInvitation,
+  RejectInvitation,
+  BlockInvitation
 }
 
 export function strikeApi(api:Api, params?:any):Promise {
@@ -65,6 +71,12 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
       return logOut;
     case Api.FinishQuestion:
       return finishQuestion;
+    case Api.AcceptInvitation:
+      return acceptInvitation;
+    case Api.RejectInvitation:
+      return rejectInvitation;
+    case Api.BlockInvitation:
+      return blockInvitation;
     default:
       throw 'Api not exist'
   }
@@ -135,7 +147,10 @@ function normalize(uri, params) {
   delete params.groupId;
   let commentId = params.commentId;
   delete params.commentId;
+  let invitationId = params.invitationId;
+  delete params.invitationId;
   let normalized = uri
+    .replace(':invitationId', invitationId)
     .replace(':questionId', questionId)
     .replace(':commentId', commentId)
     .replace(':groupId', groupId);
@@ -158,6 +173,34 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
+
+function acceptInvitation(params:any, resolve, reject, queueResolve) {
+  let {normalized, params} = normalize(Uri.acceptInvitation, params);
+
+  request
+    .patch(normalized)
+    .set('X-CSRF-Token', token())
+    .end(finalize(resolve, reject, queueResolve))
+}
+
+function blockInvitation(params:any, resolve, reject, queueResolve) {
+  let {normalized, params} = normalize(Uri.blockInvitation, params);
+
+  request
+    .patch(normalized)
+    .set('X-CSRF-Token', token())
+    .end(finalize(resolve, reject, queueResolve))
+}
+
+function rejectInvitation(params:any, resolve, reject, queueResolve) {
+  let {normalized, params} = normalize(Uri.rejectInvitation, params);
+
+  request
+    .patch(normalized)
+    .set('X-CSRF-Token', token())
+    .end(finalize(resolve, reject, queueResolve))
+}
+
 
 function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
   let {normalized, params} = normalize(Uri.createQuestion, params);

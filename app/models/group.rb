@@ -1,4 +1,6 @@
 class Group < ActiveRecord::Base
+  include SpecialGroup
+
   belongs_to :user, inverse_of: :own_groups
   has_many :group_questions
   has_many :questions, through: :group_questions

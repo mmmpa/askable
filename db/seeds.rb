@@ -1,23 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+begin
+  User.new(login: 'a', name: 'system', password: SecureRandom.uuid, email: 'a').save(validate: false)
+  User.new(login: 'b', name: 'information', password: SecureRandom.uuid, email: 'b').save(validate: false)
+  User.new(login: 'c', name: 'error', password: SecureRandom.uuid, email: 'c').save(validate: false)
+  User.new(login: 'd', name: 'invitation', password: SecureRandom.uuid, email: 'd').save(validate: false)
+  User.new(login: 'z', name: '退会ユーザー', password: SecureRandom.uuid, email: 'e').save(validate: false)
+rescue
+  p 'Users are already initialized.'
+end
 
-p :seeding
-
-User.new(login: 'a', name: 'system', password: SecureRandom.uuid, email: 'a').save(validate: false)
-User.new(login: 'b', name: 'information', password: SecureRandom.uuid, email: 'b').save(validate: false)
-User.new(login: 'c', name: 'error', password: SecureRandom.uuid, email: 'c').save(validate: false)
-User.new(login: 'd', name: 'invitation', password: SecureRandom.uuid, email: 'd').save(validate: false)
-User.new(login: 'z', name: '退会ユーザー', password: SecureRandom.uuid, email: 'e').save(validate: false)
+if Group.where { user == User.system }.size == 0
+  Group.create(user: User.system, name: 'はじめてのグループ', description: '最初に招待されるグループです。必要がなければリムーブしてください。')
+else
+  p 'Groups are already initialized.'
+end
 
 if ENV['DEV_DATA']
-  User.destroy_all
+  User.all.each do |user|
+    user.destroy unless user.system?
+  end
+
+  Group.all.each do |group|
+    group.destroy unless group.user.try(:system?)
+  end
+
   Question.destroy_all
-  Group.destroy_all
 
   question_numbers = [15, 5, 12, 20, 13, 12, 0, 1]
 
@@ -43,7 +49,7 @@ if ENV['DEV_DATA']
       g.add_by!(owner, User.sample) rescue nil
     end
 
-    GroupUser.all.each(&:accepted!)
+    GroupUser.where { group == g }.each(&:accepted!)
 
     question_numbers[index].times do |n|
       owner = g.users.sample
@@ -53,3 +59,4 @@ if ENV['DEV_DATA']
     end
   end
 end
+

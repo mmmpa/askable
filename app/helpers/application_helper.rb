@@ -7,7 +7,7 @@ module ApplicationHelper
         %q{<i class="fa fa-sorryed"></i>}.html_safe
       when AskUser.status[:assigned]
         %q{<i class="fa fa-assigned"></i>}.html_safe
-      when AskUser.status[:wait]
+      when AskUser.status[:waited]
         %q{<i class="fa fa-waited"></i>}.html_safe
       else
         nil
