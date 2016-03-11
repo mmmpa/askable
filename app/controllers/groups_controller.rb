@@ -11,7 +11,10 @@ class GroupsController < ApplicationController
   end
 
   def create
-    Group.create_by!(user, group_params)
+    g = Group.create_by!(user, group_params)
+    render json: {id: g.id}, status: 201
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {errors: e.record.errors.messages}, status: 400
   end
 
   def invite

@@ -22,6 +22,9 @@ class Group < ActiveRecord::Base
   has_many :group_members, -> { where { state == GroupUser.status[:accepted] } }, class_name: GroupUser
   has_many :members, -> { normal }, through: :group_members, source: :user
 
+  validates :name, :description, :user,
+            presence: true
+
   #
   # indexでの利用時にはカウント数を挿入しておく
   #
@@ -55,6 +58,7 @@ class Group < ActiveRecord::Base
       g = Group.new(params)
       g.user = user
       g.save!
+      g
     end
   end
 
@@ -80,9 +84,13 @@ class Group < ActiveRecord::Base
     members
   end
 
-  def dispose!(owner)
-    owner_or_die!(owner)
-    destroy!
+  def dispose!(member)
+    member_or_die!(member)
+    if owner?(member)
+      destroy!
+    elsif member?(member)
+      remove_by!(member, member)
+    end
   end
 
   def invite!(owner, invite_params)

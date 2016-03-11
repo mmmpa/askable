@@ -19,37 +19,26 @@ var Context = (function (_super) {
     function Context() {
         _super.apply(this, arguments);
     }
-    Object.defineProperty(Context.prototype, "groupId", {
-        get: function () {
-            return this.props.groupId;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Context.prototype.succeed = function () {
-        location.reload();
+    Context.prototype.succeed = function (groupId) {
+        location.href = '/g/' + groupId;
     };
-    Context.prototype.setBase = function (params) {
-        params.groupId = this.groupId;
-        return params;
-    };
-    Context.prototype.submit = function () {
+    Context.prototype.submit = function (params) {
         var _this = this;
         this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.DisposeGroup, this.setBase({}))
+        strike_api_1.strikeApi(strike_api_1.Api.CreateGroup, params)
             .then(function (result) {
-            _this.succeed();
+            _this.succeed(result.id);
             _this.setState({ result: result, errors: {}, state: State.Success });
         })
             .catch(function (result) {
-            _this.succeed();
-            _this.setState({ errors: {}, state: State.Fail });
+            var errors = result.errors;
+            _this.setState({ errors: errors, state: State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
         var _this = this;
-        to('submit', function () {
-            _this.submit();
+        to('submit', function (params) {
+            _this.submit(params);
         });
     };
     Context.prototype.initialState = function (props) {
@@ -64,9 +53,18 @@ var Component = (function (_super) {
     function Component(props) {
         _super.call(this, props);
         this.state = {
-            name: ''
+            name: '',
+            description: ''
         };
     }
+    Object.defineProperty(Component.prototype, "params", {
+        get: function () {
+            var _a = this.state, name = _a.name, description = _a.description;
+            return { name: name, description: description };
+        },
+        enumerable: true,
+        configurable: true
+    });
     Component.prototype.writeError = function (name) {
         if (!this.props.errors) {
             return null;
@@ -77,61 +75,37 @@ var Component = (function (_super) {
         }
         return React.createElement("ul", {"className": "error-messages"}, errors.map(function (error) { return React.createElement("li", {"className": "error-message"}, error); }));
     };
-    Object.defineProperty(Component.prototype, "text", {
-        get: function () {
-            return this.props.isOwner ? '解散' : '脱退';
-        },
-        enumerable: true,
-        configurable: true
-    });
     Component.prototype.writeSubmit = function () {
         var _this = this;
-        if (this.props.groupName !== this.state.name) {
-            return React.createElement("button", {"className": "dispose", "disabled": true}, React.createElement(fa_1.default, {"icon": "remove"}), this.text, "する");
-        }
         switch (this.props.state) {
-            case State.Success:
             case State.Submitting:
-                return React.createElement("button", {"className": "sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "`$", this.text, "する`");
+                return React.createElement("button", {"className": "sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "送信中");
+            case State.Success:
             case State.Waiting:
             case State.Fail:
             default:
-                return React.createElement("button", {"className": "dispose", "onClick": function () { return _this.dispatch('submit'); }}, React.createElement(fa_1.default, {"icon": "remove"}), this.text, "する");
-        }
-    };
-    Component.prototype.writeResult = function () {
-        switch (this.props.state) {
-            case State.Success:
-                return React.createElement("p", {"className": "disposer success"}, this.text, "しました");
-            case State.Submitting:
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return null;
+                return React.createElement("button", {"className": "submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "作成する");
         }
     };
     Component.prototype.render = function () {
         var _this = this;
-        var login = this.state.login;
-        return React.createElement("section", {"className": "disposer body"}, React.createElement("div", {"className": "disposer input-area"}, React.createElement("section", {"className": "disposer login-area"}, React.createElement("input", {"type": "text", "value": login, "placeholder": "グループの名前を入力", "onChange": function (e) { return _this.setState({ name: e.target.value }); }})), this.writeSubmit()), this.writeResult());
+        var _a = this.state, name = _a.name, description = _a.description;
+        return React.createElement("section", {"className": "new-group body"}, React.createElement("h1", {"className": "new-group registering-title"}, "グループを作成する"), React.createElement("section", {"className": "new-group registering-body"}, React.createElement("section", {"className": "new-group input-section"}, React.createElement("input", {"type": "text", "placeholder": "グループの名前", "value": name, "onChange": function (e) { return _this.setState({ name: e.target.value }); }}), this.writeError('name')), React.createElement("section", {"className": "new-group input-section"}, React.createElement("textarea", {"type": "text", "placeholder": "グループの概要", "value": description, "onChange": function (e) { return _this.setState({ description: e.target.value }); }}), this.writeError('description')), React.createElement("section", {"className": "new-group submit-section"}, this.writeSubmit())));
     };
     return Component;
 })(eventer_1.Node);
-var GroupDisposer = (function () {
-    function GroupDisposer() {
+var NewGroup = (function () {
+    function NewGroup() {
     }
-    GroupDisposer.start = function (dom) {
+    NewGroup.start = function (dom) {
         if (!dom) {
             return;
         }
-        var groupId = dom.getAttribute('data-id');
-        var groupName = dom.getAttribute('data-name');
-        var isOwner = dom.getAttribute('data-owner') === 'true';
-        ReactDOM.render(React.createElement(Context, React.__spread({}, { groupId: groupId, groupName: groupName, isOwner: isOwner }), React.createElement(Component, null)), dom);
+        ReactDOM.render(React.createElement(Context, null, React.createElement(Component, null)), dom);
     };
-    return GroupDisposer;
+    return NewGroup;
 })();
-window.GroupDisposer = GroupDisposer;
+window.NewGroup = NewGroup;
 
 },{"./lib/eventer":2,"./lib/fa":3,"./lib/services/strike-api":4}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {

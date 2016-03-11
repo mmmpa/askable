@@ -16,19 +16,15 @@ enum State{
 }
 
 class Context extends Root {
-  get groupId() {
-    return this.props.groupId;
-  }
-
-  setBase(params) {
-    params.groupId = this.groupId;
-    return params;
+  succeed(groupId) {
+    location.href = '/g/' + groupId;
   }
 
   submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.Invite, this.setBase(params))
+    strikeApi(Api.CreateGroup, params)
       .then((result)=> {
+        this.succeed(result.id);
         this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
@@ -55,18 +51,14 @@ class Component extends Node {
   constructor(props) {
     super(props);
     this.state = {
-      login: ''
+      name: '',
+      description: ''
     }
   }
 
   get params() {
-    return {login: this.state.login}
-  }
-
-  componentWillUpdate(props) {
-    if (this.props.state !== State.Success && props.state === State.Success) {
-      this.setState({login: ''})
-    }
+    let {name, description} = this.state
+    return {name, description}
   }
 
   writeError(name:string) {
@@ -86,8 +78,8 @@ class Component extends Node {
     switch (this.props.state) {
       case State.Submitting:
         return <button className="sending" disabled={true}>
-          <Fa icon="thumbs-o-up" animation="pulse"/>
-          招待する
+          <Fa icon="spinner" animation="pulse"/>
+          送信中
         </button>;
       case State.Success:
       case State.Waiting:
@@ -96,53 +88,46 @@ class Component extends Node {
         return <button className="submit"
                        onClick={()=> this.dispatch('submit', this.params)}>
           <Fa icon="thumbs-o-up"/>
-          招待する
+          作成する
         </button>;
     }
   }
 
-  writeResult() {
-    switch (this.props.state) {
-      case State.Success:
-        return <p className="invitation success">招待しました</p>
-      case State.Submitting:
-        return <p className="invitation success">&nbsp;</p>
-      case State.Waiting:
-        return null;
-      case State.Fail:
-      default:
-        return this.writeError('any')
-    }
-  }
-
   render() {
-    let {login} = this.state;
+    let {name, description} = this.state;
 
-    return <section className="invitation body">
-      <div className="invitation input-area">
-        <section className="invitation login-area">
-          <input type="text" value={login} placeholder="対象ユーザーのログインId"
-                 onChange={(e)=> this.setState({login: e.target.value})}/>
+    return <section className="new-group body">
+      <h1 className="new-group registering-title">グループを作成する</h1>
+      <section className="new-group registering-body">
+        <section className="new-group input-section">
+          <input type="text" placeholder="グループの名前" value={name}
+                 onChange={(e)=> this.setState({name: e.target.value})}/>
+          {this.writeError('name')}
         </section>
-        {this.writeSubmit()}
-      </div>
-      {this.writeResult()}
+        <section className="new-group input-section">
+          <textarea type="text" placeholder="グループの概要" value={description}
+                    onChange={(e)=> this.setState({description: e.target.value})}/>
+          {this.writeError('description')}
+        </section>
+        <section className="new-group submit-section">
+          {this.writeSubmit()}
+        </section>
+      </section>
     </section>
   }
 }
 
-class InvitationCreator {
+class NewGroup {
   static start(dom) {
-    if(!dom) {
+    if (!dom) {
       return;
     }
-    let groupId = dom.getAttribute('data-id');
-    ReactDOM.render(<Context {...{groupId}}>
+    ReactDOM.render(<Context>
       <Component/>
     </Context>, dom);
   }
 }
 
-window.InvitationCreator = InvitationCreator;
+window.NewGroup = NewGroup;
 
 

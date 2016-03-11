@@ -1,14 +1,4 @@
 article.group-portal.body
-  -if @group.owner?(@user)
-    section.group-portal.editor-area
-      h1.group-portal.title
-        i.fa.fa-paper-plane-o
-        | グループに招待する
-      section.group-portal#invitation(data-id=@group.id)
-      h1.group-portal.title
-        i.fa.fa-remove
-        | グループを解散する
-      section.group-portal#disposer(data-id=@group.id data-name=@group.name)
   section.group-portal.information-area
     h1.group-portal.title
       i.fa.fa-child
@@ -25,6 +15,22 @@ article.group-portal.body
       ul.group-portal.members
         - @group.members.each do |member|
           li.group-portal.member= member.name
+  -if @group.owner?(@user)
+    section.group-portal.editor-area
+      h1.group-portal.title
+        i.fa.fa-paper-plane-o
+        | グループに招待する
+      section.group-portal#invitation(data-id=@group.id)
+      h1.group-portal.title
+        i.fa.fa-remove
+        | グループを解散する
+      section.group-portal#disposer(data-id=@group.id data-name=@group.name data-owner="true")
+  -else
+    section.group-portal.editor-area
+      h1.group-portal.title
+        i.fa.fa-remove
+        | グループを脱退する
+      section.group-portal#disposer(data-id=@group.id data-name=@group.name data-owner="false")
 
   script src='/js/invitation-creator/built.js'
   script src='/js/group-disposer/built.js'

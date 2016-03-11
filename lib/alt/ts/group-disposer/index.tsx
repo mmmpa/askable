@@ -37,8 +37,8 @@ class Context extends Root {
         this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
-        let {errors} = result
-        this.setState({errors, state: State.Fail});
+        this.succeed();
+        this.setState({errors: {}, state: State.Fail});
       });
   }
 
@@ -54,7 +54,6 @@ class Context extends Root {
     }
   }
 }
-
 
 class Component extends Node {
   constructor(props) {
@@ -77,28 +76,34 @@ class Component extends Node {
     </ul>
   }
 
+  get text() {
+    return this.props.isOwner ? '解散' : '脱退'
+  }
+
   writeSubmit() {
     if (this.props.groupName !== this.state.name) {
       return <button className="dispose" disabled={true}>
         <Fa icon="remove"/>
-        解散する
+        {this.text}
+        する
       </button>;
     }
 
     switch (this.props.state) {
+      case State.Success:
       case State.Submitting:
         return <button className="sending" disabled={true}>
           <Fa icon="spinner" animation="pulse"/>
-          解散する
+          `${this.text}する`
         </button>;
-      case State.Success:
       case State.Waiting:
       case State.Fail:
       default:
         return <button className="dispose"
                        onClick={()=> this.dispatch('submit')}>
           <Fa icon="remove"/>
-          解散する
+          {this.text}
+          する
         </button>;
     }
   }
@@ -106,7 +111,10 @@ class Component extends Node {
   writeResult() {
     switch (this.props.state) {
       case State.Success:
-        return <p className="disposer success">削除しました</p>
+        return <p className="disposer success">
+          {this.text}
+          しました
+        </p>
       case State.Submitting:
       case State.Waiting:
       case State.Fail:
@@ -133,9 +141,13 @@ class Component extends Node {
 
 class GroupDisposer {
   static start(dom) {
+    if (!dom) {
+      return;
+    }
     let groupId = dom.getAttribute('data-id');
     let groupName = dom.getAttribute('data-name');
-    ReactDOM.render(<Context {...{groupId, groupName}}>
+    let isOwner = dom.getAttribute('data-owner') === 'true';
+    ReactDOM.render(<Context {...{groupId, groupName, isOwner}}>
       <Component/>
     </Context>, dom);
   }

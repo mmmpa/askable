@@ -602,3 +602,27 @@ input.has-error
     @extend .input-contrast, .input-block
   &.submit-section
     @extend .form-actions
+
+.new-group
+  &.body
+    @extend %small-body
+  &.registering-body
+    @extend %boxed-group-inner
+    padding: 20px
+    &.form
+      padding: 20px 10px
+  &.info-label
+    font-size: $size-normal
+  &.link-section
+    padding-bottom: 10px
+    text-align: right
+  &.registering-title
+    @extend %boxed-group-title
+  &.input-section
+    margin: 0 0 20px
+  input,
+  textarea
+    @extend .input-contrast, .input-block
+  &.submit-section
+    @extend .form-actions
+

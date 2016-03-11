@@ -121,6 +121,9 @@ var InvitationCreator = (function () {
     function InvitationCreator() {
     }
     InvitationCreator.start = function (dom) {
+        if (!dom) {
+            return;
+        }
         var groupId = dom.getAttribute('data-id');
         ReactDOM.render(React.createElement(Context, React.__spread({}, { groupId: groupId }), React.createElement(Component, null)), dom);
     };
