@@ -9,6 +9,7 @@ require "action_mailer/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
 Bundler.require(*Rails.groups)
+require 'slim/include'
 
 module Askable
   class Application < Rails::Application
@@ -22,7 +23,7 @@ module Askable
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :en
 
-    Slim::Engine.set_options pretty: false
+    Slim::Engine.set_options(pretty: false, include_dirs: ["#{Rails.root}/app/views/partials"])
 
     config.generators do |g|
       g.assets false

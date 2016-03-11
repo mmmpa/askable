@@ -1,0 +1,16 @@
+header.sub-header.wrapper.with-nav
+  div.sub-header.body
+    h1.sub-header.title
+      i.fa.fa-map-o
+      = "#{@user.name} [#{@user.login}]"
+  div.sub-header.sub-nav
+    nav.tabnav-tabs.sub-header.body
+      a.tabnav-tab.opened[href=portal_path class=detect_index_tab_selected(portal_path)]
+        i.fa.fa-map-o
+        | トップページ
+      a.tabnav-tab.opened[href=new_group_path class=detect_index_tab_selected(new_group_path)]
+        i.fa.fa-plus-circle
+        | グループの作成
+      a.tabnav-tab.opened[href=edit_user_path class=detect_index_tab_selected(edit_user_path)]
+        i.fa.fa-gear
+        | 設定

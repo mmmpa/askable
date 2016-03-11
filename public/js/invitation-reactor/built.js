@@ -286,7 +286,7 @@ var Uri = {
     createUser: '/welcome/new',
     logIn: '/in',
     logOut: '/out',
-    createQuestion: '/g/:groupId/users/me/q/new',
+    createQuestion: '/g/:groupId/me/q/new',
     answerQuestion: '/g/:groupId/q/:questionId/answer',
     assignUserQuestion: '/g/:groupId/q/:questionId/assign',
     waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',

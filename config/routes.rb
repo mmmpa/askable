@@ -16,6 +16,12 @@ Rails.application.routes.draw do
       post 'new', to: 'groups#create'
     end
 
+    scope 'me' do
+      get '', to: 'users#edit', as: :edit_user
+      patch '', to: 'users#update'
+      delete '', to: 'users#destroy'
+    end
+
     scope 'g/:group_id', constraints: Constraint::Group.new do
       get '', to: 'groups#show', as: :group
       post 'invitation', to: 'groups#invite'
@@ -50,25 +56,11 @@ Rails.application.routes.draw do
         end
       end
 
-      scope 'users/me' do
-        get '', to: 'users#show', as: :user
-        get 'edit', to: 'users#edit', as: :edit_user
-        patch 'edit', to: 'users#update'
-        delete '', to: 'users#destroy'
-
+      scope 'me' do
         scope :q do
-          get 'index', to: 'questions#user_index'
           get 'new', to: 'questions#new', as: :new_question
           post 'new', to: 'questions#create'
         end
-
-        scope :a do
-          get 'index', to: 'comments#user_index', as: :comments
-        end
-      end
-
-      scope 'users/:login' do
-        get '', to: 'users#show'
       end
 
       get '/', to: redirect(path: '/g/%{group_id}/q/index')
