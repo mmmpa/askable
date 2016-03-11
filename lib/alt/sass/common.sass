@@ -18,7 +18,8 @@ a
     @extend .btn, .btn-primary
   &.sending
     @extend .btn
-  &.block
+  &.block,
+  &.dispose
     @extend .btn, .btn-danger
   &.reject
     @extend .btn, .btn-form
@@ -244,6 +245,57 @@ input.has-error
     .controller
       button
         padding: 3px 10px
+
+.invitation,
+.disposer
+  &.body
+    padding: 20px
+    .error-messages
+      margin-bottom: -5px
+  &.login-area
+    display: inline-block
+    input
+      width: 300px
+      border-radius: $radius 0 0 $radius
+  &.input-area
+    .submit,
+    .dispose
+      border-radius: 0 $radius $radius 0
+      margin-left: -2px
+  &.success
+    color: $brand-green
+    margin-bottom: 0
+.group-portal
+  &.body
+    @extend %normal-body
+  &.editor-area,
+  &.information-area
+    margin: 0 0 20px
+    border: 1px solid $border-color
+    border-radius: $radius
+    overflow: hidden
+  &.title
+    @extend %boxed-group-title
+    border: 1px solid $border-color
+    border-width: 1px 0
+    border-radius: 0
+    margin: -1px 0
+  &.name
+    font-size: $size-title
+    padding: 20px
+  &.description
+    font-size: $size-normal
+    line-height: 200%
+    padding: 20px
+  &.members
+    font-size: $size-normal
+    line-height: 200%
+    padding: 20px 0 20px 20px
+    .member
+      display: inline-block
+      padding: 0 20px 0 0
+      white-space: nowrap
+    list-style: none
 .show-question
   &.body
     @extend %normal-body

@@ -11,7 +11,17 @@ Rails.application.routes.draw do
       patch 'block', to: 'invitations#block', as: :block_invitation
     end
 
+    scope :g do
+      get 'new', to: 'groups#new', as: :new_group
+      post 'new', to: 'groups#create'
+    end
+
     scope 'g/:group_id', constraints: Constraint::Group.new do
+      get '', to: 'groups#show', as: :group
+      post 'invitation', to: 'groups#invite'
+      delete '', to: 'groups#destroy'
+      delete 'remove', to: 'groups#remove'
+
       scope :q do
         get 'index/opened', to: 'questions#opened', as: :group_portal
         get 'index', to: 'questions#index', as: :questions

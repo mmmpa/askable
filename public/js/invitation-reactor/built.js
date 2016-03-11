@@ -295,7 +295,10 @@ var Uri = {
     finishQuestion: '/g/:groupId/q/:questionId/finish',
     acceptInvitation: '/i/:invitationId/accept',
     rejectInvitation: '/i/:invitationId/reject',
-    blockInvitation: '/i/:invitationId/block'
+    blockInvitation: '/i/:invitationId/block',
+    invite: '/g/:groupId/invitation',
+    disposeGroup: '/g/:groupId',
+    createGroup: '/g/new'
 };
 (function (Api) {
     Api[Api["CreateUser"] = 0] = "CreateUser";
@@ -311,6 +314,9 @@ var Uri = {
     Api[Api["AcceptInvitation"] = 10] = "AcceptInvitation";
     Api[Api["RejectInvitation"] = 11] = "RejectInvitation";
     Api[Api["BlockInvitation"] = 12] = "BlockInvitation";
+    Api[Api["Invite"] = 13] = "Invite";
+    Api[Api["DisposeGroup"] = 14] = "DisposeGroup";
+    Api[Api["CreateGroup"] = 15] = "CreateGroup";
 })(exports.Api || (exports.Api = {}));
 var Api = exports.Api;
 function strikeApi(api, params) {
@@ -354,6 +360,12 @@ function detectFunction(api) {
             return rejectInvitation;
         case Api.BlockInvitation:
             return blockInvitation;
+        case Api.Invite:
+            return invite;
+        case Api.DisposeGroup:
+            return disposeGroup;
+        case Api.CreateGroup:
+            return createGroup;
         default:
             throw 'Api not exist';
     }
@@ -401,6 +413,29 @@ function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function invite(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.invite, params), normalized = _a.normalized, params = _a.params;
+    request
+        .post(normalized)
+        .send({ invitations: params })
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function disposeGroup(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.disposeGroup, params), normalized = _a.normalized, params = _a.params;
+    request
+        .delete(normalized)
+        .set('X-CSRF-Token', token())
+        .end(finalize(resolve, reject, queueResolve));
+}
+function createGroup(params, resolve, reject, queueResolve) {
+    var _a = normalize(Uri.createGroup, params), normalized = _a.normalized, params = _a.params;
+    request
+        .post(normalized)
+        .send({ groups: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }

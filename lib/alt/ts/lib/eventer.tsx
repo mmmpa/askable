@@ -29,7 +29,6 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
   emitter:EventEmitter;
   addedOnStore = [];
 
-  abstract children(props):any;
   abstract listen(to:(eventName:string, callback:Function)=>void):void;
   abstract initialState(props):S;
 

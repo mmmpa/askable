@@ -50,6 +50,14 @@ class Group < ActiveRecord::Base
 
   before_create :be_member
 
+  class << self
+    def create_by!(user, params)
+      g = Group.new(params)
+      g.user = user
+      g.save!
+    end
+  end
+
   def as_json(options = {})
     options.merge!(only: [:name])
     super(options).merge!(users: members)
@@ -70,6 +78,17 @@ class Group < ActiveRecord::Base
 
   def all_members
     members
+  end
+
+  def dispose!(owner)
+    owner_or_die!(owner)
+    destroy!
+  end
+
+  def invite!(owner, invite_params)
+    owner_or_die!(owner)
+    target = User.normal.find_by(login: invite_params[:login]) || (raise ActiveRecord::RecordNotFound)
+    add_by!(owner, target)
   end
 
   def update_by!(owner, params)
