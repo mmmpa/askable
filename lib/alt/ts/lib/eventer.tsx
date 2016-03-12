@@ -30,6 +30,7 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
   addedOnStore = [];
 
   abstract listen(to:(eventName:string, callback:Function)=>void):void;
+
   abstract initialState(props):S;
 
   static get childContextTypes():React.ValidationMap<any> {
@@ -66,10 +67,13 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
     let props = _.merge(_.clone(this.props), this.state);
     delete props.children;
     let {children} = this.props;
-    if(!children.map){
+    if (!children.map) {
       children = [children]
     }
-    return <div>{children.map((child)=> React.cloneElement(child || <div>blank</div>, props))}</div>;
+    return <div>{children.map((child, i)=> {
+      props.key = i;
+      return React.cloneElement(child || <div>blank</div>, props)
+      })}</div>;
   }
 }
 

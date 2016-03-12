@@ -5,8 +5,9 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
-import {Api, strikeApi, ILogIn} from './lib/services/strike-api'
+import SubmitButton from './lib/components/submit-button'
 
 enum State{
   Waiting,
@@ -17,15 +18,15 @@ enum State{
 
 class Context extends Root {
   succeed() {
-    document.location = this.props.userPage;
+    location.reload();
   }
 
-  submit(params:ILogIn) {
+  submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.LogIn, params)
+    strike(Api.LogIn, params)
       .then(()=> {
-        this.setState({state: State.Success});
         this.succeed();
+        this.setState({state: State.Success});
       })
       .catch(()=> {
         this.setState({state: State.Fail});
@@ -45,7 +46,6 @@ class Context extends Root {
   }
 }
 
-
 class Component extends Node {
   constructor(props) {
     super(props);
@@ -55,83 +55,65 @@ class Component extends Node {
     }
   }
 
-  get params():ILogIn {
+  get params() {
     let {login, password} = this.state;
     return {login, password};
   }
 
-  writeError() {
-    switch (this.props.state) {
+  writeError(state) {
+    switch (state) {
       case State.Fail:
-        return <section className="user-log-in error-messages">
-          <p className="error-message">
-            <Fa icon="ban"/>
-            ログインに失敗しました
-          </p>
-        </section>;
+        return <p className="com message-area error-message">
+          <Fa icon="ban"/>
+          ログインに失敗しました
+        </p>;
       case State.Success:
-        return <section className="user-log-in success-messages">
-          <p className="success-message">
-            <Fa icon="paw"/>
-            ログインに成功しました
-          </p>
-        </section>;
+        return <p className="com message-area success-message">
+          <Fa icon="paw"/>
+          ログインに成功しました
+        </p>;
       case State.Submitting:
       case State.Waiting:
       default:
         return null;
-    }
-  }
-
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="user-log-in sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          認証中
-        </button>;
-      case State.Success:
-        return null;
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="user-log-in submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="sign-in"/>
-          ログインする
-        </button>;
     }
   }
 
   render() {
+    let {state} = this.props;
+
     return <article className="user-log-in body">
-      <section className="user-log-in box-body">
-        <h1 className="user-log-in log-in-title">ログイン</h1>
-        <div className="inner form">
-          <section className="user-log-in input-section">
+      <section className="com border-box-container">
+        <h1 className="com border-box-title-area">ログイン</h1>
+        <div className="com form-area">
+          <section className="com input-section">
             <input type="text" name="login" value={this.state.login} placeholder="ログインID"
                    onChange={(e)=> this.setState({login: e.target.value})}/>
           </section>
-          <section className="user-log-in input-section">
+          <section className="com input-section">
             <input type="password" name="password" value={this.state.password} placeholder="パスワード"
                    onChange={(e)=> this.setState({password: e.target.value})}/>
           </section>
-          {this.writeError()}
-          <section className="user-log-in submit-section">
-            {this.writeSubmit()}
+          <section className="com submit-section">
+            <SubmitButton {...{
+              state, icon: "sign-in", text: "ログインする", className: 'submit',
+              onClick: ()=>this.dispatch('submit', this.params)
+            }}/>
           </section>
         </div>
+        {this.writeError(state)}
       </section>
     </article>
   }
 }
 
 class LogIn {
-  static start(dom:HTMLElement, userPage:string) {
-    ReactDOM.render(<Context {...{userPage}}>
-      <Component/>
-    </Context>, dom);
+  static start(dom:HTMLElement) {
+    ReactDOM.render(
+      <Context>
+        <Component/>
+      </Context>
+      , dom);
   }
 }
 

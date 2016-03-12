@@ -10,6 +10,12 @@ var user_1 = require('./lib/models/user');
 var state_1 = require('./lib/models/state');
 var submit_button_1 = require('./lib/components/submit-button');
 var input_form_1 = require('./lib/components/input-form');
+var Target;
+(function (Target) {
+    Target[Target["User"] = 0] = "User";
+    Target[Target["Password"] = 1] = "Password";
+    Target[Target["Disposer"] = 2] = "Disposer";
+})(Target || (Target = {}));
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -71,7 +77,8 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: 'ready',
+            state: state_1.State.Waiting,
+            targetNow: null,
             user: props.initial,
             errors: {}
         };
@@ -117,10 +124,10 @@ var UserComponent = (function (_super) {
     };
     UserComponent.prototype.render = function () {
         var _this = this;
-        var _a = this.props, state = _a.state, errors = _a.errors;
+        var _a = this.props, state = _a.state, targetNow = _a.targetNow, errors = _a.errors;
         var _b = this.state, name = _b.name, login = _b.login, email = _b.email;
         return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "登録内容の変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'name', label: '表示するなまえ', value: name, onChange: function (v) { return _this.setState({ name: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'login', label: 'ログイン用ID', value: login, onChange: function (v) { return _this.setState({ login: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'email', label: 'メールアドレス', value: email, onChange: function (v) { return _this.setState({ email: v }); } }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
-            state: state, icon: "send-o", text: "変更する", className: 'submit',
+            state: state, targetNow: targetNow, icon: "send-o", text: "変更する", className: 'submit', target: Target.User,
             onClick: function () { return _this.dispatch('update', _this.updatingParams); }
         })))));
     };
@@ -162,7 +169,7 @@ var PasswordComponent = (function (_super) {
     };
     PasswordComponent.prototype.render = function () {
         var _this = this;
-        var _a = this.props, state = _a.state, errors = _a.errors;
+        var _a = this.props, state = _a.state, targetNow = _a.targetNow, errors = _a.errors;
         var _b = this.state, passwordNow = _b.passwordNow, password = _b.password;
         return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "パスワードの変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
             errors: errors, type: 'password', name: 'passwordNow', label: '旧パスワード', value: passwordNow,
@@ -171,7 +178,7 @@ var PasswordComponent = (function (_super) {
             errors: errors, type: 'password', name: 'password', label: '新パスワード', value: password,
             onChange: function (v) { return _this.setState({ password: v }); }
         }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
-            state: state, icon: "key", text: "パスワードを変更する", className: 'submit',
+            state: state, targetNow: targetNow, icon: "key", text: "パスワードを変更する", className: 'submit', target: Target.Password,
             onClick: function () { return _this.dispatch('changePassword', _this.passwordParams); }
         })))));
     };
@@ -190,10 +197,10 @@ var DisposerComponent = (function (_super) {
     };
     DisposerComponent.prototype.render = function () {
         var _this = this;
-        var state = this.props.state;
+        var _a = this.props, state = _a.state, targetNow = _a.targetNow;
         var yes = this.state.yes;
         return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "アカウントの削除"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor dispose-verify"}, React.createElement("label", null, React.createElement("input", {"type": "checkbox", "name": "yes", "checked": yes, "onChange": function () { return _this.setState({ yes: !yes }); }}), "本当に削除する")), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
-            state: state, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes,
+            state: state, targetNow: targetNow, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes, target: Target.Disposer,
             onClick: function () { return _this.dispatch('destroy'); }
         })))));
     };
@@ -204,7 +211,7 @@ var UserEditor = (function () {
     }
     UserEditor.start = function (dom) {
         var initial = new user_1.default(JSON.parse(dom.getAttribute('data-user')));
-        ReactDOM.render(React.createElement("article", {"className": "user-editor body"}, React.createElement(Context, React.__spread({}, { initial: initial }), React.createElement(UserComponent, null)), React.createElement(Context, null, React.createElement(PasswordComponent, null)), React.createElement(Context, null, React.createElement(DisposerComponent, null))), dom);
+        ReactDOM.render(React.createElement("article", {"className": "user-editor body"}, React.createElement(Context, React.__spread({}, { initial: initial }), React.createElement(UserComponent, null), React.createElement(PasswordComponent, null), React.createElement(DisposerComponent, null))), dom);
     };
     return UserEditor;
 })();
@@ -241,7 +248,7 @@ var ErrorMessage = (function (_super) {
         if (myErrors.length === 0) {
             return null;
         }
-        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error) { return React.createElement("li", {"className": "error-message"}, error); }));
+        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error, i) { return React.createElement("li", {"className": "error-message", "key": i}, error); }));
     };
     return ErrorMessage;
 })(eventer_1.Node);
@@ -416,7 +423,10 @@ var Root = (function (_super) {
         if (!children.map) {
             children = [children];
         }
-        return React.createElement("div", null, children.map(function (child) { return React.cloneElement(child || React.createElement("div", null, "blank"), props); }));
+        return React.createElement("div", null, children.map(function (child, i) {
+            props.key = i;
+            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
+        }));
     };
     return Root;
 })(Node);
@@ -475,28 +485,6 @@ exports.default = User;
 
 },{}],9:[function(require,module,exports){
 var jobs = Promise.resolve();
-(function (OldApi) {
-    OldApi[OldApi["CreateUser"] = 0] = "CreateUser";
-    OldApi[OldApi["createQuestion"] = 1] = "createQuestion";
-    OldApi[OldApi["LogIn"] = 2] = "LogIn";
-    OldApi[OldApi["AnswerQuestion"] = 3] = "AnswerQuestion";
-    OldApi[OldApi["AssignUserQuestion"] = 4] = "AssignUserQuestion";
-    OldApi[OldApi["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
-    OldApi[OldApi["SorryQuestion"] = 6] = "SorryQuestion";
-    OldApi[OldApi["ReplyToReply"] = 7] = "ReplyToReply";
-    OldApi[OldApi["LogOut"] = 8] = "LogOut";
-    OldApi[OldApi["FinishQuestion"] = 9] = "FinishQuestion";
-    OldApi[OldApi["AcceptInvitation"] = 10] = "AcceptInvitation";
-    OldApi[OldApi["RejectInvitation"] = 11] = "RejectInvitation";
-    OldApi[OldApi["BlockInvitation"] = 12] = "BlockInvitation";
-    OldApi[OldApi["Invite"] = 13] = "Invite";
-    OldApi[OldApi["DisposeGroup"] = 14] = "DisposeGroup";
-    OldApi[OldApi["CreateGroup"] = 15] = "CreateGroup";
-    OldApi[OldApi["UpdateUser"] = 16] = "UpdateUser";
-    OldApi[OldApi["DestroyUser"] = 17] = "DestroyUser";
-    OldApi[OldApi["ChangePassword"] = 18] = "ChangePassword";
-})(exports.OldApi || (exports.OldApi = {}));
-var OldApi = exports.OldApi;
 var Method;
 (function (Method) {
     Method[Method["Get"] = 0] = "Get";
@@ -505,28 +493,87 @@ var Method;
     Method[Method["Put"] = 3] = "Put";
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
-var Uri = {
-    createUser: '/welcome/new',
-    logIn: '/in',
-    logOut: '/out',
-    createQuestion: '/g/:groupId/me/q/new',
-    answerQuestion: '/g/:groupId/q/:questionId/answer',
-    assignUserQuestion: '/g/:groupId/q/:questionId/assign',
-    waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
-    sorryQuestion: '/g/:groupId/q/:questionId/sorry',
-    replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
-    finishQuestion: '/g/:groupId/q/:questionId/finish',
-    acceptInvitation: '/i/:invitationId/accept',
-    rejectInvitation: '/i/:invitationId/reject',
-    blockInvitation: '/i/:invitationId/block',
-    invite: '/g/:groupId/invitation',
-    disposeGroup: '/g/:groupId',
-    createGroup: '/g/new',
-    updateUser: '/me',
-    destroyUser: '/me',
-    changePassword: '/me/password'
-};
 exports.Api = {
+    Invite: {
+        uri: '/g/:groupId/invitation',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    DisposeGroup: {
+        uri: '/g/:groupId',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    CreateGroup: {
+        uri: '/g/new',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    AcceptInvitation: {
+        uri: '/i/:invitationId/accept',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    RejectInvitation: {
+        uri: '/i/:invitationId/reject',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    BlockInvitation: {
+        uri: '/i/:invitationId/block',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    CreateQuestion: {
+        uri: '/g/:groupId/me/q/new',
+        method: Method.Post,
+        params: function (p) { return ({ questions: p }); }
+    },
+    AnswerQuestion: {
+        uri: '/g/:groupId/q/:questionId/answer',
+        method: Method.Patch,
+        params: function (p) { return ({ questions: p }); }
+    },
+    AssignUserQuestion: {
+        uri: '/g/:groupId/q/:questionId/assign',
+        method: Method.Patch,
+        params: function (p) { return ({ questions: p }); }
+    },
+    WaitAnswerQuestion: {
+        uri: '/g/:groupId/q/:questionId/wait',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    SorryQuestion: {
+        uri: '/g/:groupId/q/:questionId/sorry',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    ReplyToReply: {
+        uri: '/g/:groupId/q/:questionId/a/:commentId/res',
+        method: Method.Post,
+        params: function (p) { return ({ questions: p }); }
+    },
+    FinishQuestion: {
+        uri: '/g/:groupId/q/:questionId/finish',
+        method: Method.Patch,
+        params: function (p) { return ({}); }
+    },
+    LogIn: {
+        uri: '/in',
+        method: Method.Post,
+        params: function (p) { return ({ user_sessions: p }); }
+    },
+    LogOut: {
+        uri: '/out',
+        method: Method.Delete,
+        params: function (p) { return ({}); }
+    },
+    CreateUser: {
+        uri: '/welcome/new',
+        method: Method.Post,
+        params: function (p) { return ({ users: p }); }
+    },
     UpdateUser: {
         uri: '/me',
         method: Method.Patch,
@@ -560,67 +607,16 @@ function add(api, params, resolve, reject) {
         });
     });
 }
-function strikeApi(api, params) {
-    return new Promise(function (resolve, reject) {
-        addJob(api, params, resolve, reject);
-    });
-}
-exports.strikeApi = strikeApi;
-function addJob(api, params, resolve, reject) {
-    jobs = jobs.then(function () {
-        return new Promise(function (queueResolve, _) {
-            detectFunction(api)(params, resolve, reject, queueResolve);
-        });
-    });
-}
-function detectFunction(api) {
-    switch (api) {
-        case exports.Api.CreateUser:
-            return createUser;
-        case exports.Api.createQuestion:
-            return createQuestion;
-        case exports.Api.LogIn:
-            return logIn;
-        case exports.Api.AnswerQuestion:
-            return answerQuestion;
-        case exports.Api.AssignUserQuestion:
-            return assignUserQuestion;
-        case exports.Api.WaitAnswerQuestion:
-            return waitAnswerQuestion;
-        case exports.Api.SorryQuestion:
-            return sorryQuestion;
-        case exports.Api.ReplyToReply:
-            return replyToReply;
-        case exports.Api.LogOut:
-            return logOut;
-        case exports.Api.FinishQuestion:
-            return finishQuestion;
-        case exports.Api.AcceptInvitation:
-            return acceptInvitation;
-        case exports.Api.RejectInvitation:
-            return rejectInvitation;
-        case exports.Api.BlockInvitation:
-            return blockInvitation;
-        case exports.Api.Invite:
-            return invite;
-        case exports.Api.DisposeGroup:
-            return disposeGroup;
-        case exports.Api.CreateGroup:
-            return createGroup;
-        case exports.Api.UpdateUser:
-            return updateUser;
-        case exports.Api.DestroyUser:
-            return destroyUser;
-        case exports.Api.ChangePassword:
-            return changePassword;
-        default:
-            throw 'Api not exist';
-    }
+function common(api, params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
 }
 function build(resolve, reject, queueResolve, uri, method, params) {
     if (params === void 0) { params = {}; }
-    base(uri, method)
-        .send(params)
+    if (uri.indexOf(':') !== -1) {
+        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
+    }
+    base(normalized || uri, method)
+        .send(trimmed || params)
         .end(finalize(resolve, reject, queueResolve));
 }
 function base(uri, method) {
@@ -659,150 +655,21 @@ function finalize(resolve, reject, queueResolve) {
         queueResolve();
     };
 }
-function normalize(uri, params) {
-    var questionId = params.questionId;
-    delete params.questionId;
-    var groupId = params.groupId;
-    delete params.groupId;
-    var commentId = params.commentId;
-    delete params.commentId;
-    var invitationId = params.invitationId;
-    delete params.invitationId;
+function normalize(uri, trimmed) {
+    var questionId = trimmed.questionId;
+    delete trimmed.questionId;
+    var groupId = trimmed.groupId;
+    delete trimmed.groupId;
+    var commentId = trimmed.commentId;
+    delete trimmed.commentId;
+    var invitationId = trimmed.invitationId;
+    delete trimmed.invitationId;
     var normalized = uri
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)
         .replace(':groupId', groupId);
-    return { params: params, normalized: normalized };
-}
-function logOut(params, resolve, reject, queueResolve) {
-    request
-        .delete(Uri.logOut)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function common(api, params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
-}
-function createUser(params, resolve, reject, queueResolve) {
-    request
-        .post(Uri.createUser)
-        .send({ users: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function updateUser(params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, Uri.updateUser, Method.Patch, { users: params });
-}
-function destroyUser(params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, Uri.destroyUser, Method.Delete);
-}
-function changePassword(params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, Uri.changePassword, Method.Patch, { users: params });
-}
-function invite(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.invite, params), normalized = _a.normalized, params = _a.params;
-    request
-        .post(normalized)
-        .send({ invitations: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function disposeGroup(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.disposeGroup, params), normalized = _a.normalized, params = _a.params;
-    request
-        .delete(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function createGroup(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.createGroup, params), normalized = _a.normalized, params = _a.params;
-    request
-        .post(normalized)
-        .send({ groups: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function acceptInvitation(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.acceptInvitation, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function blockInvitation(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.blockInvitation, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function rejectInvitation(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.rejectInvitation, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function createQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.createQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .post(normalized)
-        .send({ questions: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function finishQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.finishQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function answerQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.answerQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .send({ questions: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function replyToReply(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.replyToReply, params), normalized = _a.normalized, params = _a.params;
-    request
-        .post(normalized)
-        .send({ questions: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function assignUserQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.assignUserQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .send({ questions: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function sorryQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.sorryQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function waitAnswerQuestion(params, resolve, reject, queueResolve) {
-    var _a = normalize(Uri.waitAnswerQuestion, params), normalized = _a.normalized, params = _a.params;
-    request
-        .patch(normalized)
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
-}
-function logIn(params, resolve, reject, queueResolve) {
-    request
-        .post(Uri.logIn)
-        .send({ user_sessions: params })
-        .set('X-CSRF-Token', token())
-        .end(finalize(resolve, reject, queueResolve));
+    return { trimmed: trimmed, normalized: normalized };
 }
 function token() {
     try {

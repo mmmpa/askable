@@ -5,8 +5,10 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateUser} from './lib/services/strike-api'
+import SubmitButton from './lib/components/submit-button'
+import InputForm from './lib/components/input-form'
 
 enum State{
   Waiting,
@@ -16,9 +18,9 @@ enum State{
 }
 
 class Context extends Root {
-  submit(params:ICreateUser) {
+  submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.CreateUser, params)
+    strike(Api.CreateUser, params)
       .then((result)=> {
         this.setState({result, errors: {}, state: State.Success});
       })
@@ -53,78 +55,48 @@ class Component extends Node {
     }
   }
 
-  get params():ICreateUser {
+  get params() {
     let {name, login, email, password} = this.state;
     return {name, login, email, password};
   }
 
-  setStateHelper(key, value) {
-    let hash = {};
-    hash[key] = value;
-    this.setState(hash);
-  }
-
-  writeInput(type:string, name:string, placeholder?:string) {
-    let errors = this.writeError(name);
-    let state = !!this.writeError(name) ? 'has-error' : 'calm'
-    return <div className="input">
-      <input className={state} {...{type, name, placeholder}} value={this.state[name]}
-             onChange={(e)=> {this.setStateHelper(name, e.target.value)}}/>
-      {errors}
-    </div>
-  }
-
-  writeError(name:string) {
-    if (!this.props.errors) {
-      return null;
-    }
-    let errors = this.props.errors[name];
-    if (!errors) {
-      return null;
-    }
-    return <ul className="error-messages">
-      {errors.map((error)=> <li className="error-message">{error}</li>)}
-    </ul>
-  }
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="user-register sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          登録中
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="user-register submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="send-o"/>
-          登録する
-        </button>;
-    }
-  }
-
   writeForm() {
+    let {state, errors} = this.props;
+    let {name, login, email, password} = this.state;
+
     return <article className="user-register body">
-      <section className="user-register registering-body">
-        <h1 className="user-register registering-title">登録内容を入力してください</h1>
-        <div className="inner form">
-          <section className="user-register input-section">
-            {this.writeInput('text', 'name', '表示するなまえ')}
+      <section className="com border-box-container">
+        <h1 className="com border-box-title-area">登録内容を入力してください</h1>
+        <div className="com form-area">
+          <section className="com input-section">
+            <InputForm {...{
+              errors, type: 'text', name: 'name', placeholder: '表示するなまえ', value: name,
+              onChange: (v)=> this.setState({name: v})
+            }}/>
           </section>
-          <section className="user-register input-section">
-            {this.writeInput('text', 'login', 'ログイン用ID')}
+          <section className="com input-section">
+            <InputForm {...{
+              errors, type: 'text', name: 'login', placeholder: 'ログイン用ID', value: login,
+              onChange: (v)=> this.setState({login: v})
+            }}/>
           </section>
-          <section className="user-register input-section">
-            {this.writeInput('text', 'email', 'メールアドレス')}
+          <section className="com input-section">
+            <InputForm {...{
+              errors, type: 'text', name: 'email', placeholder: 'メールアドレス', value: email,
+              onChange: (v)=> this.setState({email: v})
+            }}/>
           </section>
-          <section className="user-register input-section">
-            {this.writeInput('password', 'password', 'パスワード')}
+          <section className="com input-section">
+            <InputForm {...{
+              errors, type: 'password', name: 'password', placeholder: 'パスワード', value: password,
+              onChange: (v)=> this.setState({password: v})
+            }}/>
           </section>
-          <section className="user-register submit-section">
-            {this.writeSubmit()}
+          <section className="com submit-section">
+            <SubmitButton {...{
+              state, icon: "send-o", text: "登録する", className: 'submit',
+              onClick: ()=>this.dispatch('submit', this.params)
+            }}/>
           </section>
         </div>
       </section>
@@ -134,18 +106,18 @@ class Component extends Node {
   writeResult() {
     let {name, login, email} = this.props.result || {};
     return <article className="user-register body">
-      <section className="user-register registered-body">
-        <h1 className="user-register registered-title">以下の内容で登録されました</h1>
-        <div className="inner">
-          <section className="user-register info-section">
+      <section className="com border-box-container">
+        <h1 className="com border-box-title-area">以下の内容で登録されました</h1>
+        <div className="com form-area">
+          <section className="com input-section">
             <h1 className="user-register info-label">表示するなまえ</h1>
             <p className="user-register info">{name}</p>
           </section>
-          <section className="user-register info-section">
+          <section className="com input-section">
             <h1 className="user-register info-label">ログイン用ID</h1>
             <p className="user-register info">{login}</p>
           </section>
-          <section className="user-register info-section">
+          <section className="com input-section">
             <h1 className="user-register info-label">メールアドレス</h1>
             <p className="user-register info">{email}</p>
           </section>

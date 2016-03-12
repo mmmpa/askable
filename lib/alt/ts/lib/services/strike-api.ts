@@ -3,28 +3,6 @@ declare const Promise;
 
 var jobs = Promise.resolve();
 
-export enum OldApi{
-  CreateUser,
-  createQuestion,
-  LogIn,
-  AnswerQuestion,
-  AssignUserQuestion,
-  WaitAnswerQuestion,
-  SorryQuestion,
-  ReplyToReply,
-  LogOut,
-  FinishQuestion,
-  AcceptInvitation,
-  RejectInvitation,
-  BlockInvitation,
-  Invite,
-  DisposeGroup,
-  CreateGroup,
-  UpdateUser,
-  DestroyUser,
-  ChangePassword
-}
-
 enum Method {
   Get,
   Post,
@@ -33,29 +11,87 @@ enum Method {
   Delete
 }
 
-const Uri = {
-  createUser: '/welcome/new',
-  logIn: '/in',
-  logOut: '/out',
-  createQuestion: '/g/:groupId/me/q/new',
-  answerQuestion: '/g/:groupId/q/:questionId/answer',
-  assignUserQuestion: '/g/:groupId/q/:questionId/assign',
-  waitAnswerQuestion: '/g/:groupId/q/:questionId/wait',
-  sorryQuestion: '/g/:groupId/q/:questionId/sorry',
-  replyToReply: '/g/:groupId/q/:questionId/a/:commentId/res',
-  finishQuestion: '/g/:groupId/q/:questionId/finish',
-  acceptInvitation: '/i/:invitationId/accept',
-  rejectInvitation: '/i/:invitationId/reject',
-  blockInvitation: '/i/:invitationId/block',
-  invite: '/g/:groupId/invitation',
-  disposeGroup: '/g/:groupId',
-  createGroup: '/g/new',
-  updateUser: '/me',
-  destroyUser: '/me',
-  changePassword: '/me/password'
-};
-
 export const Api = {
+  Invite: {
+    uri: '/g/:groupId/invitation',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  DisposeGroup: {
+    uri: '/g/:groupId',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  CreateGroup: {
+    uri: '/g/new',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  AcceptInvitation: {
+    uri: '/i/:invitationId/accept',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  RejectInvitation: {
+    uri: '/i/:invitationId/reject',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  BlockInvitation: {
+    uri: '/i/:invitationId/block',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  CreateQuestion: {
+    uri: '/g/:groupId/me/q/new',
+    method: Method.Post,
+    params: (p)=> ({questions: p})
+  },
+  AnswerQuestion: {
+    uri: '/g/:groupId/q/:questionId/answer',
+    method: Method.Patch,
+    params: (p)=> ({questions: p})
+  },
+  AssignUserQuestion: {
+    uri: '/g/:groupId/q/:questionId/assign',
+    method: Method.Patch,
+    params: (p)=> ({questions: p})
+  },
+  WaitAnswerQuestion: {
+    uri: '/g/:groupId/q/:questionId/wait',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  SorryQuestion: {
+    uri: '/g/:groupId/q/:questionId/sorry',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  ReplyToReply: {
+    uri: '/g/:groupId/q/:questionId/a/:commentId/res',
+    method: Method.Post,
+    params: (p)=> ({questions: p})
+  },
+  FinishQuestion: {
+    uri: '/g/:groupId/q/:questionId/finish',
+    method: Method.Patch,
+    params: (p)=> ({})
+  },
+  LogIn: {
+    uri: '/in',
+    method: Method.Post,
+    params: (p)=> ({user_sessions: p})
+  },
+  LogOut: {
+    uri: '/out',
+    method: Method.Delete,
+    params: (p)=> ({})
+  },
+  CreateUser: {
+    uri: '/welcome/new',
+    method: Method.Post,
+    params: (p)=> ({users: p})
+  },
   UpdateUser: {
     uri: '/me',
     method: Method.Patch,
@@ -91,110 +127,18 @@ function add(api, params, resolve, reject) {
   })
 }
 
-export function strikeApi(api:Api, params?:any):Promise {
-  return new Promise((resolve, reject)=> {
-    addJob(api, params, resolve, reject);
-  });
-}
 
-function addJob(api, params, resolve, reject) {
-  jobs = jobs.then(()=> {
-    return new Promise((queueResolve, _)=> {
-      detectFunction(api)(params, resolve, reject, queueResolve)
-    })
-  })
-}
-
-function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void {
-  switch (api) {
-    case Api.CreateUser:
-      return createUser;
-    case Api.createQuestion:
-      return createQuestion;
-    case Api.LogIn:
-      return logIn;
-    case Api.AnswerQuestion:
-      return answerQuestion;
-    case Api.AssignUserQuestion:
-      return assignUserQuestion;
-    case Api.WaitAnswerQuestion:
-      return waitAnswerQuestion;
-    case Api.SorryQuestion:
-      return sorryQuestion;
-    case Api.ReplyToReply:
-      return replyToReply;
-    case Api.LogOut:
-      return logOut;
-    case Api.FinishQuestion:
-      return finishQuestion;
-    case Api.AcceptInvitation:
-      return acceptInvitation;
-    case Api.RejectInvitation:
-      return rejectInvitation;
-    case Api.BlockInvitation:
-      return blockInvitation;
-    case Api.Invite:
-      return invite;
-    case Api.DisposeGroup:
-      return disposeGroup;
-    case Api.CreateGroup:
-      return createGroup;
-    case Api.UpdateUser:
-      return updateUser;
-    case Api.DestroyUser:
-      return destroyUser;
-    case Api.ChangePassword:
-      return changePassword;
-    default:
-      throw 'Api not exist'
-  }
-}
-
-export interface ICreateUser {
-  name:string,
-  login:string,
-  email:string,
-  password:string
-}
-
-export interface ICreateQuestion {
-  title:string,
-  markdown:string,
-  assigned:string[]
-}
-
-export interface ILogIn {
-  login:string,
-  password:string
-}
-
-export interface IAssign {
-  assigned:string[],
-  questionId:number
-}
-
-export interface IAnswer {
-  markdown:string,
-  questionId:number
-}
-
-export interface IReplyToReply {
-  markdown:string,
-  commentId:number,
-  questionId:number
-}
-
-export interface IWait {
-  questionId:number
-}
-
-export interface ISorry {
-  questionId:number
+function common(api, params, resolve, reject, queueResolve) {
+  build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
 }
 
 function build(resolve, reject, queueResolve, uri, method:Method, params = {}) {
-  base(uri, method)
-    .send(params)
+  if (uri.indexOf(':') !== -1) {
+    var {normalized, trimmed} = normalize(uri, params)
+  }
+
+  base(normalized || uri, method)
+    .send(trimmed || params)
     .end(finalize(resolve, reject, queueResolve));
 }
 
@@ -236,188 +180,22 @@ function finalize(resolve, reject, queueResolve):(a, b)=> void {
   }
 }
 
-function normalize(uri, params) {
-  let questionId = params.questionId;
-  delete params.questionId;
-  let groupId = params.groupId;
-  delete params.groupId;
-  let commentId = params.commentId;
-  delete params.commentId;
-  let invitationId = params.invitationId;
-  delete params.invitationId;
+function normalize(uri, trimmed) {
+  let questionId = trimmed.questionId;
+  delete trimmed.questionId;
+  let groupId = trimmed.groupId;
+  delete trimmed.groupId;
+  let commentId = trimmed.commentId;
+  delete trimmed.commentId;
+  let invitationId = trimmed.invitationId;
+  delete trimmed.invitationId;
   let normalized = uri
     .replace(':invitationId', invitationId)
     .replace(':questionId', questionId)
     .replace(':commentId', commentId)
     .replace(':groupId', groupId);
 
-  return {params, normalized};
-}
-
-function logOut(params:any, resolve, reject, queueResolve) {
-  request
-    .delete(Uri.logOut)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function common(api, params, resolve, reject, queueResolve) {
-  build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
-}
-
-function createUser(params:ICreateUser, resolve, reject, queueResolve) {
-  request
-    .post(Uri.createUser)
-    .send({users: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function updateUser(params, resolve, reject, queueResolve) {
-  build(resolve, reject, queueResolve, Uri.updateUser, Method.Patch, {users: params})
-}
-
-function destroyUser(params, resolve, reject, queueResolve) {
-  build(resolve, reject, queueResolve, Uri.destroyUser, Method.Delete)
-}
-
-function changePassword(params, resolve, reject, queueResolve) {
-  build(resolve, reject, queueResolve, Uri.changePassword, Method.Patch, {users: params})
-}
-
-
-function invite(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.invite, params);
-
-  request
-    .post(normalized)
-    .send({invitations: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function disposeGroup(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.disposeGroup, params);
-
-  request
-    .delete(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function createGroup(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.createGroup, params);
-
-  request
-    .post(normalized)
-    .send({groups: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-
-function acceptInvitation(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.acceptInvitation, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function blockInvitation(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.blockInvitation, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function rejectInvitation(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.rejectInvitation, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-
-function createQuestion(params:ICreateQuestion, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.createQuestion, params);
-
-  request
-    .post(normalized)
-    .send({questions: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function finishQuestion(params:any, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.finishQuestion, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function answerQuestion(params:IAnswer, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.answerQuestion, params);
-
-  request
-    .patch(normalized)
-    .send({questions: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function replyToReply(params:IReplyToReply, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.replyToReply, params);
-
-  request
-    .post(normalized)
-    .send({questions: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function assignUserQuestion(params:IAssign, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.assignUserQuestion, params);
-
-  request
-    .patch(normalized)
-    .send({questions: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function sorryQuestion(params:ISorry, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.sorryQuestion, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-function waitAnswerQuestion(params:IWait, resolve, reject, queueResolve) {
-  let {normalized, params} = normalize(Uri.waitAnswerQuestion, params);
-
-  request
-    .patch(normalized)
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
-}
-
-
-function logIn(params:ILogIn, resolve, reject, queueResolve) {
-  request
-    .post(Uri.logIn)
-    .send({user_sessions: params})
-    .set('X-CSRF-Token', token())
-    .end(finalize(resolve, reject, queueResolve))
+  return {trimmed, normalized};
 }
 
 function token():string {

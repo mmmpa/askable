@@ -8,7 +8,7 @@ import Fa from '../fa'
 
 export default class ErrorMessage extends Node {
   wrap(errors) {
-    switch(true){
+    switch (true) {
       case _.isArray(errors):
         return errors;
       case !errors:
@@ -30,7 +30,7 @@ export default class ErrorMessage extends Node {
     }
 
     return <ul className="error-messages">
-      {myErrors.map((error)=> <li className="error-message">{error}</li>)}
+      {myErrors.map((error, i)=> <li className="error-message" key={i}>{error}</li>)}
     </ul>
   }
 

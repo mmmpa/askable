@@ -12,6 +12,12 @@ import {State} from './lib/models/state'
 import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
 
+enum Target{
+  User,
+  Password,
+  Disposer
+}
+
 class Context extends Root {
   destroySucceed() {
     location.reload();
@@ -72,7 +78,8 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready',
+      state: State.Waiting,
+      targetNow: null,
       user: props.initial,
       errors: {}
     }
@@ -119,7 +126,7 @@ class UserComponent extends Node {
   }
 
   render() {
-    let {state, errors} = this.props;
+    let {state, targetNow, errors} = this.props;
     let {name, login, email} = this.state;
 
     return <section className="user-editor registering-body">
@@ -136,7 +143,7 @@ class UserComponent extends Node {
         </section>
         <section className="user-editor submit-section">
           <SubmitButton {...{
-            state, icon: "send-o", text: "変更する", className: 'submit',
+            state, targetNow, icon: "send-o", text: "変更する", className: 'submit', target: Target.User,
             onClick: ()=>this.dispatch('update', this.updatingParams)
           }}/>
         </section>
@@ -180,7 +187,7 @@ class PasswordComponent extends Node {
   }
 
   render() {
-    let {state, errors} = this.props;
+    let {state, targetNow, errors} = this.props;
     let {passwordNow, password} = this.state;
 
     return <section className="user-editor registering-body">
@@ -200,7 +207,7 @@ class PasswordComponent extends Node {
         </section>
         <section className="user-editor submit-section">
           <SubmitButton {...{
-            state, icon: "key", text: "パスワードを変更する", className: 'submit',
+            state, targetNow, icon: "key", text: "パスワードを変更する", className: 'submit', target: Target.Password,
             onClick: ()=> this.dispatch('changePassword', this.passwordParams)
           }}/>
         </section>
@@ -222,7 +229,7 @@ class DisposerComponent extends Node {
   }
 
   render() {
-    let {state} = this.props;
+    let {state,  targetNow} = this.props;
     let {yes} = this.state;
 
     return <section className="user-editor registering-body">
@@ -236,7 +243,7 @@ class DisposerComponent extends Node {
         </section>
         <section className="user-editor submit-section">
           <SubmitButton {...{
-            state, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes,
+            state, targetNow, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes, target: Target.Disposer,
             onClick: ()=> this.dispatch('destroy')
           }}/>
         </section>
@@ -252,11 +259,7 @@ class UserEditor {
       <article className="user-editor body">
         <Context {...{initial}}>
           <UserComponent/>
-        </Context>
-        <Context>
           <PasswordComponent/>
-        </Context>
-        <Context>
           <DisposerComponent/>
         </Context>
       </article>
