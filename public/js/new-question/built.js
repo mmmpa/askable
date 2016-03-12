@@ -14381,13 +14381,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var eventer_1 = require('./lib/eventer');
+var strike_api_1 = require('./lib/services/strike-api');
+var state_1 = require('./lib/models/state');
 var comment_editor_1 = require('./lib/components/comment-editor');
 var assigner_1 = require('./lib/components/assigner');
-var strike_api_1 = require('./lib/services/strike-api');
 var user_1 = require("./lib/models/user");
 var group_1 = require("./lib/models/group");
 var submit_button_1 = require('./lib/components/submit-button');
-var state_1 = require('./lib/models/state');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {

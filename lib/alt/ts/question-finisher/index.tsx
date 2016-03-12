@@ -6,19 +6,10 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
-import {Api, strikeApi, IAssign, IAnswer, IWait, ISorry} from './lib/services/strike-api'
-import CommentEditor from './lib/components/comment-editor'
-import Assigner from './lib/components/assigner'
-import User from "./lib/models/user";
-import Group from "./lib/models/group";
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
 
 class Context extends Root {
   succeed() {
@@ -33,7 +24,7 @@ class Context extends Root {
     return this.props.groupId;
   }
 
-  setBase(params){
+  setBase(params) {
     params.groupId = this.groupId;
     params.questionId = this.questionId;
     return params;
@@ -41,7 +32,7 @@ class Context extends Root {
 
   submit() {
     this.setState({state: State.Submitting});
-    strikeApi(Api.FinishQuestion, this.setBase({}))
+    strike(Api.FinishQuestion, this.setBase({}))
       .then(()=> {
         this.setState({state: State.Success});
         this.succeed();
@@ -64,28 +55,10 @@ class Context extends Root {
 }
 
 class Component extends Node {
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="new-question sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          送信中
-        </button>;
-      case State.Success:
-        return null;
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="new-question submit"
-                       onClick={()=> this.dispatch('submit')}>
-          <Fa icon="hand-paper-o"/>
-          質問を終了する
-        </button>;
-    }
-  }
-
   render() {
-    if (this.props.state === State.Success) {
+    let {state} = this.props;
+
+    if (state === State.Success) {
       return <article className="finish body">
         <section className="finish registered-body">
           <p className="finish registered-message">送信完了しました</p>
@@ -95,24 +68,28 @@ class Component extends Node {
 
     return <article className="finish body">
       <section className="finish submit-area">
-        {this.writeSubmit()}
+        <SubmitButton {...{
+          state, icon: "thumbs-o-up", text: "質問を終了する", className: 'submit',
+          onClick: ()=>this.dispatch('submit')
+        }}/>
       </section>
     </article>
   }
 }
 
 class QuestionFinisher {
-  static start(dom:HTMLElement, {closed, questionId, groupId}) {
+  static start(dom) {
     if (!dom) {
       return;
     }
-    if (closed) {
-      dom.parentNode.removeChild(dom);
-      return;
-    }
-    ReactDOM.render(<Context {...{questionId, groupId}}>
-      <Component/>
-    </Context>, dom);
+
+    let questionId = dom.getAttribute('data-questionId');
+    let groupId = dom.getAttribute('data-groupId');
+    ReactDOM.render(
+      <Context {...{questionId, groupId}}>
+        <Component/>
+      </Context>
+      , dom);
   }
 }
 

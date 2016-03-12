@@ -5,15 +5,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var eventer_1 = require('./lib/eventer');
-var fa_1 = require('./lib/fa');
 var strike_api_1 = require('./lib/services/strike-api');
-var State;
-(function (State) {
-    State[State["Waiting"] = 0] = "Waiting";
-    State[State["Submitting"] = 1] = "Submitting";
-    State[State["Fail"] = 2] = "Fail";
-    State[State["Success"] = 3] = "Success";
-})(State || (State = {}));
+var state_1 = require('./lib/models/state');
+var submit_button_1 = require('./lib/components/submit-button');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -43,15 +37,15 @@ var Context = (function (_super) {
     };
     Context.prototype.submit = function () {
         var _this = this;
-        this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.FinishQuestion, this.setBase({}))
+        this.setState({ state: state_1.State.Submitting });
+        strike_api_1.strike(strike_api_1.Api.FinishQuestion, this.setBase({}))
             .then(function () {
-            _this.setState({ state: State.Success });
+            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
             var errors = _a.errors;
-            _this.setState({ errors: errors, state: State.Fail });
+            _this.setState({ errors: errors, state: state_1.State.Fail });
             _this.succeed();
         });
     };
@@ -71,46 +65,75 @@ var Component = (function (_super) {
     function Component() {
         _super.apply(this, arguments);
     }
-    Component.prototype.writeSubmit = function () {
-        var _this = this;
-        switch (this.props.state) {
-            case State.Submitting:
-                return React.createElement("button", {"className": "new-question sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "送信中");
-            case State.Success:
-                return null;
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return React.createElement("button", {"className": "new-question submit", "onClick": function () { return _this.dispatch('submit'); }}, React.createElement(fa_1.default, {"icon": "hand-paper-o"}), "質問を終了する");
-        }
-    };
     Component.prototype.render = function () {
-        if (this.props.state === State.Success) {
+        var _this = this;
+        var state = this.props.state;
+        if (state === state_1.State.Success) {
             return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish registered-body"}, React.createElement("p", {"className": "finish registered-message"}, "送信完了しました")));
         }
-        return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish submit-area"}, this.writeSubmit()));
+        return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish submit-area"}, React.createElement(submit_button_1.default, React.__spread({}, {
+            state: state, icon: "thumbs-o-up", text: "質問を終了する", className: 'submit',
+            onClick: function () { return _this.dispatch('submit'); }
+        }))));
     };
     return Component;
 })(eventer_1.Node);
 var QuestionFinisher = (function () {
     function QuestionFinisher() {
     }
-    QuestionFinisher.start = function (dom, _a) {
-        var closed = _a.closed, questionId = _a.questionId, groupId = _a.groupId;
+    QuestionFinisher.start = function (dom) {
         if (!dom) {
             return;
         }
-        if (closed) {
-            dom.parentNode.removeChild(dom);
-            return;
-        }
+        var questionId = dom.getAttribute('data-questionId');
+        var groupId = dom.getAttribute('data-groupId');
         ReactDOM.render(React.createElement(Context, React.__spread({}, { questionId: questionId, groupId: groupId }), React.createElement(Component, null)), dom);
     };
     return QuestionFinisher;
 })();
 window.QuestionFinisher = QuestionFinisher;
 
-},{"./lib/eventer":2,"./lib/fa":3,"./lib/services/strike-api":4}],2:[function(require,module,exports){
+},{"./lib/components/submit-button":2,"./lib/eventer":3,"./lib/models/state":5,"./lib/services/strike-api":6}],2:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var state_1 = require('../models/state');
+var fa_1 = require('../fa');
+var SubmitButton = (function (_super) {
+    __extends(SubmitButton, _super);
+    function SubmitButton() {
+        _super.apply(this, arguments);
+    }
+    Object.defineProperty(SubmitButton.prototype, "className", {
+        get: function () {
+            var _a = this.props, className = _a.className, state = _a.state;
+            return className + (state === state_1.State.Submitting ? ' sending' : ' ready');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SubmitButton.prototype.render = function () {
+        var _a = this.props, text = _a.text, onClick = _a.onClick, icon = _a.icon, state = _a.state, disabled = _a.disabled;
+        var className = this.className;
+        switch (state) {
+            case state_1.State.Submitting:
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+            case state_1.State.Success:
+            case state_1.State.Waiting:
+            case state_1.State.Fail:
+            default:
+                return React.createElement("button", React.__spread({}, { className: className, disabled: disabled, onClick: onClick }), React.createElement(fa_1.default, {"icon": icon}), text);
+        }
+    };
+    return SubmitButton;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SubmitButton;
+
+},{"../eventer":3,"../fa":4,"../models/state":5}],3:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -193,7 +216,7 @@ var Root = (function (_super) {
 })(Node);
 exports.Root = Root;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -223,7 +246,16 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+(function (State) {
+    State[State["Waiting"] = 0] = "Waiting";
+    State[State["Submitting"] = 1] = "Submitting";
+    State[State["Fail"] = 2] = "Fail";
+    State[State["Success"] = 3] = "Success";
+})(exports.State || (exports.State = {}));
+var State = exports.State;
+
+},{}],6:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {

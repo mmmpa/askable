@@ -6,19 +6,14 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
-import {Api, strikeApi, IReplyToReply} from './lib/services/strike-api'
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
 import User from "./lib/models/user";
 import Group from "./lib/models/group";
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
 
 class Context extends Root {
   succeed() {
@@ -37,16 +32,16 @@ class Context extends Root {
     return this.props.groupId;
   }
 
-  setBase(params){
+  setBase(params) {
     params.groupId = this.groupId;
     params.questionId = this.questionId;
     params.commentId = this.commentId;
     return params;
   }
 
-  submit(params:IReplyToReply) {
+  submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.ReplyToReply, this.setBase(params))
+    strike(Api.ReplyToReply, this.setBase(params))
       .then(()=> {
         this.setState({state: State.Success});
         this.succeed();
@@ -80,39 +75,23 @@ class Component extends Node {
     }
   }
 
-  get params():IReplyToReply {
+  get params() {
     let {markdown} = this.state;
     return {markdown, commentId: null, questionId: null};
   }
 
   writeResponder() {
-    let {errors} = this.props;
+    let {errors, state} = this.props;
     let {markdown} = this.state;
     return <section>
       <CommentEditor {...{errors, markdown}} title="not required" onChange={(state)=> this.setState(state)}/>
-      <section className="reply-to-reply submit-section">
-        {this.writeSubmit()}
+      <section className="com submit-section">
+        <SubmitButton {...{
+          state, icon: "reply", text: "返信、または補足する", className: 'reply-to-reply submit',
+          onClick: ()=>this.dispatch('submit', this.params)
+        }}/>
       </section>
     </section>
-  }
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="reply-to-reply sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          送信中
-        </button>;
-      case State.Success:
-        return null;
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="reply-to-reply submit" onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="hand-paper-o"/>
-          返信、もしくは補足する
-        </button>;
-    }
   }
 
   render() {
@@ -133,14 +112,11 @@ class Component extends Node {
 }
 
 class ReplyToReply {
-  static opener(doms, {closed, questionId, groupId}) {
-    if (closed) {
-      _.each(doms, (dom)=> dom.parentNode.parentNode.removeChild(dom.parentNode));
-      return;
-    }
-
+  static opener(doms) {
     _.each(doms, (dom)=> {
-      let commentId = dom.getAttribute('data-id');
+      let questionId = dom.getAttribute('data-questionId');
+      let groupId = dom.getAttribute('data-groupId');
+      let commentId = dom.getAttribute('data-commentId');
       dom.addEventListener('click', (e)=> {
         ReactDOM.render(<Context {...{commentId, questionId, groupId}}>
           <Component/>

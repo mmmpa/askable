@@ -6,15 +6,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var eventer_1 = require('./lib/eventer');
 var strike_api_1 = require('./lib/services/strike-api');
+var state_1 = require('./lib/models/state');
 var fa_1 = require('./lib/fa');
 var submit_button_1 = require('./lib/components/submit-button');
-var State;
-(function (State) {
-    State[State["Waiting"] = 0] = "Waiting";
-    State[State["Submitting"] = 1] = "Submitting";
-    State[State["Fail"] = 2] = "Fail";
-    State[State["Success"] = 3] = "Success";
-})(State || (State = {}));
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -25,14 +19,14 @@ var Context = (function (_super) {
     };
     Context.prototype.submit = function (params) {
         var _this = this;
-        this.setState({ state: State.Submitting });
+        this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.LogIn, params)
             .then(function () {
             _this.succeed();
-            _this.setState({ state: State.Success });
+            _this.setState({ state: state_1.State.Success });
         })
             .catch(function () {
-            _this.setState({ state: State.Fail });
+            _this.setState({ state: state_1.State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
@@ -43,7 +37,7 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: State.Waiting
+            state: state_1.State.Waiting
         };
     };
     return Context;
@@ -67,12 +61,12 @@ var Component = (function (_super) {
     });
     Component.prototype.writeError = function (state) {
         switch (state) {
-            case State.Fail:
+            case state_1.State.Fail:
                 return React.createElement("p", {"className": "com message-area error-message"}, React.createElement(fa_1.default, {"icon": "ban"}), "ログインに失敗しました");
-            case State.Success:
+            case state_1.State.Success:
                 return React.createElement("p", {"className": "com message-area success-message"}, React.createElement(fa_1.default, {"icon": "paw"}), "ログインに成功しました");
-            case State.Submitting:
-            case State.Waiting:
+            case state_1.State.Submitting:
+            case state_1.State.Waiting:
             default:
                 return null;
         }
@@ -97,7 +91,7 @@ var LogIn = (function () {
 })();
 window.LogIn = LogIn;
 
-},{"./lib/components/submit-button":2,"./lib/eventer":3,"./lib/fa":4,"./lib/services/strike-api":6}],2:[function(require,module,exports){
+},{"./lib/components/submit-button":2,"./lib/eventer":3,"./lib/fa":4,"./lib/models/state":5,"./lib/services/strike-api":6}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

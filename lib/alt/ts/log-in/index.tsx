@@ -6,15 +6,9 @@ declare const Promise;
 
 import {Root, Node} from './lib/eventer'
 import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
 
 class Context extends Root {
   succeed() {

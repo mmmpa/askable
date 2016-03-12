@@ -5,14 +5,14 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
-import {Api, strike} from './lib/services/strike-api'
 import User from "./lib/models/user";
 import Group from "./lib/models/group";
 import SubmitButton from './lib/components/submit-button'
-import {State} from './lib/models/state'
 
 class Context extends Root {
   succeed(questionId) {

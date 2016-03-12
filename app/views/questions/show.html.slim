@@ -35,10 +35,10 @@ section.show-question.body
                 li.show-question.assigned-user
                   = detect_respond_icon(user.respond_state)
                   = user.name
-      - if @question.owner?(@user)
-        section#question-finisher
+      - if @question.owner?(@user) && @question.opened?
+        section#question-finisher(data-groupId=@group.id data-questionId=@question.id)
   - if @question.opened?
-    div#response-to-question
+    div#response-to-question(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
       button.respond.opener
         i.fa.fa-folder-open-o
         | 回答フォームを開く
@@ -75,11 +75,11 @@ section.show-question.body
                       section.show-question.response-comment.markdown-html= child.html.html_safe
                       - if @question.opened?
                         div.show-question.reply-to-reply-area
-                          button.show-question.reply-to-reply-button(data-id=child.id)
+                          button.show-question.reply-to-reply-button(data-groupId=@group.id data-questionId=@question.id data-commentId=child.id)
                             i.fa.fa-reply
                             | この回答に返信、もしくは補足する
   - if @question.opened?
-    div#response-to-question-foot
+    div#response-to-question-foot(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
       button.respond.opener
         i.fa.fa-folder-open-o
         | 回答フォームを開く
@@ -90,23 +90,14 @@ script src='/js/question-finisher/built.js'
 javascript:
   (function () {
     var doc = document;
-    var params = {
-      groupId: #{@group.id},
-      questionId: #{@question.id},
-      user: #{@user.to_json.html_safe},
-      group: #{@group.to_json.html_safe},
-      already: #{@question.users.pluck(:login).to_json.html_safe},
-      responded: #{@question.responded?(@user)},
-      owner: #{@question.owner?(@user)},
-      closed: #{@question.closed?}
-    };
-    QuestionFinisher.start(doc.querySelector('#question-finisher'), params);
-    QuestionResponder.opener(doc.querySelectorAll('.respond.opener'), params);
+    var responded = #{@question.responded?(@user)};
 
-    if (!params.responded) {
-      QuestionResponder.start(doc.querySelector('#response-to-question'), params);
+    QuestionFinisher.start(doc.querySelector('#question-finisher'));
+    QuestionResponder.opener(doc.querySelectorAll('.respond.opener'));
+    if(!responded){
+      QuestionResponder.start(doc.querySelector('#response-to-question'));
     }
 
-    ReplyToReply.opener(doc.querySelectorAll('.reply-to-reply-button'), params);
+    ReplyToReply.opener(doc.querySelectorAll('.reply-to-reply-button'));
     AnchorColoring.anchor(doc.querySelectorAll('.reply-anchor, .permalink'));
   })();
