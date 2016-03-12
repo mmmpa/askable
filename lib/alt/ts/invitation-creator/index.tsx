@@ -5,15 +5,12 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateUser} from './lib/services/strike-api'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
+import InputForm from './lib/components/input-form'
+import ErrorMessage from './lib/components/error-message'
 
 class Context extends Root {
   get groupId() {
@@ -27,12 +24,12 @@ class Context extends Root {
 
   submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.Invite, this.setBase(params))
+    strike(Api.Invite, this.setBase(params))
       .then((result)=> {
         this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
-        let {errors} = result
+        let {errors} = result;
         this.setState({errors, state: State.Fail});
       });
   }
@@ -45,7 +42,7 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: State.Waiting
     }
   }
 }
@@ -69,77 +66,60 @@ class Component extends Node {
     }
   }
 
-  writeError(name:string) {
-    if (!this.props.errors) {
-      return null;
-    }
-    let errors = this.props.errors[name];
-    if (!errors) {
-      return null;
-    }
-    return <ul className="error-messages">
-      {errors.map((error)=> <li className="error-message">{error}</li>)}
-    </ul>
-  }
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="sending" disabled={true}>
-          <Fa icon="thumbs-o-up" animation="pulse"/>
-          招待する
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="thumbs-o-up"/>
-          招待する
-        </button>;
-    }
-  }
-
   writeResult() {
     switch (this.props.state) {
       case State.Success:
-        return <p className="invitation success">招待しました</p>
+        return <div className="invitation message-area">
+          <p className="com success-message">招待しました</p>
+        </div>;
       case State.Submitting:
-        return <p className="invitation success">&nbsp;</p>
+        return <div className="invitation message-area"/>;
       case State.Waiting:
         return null;
       case State.Fail:
       default:
-        return this.writeError('any')
+        let {errors} = this.props;
+        let name = 'any';
+        return <div className="invitation message-area">
+          <ErrorMessage {...{errors, name}}/>
+        </div>;
     }
   }
 
   render() {
     let {login} = this.state;
+    let {state} = this.props;
 
     return <section className="invitation body">
       <div className="invitation input-area">
         <section className="invitation login-area">
-          <input type="text" value={login} placeholder="対象ユーザーのログインId"
-                 onChange={(e)=> this.setState({login: e.target.value})}/>
+          <InputForm {...{
+            type: 'text', name: 'login', placeholder: '対象ユーザーのログインId', value: login,
+            onChange: (v)=> this.setState({login: v})
+          }}/>
         </section>
-        {this.writeSubmit()}
+        <SubmitButton {...{
+          state, icon: "thumbs-o-up", text: "招待する", className: 'submit',
+          onClick: ()=>this.dispatch('submit', this.params)
+        }}/>
+        {this.writeResult()}
       </div>
-      {this.writeResult()}
     </section>
   }
 }
 
 class InvitationCreator {
   static start(dom) {
-    if(!dom) {
+    if (!dom) {
       return;
     }
+
     let groupId = dom.getAttribute('data-id');
-    ReactDOM.render(<Context {...{groupId}}>
+    ReactDOM.render(
+      <Context {...{groupId}}>
       <Component/>
-    </Context>, dom);
+    </Context>
+      , dom);
   }
 }
 

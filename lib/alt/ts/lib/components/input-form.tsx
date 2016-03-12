@@ -35,7 +35,7 @@ export default class InputForm extends Node {
   render() {
     let {type, name, placeholder, value, onChange, errors} = this.props;
 
-    let state = !!errors && !!errors[name] ? 'has-error' : 'calm'
+    let state = !!errors && !!errors[name] ? 'has-error' : 'calm';
 
     return <div className="input-form">
       {this.label}

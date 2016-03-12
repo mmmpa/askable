@@ -14,33 +14,33 @@ enum Method {
 export const Api = {
   Invite: {
     uri: '/g/:groupId/invitation',
-    method: Method.Patch,
-    params: (p)=> ({})
+    method: Method.Post,
+    params: (p)=> ({invitations: p})
   },
   DisposeGroup: {
     uri: '/g/:groupId',
-    method: Method.Patch,
-    params: (p)=> ({})
+    method: Method.Delete,
+    params: (p)=> p
   },
   CreateGroup: {
     uri: '/g/new',
-    method: Method.Patch,
-    params: (p)=> ({})
+    method: Method.Post,
+    params: (p)=> ({groups: p})
   },
   AcceptInvitation: {
     uri: '/i/:invitationId/accept',
     method: Method.Patch,
-    params: (p)=> ({})
+    params: (p)=> p
   },
   RejectInvitation: {
     uri: '/i/:invitationId/reject',
     method: Method.Patch,
-    params: (p)=> ({})
+    params: (p)=> p
   },
   BlockInvitation: {
     uri: '/i/:invitationId/block',
     method: Method.Patch,
-    params: (p)=> ({})
+    params: (p)=> p
   },
   CreateQuestion: {
     uri: '/g/:groupId/me/q/new',
@@ -129,16 +129,19 @@ function add(api, params, resolve, reject) {
 
 
 function common(api, params, resolve, reject, queueResolve) {
-  build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+  let {uri} = api;
+  if (uri.indexOf(':') !== -1) {
+    var {normalized, trimmed} = normalize(uri, params);
+    console.log(uri, params, normalized, trimmed)
+  }
+
+  build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
 
 function build(resolve, reject, queueResolve, uri, method:Method, params = {}) {
-  if (uri.indexOf(':') !== -1) {
-    var {normalized, trimmed} = normalize(uri, params)
-  }
 
-  base(normalized || uri, method)
-    .send(trimmed || params)
+  base(uri, method)
+    .send(params)
     .end(finalize(resolve, reject, queueResolve));
 }
 

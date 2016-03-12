@@ -1,12 +1,6 @@
 = stylesheet_link_tag '/css/codemirror.css', media: 'all'
-div#new-question
+div#new-question(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionPage=question_path(question_id: ":questionId"))
 
 script src='/js/new-question/built.js'
 javascript:
-  var params = {
-    user: #{@user.to_json.html_safe},
-    group: #{@group.to_json.html_safe},
-    groupId: #{@group.id},
-    questionPage: '#{question_path(question_id: ":questionId")}'
-  };
-  NewQuestion.start(document.querySelector('#new-question'), params);
+  NewQuestion.start(document.querySelector('#new-question'));

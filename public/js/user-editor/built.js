@@ -496,33 +496,33 @@ var Method;
 exports.Api = {
     Invite: {
         uri: '/g/:groupId/invitation',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ invitations: p }); }
     },
     DisposeGroup: {
         uri: '/g/:groupId',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Delete,
+        params: function (p) { return p; }
     },
     CreateGroup: {
         uri: '/g/new',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ groups: p }); }
     },
     AcceptInvitation: {
         uri: '/i/:invitationId/accept',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     RejectInvitation: {
         uri: '/i/:invitationId/reject',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     BlockInvitation: {
         uri: '/i/:invitationId/block',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     CreateQuestion: {
         uri: '/g/:groupId/me/q/new',
@@ -608,15 +608,17 @@ function add(api, params, resolve, reject) {
     });
 }
 function common(api, params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+    var uri = api.uri;
+    if (uri.indexOf(':') !== -1) {
+        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
+        console.log(uri, params, normalized, trimmed);
+    }
+    build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
 function build(resolve, reject, queueResolve, uri, method, params) {
     if (params === void 0) { params = {}; }
-    if (uri.indexOf(':') !== -1) {
-        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-    }
-    base(normalized || uri, method)
-        .send(trimmed || params)
+    base(uri, method)
+        .send(params)
         .end(finalize(resolve, reject, queueResolve));
 }
 function base(uri, method) {

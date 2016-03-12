@@ -9,13 +9,7 @@ import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import {State} from './lib/models/state'
 
 class Context extends Root {
   submit(params) {
@@ -38,7 +32,7 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: State.Waiting
     }
   }
 }
@@ -60,38 +54,30 @@ class Component extends Node {
     return {name, login, email, password};
   }
 
+  writeInput(type, name, placeholder, errors) {
+    return <section className="com input-section">
+      <InputForm {...{
+        errors, type, name, placeholder, value: this.state[name],
+        onChange: (v)=> {
+          let p = {};
+          p[name] = v;
+          this.setState(p)
+        }
+      }}/>
+    </section>
+  }
+
   writeForm() {
     let {state, errors} = this.props;
-    let {name, login, email, password} = this.state;
 
     return <article className="user-register body">
       <section className="com border-box-container">
         <h1 className="com border-box-title-area">登録内容を入力してください</h1>
         <div className="com form-area">
-          <section className="com input-section">
-            <InputForm {...{
-              errors, type: 'text', name: 'name', placeholder: '表示するなまえ', value: name,
-              onChange: (v)=> this.setState({name: v})
-            }}/>
-          </section>
-          <section className="com input-section">
-            <InputForm {...{
-              errors, type: 'text', name: 'login', placeholder: 'ログイン用ID', value: login,
-              onChange: (v)=> this.setState({login: v})
-            }}/>
-          </section>
-          <section className="com input-section">
-            <InputForm {...{
-              errors, type: 'text', name: 'email', placeholder: 'メールアドレス', value: email,
-              onChange: (v)=> this.setState({email: v})
-            }}/>
-          </section>
-          <section className="com input-section">
-            <InputForm {...{
-              errors, type: 'password', name: 'password', placeholder: 'パスワード', value: password,
-              onChange: (v)=> this.setState({password: v})
-            }}/>
-          </section>
+          {this.writeInput('text', 'name', '表示する名前', errors)}
+          {this.writeInput('text', 'login', 'ログイン用ID', errors)}
+          {this.writeInput('text', 'email', 'メールアドレス', errors)}
+          {this.writeInput('password', 'password', 'パスワード', errors)}
           <section className="com submit-section">
             <SubmitButton {...{
               state, icon: "send-o", text: "登録する", className: 'submit',

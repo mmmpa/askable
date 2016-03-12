@@ -34,7 +34,7 @@ class UserInformation
   end
 
   def all
-    invitations + invitations + messages
+    invitations + messages
   end
 
   def invitations

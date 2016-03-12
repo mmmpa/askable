@@ -5,15 +5,11 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateUser} from './lib/services/strike-api'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
+import InputForm from './lib/components/input-form'
+import {State} from './lib/models/state'
 
 class Context extends Root {
   succeed(groupId) {
@@ -22,7 +18,7 @@ class Context extends Root {
 
   submit(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.CreateGroup, params)
+    strike(Api.CreateGroup, params)
       .then((result)=> {
         this.succeed(result.id);
         this.setState({result, errors: {}, state: State.Success});
@@ -41,7 +37,7 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: State.Waiting
     }
   }
 }
@@ -57,63 +53,41 @@ class Component extends Node {
   }
 
   get params() {
-    let {name, description} = this.state
+    let {name, description} = this.state;
     return {name, description}
   }
 
-  writeError(name:string) {
-    if (!this.props.errors) {
-      return null;
-    }
-    let errors = this.props.errors[name];
-    if (!errors) {
-      return null;
-    }
-    return <ul className="error-messages">
-      {errors.map((error)=> <li className="error-message">{error}</li>)}
-    </ul>
-  }
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          送信中
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="thumbs-o-up"/>
-          作成する
-        </button>;
-    }
+  writeInput(type, name, placeholder, errors) {
+    return <section className="com input-section">
+      <InputForm {...{
+        errors, type, name, placeholder, value: this.state[name],
+        onChange: (v)=> {
+          let p = {};
+          p[name] = v;
+          this.setState(p)
+        }
+      }}/>
+    </section>
   }
 
   render() {
-    let {name, description} = this.state;
+    let {state, errors} = this.props;
 
-    return <section className="new-group body">
-      <h1 className="new-group registering-title">グループを作成する</h1>
-      <section className="new-group registering-body">
-        <section className="new-group input-section">
-          <input type="text" placeholder="グループの名前" value={name}
-                 onChange={(e)=> this.setState({name: e.target.value})}/>
-          {this.writeError('name')}
+    return <article className="new-group body">
+      <div className="com border-box-container">
+        <h1 className="com border-box-title-area">グループを作成する</h1>
+        <section className="com form-area">
+          {this.writeInput('text', 'name', 'グループの名前', errors)}
+          {this.writeInput('text', 'description', 'グループの概要', errors)}
+          <section className="com submit-section">
+            <SubmitButton {...{
+              state, icon: "thumbs-o-up", text: "作成する", className: 'submit',
+              onClick: ()=>this.dispatch('submit', this.params)
+            }}/>
+          </section>
         </section>
-        <section className="new-group input-section">
-          <textarea type="text" placeholder="グループの概要" value={description}
-                    onChange={(e)=> this.setState({description: e.target.value})}/>
-          {this.writeError('description')}
-        </section>
-        <section className="new-group submit-section">
-          {this.writeSubmit()}
-        </section>
-      </section>
-    </section>
+      </div>
+    </article>
   }
 }
 
@@ -122,9 +96,11 @@ class NewGroup {
     if (!dom) {
       return;
     }
-    ReactDOM.render(<Context>
-      <Component/>
-    </Context>, dom);
+    ReactDOM.render(
+      <Context>
+        <Component/>
+      </Context>
+      , dom);
   }
 }
 

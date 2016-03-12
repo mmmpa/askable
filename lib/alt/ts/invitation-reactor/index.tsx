@@ -5,23 +5,18 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {Api, strike} from './lib/services/strike-api'
+import {State} from './lib/models/state'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateUser} from './lib/services/strike-api'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
 
 class Context extends Root {
-  succeed() {
-    location.reload();
-  }
-
   get invitationId() {
     return this.props.invitationId;
+  }
+
+  succeed(){
+    location.reload();
   }
 
   setBase(params) {
@@ -31,9 +26,10 @@ class Context extends Root {
 
   submit(api:Api) {
     this.setState({state: State.Submitting});
-    strikeApi(api, this.setBase({}))
-      .then((result)=> {
-        this.succeed();
+    strike(api, this.setBase({}))
+      .then(()=> {
+        let result = this.resultMessage(api);
+        location.reload();
         this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
@@ -42,23 +38,34 @@ class Context extends Root {
       });
   }
 
+  resultMessage(api){
+    switch(api){
+      case Api.AcceptInvitation:
+        return '参加しました';
+      case Api.RejectInvitation:
+        return 'ことわりました';
+      case Api.BlockInvitation:
+        return 'ブロックしました'
+    }
+  }
+
   listen(to) {
-    to('submitAccept', ()=> {
+    to('accept', ()=> {
       this.submit(Api.AcceptInvitation);
     });
 
-    to('submitReject', ()=> {
+    to('reject', ()=> {
       this.submit(Api.RejectInvitation);
     });
 
-    to('submitBlock', ()=> {
+    to('block', ()=> {
       this.submit(Api.BlockInvitation);
     });
   }
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: State.Waiting
     }
   }
 }
@@ -67,117 +74,30 @@ class Context extends Root {
 class Component extends Node {
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-      login: '',
-      email: '',
-      password: ''
-    }
-  }
-
-  get params():ICreateUser {
-    let {name, login, email, password} = this.state;
-    return {name, login, email, password};
-  }
-
-  setStateHelper(key, value) {
-    let hash = {};
-    hash[key] = value;
-    this.setState(hash);
-  }
-
-  writeInput(type:string, name:string, placeholder?:string) {
-    let errors = this.writeError(name);
-    let state = !!this.writeError(name) ? 'has-error' : 'calm'
-    return <div className="input">
-      <input className={state} {...{type, name, placeholder}} value={this.state[name]}
-             onChange={(e)=> {this.setStateHelper(name, e.target.value)}}/>
-      {errors}
-    </div>
-  }
-
-  writeError(name:string) {
-    if (!this.props.errors) {
-      return null;
-    }
-    let errors = this.props.errors[name];
-    if (!errors) {
-      return null;
-    }
-    return <ul className="error-messages">
-      {errors.map((error)=> <li className="error-message">{error}</li>)}
-    </ul>
-  }
-
-  writeAccept() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="sending" disabled={true}>
-          <Fa icon="thumbs-o-up" animation="pulse"/>
-          参加する
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="submit"
-                       onClick={()=> this.dispatch('submitAccept')}>
-          <Fa icon="thumbs-o-up"/>
-          参加する
-        </button>;
-    }
-  }
-
-  writeReject() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="sending" disabled={true}>
-          <Fa icon="trash" animation="pulse"/>
-          ことわる
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="reject"
-                       onClick={()=> this.dispatch('submitReject')}>
-          <Fa icon="trash"/>
-          ことわる
-        </button>;
-    }
-  }
-
-  writeBlock() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="sending" disabled={true}>
-          <Fa icon="ban" animation="pulse"/>
-          ブロック
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="block"
-                       onClick={()=> this.dispatch('submitBlock')}>
-          <Fa icon="ban"/>
-          ブロック
-        </button>;
-    }
   }
 
   writeForm() {
+    let {state} = this.props;
+
     return <section className="reactor body">
-      {this.writeAccept()}
-      {this.writeReject()}
-      {this.writeBlock()}
+      <SubmitButton {...{
+        state, icon: "thumbs-o-up", text: "参加する", className: 'submit',
+        onClick: ()=>this.dispatch('accept')
+      }}/>
+      <SubmitButton {...{
+        state, icon: "trash", text: "ことわる", className: 'reject',
+        onClick: ()=>this.dispatch('reject')
+      }}/>
+      <SubmitButton {...{
+        state, icon: "ban", text: "ブロック", className: 'block',
+        onClick: ()=>this.dispatch('block')
+      }}/>
     </section>
   }
 
   writeResult() {
-    let {name, login, email} = this.props.result || {};
     return <section className="reactor body">
-      <p className="rector message">送信完了しました</p>
+      <div className="com success-message reactor completed">{this.props.result}</div>
     </section>
   }
 
@@ -196,11 +116,17 @@ class Component extends Node {
 
 class InvitationReactor {
   static start(doms) {
+    if (!doms) {
+      return;
+    }
+
     _.each(doms, (dom)=> {
       let invitationId = dom.getAttribute('data-id');
-      ReactDOM.render(<Context {...{invitationId}}>
-        <Component/>
-      </Context>, dom);
+      ReactDOM.render(
+        <Context {...{invitationId}}>
+          <Component/>
+        </Context>
+        , dom);
     })
   }
 }

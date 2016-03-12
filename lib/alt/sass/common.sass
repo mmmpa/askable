@@ -283,9 +283,6 @@ input.has-error
     .message
       width: 100%
       padding: 10px 0
-    .controller
-      button
-        padding: 3px 10px
 
 .invitation,
 .disposer
@@ -305,7 +302,13 @@ input.has-error
       margin-left: -2px
   &.success
     color: $brand-green
-    margin-bottom: 0
+  &.message-area
+    height: 34px
+    margin-bottom: -10px
+    overflow: hidden
+    p
+      margin: 10px 0 0 0
+      font-size: $size-normal
 
 .group-portal
   &.body
@@ -668,3 +671,20 @@ input.has-error
   &.submit-section
     @extend .form-actions
 
+.reactor
+  &.completed
+    line-height: 26px
+    height: 28px
+  button.submit,
+  button.reject,
+  button.block
+    padding: 0 10px
+    line-height: 26px
+    height: 28px
+  button.submit
+    border-radius: $radius 0 0 $radius
+  button.reject
+    border-radius: 0
+    margin: 0 -1px
+  button.block
+    border-radius: 0 $radius $radius 0

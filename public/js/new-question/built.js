@@ -14381,19 +14381,13 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var eventer_1 = require('./lib/eventer');
-var fa_1 = require('./lib/fa');
 var comment_editor_1 = require('./lib/components/comment-editor');
 var assigner_1 = require('./lib/components/assigner');
 var strike_api_1 = require('./lib/services/strike-api');
 var user_1 = require("./lib/models/user");
 var group_1 = require("./lib/models/group");
-var State;
-(function (State) {
-    State[State["Waiting"] = 0] = "Waiting";
-    State[State["Submitting"] = 1] = "Submitting";
-    State[State["Fail"] = 2] = "Fail";
-    State[State["Success"] = 3] = "Success";
-})(State || (State = {}));
+var submit_button_1 = require('./lib/components/submit-button');
+var state_1 = require('./lib/models/state');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -14415,16 +14409,16 @@ var Context = (function (_super) {
     Context.prototype.submit = function (params) {
         var _this = this;
         this.setBase(params);
-        this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.createQuestion, params)
+        this.setState({ state: state_1.State.Submitting });
+        strike_api_1.strike(strike_api_1.Api.CreateQuestion, params)
             .then(function (_a) {
             var id = _a.id;
-            _this.setState({ state: State.Success });
+            _this.setState({ state: state_1.State.Success });
             _this.succeed(id);
         })
             .catch(function (_a) {
             var errors = _a.errors;
-            _this.setState({ errors: errors, state: State.Fail });
+            _this.setState({ errors: errors, state: state_1.State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
@@ -14435,7 +14429,7 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: 'ready',
+            state: state_1.State.Waiting,
             errors: {}
         };
     };
@@ -14460,43 +14454,35 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Component.prototype.writeSubmit = function () {
-        var _this = this;
-        switch (this.props.state) {
-            case State.Submitting:
-                return React.createElement("button", {"className": "new-question sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "送信中");
-            case State.Success:
-                return null;
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return React.createElement("button", {"className": "new-question submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "hand-paper-o"}), "この内容で質問する");
-        }
-    };
     Component.prototype.render = function () {
         var _this = this;
-        if (this.props.state === State.Success) {
+        if (this.props.state === state_1.State.Success) {
             return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question registered-body"}, React.createElement("p", {"className": "new-question registered-message"}, "投稿完了しました")));
         }
+        var state = this.props.state;
         var _a = this.props, errors = _a.errors, user = _a.user, group = _a.group;
-        return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question box-body"}, React.createElement("div", {"className": "columns"}, React.createElement("section", {"className": "new-question editor-area"}, React.createElement(comment_editor_1.default, React.__spread({}, { errors: errors }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "new-question submit-section"}, this.writeSubmit()))), React.createElement("section", {"className": "new-question assigning-area"}, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, user: user, group: group }, {"onChange": function (state) { return _this.setState(state); }}))))));
+        return React.createElement("article", {"className": "new-question body"}, React.createElement("section", {"className": "new-question box-body"}, React.createElement("div", {"className": "columns"}, React.createElement("section", {"className": "new-question editor-area"}, React.createElement(comment_editor_1.default, React.__spread({}, { errors: errors }, {"onChange": function (state) { return _this.setState(state); }})), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "new-question submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+            state: state, icon: "plus-circle", text: "この内容で質問する", className: 'submit',
+            onClick: function () { return _this.dispatch('submit', _this.params); }
+        }))))), React.createElement("section", {"className": "new-question assigning-area"}, React.createElement(assigner_1.default, React.__spread({}, { errors: errors, user: user, group: group }, {"onChange": function (state) { return _this.setState(state); }}))))));
     };
     return Component;
 })(eventer_1.Node);
 var NewQuestion = (function () {
     function NewQuestion() {
     }
-    NewQuestion.start = function (dom, _a) {
-        var questionPage = _a.questionPage, user = _a.user, group = _a.group, groupId = _a.groupId;
-        var user = new user_1.default(user);
-        var group = new group_1.default(group);
+    NewQuestion.start = function (dom) {
+        var questionPage = dom.getAttribute('data-questionPage');
+        var groupId = dom.getAttribute('data-groupId');
+        var user = new user_1.default(JSON.parse(dom.getAttribute('data-user')));
+        var group = new group_1.default(JSON.parse(dom.getAttribute('data-group')));
         ReactDOM.render(React.createElement(Context, React.__spread({}, { questionPage: questionPage, user: user, group: group, groupId: groupId }), React.createElement(Component, null)), dom);
     };
     return NewQuestion;
 })();
 window.NewQuestion = NewQuestion;
 
-},{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/eventer":17,"./lib/fa":18,"./lib/models/group":19,"./lib/models/user":20,"./lib/services/strike-api":21}],14:[function(require,module,exports){
+},{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/components/submit-button":17,"./lib/eventer":18,"./lib/models/group":20,"./lib/models/state":21,"./lib/models/user":22,"./lib/services/strike-api":23}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14553,7 +14539,7 @@ var Assigner = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Assigner;
 
-},{"../eventer":17,"../fa":18,"./error-messages":16}],15:[function(require,module,exports){
+},{"../eventer":18,"../fa":19,"./error-messages":16}],15:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14667,7 +14653,7 @@ var CommentEditor = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentEditor;
 
-},{"../eventer":17,"../fa":18,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],16:[function(require,module,exports){
+},{"../eventer":18,"../fa":19,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],16:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14693,7 +14679,47 @@ var ErrorMessages = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ErrorMessages;
 
-},{"../eventer":17}],17:[function(require,module,exports){
+},{"../eventer":18}],17:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var state_1 = require('../models/state');
+var fa_1 = require('../fa');
+var SubmitButton = (function (_super) {
+    __extends(SubmitButton, _super);
+    function SubmitButton() {
+        _super.apply(this, arguments);
+    }
+    Object.defineProperty(SubmitButton.prototype, "className", {
+        get: function () {
+            var _a = this.props, className = _a.className, state = _a.state;
+            return className + (state === state_1.State.Submitting ? ' sending' : ' ready');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SubmitButton.prototype.render = function () {
+        var _a = this.props, text = _a.text, onClick = _a.onClick, icon = _a.icon, state = _a.state, disabled = _a.disabled;
+        var className = this.className;
+        switch (state) {
+            case state_1.State.Submitting:
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+            case state_1.State.Success:
+            case state_1.State.Waiting:
+            case state_1.State.Fail:
+            default:
+                return React.createElement("button", React.__spread({}, { className: className, disabled: disabled, onClick: onClick }), React.createElement(fa_1.default, {"icon": icon}), text);
+        }
+    };
+    return SubmitButton;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SubmitButton;
+
+},{"../eventer":18,"../fa":19,"../models/state":21}],18:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14776,7 +14802,7 @@ var Root = (function (_super) {
 })(Node);
 exports.Root = Root;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14806,7 +14832,7 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var user_1 = require("./user");
 var Group = (function () {
     function Group(params) {
@@ -14820,7 +14846,16 @@ var Group = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Group;
 
-},{"./user":20}],20:[function(require,module,exports){
+},{"./user":22}],21:[function(require,module,exports){
+(function (State) {
+    State[State["Waiting"] = 0] = "Waiting";
+    State[State["Submitting"] = 1] = "Submitting";
+    State[State["Fail"] = 2] = "Fail";
+    State[State["Success"] = 3] = "Success";
+})(exports.State || (exports.State = {}));
+var State = exports.State;
+
+},{}],22:[function(require,module,exports){
 var User = (function () {
     function User(params) {
         this.name = params.name;
@@ -14832,7 +14867,7 @@ var User = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = User;
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {
@@ -14845,33 +14880,33 @@ var Method;
 exports.Api = {
     Invite: {
         uri: '/g/:groupId/invitation',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ invitations: p }); }
     },
     DisposeGroup: {
         uri: '/g/:groupId',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Delete,
+        params: function (p) { return p; }
     },
     CreateGroup: {
         uri: '/g/new',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ groups: p }); }
     },
     AcceptInvitation: {
         uri: '/i/:invitationId/accept',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     RejectInvitation: {
         uri: '/i/:invitationId/reject',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     BlockInvitation: {
         uri: '/i/:invitationId/block',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     CreateQuestion: {
         uri: '/g/:groupId/me/q/new',
@@ -14957,15 +14992,17 @@ function add(api, params, resolve, reject) {
     });
 }
 function common(api, params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+    var uri = api.uri;
+    if (uri.indexOf(':') !== -1) {
+        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
+        console.log(uri, params, normalized, trimmed);
+    }
+    build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
 function build(resolve, reject, queueResolve, uri, method, params) {
     if (params === void 0) { params = {}; }
-    if (uri.indexOf(':') !== -1) {
-        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-    }
-    base(normalized || uri, method)
-        .send(trimmed || params)
+    base(uri, method)
+        .send(params)
         .end(finalize(resolve, reject, queueResolve));
 }
 function base(uri, method) {

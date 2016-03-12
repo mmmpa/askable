@@ -8,17 +8,11 @@ import {Root, Node} from './lib/eventer'
 import Fa from './lib/fa'
 import CommentEditor from './lib/components/comment-editor'
 import Assigner from './lib/components/assigner'
-import {Api, strikeApi, ICreateQuestion} from './lib/services/strike-api'
+import {Api, strike} from './lib/services/strike-api'
 import User from "./lib/models/user";
 import Group from "./lib/models/group";
-
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import SubmitButton from './lib/components/submit-button'
+import {State} from './lib/models/state'
 
 class Context extends Root {
   succeed(questionId) {
@@ -29,15 +23,15 @@ class Context extends Root {
     return this.props.groupId;
   }
 
-  setBase(params){
+  setBase(params) {
     params.groupId = this.groupId;
   }
 
-  submit(params:ICreateQuestion) {
+  submit(params) {
     this.setBase(params);
 
     this.setState({state: State.Submitting});
-    strikeApi(Api.createQuestion, params)
+    strike(Api.CreateQuestion, params)
       .then(({id})=> {
         this.setState({state: State.Success});
         this.succeed(id);
@@ -55,7 +49,7 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready',
+      state: State.Waiting,
       errors: {}
     }
   }
@@ -72,31 +66,10 @@ class Component extends Node {
     }
   }
 
-  get params():ICreateQuestion {
+  get params() {
     let {title, markdown, assigned} = this.state;
     return {title, markdown, assigned};
   }
-
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="new-question sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          送信中
-        </button>;
-      case State.Success:
-        return null;
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="new-question submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="hand-paper-o"/>
-          この内容で質問する
-        </button>;
-    }
-  }
-
 
   render() {
     if (this.props.state === State.Success) {
@@ -107,6 +80,8 @@ class Component extends Node {
       </article>
     }
 
+    let {state} = this.props;
+
     let {errors, user, group} = this.props;
     return <article className="new-question body">
       <section className="new-question box-body">
@@ -115,7 +90,10 @@ class Component extends Node {
             <CommentEditor {...{errors}} onChange={(state)=> this.setState(state)}/>
             <div className="inner form">
               <section className="new-question submit-section">
-                {this.writeSubmit()}
+                <SubmitButton {...{
+                  state, icon: "plus-circle", text: "この内容で質問する", className: 'submit',
+                  onClick: ()=>this.dispatch('submit', this.params)
+                }}/>
               </section>
             </div>
           </section>
@@ -129,12 +107,17 @@ class Component extends Node {
 }
 
 class NewQuestion {
-  static start(dom:HTMLElement, {questionPage, user, group, groupId}) {
-    let user = new User(user);
-    let group = new Group(group);
-    ReactDOM.render(<Context {...{questionPage, user, group, groupId}}>
-      <Component/>
-    </Context>, dom);
+  static start(dom) {
+    let questionPage = dom.getAttribute('data-questionPage');
+    let groupId = dom.getAttribute('data-groupId');
+    let user = new User(JSON.parse(dom.getAttribute('data-user')));
+    let group = new Group(JSON.parse(dom.getAttribute('data-group')));
+
+    ReactDOM.render(
+      <Context {...{questionPage, user, group, groupId}}>
+        <Component/>
+      </Context>
+      , dom);
   }
 }
 

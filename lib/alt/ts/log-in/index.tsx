@@ -41,7 +41,7 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: State.Waiting
     }
   }
 }

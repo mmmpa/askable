@@ -11,6 +11,7 @@ import User from './lib/models/user'
 import {State} from './lib/models/state'
 import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
+import InputForm from './lib/components/input-form'
 
 enum Target{
   User,

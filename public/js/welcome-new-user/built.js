@@ -9,13 +9,7 @@ var strike_api_1 = require('./lib/services/strike-api');
 var fa_1 = require('./lib/fa');
 var submit_button_1 = require('./lib/components/submit-button');
 var input_form_1 = require('./lib/components/input-form');
-var State;
-(function (State) {
-    State[State["Waiting"] = 0] = "Waiting";
-    State[State["Submitting"] = 1] = "Submitting";
-    State[State["Fail"] = 2] = "Fail";
-    State[State["Success"] = 3] = "Success";
-})(State || (State = {}));
+var state_1 = require('./lib/models/state');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -23,14 +17,14 @@ var Context = (function (_super) {
     }
     Context.prototype.submit = function (params) {
         var _this = this;
-        this.setState({ state: State.Submitting });
+        this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.CreateUser, params)
             .then(function (result) {
-            _this.setState({ result: result, errors: {}, state: State.Success });
+            _this.setState({ result: result, errors: {}, state: state_1.State.Success });
         })
             .catch(function (result) {
             var errors = result.errors;
-            _this.setState({ errors: errors, state: State.Fail });
+            _this.setState({ errors: errors, state: state_1.State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
@@ -41,7 +35,7 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: 'ready'
+            state: state_1.State.Waiting
         };
     };
     return Context;
@@ -65,23 +59,21 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Component.prototype.writeInput = function (type, name, placeholder, errors) {
+        var _this = this;
+        return React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+            errors: errors, type: type, name: name, placeholder: placeholder, value: this.state[name],
+            onChange: function (v) {
+                var p = {};
+                p[name] = v;
+                _this.setState(p);
+            }
+        })));
+    };
     Component.prototype.writeForm = function () {
         var _this = this;
         var _a = this.props, state = _a.state, errors = _a.errors;
-        var _b = this.state, name = _b.name, login = _b.login, email = _b.email, password = _b.password;
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "登録内容を入力してください"), React.createElement("div", {"className": "com form-area"}, React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'text', name: 'name', placeholder: '表示するなまえ', value: name,
-            onChange: function (v) { return _this.setState({ name: v }); }
-        }))), React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'text', name: 'login', placeholder: 'ログイン用ID', value: login,
-            onChange: function (v) { return _this.setState({ login: v }); }
-        }))), React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'text', name: 'email', placeholder: 'メールアドレス', value: email,
-            onChange: function (v) { return _this.setState({ email: v }); }
-        }))), React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'password', name: 'password', placeholder: 'パスワード', value: password,
-            onChange: function (v) { return _this.setState({ password: v }); }
-        }))), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "登録内容を入力してください"), React.createElement("div", {"className": "com form-area"}, this.writeInput('text', 'name', '表示する名前', errors), this.writeInput('text', 'login', 'ログイン用ID', errors), this.writeInput('text', 'email', 'メールアドレス', errors), this.writeInput('password', 'password', 'パスワード', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "send-o", text: "登録する", className: 'submit',
             onClick: function () { return _this.dispatch('submit', _this.params); }
         }))))));
@@ -92,11 +84,11 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         switch (this.props.state) {
-            case State.Success:
+            case state_1.State.Success:
                 return this.writeResult();
-            case State.Submitting:
-            case State.Waiting:
-            case State.Fail:
+            case state_1.State.Submitting:
+            case state_1.State.Waiting:
+            case state_1.State.Fail:
             default:
                 return this.writeForm();
         }
@@ -113,7 +105,7 @@ var Welcome = (function () {
 })();
 window.Welcome = Welcome;
 
-},{"./lib/components/input-form":3,"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/fa":6,"./lib/services/strike-api":8}],2:[function(require,module,exports){
+},{"./lib/components/input-form":3,"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/fa":6,"./lib/models/state":7,"./lib/services/strike-api":8}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -380,33 +372,33 @@ var Method;
 exports.Api = {
     Invite: {
         uri: '/g/:groupId/invitation',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ invitations: p }); }
     },
     DisposeGroup: {
         uri: '/g/:groupId',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Delete,
+        params: function (p) { return p; }
     },
     CreateGroup: {
         uri: '/g/new',
-        method: Method.Patch,
-        params: function (p) { return ({}); }
+        method: Method.Post,
+        params: function (p) { return ({ groups: p }); }
     },
     AcceptInvitation: {
         uri: '/i/:invitationId/accept',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     RejectInvitation: {
         uri: '/i/:invitationId/reject',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     BlockInvitation: {
         uri: '/i/:invitationId/block',
         method: Method.Patch,
-        params: function (p) { return ({}); }
+        params: function (p) { return p; }
     },
     CreateQuestion: {
         uri: '/g/:groupId/me/q/new',
@@ -492,15 +484,17 @@ function add(api, params, resolve, reject) {
     });
 }
 function common(api, params, resolve, reject, queueResolve) {
-    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+    var uri = api.uri;
+    if (uri.indexOf(':') !== -1) {
+        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
+        console.log(uri, params, normalized, trimmed);
+    }
+    build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
 function build(resolve, reject, queueResolve, uri, method, params) {
     if (params === void 0) { params = {}; }
-    if (uri.indexOf(':') !== -1) {
-        var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-    }
-    base(normalized || uri, method)
-        .send(trimmed || params)
+    base(uri, method)
+        .send(params)
         .end(finalize(resolve, reject, queueResolve));
 }
 function base(uri, method) {
