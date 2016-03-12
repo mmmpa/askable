@@ -6,22 +6,23 @@ declare const Promise;
 
 import {Root, Node} from './lib/eventer'
 import Fa from './lib/fa'
-import {Api, strikeApi, ICreateUser} from './lib/services/strike-api'
+import {Api, strike} from './lib/services/strike-api'
 import User from './lib/models/user'
-
-enum State{
-  Waiting,
-  Submitting,
-  Fail,
-  Success
-}
+import {State} from './lib/models/state'
+import SubmitButton from './lib/components/submit-button'
+import InputForm from './lib/components/input-form'
 
 class Context extends Root {
-  submit(params:ICreateUser) {
+  destroySucceed() {
+    location.reload();
+  }
+
+  update(params) {
     this.setState({state: State.Submitting});
-    strikeApi(Api.CreateUser, params)
+    strike(Api.UpdateUser, params)
       .then((result)=> {
-        this.setState({result, errors: {}, state: State.Success});
+        let user = new User(result);
+        this.setState({result, user, errors: {}, state: State.Success});
       })
       .catch((result)=> {
         let {errors} = result
@@ -29,158 +30,240 @@ class Context extends Root {
       });
   }
 
+  changePassword(params) {
+    this.setState({state: State.Submitting});
+    strike(Api.ChangePassword, params)
+      .then((result)=> {
+        this.setState({result, errors: {}, state: State.Success});
+      })
+      .catch((result)=> {
+        let {errors} = result;
+        errors.passwordNow = errors.password_now
+        this.setState({errors, state: State.Fail});
+      });
+  }
+
+  destroy() {
+    this.setState({state: State.Submitting});
+    strike(Api.DestroyUser)
+      .then((result)=> {
+        this.destroySucceed();
+        this.setState({result, errors: {}, state: State.Success});
+      })
+      .catch((result)=> {
+        let {errors} = result;
+        this.setState({errors, state: State.Fail});
+      });
+  }
+
   listen(to) {
-    to('submit', (params)=> {
-      this.submit(params);
+    to('update', (params)=> {
+      this.update(params);
+    });
+
+    to('destroy', ()=> {
+      this.destroy();
+    });
+
+    to('changePassword', (params)=> {
+      this.changePassword(params);
     });
   }
 
   initialState(props) {
     return {
-      state: 'ready'
+      state: 'ready',
+      user: props.initial,
+      errors: {}
     }
   }
 }
 
-
-class Component extends Node {
+class UserComponent extends Node {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       login: '',
       email: '',
-      password: ''
     }
   }
 
-  get params():ICreateUser {
-    let {name, login, email, password} = this.state;
-    return {name, login, email, password};
+  get updatingParams() {
+    let {name, login, email} = this.state;
+    return {name, login, email};
   }
 
-  setStateHelper(key, value) {
-    let hash = {};
-    hash[key] = value;
-    this.setState(hash);
+  componentDidMount() {
+    this.updateState(this.props);
   }
 
-  writeInput(type:string, name:string, placeholder?:string) {
-    let errors = this.writeError(name);
-    let state = !!this.writeError(name) ? 'has-error' : 'calm'
-    return <div className="input">
-      <input className={state} {...{type, name, placeholder}} value={this.state[name]}
-             onChange={(e)=> {this.setStateHelper(name, e.target.value)}}/>
-      {errors}
-    </div>
+  componentWillUpdate(props, state) {
+    this.updateState(props, this.props);
   }
 
-  writeError(name:string) {
-    if (!this.props.errors) {
-      return null;
+  isToSuccess(nextProps, props?) {
+    if (!props) {
+      return nextProps.state === State.Success;
     }
-    let errors = this.props.errors[name];
-    if (!errors) {
-      return null;
+    return props.state !== State.Success && nextProps.state === State.Success
+  }
+
+  updateState(nextProps, props?) {
+    if (props && (nextProps === props || !this.isToSuccess(nextProps, props))) {
+      return;
     }
-    return <ul className="error-messages">
-      {errors.map((error)=> <li className="error-message">{error}</li>)}
-    </ul>
-  }
 
-  writeSubmit() {
-    switch (this.props.state) {
-      case State.Submitting:
-        return <button className="user-register sending" disabled={true}>
-          <Fa icon="spinner" animation="pulse"/>
-          登録中
-        </button>;
-      case State.Success:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return <button className="user-register submit"
-                       onClick={()=> this.dispatch('submit', this.params)}>
-          <Fa icon="send-o"/>
-          登録する
-        </button>;
-    }
-  }
-
-  writeForm() {
-    return <article className="user-register body">
-      <section className="user-register registering-body">
-        <h1 className="user-register registering-title">登録内容を入力してください</h1>
-        <div className="inner form">
-          <section className="user-register input-section">
-            {this.writeInput('text', 'name', '表示するなまえ')}
-          </section>
-          <section className="user-register input-section">
-            {this.writeInput('text', 'login', 'ログイン用ID')}
-          </section>
-          <section className="user-register input-section">
-            {this.writeInput('text', 'email', 'メールアドレス')}
-          </section>
-          <section className="user-register input-section">
-            {this.writeInput('password', 'password', 'パスワード')}
-          </section>
-          <section className="user-register submit-section">
-            {this.writeSubmit()}
-          </section>
-        </div>
-      </section>
-    </article>
-  }
-
-  writeResult() {
-    let {name, login, email} = this.props.result || {};
-    return <article className="user-register body">
-      <section className="user-register registered-body">
-        <h1 className="user-register registered-title">以下の内容で登録されました</h1>
-        <div className="inner">
-          <section className="user-register info-section">
-            <h1 className="user-register info-label">表示するなまえ</h1>
-            <p className="user-register info">{name}</p>
-          </section>
-          <section className="user-register info-section">
-            <h1 className="user-register info-label">ログイン用ID</h1>
-            <p className="user-register info">{login}</p>
-          </section>
-          <section className="user-register info-section">
-            <h1 className="user-register info-label">メールアドレス</h1>
-            <p className="user-register info">{email}</p>
-          </section>
-          <section className="user-register link-section">
-            <Fa icon="sign-in"/>
-            <a href="/in">ログインページヘ</a>
-          </section>
-        </div>
-      </section>
-    </article>
+    let {name, login, email} = nextProps.user;
+    this.setState({name, login, email})
   }
 
   render() {
-    switch (this.props.state) {
-      case State.Success:
-        return this.writeResult();
-      case State.Submitting:
-      case State.Waiting:
-      case State.Fail:
-      default:
-        return this.writeForm();
+    let {state, errors} = this.props;
+    let {name, login, email} = this.state;
+
+    return <section className="user-editor registering-body">
+      <h1 className="user-editor registering-title">登録内容の変更</h1>
+      <div className="inner form">
+        <section className="user-editor input-section">
+          <InputForm {...{errors, type: 'text', name: 'name', label: '表示するなまえ', value: name, onChange: (v)=> this.setState({name: v})}}/>
+        </section>
+        <section className="user-editor input-section">
+          <InputForm {...{errors, type: 'text', name: 'login', label: 'ログイン用ID', value: login, onChange: (v)=> this.setState({login: v})}}/>
+        </section>
+        <section className="user-editor input-section">
+          <InputForm {...{errors, type: 'text', name: 'email', label: 'メールアドレス', value: email, onChange: (v)=> this.setState({email: v})}}/>
+        </section>
+        <section className="user-editor submit-section">
+          <SubmitButton {...{
+            state, icon: "send-o", text: "変更する", className: 'submit',
+            onClick: ()=>this.dispatch('update', this.updatingParams)
+          }}/>
+        </section>
+      </div>
+    </section>
+  }
+}
+class PasswordComponent extends Node {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: '',
+      passwordNow: '',
     }
+  }
+
+  get passwordParams() {
+    let {passwordNow, password} = this.state;
+    return {passwordNow, password};
+  }
+
+  componentDidMount() {
+    this.clearPassword(this.props);
+  }
+
+  componentWillUpdate(props, state) {
+    this.clearPassword(props, this.props);
+  }
+
+  isToSuccess(nextProps, props?) {
+    if (!props) {
+      return nextProps.state === State.Success;
+    }
+    return props.state !== State.Success && nextProps.state === State.Success
+  }
+
+  clearPassword(nextProps, props?) {
+    if (this.isToSuccess(nextProps, props)) {
+      this.setState({password: '', passwordNow: ''})
+    }
+  }
+
+  render() {
+    let {state, errors} = this.props;
+    let {passwordNow, password} = this.state;
+
+    return <section className="user-editor registering-body">
+      <h1 className="user-editor registering-title">パスワードの変更</h1>
+      <div className="inner form">
+        <section className="user-editor input-section">
+          <InputForm {...{
+            errors, type: 'password', name: 'passwordNow', label: '旧パスワード', value: passwordNow,
+            onChange: (v)=> this.setState({passwordNow: v})
+          }}/>
+        </section>
+        <section className="user-editor input-section">
+          <InputForm {...{
+            errors, type: 'password', name: 'password', label: '新パスワード', value: password,
+            onChange: (v)=> this.setState({password: v})
+          }}/>
+        </section>
+        <section className="user-editor submit-section">
+          <SubmitButton {...{
+            state, icon: "key", text: "パスワードを変更する", className: 'submit',
+            onClick: ()=> this.dispatch('changePassword', this.passwordParams)
+          }}/>
+        </section>
+      </div>
+    </section>
+  }
+}
+
+class DisposerComponent extends Node {
+  constructor(props) {
+    super(props);
+    this.state = {
+      yes: false
+    }
+  }
+
+  destroy() {
+    this.dispatch('destroy');
+  }
+
+  render() {
+    let {state} = this.props;
+    let {yes} = this.state;
+
+    return <section className="user-editor registering-body">
+      <h1 className="user-editor registering-title">アカウントの削除</h1>
+      <div className="inner form">
+        <section className="user-editor dispose-verify">
+          <label>
+            <input type="checkbox" name="yes" checked={yes} onChange={()=> this.setState({yes: !yes})}/>
+            本当に削除する
+          </label>
+        </section>
+        <section className="user-editor submit-section">
+          <SubmitButton {...{
+            state, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes,
+            onClick: ()=> this.dispatch('destroy')
+          }}/>
+        </section>
+      </div>
+    </section>
   }
 }
 
 class UserEditor {
   static start(dom:HTMLElement) {
-    let user = new User(JSON.parse(dom.getAttribute('data-user')));
-    console.log(user);
-    ReactDOM.render(<Context>
-      <Component/>
-    </Context>, dom);
+    let initial = new User(JSON.parse(dom.getAttribute('data-user')));
+    ReactDOM.render(
+      <article className="user-editor body">
+        <Context {...{initial}}>
+          <UserComponent/>
+        </Context>
+        <Context>
+          <PasswordComponent/>
+        </Context>
+        <Context>
+          <DisposerComponent/>
+        </Context>
+      </article>
+      , dom);
   }
 }
+
 
 window.UserEditor = UserEditor;
 

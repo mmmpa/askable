@@ -203,7 +203,11 @@ var Root = (function (_super) {
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
         delete props.children;
-        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
+        var children = this.props.children;
+        if (!children.map) {
+            children = [children];
+        }
+        return React.createElement("div", null, children.map(function (child) { return React.cloneElement(child || React.createElement("div", null, "blank"), props); }));
     };
     return Root;
 })(Node);
@@ -241,6 +245,36 @@ exports.default = Fa;
 
 },{}],4:[function(require,module,exports){
 var jobs = Promise.resolve();
+(function (OldApi) {
+    OldApi[OldApi["CreateUser"] = 0] = "CreateUser";
+    OldApi[OldApi["createQuestion"] = 1] = "createQuestion";
+    OldApi[OldApi["LogIn"] = 2] = "LogIn";
+    OldApi[OldApi["AnswerQuestion"] = 3] = "AnswerQuestion";
+    OldApi[OldApi["AssignUserQuestion"] = 4] = "AssignUserQuestion";
+    OldApi[OldApi["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
+    OldApi[OldApi["SorryQuestion"] = 6] = "SorryQuestion";
+    OldApi[OldApi["ReplyToReply"] = 7] = "ReplyToReply";
+    OldApi[OldApi["LogOut"] = 8] = "LogOut";
+    OldApi[OldApi["FinishQuestion"] = 9] = "FinishQuestion";
+    OldApi[OldApi["AcceptInvitation"] = 10] = "AcceptInvitation";
+    OldApi[OldApi["RejectInvitation"] = 11] = "RejectInvitation";
+    OldApi[OldApi["BlockInvitation"] = 12] = "BlockInvitation";
+    OldApi[OldApi["Invite"] = 13] = "Invite";
+    OldApi[OldApi["DisposeGroup"] = 14] = "DisposeGroup";
+    OldApi[OldApi["CreateGroup"] = 15] = "CreateGroup";
+    OldApi[OldApi["UpdateUser"] = 16] = "UpdateUser";
+    OldApi[OldApi["DestroyUser"] = 17] = "DestroyUser";
+    OldApi[OldApi["ChangePassword"] = 18] = "ChangePassword";
+})(exports.OldApi || (exports.OldApi = {}));
+var OldApi = exports.OldApi;
+var Method;
+(function (Method) {
+    Method[Method["Get"] = 0] = "Get";
+    Method[Method["Post"] = 1] = "Post";
+    Method[Method["Patch"] = 2] = "Patch";
+    Method[Method["Put"] = 3] = "Put";
+    Method[Method["Delete"] = 4] = "Delete";
+})(Method || (Method = {}));
 var Uri = {
     createUser: '/welcome/new',
     logIn: '/in',
@@ -257,27 +291,45 @@ var Uri = {
     blockInvitation: '/i/:invitationId/block',
     invite: '/g/:groupId/invitation',
     disposeGroup: '/g/:groupId',
-    createGroup: '/g/new'
+    createGroup: '/g/new',
+    updateUser: '/me',
+    destroyUser: '/me',
+    changePassword: '/me/password'
 };
-(function (Api) {
-    Api[Api["CreateUser"] = 0] = "CreateUser";
-    Api[Api["createQuestion"] = 1] = "createQuestion";
-    Api[Api["LogIn"] = 2] = "LogIn";
-    Api[Api["AnswerQuestion"] = 3] = "AnswerQuestion";
-    Api[Api["AssignUserQuestion"] = 4] = "AssignUserQuestion";
-    Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
-    Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
-    Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
-    Api[Api["LogOut"] = 8] = "LogOut";
-    Api[Api["FinishQuestion"] = 9] = "FinishQuestion";
-    Api[Api["AcceptInvitation"] = 10] = "AcceptInvitation";
-    Api[Api["RejectInvitation"] = 11] = "RejectInvitation";
-    Api[Api["BlockInvitation"] = 12] = "BlockInvitation";
-    Api[Api["Invite"] = 13] = "Invite";
-    Api[Api["DisposeGroup"] = 14] = "DisposeGroup";
-    Api[Api["CreateGroup"] = 15] = "CreateGroup";
-})(exports.Api || (exports.Api = {}));
-var Api = exports.Api;
+exports.Api = {
+    UpdateUser: {
+        uri: '/me',
+        method: Method.Patch,
+        params: function (p) { return ({ users: p }); }
+    },
+    DestroyUser: {
+        uri: '/me',
+        method: Method.Delete,
+        params: function (p) { return ({}); }
+    },
+    ChangePassword: {
+        uri: '/me/password',
+        method: Method.Patch,
+        params: function (p) {
+            p.password_now = p.passwordNow;
+            delete p.passwordNow;
+            return { users: p };
+        }
+    }
+};
+function strike(api, params) {
+    return new Promise(function (resolve, reject) {
+        add(api, params, resolve, reject);
+    });
+}
+exports.strike = strike;
+function add(api, params, resolve, reject) {
+    jobs = jobs.then(function () {
+        return new Promise(function (queueResolve, _) {
+            common(api, params, resolve, reject, queueResolve);
+        });
+    });
+}
 function strikeApi(api, params) {
     return new Promise(function (resolve, reject) {
         addJob(api, params, resolve, reject);
@@ -293,47 +345,78 @@ function addJob(api, params, resolve, reject) {
 }
 function detectFunction(api) {
     switch (api) {
-        case Api.CreateUser:
+        case exports.Api.CreateUser:
             return createUser;
-        case Api.createQuestion:
+        case exports.Api.createQuestion:
             return createQuestion;
-        case Api.LogIn:
+        case exports.Api.LogIn:
             return logIn;
-        case Api.AnswerQuestion:
+        case exports.Api.AnswerQuestion:
             return answerQuestion;
-        case Api.AssignUserQuestion:
+        case exports.Api.AssignUserQuestion:
             return assignUserQuestion;
-        case Api.WaitAnswerQuestion:
+        case exports.Api.WaitAnswerQuestion:
             return waitAnswerQuestion;
-        case Api.SorryQuestion:
+        case exports.Api.SorryQuestion:
             return sorryQuestion;
-        case Api.ReplyToReply:
+        case exports.Api.ReplyToReply:
             return replyToReply;
-        case Api.LogOut:
+        case exports.Api.LogOut:
             return logOut;
-        case Api.FinishQuestion:
+        case exports.Api.FinishQuestion:
             return finishQuestion;
-        case Api.AcceptInvitation:
+        case exports.Api.AcceptInvitation:
             return acceptInvitation;
-        case Api.RejectInvitation:
+        case exports.Api.RejectInvitation:
             return rejectInvitation;
-        case Api.BlockInvitation:
+        case exports.Api.BlockInvitation:
             return blockInvitation;
-        case Api.Invite:
+        case exports.Api.Invite:
             return invite;
-        case Api.DisposeGroup:
+        case exports.Api.DisposeGroup:
             return disposeGroup;
-        case Api.CreateGroup:
+        case exports.Api.CreateGroup:
             return createGroup;
+        case exports.Api.UpdateUser:
+            return updateUser;
+        case exports.Api.DestroyUser:
+            return destroyUser;
+        case exports.Api.ChangePassword:
+            return changePassword;
         default:
             throw 'Api not exist';
+    }
+}
+function build(resolve, reject, queueResolve, uri, method, params) {
+    if (params === void 0) { params = {}; }
+    base(uri, method)
+        .send(params)
+        .end(finalize(resolve, reject, queueResolve));
+}
+function base(uri, method) {
+    var r = methodEnchantedRequest(request, uri, method);
+    return method === Method.Get
+        ? r
+        : r.set('X-CSRF-Token', token());
+}
+function methodEnchantedRequest(request, uri, method) {
+    switch (method) {
+        case Method.Get:
+            return request.get(uri);
+        case Method.Post:
+            return request.post(uri);
+        case Method.Patch:
+            return request.patch(uri);
+        case Method.Put:
+            return request.put(uri);
+        case Method.Delete:
+            return request.delete(uri);
     }
 }
 function finalize(resolve, reject, queueResolve) {
     return function (err, res) {
         if (!!err) {
             if (!res.body || !res.body.errors) {
-                console.log(err);
                 reject({ errors: { unknown: [err] } });
             }
             else {
@@ -368,12 +451,24 @@ function logOut(params, resolve, reject, queueResolve) {
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
+function common(api, params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+}
 function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
+}
+function updateUser(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.updateUser, Method.Patch, { users: params });
+}
+function destroyUser(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.destroyUser, Method.Delete);
+}
+function changePassword(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.changePassword, Method.Patch, { users: params });
 }
 function invite(params, resolve, reject, queueResolve) {
     var _a = normalize(Uri.invite, params), normalized = _a.normalized, params = _a.params;

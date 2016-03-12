@@ -15,14 +15,23 @@ $background-gray-sub: #fafafa
 button,
 a
   &.submit
-    @extend .btn, .btn-primary
+    &.ready
+      @extend .btn, .btn-primary
+    &.sending
+      @extend .btn, .btn-form
   &.sending
     @extend .btn
   &.block,
   &.dispose
-    @extend .btn, .btn-danger
+    &.ready
+      @extend .btn, .btn-danger
+    &.sending
+      @extend .btn, .btn-form
   &.reject
-    @extend .btn, .btn-form
+    &.ready
+      @extend .btn, .btn-form
+    &.sending
+      @extend .btn, .btn-form
 
 button.default,
 a.default
@@ -265,6 +274,7 @@ input.has-error
   &.success
     color: $brand-green
     margin-bottom: 0
+
 .group-portal
   &.body
     @extend %normal-body
@@ -296,6 +306,7 @@ input.has-error
       padding: 0 20px 0 0
       white-space: nowrap
     list-style: none
+
 .show-question
   &.body
     @extend %normal-body
@@ -560,7 +571,8 @@ input.has-error
   input
     @extend .input-block
 
-.user-register
+.user-register,
+.user-editor
   &.body
     @extend %small-body
   &.registered-body,
@@ -584,6 +596,16 @@ input.has-error
     @extend .input-contrast, .input-block
   &.submit-section
     @extend .form-actions
+  &.dispose-verify
+    input
+      display: inline-block
+      width: $check-size
+      height: $check-size
+      margin-right: 5px
+    span
+      line-height: $check-size
+      display: inline-block
+      vertical-align: top
 
 .user-log-in
   &.body

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     scope 'me' do
       get '', to: 'users#edit', as: :edit_user
       patch '', to: 'users#update'
+      patch 'password', to: 'users#update_password', as: :change_password
       delete '', to: 'users#destroy'
     end
 

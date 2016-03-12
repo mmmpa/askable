@@ -5,131 +5,344 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var eventer_1 = require('./lib/eventer');
-var fa_1 = require('./lib/fa');
 var strike_api_1 = require('./lib/services/strike-api');
 var user_1 = require('./lib/models/user');
-var State;
-(function (State) {
-    State[State["Waiting"] = 0] = "Waiting";
-    State[State["Submitting"] = 1] = "Submitting";
-    State[State["Fail"] = 2] = "Fail";
-    State[State["Success"] = 3] = "Success";
-})(State || (State = {}));
+var state_1 = require('./lib/models/state');
+var submit_button_1 = require('./lib/components/submit-button');
+var input_form_1 = require('./lib/components/input-form');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
         _super.apply(this, arguments);
     }
-    Context.prototype.submit = function (params) {
+    Context.prototype.destroySucceed = function () {
+        location.reload();
+    };
+    Context.prototype.update = function (params) {
         var _this = this;
-        this.setState({ state: State.Submitting });
-        strike_api_1.strikeApi(strike_api_1.Api.CreateUser, params)
+        this.setState({ state: state_1.State.Submitting });
+        strike_api_1.strike(strike_api_1.Api.UpdateUser, params)
             .then(function (result) {
-            _this.setState({ result: result, errors: {}, state: State.Success });
+            var user = new user_1.default(result);
+            _this.setState({ result: result, user: user, errors: {}, state: state_1.State.Success });
         })
             .catch(function (result) {
             var errors = result.errors;
-            _this.setState({ errors: errors, state: State.Fail });
+            _this.setState({ errors: errors, state: state_1.State.Fail });
+        });
+    };
+    Context.prototype.changePassword = function (params) {
+        var _this = this;
+        this.setState({ state: state_1.State.Submitting });
+        strike_api_1.strike(strike_api_1.Api.ChangePassword, params)
+            .then(function (result) {
+            _this.setState({ result: result, errors: {}, state: state_1.State.Success });
+        })
+            .catch(function (result) {
+            var errors = result.errors;
+            errors.passwordNow = errors.password_now;
+            _this.setState({ errors: errors, state: state_1.State.Fail });
+        });
+    };
+    Context.prototype.destroy = function () {
+        var _this = this;
+        this.setState({ state: state_1.State.Submitting });
+        strike_api_1.strike(strike_api_1.Api.DestroyUser)
+            .then(function (result) {
+            _this.destroySucceed();
+            _this.setState({ result: result, errors: {}, state: state_1.State.Success });
+        })
+            .catch(function (result) {
+            var errors = result.errors;
+            _this.setState({ errors: errors, state: state_1.State.Fail });
         });
     };
     Context.prototype.listen = function (to) {
         var _this = this;
-        to('submit', function (params) {
-            _this.submit(params);
+        to('update', function (params) {
+            _this.update(params);
+        });
+        to('destroy', function () {
+            _this.destroy();
+        });
+        to('changePassword', function (params) {
+            _this.changePassword(params);
         });
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: 'ready'
+            state: 'ready',
+            user: props.initial,
+            errors: {}
         };
     };
     return Context;
 })(eventer_1.Root);
-var Component = (function (_super) {
-    __extends(Component, _super);
-    function Component(props) {
+var UserComponent = (function (_super) {
+    __extends(UserComponent, _super);
+    function UserComponent(props) {
         _super.call(this, props);
         this.state = {
             name: '',
             login: '',
             email: '',
-            password: ''
         };
     }
-    Object.defineProperty(Component.prototype, "params", {
+    Object.defineProperty(UserComponent.prototype, "updatingParams", {
         get: function () {
-            var _a = this.state, name = _a.name, login = _a.login, email = _a.email, password = _a.password;
-            return { name: name, login: login, email: email, password: password };
+            var _a = this.state, name = _a.name, login = _a.login, email = _a.email;
+            return { name: name, login: login, email: email };
         },
         enumerable: true,
         configurable: true
     });
-    Component.prototype.setStateHelper = function (key, value) {
-        var hash = {};
-        hash[key] = value;
-        this.setState(hash);
+    UserComponent.prototype.componentDidMount = function () {
+        this.updateState(this.props);
     };
-    Component.prototype.writeInput = function (type, name, placeholder) {
+    UserComponent.prototype.componentWillUpdate = function (props, state) {
+        this.updateState(props, this.props);
+    };
+    UserComponent.prototype.isToSuccess = function (nextProps, props) {
+        if (!props) {
+            return nextProps.state === state_1.State.Success;
+        }
+        return props.state !== state_1.State.Success && nextProps.state === state_1.State.Success;
+    };
+    UserComponent.prototype.updateState = function (nextProps, props) {
+        if (props && (nextProps === props || !this.isToSuccess(nextProps, props))) {
+            return;
+        }
+        var _a = nextProps.user, name = _a.name, login = _a.login, email = _a.email;
+        this.setState({ name: name, login: login, email: email });
+    };
+    UserComponent.prototype.render = function () {
         var _this = this;
-        var errors = this.writeError(name);
-        var state = !!this.writeError(name) ? 'has-error' : 'calm';
-        return React.createElement("div", {"className": "input"}, React.createElement("input", React.__spread({"className": state}, { type: type, name: name, placeholder: placeholder }, {"value": this.state[name], "onChange": function (e) { _this.setStateHelper(name, e.target.value); }})), errors);
+        var _a = this.props, state = _a.state, errors = _a.errors;
+        var _b = this.state, name = _b.name, login = _b.login, email = _b.email;
+        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "登録内容の変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'name', label: '表示するなまえ', value: name, onChange: function (v) { return _this.setState({ name: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'login', label: 'ログイン用ID', value: login, onChange: function (v) { return _this.setState({ login: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'email', label: 'メールアドレス', value: email, onChange: function (v) { return _this.setState({ email: v }); } }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+            state: state, icon: "send-o", text: "変更する", className: 'submit',
+            onClick: function () { return _this.dispatch('update', _this.updatingParams); }
+        })))));
     };
-    Component.prototype.writeError = function (name) {
-        if (!this.props.errors) {
-            return null;
-        }
-        var errors = this.props.errors[name];
-        if (!errors) {
-            return null;
-        }
-        return React.createElement("ul", {"className": "error-messages"}, errors.map(function (error) { return React.createElement("li", {"className": "error-message"}, error); }));
+    return UserComponent;
+})(eventer_1.Node);
+var PasswordComponent = (function (_super) {
+    __extends(PasswordComponent, _super);
+    function PasswordComponent(props) {
+        _super.call(this, props);
+        this.state = {
+            password: '',
+            passwordNow: '',
+        };
+    }
+    Object.defineProperty(PasswordComponent.prototype, "passwordParams", {
+        get: function () {
+            var _a = this.state, passwordNow = _a.passwordNow, password = _a.password;
+            return { passwordNow: passwordNow, password: password };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PasswordComponent.prototype.componentDidMount = function () {
+        this.clearPassword(this.props);
     };
-    Component.prototype.writeSubmit = function () {
+    PasswordComponent.prototype.componentWillUpdate = function (props, state) {
+        this.clearPassword(props, this.props);
+    };
+    PasswordComponent.prototype.isToSuccess = function (nextProps, props) {
+        if (!props) {
+            return nextProps.state === state_1.State.Success;
+        }
+        return props.state !== state_1.State.Success && nextProps.state === state_1.State.Success;
+    };
+    PasswordComponent.prototype.clearPassword = function (nextProps, props) {
+        if (this.isToSuccess(nextProps, props)) {
+            this.setState({ password: '', passwordNow: '' });
+        }
+    };
+    PasswordComponent.prototype.render = function () {
         var _this = this;
-        switch (this.props.state) {
-            case State.Submitting:
-                return React.createElement("button", {"className": "user-register sending", "disabled": true}, React.createElement(fa_1.default, {"icon": "spinner", "animation": "pulse"}), "登録中");
-            case State.Success:
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return React.createElement("button", {"className": "user-register submit", "onClick": function () { return _this.dispatch('submit', _this.params); }}, React.createElement(fa_1.default, {"icon": "send-o"}), "登録する");
-        }
+        var _a = this.props, state = _a.state, errors = _a.errors;
+        var _b = this.state, passwordNow = _b.passwordNow, password = _b.password;
+        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "パスワードの変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+            errors: errors, type: 'password', name: 'passwordNow', label: '旧パスワード', value: passwordNow,
+            onChange: function (v) { return _this.setState({ passwordNow: v }); }
+        }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+            errors: errors, type: 'password', name: 'password', label: '新パスワード', value: password,
+            onChange: function (v) { return _this.setState({ password: v }); }
+        }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+            state: state, icon: "key", text: "パスワードを変更する", className: 'submit',
+            onClick: function () { return _this.dispatch('changePassword', _this.passwordParams); }
+        })))));
     };
-    Component.prototype.writeForm = function () {
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registering-body"}, React.createElement("h1", {"className": "user-register registering-title"}, "登録内容を入力してください"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'name', '表示するなまえ')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'login', 'ログイン用ID')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('text', 'email', 'メールアドレス')), React.createElement("section", {"className": "user-register input-section"}, this.writeInput('password', 'password', 'パスワード')), React.createElement("section", {"className": "user-register submit-section"}, this.writeSubmit()))));
+    return PasswordComponent;
+})(eventer_1.Node);
+var DisposerComponent = (function (_super) {
+    __extends(DisposerComponent, _super);
+    function DisposerComponent(props) {
+        _super.call(this, props);
+        this.state = {
+            yes: false
+        };
+    }
+    DisposerComponent.prototype.destroy = function () {
+        this.dispatch('destroy');
     };
-    Component.prototype.writeResult = function () {
-        var _a = this.props.result || {}, name = _a.name, login = _a.login, email = _a.email;
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "user-register registered-body"}, React.createElement("h1", {"className": "user-register registered-title"}, "以下の内容で登録されました"), React.createElement("div", {"className": "inner"}, React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "表示するなまえ"), React.createElement("p", {"className": "user-register info"}, name)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "ログイン用ID"), React.createElement("p", {"className": "user-register info"}, login)), React.createElement("section", {"className": "user-register info-section"}, React.createElement("h1", {"className": "user-register info-label"}, "メールアドレス"), React.createElement("p", {"className": "user-register info"}, email)), React.createElement("section", {"className": "user-register link-section"}, React.createElement(fa_1.default, {"icon": "sign-in"}), React.createElement("a", {"href": "/in"}, "ログインページヘ")))));
+    DisposerComponent.prototype.render = function () {
+        var _this = this;
+        var state = this.props.state;
+        var yes = this.state.yes;
+        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "アカウントの削除"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor dispose-verify"}, React.createElement("label", null, React.createElement("input", {"type": "checkbox", "name": "yes", "checked": yes, "onChange": function () { return _this.setState({ yes: !yes }); }}), "本当に削除する")), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+            state: state, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes,
+            onClick: function () { return _this.dispatch('destroy'); }
+        })))));
     };
-    Component.prototype.render = function () {
-        switch (this.props.state) {
-            case State.Success:
-                return this.writeResult();
-            case State.Submitting:
-            case State.Waiting:
-            case State.Fail:
-            default:
-                return this.writeForm();
-        }
-    };
-    return Component;
+    return DisposerComponent;
 })(eventer_1.Node);
 var UserEditor = (function () {
     function UserEditor() {
     }
     UserEditor.start = function (dom) {
-        var user = new user_1.default(JSON.parse(dom.getAttribute('data-user')));
-        console.log(user);
-        ReactDOM.render(React.createElement(Context, null, React.createElement(Component, null)), dom);
+        var initial = new user_1.default(JSON.parse(dom.getAttribute('data-user')));
+        ReactDOM.render(React.createElement("article", {"className": "user-editor body"}, React.createElement(Context, React.__spread({}, { initial: initial }), React.createElement(UserComponent, null)), React.createElement(Context, null, React.createElement(PasswordComponent, null)), React.createElement(Context, null, React.createElement(DisposerComponent, null))), dom);
     };
     return UserEditor;
 })();
 window.UserEditor = UserEditor;
 
-},{"./lib/eventer":2,"./lib/fa":3,"./lib/models/user":4,"./lib/services/strike-api":5}],2:[function(require,module,exports){
+},{"./lib/components/input-form":3,"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/models/state":7,"./lib/models/user":8,"./lib/services/strike-api":9}],2:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var ErrorMessage = (function (_super) {
+    __extends(ErrorMessage, _super);
+    function ErrorMessage() {
+        _super.apply(this, arguments);
+    }
+    ErrorMessage.prototype.wrap = function (errors) {
+        switch (true) {
+            case _.isArray(errors):
+                return errors;
+            case !errors:
+                return [];
+            default:
+                return [errors];
+        }
+    };
+    ErrorMessage.prototype.render = function () {
+        var _a = this.props, errors = _a.errors, name = _a.name;
+        if (!errors) {
+            return null;
+        }
+        var myErrors = this.wrap(errors[name]);
+        if (myErrors.length === 0) {
+            return null;
+        }
+        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error) { return React.createElement("li", {"className": "error-message"}, error); }));
+    };
+    return ErrorMessage;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ErrorMessage;
+
+},{"../eventer":5}],3:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var state_1 = require('../models/state');
+var error_message_1 = require('./error-message');
+var InputForm = (function (_super) {
+    __extends(InputForm, _super);
+    function InputForm(props) {
+        _super.call(this, props);
+        this.state = {
+            value: this.props.initialValue
+        };
+    }
+    Object.defineProperty(InputForm.prototype, "className", {
+        get: function () {
+            var _a = this.props, className = _a.className, state = _a.state;
+            return className + (state === state_1.State.Submitting ? ' sending' : ' ready');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InputForm.prototype, "label", {
+        get: function () {
+            var label = this.props.label;
+            if (!label) {
+                return null;
+            }
+            return React.createElement("label", null, label);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InputForm.prototype, "error", {
+        get: function () {
+            var _a = this.props, errors = _a.errors, name = _a.name;
+            return React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: name }));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InputForm.prototype.render = function () {
+        var _a = this.props, type = _a.type, name = _a.name, placeholder = _a.placeholder, value = _a.value, onChange = _a.onChange, errors = _a.errors;
+        var state = !!errors && !!errors[name] ? 'has-error' : 'calm';
+        return React.createElement("div", {"className": "input-form"}, this.label, React.createElement("input", React.__spread({"className": state}, { type: type, name: name, placeholder: placeholder, value: value, onChange: function (e) { return onChange(e.target.value); } })), this.error);
+    };
+    return InputForm;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = InputForm;
+
+},{"../eventer":5,"../models/state":7,"./error-message":2}],4:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var state_1 = require('../models/state');
+var fa_1 = require('../fa');
+var SubmitButton = (function (_super) {
+    __extends(SubmitButton, _super);
+    function SubmitButton() {
+        _super.apply(this, arguments);
+    }
+    Object.defineProperty(SubmitButton.prototype, "className", {
+        get: function () {
+            var _a = this.props, className = _a.className, state = _a.state;
+            return className + (state === state_1.State.Submitting ? ' sending' : ' ready');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SubmitButton.prototype.render = function () {
+        var _a = this.props, text = _a.text, onClick = _a.onClick, icon = _a.icon, state = _a.state, disabled = _a.disabled;
+        var className = this.className;
+        switch (state) {
+            case state_1.State.Submitting:
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+            case state_1.State.Success:
+            case state_1.State.Waiting:
+            case state_1.State.Fail:
+            default:
+                return React.createElement("button", React.__spread({}, { className: className, disabled: disabled, onClick: onClick }), React.createElement(fa_1.default, {"icon": icon}), text);
+        }
+    };
+    return SubmitButton;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SubmitButton;
+
+},{"../eventer":5,"../fa":6,"../models/state":7}],5:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -199,13 +412,17 @@ var Root = (function (_super) {
     Root.prototype.render = function () {
         var props = _.merge(_.clone(this.props), this.state);
         delete props.children;
-        return React.cloneElement(this.props.children || React.createElement("div", null, "blank"), props);
+        var children = this.props.children;
+        if (!children.map) {
+            children = [children];
+        }
+        return React.createElement("div", null, children.map(function (child) { return React.cloneElement(child || React.createElement("div", null, "blank"), props); }));
     };
     return Root;
 })(Node);
 exports.Root = Root;
 
-},{}],3:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -235,7 +452,16 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],4:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+(function (State) {
+    State[State["Waiting"] = 0] = "Waiting";
+    State[State["Submitting"] = 1] = "Submitting";
+    State[State["Fail"] = 2] = "Fail";
+    State[State["Success"] = 3] = "Success";
+})(exports.State || (exports.State = {}));
+var State = exports.State;
+
+},{}],8:[function(require,module,exports){
 var User = (function () {
     function User(params) {
         this.name = params.name;
@@ -247,8 +473,38 @@ var User = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = User;
 
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var jobs = Promise.resolve();
+(function (OldApi) {
+    OldApi[OldApi["CreateUser"] = 0] = "CreateUser";
+    OldApi[OldApi["createQuestion"] = 1] = "createQuestion";
+    OldApi[OldApi["LogIn"] = 2] = "LogIn";
+    OldApi[OldApi["AnswerQuestion"] = 3] = "AnswerQuestion";
+    OldApi[OldApi["AssignUserQuestion"] = 4] = "AssignUserQuestion";
+    OldApi[OldApi["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
+    OldApi[OldApi["SorryQuestion"] = 6] = "SorryQuestion";
+    OldApi[OldApi["ReplyToReply"] = 7] = "ReplyToReply";
+    OldApi[OldApi["LogOut"] = 8] = "LogOut";
+    OldApi[OldApi["FinishQuestion"] = 9] = "FinishQuestion";
+    OldApi[OldApi["AcceptInvitation"] = 10] = "AcceptInvitation";
+    OldApi[OldApi["RejectInvitation"] = 11] = "RejectInvitation";
+    OldApi[OldApi["BlockInvitation"] = 12] = "BlockInvitation";
+    OldApi[OldApi["Invite"] = 13] = "Invite";
+    OldApi[OldApi["DisposeGroup"] = 14] = "DisposeGroup";
+    OldApi[OldApi["CreateGroup"] = 15] = "CreateGroup";
+    OldApi[OldApi["UpdateUser"] = 16] = "UpdateUser";
+    OldApi[OldApi["DestroyUser"] = 17] = "DestroyUser";
+    OldApi[OldApi["ChangePassword"] = 18] = "ChangePassword";
+})(exports.OldApi || (exports.OldApi = {}));
+var OldApi = exports.OldApi;
+var Method;
+(function (Method) {
+    Method[Method["Get"] = 0] = "Get";
+    Method[Method["Post"] = 1] = "Post";
+    Method[Method["Patch"] = 2] = "Patch";
+    Method[Method["Put"] = 3] = "Put";
+    Method[Method["Delete"] = 4] = "Delete";
+})(Method || (Method = {}));
 var Uri = {
     createUser: '/welcome/new',
     logIn: '/in',
@@ -265,27 +521,45 @@ var Uri = {
     blockInvitation: '/i/:invitationId/block',
     invite: '/g/:groupId/invitation',
     disposeGroup: '/g/:groupId',
-    createGroup: '/g/new'
+    createGroup: '/g/new',
+    updateUser: '/me',
+    destroyUser: '/me',
+    changePassword: '/me/password'
 };
-(function (Api) {
-    Api[Api["CreateUser"] = 0] = "CreateUser";
-    Api[Api["createQuestion"] = 1] = "createQuestion";
-    Api[Api["LogIn"] = 2] = "LogIn";
-    Api[Api["AnswerQuestion"] = 3] = "AnswerQuestion";
-    Api[Api["AssignUserQuestion"] = 4] = "AssignUserQuestion";
-    Api[Api["WaitAnswerQuestion"] = 5] = "WaitAnswerQuestion";
-    Api[Api["SorryQuestion"] = 6] = "SorryQuestion";
-    Api[Api["ReplyToReply"] = 7] = "ReplyToReply";
-    Api[Api["LogOut"] = 8] = "LogOut";
-    Api[Api["FinishQuestion"] = 9] = "FinishQuestion";
-    Api[Api["AcceptInvitation"] = 10] = "AcceptInvitation";
-    Api[Api["RejectInvitation"] = 11] = "RejectInvitation";
-    Api[Api["BlockInvitation"] = 12] = "BlockInvitation";
-    Api[Api["Invite"] = 13] = "Invite";
-    Api[Api["DisposeGroup"] = 14] = "DisposeGroup";
-    Api[Api["CreateGroup"] = 15] = "CreateGroup";
-})(exports.Api || (exports.Api = {}));
-var Api = exports.Api;
+exports.Api = {
+    UpdateUser: {
+        uri: '/me',
+        method: Method.Patch,
+        params: function (p) { return ({ users: p }); }
+    },
+    DestroyUser: {
+        uri: '/me',
+        method: Method.Delete,
+        params: function (p) { return ({}); }
+    },
+    ChangePassword: {
+        uri: '/me/password',
+        method: Method.Patch,
+        params: function (p) {
+            p.password_now = p.passwordNow;
+            delete p.passwordNow;
+            return { users: p };
+        }
+    }
+};
+function strike(api, params) {
+    return new Promise(function (resolve, reject) {
+        add(api, params, resolve, reject);
+    });
+}
+exports.strike = strike;
+function add(api, params, resolve, reject) {
+    jobs = jobs.then(function () {
+        return new Promise(function (queueResolve, _) {
+            common(api, params, resolve, reject, queueResolve);
+        });
+    });
+}
 function strikeApi(api, params) {
     return new Promise(function (resolve, reject) {
         addJob(api, params, resolve, reject);
@@ -301,47 +575,78 @@ function addJob(api, params, resolve, reject) {
 }
 function detectFunction(api) {
     switch (api) {
-        case Api.CreateUser:
+        case exports.Api.CreateUser:
             return createUser;
-        case Api.createQuestion:
+        case exports.Api.createQuestion:
             return createQuestion;
-        case Api.LogIn:
+        case exports.Api.LogIn:
             return logIn;
-        case Api.AnswerQuestion:
+        case exports.Api.AnswerQuestion:
             return answerQuestion;
-        case Api.AssignUserQuestion:
+        case exports.Api.AssignUserQuestion:
             return assignUserQuestion;
-        case Api.WaitAnswerQuestion:
+        case exports.Api.WaitAnswerQuestion:
             return waitAnswerQuestion;
-        case Api.SorryQuestion:
+        case exports.Api.SorryQuestion:
             return sorryQuestion;
-        case Api.ReplyToReply:
+        case exports.Api.ReplyToReply:
             return replyToReply;
-        case Api.LogOut:
+        case exports.Api.LogOut:
             return logOut;
-        case Api.FinishQuestion:
+        case exports.Api.FinishQuestion:
             return finishQuestion;
-        case Api.AcceptInvitation:
+        case exports.Api.AcceptInvitation:
             return acceptInvitation;
-        case Api.RejectInvitation:
+        case exports.Api.RejectInvitation:
             return rejectInvitation;
-        case Api.BlockInvitation:
+        case exports.Api.BlockInvitation:
             return blockInvitation;
-        case Api.Invite:
+        case exports.Api.Invite:
             return invite;
-        case Api.DisposeGroup:
+        case exports.Api.DisposeGroup:
             return disposeGroup;
-        case Api.CreateGroup:
+        case exports.Api.CreateGroup:
             return createGroup;
+        case exports.Api.UpdateUser:
+            return updateUser;
+        case exports.Api.DestroyUser:
+            return destroyUser;
+        case exports.Api.ChangePassword:
+            return changePassword;
         default:
             throw 'Api not exist';
+    }
+}
+function build(resolve, reject, queueResolve, uri, method, params) {
+    if (params === void 0) { params = {}; }
+    base(uri, method)
+        .send(params)
+        .end(finalize(resolve, reject, queueResolve));
+}
+function base(uri, method) {
+    var r = methodEnchantedRequest(request, uri, method);
+    return method === Method.Get
+        ? r
+        : r.set('X-CSRF-Token', token());
+}
+function methodEnchantedRequest(request, uri, method) {
+    switch (method) {
+        case Method.Get:
+            return request.get(uri);
+        case Method.Post:
+            return request.post(uri);
+        case Method.Patch:
+            return request.patch(uri);
+        case Method.Put:
+            return request.put(uri);
+        case Method.Delete:
+            return request.delete(uri);
     }
 }
 function finalize(resolve, reject, queueResolve) {
     return function (err, res) {
         if (!!err) {
             if (!res.body || !res.body.errors) {
-                console.log(err);
                 reject({ errors: { unknown: [err] } });
             }
             else {
@@ -376,12 +681,24 @@ function logOut(params, resolve, reject, queueResolve) {
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
 }
+function common(api, params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+}
 function createUser(params, resolve, reject, queueResolve) {
     request
         .post(Uri.createUser)
         .send({ users: params })
         .set('X-CSRF-Token', token())
         .end(finalize(resolve, reject, queueResolve));
+}
+function updateUser(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.updateUser, Method.Patch, { users: params });
+}
+function destroyUser(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.destroyUser, Method.Delete);
+}
+function changePassword(params, resolve, reject, queueResolve) {
+    build(resolve, reject, queueResolve, Uri.changePassword, Method.Patch, { users: params });
 }
 function invite(params, resolve, reject, queueResolve) {
     var _a = normalize(Uri.invite, params), normalized = _a.normalized, params = _a.params;

@@ -3,6 +3,36 @@ declare const Promise;
 
 var jobs = Promise.resolve();
 
+export enum OldApi{
+  CreateUser,
+  createQuestion,
+  LogIn,
+  AnswerQuestion,
+  AssignUserQuestion,
+  WaitAnswerQuestion,
+  SorryQuestion,
+  ReplyToReply,
+  LogOut,
+  FinishQuestion,
+  AcceptInvitation,
+  RejectInvitation,
+  BlockInvitation,
+  Invite,
+  DisposeGroup,
+  CreateGroup,
+  UpdateUser,
+  DestroyUser,
+  ChangePassword
+}
+
+enum Method {
+  Get,
+  Post,
+  Patch,
+  Put,
+  Delete
+}
+
 const Uri = {
   createUser: '/welcome/new',
   logIn: '/in',
@@ -19,26 +49,46 @@ const Uri = {
   blockInvitation: '/i/:invitationId/block',
   invite: '/g/:groupId/invitation',
   disposeGroup: '/g/:groupId',
-  createGroup: '/g/new'
+  createGroup: '/g/new',
+  updateUser: '/me',
+  destroyUser: '/me',
+  changePassword: '/me/password'
 };
 
-export enum Api{
-  CreateUser,
-  createQuestion,
-  LogIn,
-  AnswerQuestion,
-  AssignUserQuestion,
-  WaitAnswerQuestion,
-  SorryQuestion,
-  ReplyToReply,
-  LogOut,
-  FinishQuestion,
-  AcceptInvitation,
-  RejectInvitation,
-  BlockInvitation,
-  Invite,
-  DisposeGroup,
-  CreateGroup
+export const Api = {
+  UpdateUser: {
+    uri: '/me',
+    method: Method.Patch,
+    params: (p)=> ({users: p})
+  },
+  DestroyUser: {
+    uri: '/me',
+    method: Method.Delete,
+    params: (p)=> ({})
+  },
+  ChangePassword: {
+    uri: '/me/password',
+    method: Method.Patch,
+    params: (p)=> {
+      p.password_now = p.passwordNow;
+      delete p.passwordNow;
+      return {users: p};
+    }
+  }
+};
+
+export function strike(api, params?:any):Promise {
+  return new Promise((resolve, reject)=> {
+    add(api, params, resolve, reject);
+  });
+}
+
+function add(api, params, resolve, reject) {
+  jobs = jobs.then(()=> {
+    return new Promise((queueResolve, _)=> {
+      common(api, params, resolve, reject, queueResolve);
+    })
+  })
 }
 
 export function strikeApi(api:Api, params?:any):Promise {
@@ -89,6 +139,12 @@ function detectFunction(api:Api):(params, resolve, reject, queueResolve)=> void 
       return disposeGroup;
     case Api.CreateGroup:
       return createGroup;
+    case Api.UpdateUser:
+      return updateUser;
+    case Api.DestroyUser:
+      return destroyUser;
+    case Api.ChangePassword:
+      return changePassword;
     default:
       throw 'Api not exist'
   }
@@ -136,11 +192,39 @@ export interface ISorry {
   questionId:number
 }
 
+function build(resolve, reject, queueResolve, uri, method:Method, params = {}) {
+  base(uri, method)
+    .send(params)
+    .end(finalize(resolve, reject, queueResolve));
+}
+
+function base(uri, method:Method) {
+  let r = methodEnchantedRequest(request, uri, method);
+
+  return method === Method.Get
+    ? r
+    : r.set('X-CSRF-Token', token())
+}
+
+function methodEnchantedRequest(request, uri, method:Method) {
+  switch (method) {
+    case Method.Get:
+      return request.get(uri);
+    case Method.Post:
+      return request.post(uri);
+    case Method.Patch:
+      return request.patch(uri);
+    case Method.Put:
+      return request.put(uri);
+    case Method.Delete:
+      return request.delete(uri);
+  }
+}
+
 function finalize(resolve, reject, queueResolve):(a, b)=> void {
   return (err, res)=> {
     if (!!err) {
       if (!res.body || !res.body.errors) {
-        console.log(err)
         reject({errors: {unknown: [err]}});
       } else {
         reject(res.body);
@@ -177,6 +261,9 @@ function logOut(params:any, resolve, reject, queueResolve) {
     .end(finalize(resolve, reject, queueResolve))
 }
 
+function common(api, params, resolve, reject, queueResolve) {
+  build(resolve, reject, queueResolve, api.uri, api.method, api.params(params));
+}
 
 function createUser(params:ICreateUser, resolve, reject, queueResolve) {
   request
@@ -185,6 +272,19 @@ function createUser(params:ICreateUser, resolve, reject, queueResolve) {
     .set('X-CSRF-Token', token())
     .end(finalize(resolve, reject, queueResolve))
 }
+
+function updateUser(params, resolve, reject, queueResolve) {
+  build(resolve, reject, queueResolve, Uri.updateUser, Method.Patch, {users: params})
+}
+
+function destroyUser(params, resolve, reject, queueResolve) {
+  build(resolve, reject, queueResolve, Uri.destroyUser, Method.Delete)
+}
+
+function changePassword(params, resolve, reject, queueResolve) {
+  build(resolve, reject, queueResolve, Uri.changePassword, Method.Patch, {users: params})
+}
+
 
 function invite(params:any, resolve, reject, queueResolve) {
   let {normalized, params} = normalize(Uri.invite, params);
