@@ -12,7 +12,7 @@ class UserInformation
   end
 
   def information
-    converted.sort_by(&:created_at)
+    converted.sort_by(&:created_at).reverse
   end
 
   def converted
@@ -22,10 +22,17 @@ class UserInformation
   def convert(model)
     case model
       when GroupUser
-        UserInformationItem.new(
+        Item.new(
           id: model.id,
           type: :invitation,
           message: "「#{model.group.name}」に招待されています",
+          created_at: model.created_at
+        )
+      when Message
+        Item.new(
+          id: model.id,
+          type: :message,
+          message: model.title,
           created_at: model.created_at
         )
       else
@@ -42,18 +49,19 @@ class UserInformation
   end
 
   def messages
-    []
+    user.messages
   end
-end
 
-class UserInformationItem
-  include PrettyDate
+  class Item
+    include PrettyDate
 
-  attr_accessor :id, :type, :message, :created_at, :src
+    attr_accessor :id, :type, :message, :created_at, :src
 
-  def initialize(**options)
-    options.each_pair do |k, v|
-      self.send("#{k}=", v)
+    def initialize(**options)
+      options.each_pair do |k, v|
+        self.send("#{k}=", v)
+      end
     end
   end
 end
+

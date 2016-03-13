@@ -27,7 +27,7 @@ module SpecialUser
     end
 
     def system?
-      login == 'a'
+      login.in?('a'..'z')
     end
   end
 end

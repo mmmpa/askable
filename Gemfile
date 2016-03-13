@@ -48,7 +48,7 @@ end
 group :development do
   gem 'bullet'
   gem 'rack-mini-profiler'
-  gem 'annotate', require: false
+  gem 'annotate'
   gem 'awesome_print'
   gem 'hirb'
   gem 'hirb-unicode'

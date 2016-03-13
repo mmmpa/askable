@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308215651) do
+ActiveRecord::Schema.define(version: 20160313021713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,22 +77,20 @@ ActiveRecord::Schema.define(version: 20160308215651) do
 
   add_index "groups", ["user_id"], name: "index_groups_on_user_id", using: :btree
 
-  create_table "message_users", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "message_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "message_users", ["message_id"], name: "index_message_users_on_message_id", using: :btree
-  add_index "message_users", ["user_id"], name: "index_message_users_on_user_id", using: :btree
-
   create_table "messages", force: :cascade do |t|
-    t.text     "markdown"
-    t.text     "html"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "owner_id",                  null: false
+    t.integer  "user_id",                   null: false
+    t.boolean  "owner_own",  default: true, null: false
+    t.boolean  "user_own",   default: true, null: false
+    t.string   "title",                     null: false
+    t.text     "markdown",                  null: false
+    t.text     "html",                      null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
+
+  add_index "messages", ["owner_id"], name: "index_messages_on_owner_id", using: :btree
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
     t.string   "title",      null: false
@@ -108,6 +106,8 @@ ActiveRecord::Schema.define(version: 20160308215651) do
     t.string   "name",                null: false
     t.string   "login",               null: false
     t.string   "email",               null: false
+    t.string   "new_email"
+    t.string   "new_email_token"
     t.string   "crypted_password",    null: false
     t.string   "password_salt",       null: false
     t.string   "persistence_token"
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20160308215651) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
+  add_index "users", ["new_email"], name: "index_users_on_new_email", unique: true, using: :btree
+  add_index "users", ["new_email_token"], name: "index_users_on_new_email_token", unique: true, using: :btree
 
-  add_foreign_key "message_users", "messages"
-  add_foreign_key "message_users", "users"
 end

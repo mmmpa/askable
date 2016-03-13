@@ -10,7 +10,12 @@ article.portal.body
           - @information.each do |information|
             li.portal.information-table-item(class=information.type)
               time= information.pretty_date
-              section.message= information.message
+              - if information.type == :message
+                section.message
+                  i.fa.fa-envelope-o
+                  a(href=message_path(information.id))= information.message
+              - else
+                section.message= information.message
               div.controller(data-id=information.id)
   - writer = write_group_table do |groups|
     - if groups.size == 0

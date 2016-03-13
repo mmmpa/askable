@@ -14495,6 +14495,8 @@ var ReplyToReply = (function () {
     };
     return ReplyToReply;
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ReplyToReply;
 window.ReplyToReply = ReplyToReply;
 
 },{"./lib/components/comment-editor":14,"./lib/components/submit-button":15,"./lib/eventer":16,"./lib/models/state":18,"./lib/services/strike-api":19}],14:[function(require,module,exports){

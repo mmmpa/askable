@@ -194,3 +194,19 @@ class Question < ActiveRecord::Base
 
   end
 end
+
+# == Schema Information
+#
+# Table name: questions
+#
+#  created_at :datetime         not null
+#  id         :integer          not null, primary key
+#  state      :integer          not null
+#  title      :string           not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_questions_on_user_id  (user_id)
+#

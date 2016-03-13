@@ -1,9 +1,62 @@
+# == Route Map
+#
+#              Prefix Verb   URI Pattern                                             Controller#Action
+#              portal GET    /                                                       portal#portal
+#   accept_invitation PATCH  /i/:invitation_id/accept(.:format)                      invitations#accept
+#   reject_invitation PATCH  /i/:invitation_id/reject(.:format)                      invitations#reject
+#    block_invitation PATCH  /i/:invitation_id/block(.:format)                       invitations#block
+#           new_group GET    /g/new(.:format)                                        groups#new
+#                 new POST   /g/new(.:format)                                        groups#create
+#           edit_user GET    /me(.:format)                                           users#edit
+#                     PATCH  /me(.:format)                                           users#update
+#     change_password PATCH  /me/password(.:format)                                  users#update_password
+#                     DELETE /me(.:format)                                           users#destroy
+#               group GET    /g/:group_id(.:format)                                  groups#show
+#          invitation POST   /g/:group_id/invitation(.:format)                       groups#invite
+#                     DELETE /g/:group_id(.:format)                                  groups#destroy
+#              remove DELETE /g/:group_id/remove(.:format)                           groups#remove
+#        group_portal GET    /g/:group_id/q/index/opened(.:format)                   questions#opened
+#           questions GET    /g/:group_id/q/index(.:format)                          questions#index
+#    opened_questions GET    /g/:group_id/q/index/opened(.:format)                   questions#opened
+#     asked_questions GET    /g/:group_id/q/index/asked(.:format)                    questions#asked
+# requested_questions GET    /g/:group_id/q/index/requested(.:format)                questions#requested
+#    closed_questions GET    /g/:group_id/q/index/closed(.:format)                   questions#closed
+#            question GET    /g/:group_id/q/:question_id(.:format)                   questions#show
+#      sorry_question PATCH  /g/:group_id/q/:question_id/sorry(.:format)             questions#sorry
+#     assign_question PATCH  /g/:group_id/q/:question_id/assign(.:format)            questions#assign
+#     answer_question PATCH  /g/:group_id/q/:question_id/answer(.:format)            questions#answer
+#       wait_question PATCH  /g/:group_id/q/:question_id/wait(.:format)              questions#wait
+#     finish_question PATCH  /g/:group_id/q/:question_id/finish(.:format)            questions#finish
+#                     GET    /g/:group_id/q/:question_id/a/new(.:format)             comments#new
+#                     POST   /g/:group_id/q/:question_id/a/new(.:format)             comments#create
+#                 res GET    /g/:group_id/q/:question_id/a/:comment_id/res(.:format) questions#res
+#      reply_question POST   /g/:group_id/q/:question_id/a/:comment_id/res(.:format) questions#reply
+#        new_question GET    /g/:group_id/me/q/new(.:format)                         questions#new
+#                     POST   /g/:group_id/me/q/new(.:format)                         questions#create
+#                     GET    /g/:group_id(.:format)                                  redirect(301, path: /g/%{group_id}/q/index)
+#                     GET    /*path(.:format)                                        redirect(301, /)
+#    welcome_new_user GET    /welcome/new(.:format)                                  welcome/users#new
+#         welcome_new POST   /welcome/new(.:format)                                  welcome/users#create
+#              log_in GET    /in(.:format)                                           user_sessions#new
+#                     POST   /in(.:format)                                           user_sessions#create
+#             log_out DELETE /out(.:format)                                          user_sessions#destroy
+#                     GET    /                                                       redirect(301, /in)
+#                     GET    /*path(.:format)                                        redirect(301, /in)
+#
+
 Rails.application.routes.draw do
   #
   # 最終行にconstraints失敗時のリダイレクトあり
   #
   scope constraints: Constraint::User.new do
     get '/', to: 'portal#portal', as: :portal
+
+    scope 'me' do
+      get '', to: 'users#edit', as: :edit_user
+      patch '', to: 'users#update'
+      patch 'password', to: 'users#update_password', as: :change_password
+      delete '', to: 'users#destroy'
+    end
 
     scope 'i/:invitation_id' do
       patch 'accept', to: 'invitations#accept', as: :accept_invitation
@@ -16,11 +69,10 @@ Rails.application.routes.draw do
       post 'new', to: 'groups#create'
     end
 
-    scope 'me' do
-      get '', to: 'users#edit', as: :edit_user
-      patch '', to: 'users#update'
-      patch 'password', to: 'users#update_password', as: :change_password
-      delete '', to: 'users#destroy'
+    scope :m do
+      get 'index', to: 'messages#index', as: :messages
+      get ':message_id', to: 'messages#show', as: :message
+      delete ':message_id', to: 'messages#destroy'
     end
 
     scope 'g/:group_id', constraints: Constraint::Group.new do

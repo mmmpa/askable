@@ -1,37 +1,19 @@
 class Comment < ActiveRecord::Base
   include PrettyDate
-
-  attr_accessor :use_raw
+  include MarkdownRenderer
 
   belongs_to :user, inverse_of: :comments
   belongs_to :comment
   has_many :comments
   belongs_to :question, inverse_of: :comments
 
-  before_validation :render_markdown!
   before_destroy :check_not_root_comment
 
   validates :html, :markdown, :user, :question,
             presence: true
 
-  #after_validation ->{pp self.errors}
-
   scope :with_author, -> { joins { user }.select { ["comments.*", user.name.as(:as_author_name)] } }
 
-  class Renderer < Redcarpet::Render::HTML
-    def block_code(code, language)
-      Pygments.highlight(code, lexer: language)
-    end
-  end
-
-  class << self
-    attr_accessor :markdown
-
-    def render(*args)
-      self.markdown ||= Redcarpet::Markdown.new(Renderer, autolink: true, tables: true, fenced_code_blocks: true)
-      markdown.render(*args)
-    end
-  end
 
   def author_name
     respond_to?(:as_author_name) ? as_author_name : user.name
@@ -46,12 +28,27 @@ class Comment < ActiveRecord::Base
     question.root?(self)
   end
 
-  def render_markdown!
-    return if markdown.nil?
-    self.html = !!use_raw ? markdown : self.class.render(markdown)
-  end
-
   class CannotDestroyRootComment < StandardError
 
   end
 end
+
+# == Schema Information
+#
+# Table name: comments
+#
+#  comment_id  :integer
+#  created_at  :datetime         not null
+#  html        :text             not null
+#  id          :integer          not null, primary key
+#  markdown    :text             not null
+#  question_id :integer          not null
+#  updated_at  :datetime         not null
+#  user_id     :integer          not null
+#
+# Indexes
+#
+#  index_comments_on_comment_id   (comment_id)
+#  index_comments_on_question_id  (question_id)
+#  index_comments_on_user_id      (user_id)
+#

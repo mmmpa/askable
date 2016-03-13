@@ -1,0 +1,8 @@
+article.message-box.body
+  - if @message.owner.system?
+    section.flash これはシステムからの自動送信メッセージです
+  - if @message.html.include?('システム') && !@message.owner.system?
+    section.warning これは「システム」を含んでいますが、システムからのメッセージではありません
+  section.com.border-box-container
+    h1.com.border-box-title-area= @message.title
+    section.message-box.content.markdown-html== @message.html

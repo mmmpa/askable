@@ -234,7 +234,7 @@ class Component extends Node {
   }
 }
 
-class QuestionResponder {
+export default class QuestionResponder {
   static start(dom) {
 
     let questionPage = dom.getAttribute('data-questionPage');

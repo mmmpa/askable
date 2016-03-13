@@ -169,3 +169,19 @@ class Group < ActiveRecord::Base
 
   end
 end
+
+# == Schema Information
+#
+# Table name: groups
+#
+#  created_at  :datetime         not null
+#  description :string           not null
+#  id          :integer          not null, primary key
+#  name        :string           not null
+#  updated_at  :datetime         not null
+#  user_id     :integer          not null
+#
+# Indexes
+#
+#  index_groups_on_user_id  (user_id)
+#

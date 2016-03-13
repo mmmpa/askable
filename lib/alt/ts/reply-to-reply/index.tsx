@@ -111,7 +111,7 @@ class Component extends Node {
   }
 }
 
-class ReplyToReply {
+export default class ReplyToReply {
   static opener(doms) {
     _.each(doms, (dom)=> {
       let questionId = dom.getAttribute('data-questionId');

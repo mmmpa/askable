@@ -1,4 +1,6 @@
 class GroupKeeperQuestionProxy
+  include MessBus::Hub
+
   attr_accessor :group, :question, :user
 
   def initialize(**options)
@@ -13,6 +15,7 @@ class GroupKeeperQuestionProxy
     Question.transaction do
       q = Question.create_by!(user, question_params)
       group.add_question(q)
+      static_mess_bus.tell(:on_assigned, q, *q.users)
       q
     end
   end

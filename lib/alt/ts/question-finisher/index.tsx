@@ -77,7 +77,7 @@ class Component extends Node {
   }
 }
 
-class QuestionFinisher {
+export default class QuestionFinisher {
   static start(dom) {
     if (!dom) {
       return;

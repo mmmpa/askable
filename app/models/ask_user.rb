@@ -63,3 +63,23 @@ class AskUser < ActiveRecord::Base
     timeouted!
   end
 end
+
+# == Schema Information
+#
+# Table name: ask_users
+#
+#  comment_id  :integer
+#  created_at  :datetime         not null
+#  id          :integer          not null, primary key
+#  question_id :integer          not null
+#  state       :integer          not null
+#  updated_at  :datetime         not null
+#  user_id     :integer          not null
+#
+# Indexes
+#
+#  index_ask_users_on_comment_id               (comment_id)
+#  index_ask_users_on_question_id              (question_id)
+#  index_ask_users_on_user_id                  (user_id)
+#  index_ask_users_on_user_id_and_question_id  (user_id,question_id) UNIQUE
+#

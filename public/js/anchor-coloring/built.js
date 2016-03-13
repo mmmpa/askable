@@ -73,6 +73,8 @@ var AnchorColoring = (function () {
     };
     return AnchorColoring;
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = AnchorColoring;
 window.AnchorColoring = AnchorColoring;
 
 },{}]},{},[1]);

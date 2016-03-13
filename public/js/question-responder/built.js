@@ -14587,6 +14587,8 @@ var QuestionResponder = (function () {
     };
     return QuestionResponder;
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = QuestionResponder;
 window.QuestionResponder = QuestionResponder;
 
 },{"./lib/components/assigner":14,"./lib/components/comment-editor":15,"./lib/components/submit-button":17,"./lib/eventer":18,"./lib/fa":19,"./lib/models/group":20,"./lib/models/state":21,"./lib/models/user":22,"./lib/services/strike-api":23}],14:[function(require,module,exports){

@@ -91,6 +91,8 @@ var QuestionFinisher = (function () {
     };
     return QuestionFinisher;
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = QuestionFinisher;
 window.QuestionFinisher = QuestionFinisher;
 
 },{"./lib/components/submit-button":2,"./lib/eventer":3,"./lib/models/state":5,"./lib/services/strike-api":6}],2:[function(require,module,exports){

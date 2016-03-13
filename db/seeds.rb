@@ -15,6 +15,8 @@ else
 end
 
 if ENV['DEV_DATA']
+  #Message.destroy_all
+
   User.all.each do |user|
     user.destroy unless user.system?
   end
@@ -58,8 +60,7 @@ if ENV['DEV_DATA']
     question_numbers[index].times do |n|
       owner = g.users.sample
       assigned = g.users.sample(n - 1)
-      q = Question.create_by!(owner, {title: n.to_s, markdown: "# title", assigned: assigned})
-      g.add_question(q)
+      GroupKeeper.(group: g, user: owner).q.create!({title: n.to_s, markdown: "# title", assigned: assigned})
     end
 
     g = Group.create!(

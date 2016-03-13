@@ -1,6 +1,6 @@
 declare const _;
 
-class AnchorColoring {
+export default class AnchorColoring {
   doc = document;
   anchoredColor = "#f2f9fc"
   selectedColor = "#fff9ea";
