@@ -33,7 +33,6 @@ class Context extends Root {
     this.setState({state: State.Submitting});
     strike(Api.CreateQuestion, params)
       .then(({id})=> {
-        this.setState({state: State.Success});
         this.succeed(id);
       })
       .catch(({errors})=> {
@@ -72,14 +71,6 @@ class Component extends Node {
   }
 
   render() {
-    if (this.props.state === State.Success) {
-      return <article className="new-question body">
-        <section className="new-question registered-body">
-          <p className="new-question registered-message">投稿完了しました</p>
-        </section>
-      </article>
-    }
-
     let {state} = this.props;
 
     let {errors, user, group} = this.props;

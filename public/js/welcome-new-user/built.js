@@ -224,7 +224,7 @@ var SubmitButton = (function (_super) {
         var className = this.className;
         switch (state) {
             case state_1.State.Submitting:
-                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon, "animation": "pulse"}), text);
             case state_1.State.Success:
             case state_1.State.Waiting:
             case state_1.State.Fail:

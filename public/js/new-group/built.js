@@ -23,7 +23,6 @@ var Context = (function (_super) {
         strike_api_1.strike(strike_api_1.Api.CreateGroup, params)
             .then(function (result) {
             _this.succeed(result.id);
-            _this.setState({ result: result, errors: {}, state: state_1.State.Success });
         })
             .catch(function (result) {
             var errors = result.errors;
@@ -202,7 +201,7 @@ var SubmitButton = (function (_super) {
         var className = this.className;
         switch (state) {
             case state_1.State.Submitting:
-                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon, "animation": "pulse"}), text);
             case state_1.State.Success:
             case state_1.State.Waiting:
             case state_1.State.Fail:

@@ -21,7 +21,6 @@ class Context extends Root {
     strike(Api.CreateGroup, params)
       .then((result)=> {
         this.succeed(result.id);
-        this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
         let {errors} = result

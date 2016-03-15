@@ -30,7 +30,6 @@ class Context extends Root {
       .then(()=> {
         let result = this.resultMessage(api);
         location.reload();
-        this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
         let {errors} = result

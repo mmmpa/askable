@@ -17,7 +17,7 @@ export default class SubmitButton extends Node {
     switch (state) {
       case State.Submitting:
         return <button className={this.className} disabled={true}>
-          <Fa icon={icon}/>
+          <Fa icon={icon} animation="pulse"/>
           {text}
         </button>;
       case State.Success:

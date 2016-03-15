@@ -14425,7 +14425,6 @@ var Context = (function (_super) {
         this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.ReplyToReply, this.setBase(params))
             .then(function () {
-            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
@@ -14473,9 +14472,6 @@ var Component = (function (_super) {
         }))));
     };
     Component.prototype.render = function () {
-        if (this.props.state === state_1.State.Success) {
-            return React.createElement("article", {"className": "reply-to-reply body"}, React.createElement("section", {"className": "reply-to-reply registered-body"}, React.createElement("p", {"className": "reply-to-reply registered-message"}, "投稿完了しました")));
-        }
         return React.createElement("article", {"className": "reply-to-reply body"}, React.createElement("section", {"className": "reply-to-reply responder-area"}, this.writeResponder()));
     };
     return Component;
@@ -14499,7 +14495,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ReplyToReply;
 window.ReplyToReply = ReplyToReply;
 
-},{"./lib/components/comment-editor":14,"./lib/components/submit-button":15,"./lib/eventer":16,"./lib/models/state":18,"./lib/services/strike-api":19}],14:[function(require,module,exports){
+},{"./lib/components/comment-editor":14,"./lib/components/submit-button":16,"./lib/eventer":17,"./lib/models/state":19,"./lib/services/strike-api":20}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14508,6 +14504,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var eventer_1 = require('../eventer');
 var marked = require('marked');
 var fa_1 = require('../fa');
+var error_message_1 = require('./error-message');
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/addon/display/placeholder.js");
 require("codemirror/mode/xml/xml.js");
@@ -14570,14 +14567,6 @@ var CommentEditor = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    CommentEditor.prototype.writeError = function (errors) {
-        if (!errors || errors.length === 0) {
-            return null;
-        }
-        return React.createElement("ul", {"className": "comment-editor error-messages"}, errors.map(function (error) {
-            return React.createElement("li", {"className": "error-message"}, error);
-        }));
-    };
     CommentEditor.prototype.detectTabClass = function (isPreview) {
         return isPreview === this.state.preview ? 'tabnav-tab selected' : 'tabnav-tab';
     };
@@ -14593,7 +14582,7 @@ var CommentEditor = (function (_super) {
         var className = this.isPreview
             ? 'comment-editor entry-area hidden'
             : 'comment-editor entry-area';
-        return React.createElement("section", {"className": className}, this.writeTitleArea(), this.writeError(errors.title), React.createElement("section", {"className": "comment-editor comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "内容をここに入力", "value": this.state.markdown})), this.writeError(errors.markdown));
+        return React.createElement("section", {"className": className}, this.writeTitleArea(), React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: 'title' })), React.createElement("section", {"className": "comment-editor comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "内容をここに入力", "value": this.state.markdown})), React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: 'markdown' })));
     };
     CommentEditor.prototype.writePreviewArea = function () {
         if (!this.isPreview) {
@@ -14613,7 +14602,45 @@ var CommentEditor = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentEditor;
 
-},{"../eventer":16,"../fa":17,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],15:[function(require,module,exports){
+},{"../eventer":17,"../fa":18,"./error-message":15,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],15:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var ErrorMessage = (function (_super) {
+    __extends(ErrorMessage, _super);
+    function ErrorMessage() {
+        _super.apply(this, arguments);
+    }
+    ErrorMessage.prototype.wrap = function (errors) {
+        switch (true) {
+            case _.isArray(errors):
+                return errors;
+            case !errors:
+                return [];
+            default:
+                return [errors];
+        }
+    };
+    ErrorMessage.prototype.render = function () {
+        var _a = this.props, errors = _a.errors, name = _a.name;
+        if (!errors) {
+            return null;
+        }
+        var myErrors = this.wrap(errors[name]);
+        if (myErrors.length === 0) {
+            return null;
+        }
+        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error, i) { return React.createElement("li", {"className": "error-message", "key": i}, error); }));
+    };
+    return ErrorMessage;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ErrorMessage;
+
+},{"../eventer":17}],16:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14640,7 +14667,7 @@ var SubmitButton = (function (_super) {
         var className = this.className;
         switch (state) {
             case state_1.State.Submitting:
-                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon, "animation": "pulse"}), text);
             case state_1.State.Success:
             case state_1.State.Waiting:
             case state_1.State.Fail:
@@ -14653,7 +14680,7 @@ var SubmitButton = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SubmitButton;
 
-},{"../eventer":16,"../fa":17,"../models/state":18}],16:[function(require,module,exports){
+},{"../eventer":17,"../fa":18,"../models/state":19}],17:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14731,7 +14758,7 @@ var Root = (function (_super) {
 })(Node);
 exports.Root = Root;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14761,7 +14788,7 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
     State[State["Submitting"] = 1] = "Submitting";
@@ -14770,7 +14797,7 @@ exports.default = Fa;
 })(exports.State || (exports.State = {}));
 var State = exports.State;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {

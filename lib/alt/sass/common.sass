@@ -293,6 +293,7 @@ input.has-error
     .message
       width: 100%
       padding: 20px 20px 20px 0
+
 .portal
   &.body
     @extend %normal-body
@@ -662,6 +663,32 @@ input.has-error
   &.link-section
     text-align: right
 
+.notifier
+  &.body
+    position: fixed
+    bottom: 0
+    left: 20px
+    right: 20px
+    transition: all 0.2s ease-out
+    opacity: 0
+  &.rising
+    margin: auto 0
+    bottom: 20px
+    opacity: 1
+    &.fading
+      transition: all 0.2s ease-out
+      opacity: 0
+
+  &.alert
+    @extend .flash-warn
+  &.notify
+    @extend .flash
+  p
+    margin: 0
+    font-weight: bold
+    font-size: $size-title
+    text-align: center
+
 .user-editor
   &.body
     @extend %small-body
@@ -675,6 +702,8 @@ input.has-error
       line-height: $check-size
       display: inline-block
       vertical-align: top
+  p
+    margin-bottom: 0
 
 .user-log-in
   &.body

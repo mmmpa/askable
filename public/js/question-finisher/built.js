@@ -40,7 +40,6 @@ var Context = (function (_super) {
         this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.FinishQuestion, this.setBase({}))
             .then(function () {
-            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
@@ -68,9 +67,6 @@ var Component = (function (_super) {
     Component.prototype.render = function () {
         var _this = this;
         var state = this.props.state;
-        if (state === state_1.State.Success) {
-            return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish registered-body"}, React.createElement("p", {"className": "finish registered-message"}, "送信完了しました")));
-        }
         return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish submit-area"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "thumbs-o-up", text: "質問を終了する", className: 'submit',
             onClick: function () { return _this.dispatch('submit'); }
@@ -122,7 +118,7 @@ var SubmitButton = (function (_super) {
         var className = this.className;
         switch (state) {
             case state_1.State.Submitting:
-                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon, "animation": "pulse"}), text);
             case state_1.State.Success:
             case state_1.State.Waiting:
             case state_1.State.Fail:

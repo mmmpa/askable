@@ -4,6 +4,7 @@ declare const _;
 import {Root, Node} from '../eventer'
 import * as marked from 'marked'
 import Fa from '../fa'
+import ErrorMessage from './error-message'
 
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/addon/display/placeholder.js");
@@ -69,19 +70,6 @@ export default class CommentEditor extends Node {
     return {__html};
   }
 
-
-  writeError(errors) {
-    if (!errors || errors.length === 0) {
-      return null
-    }
-
-    return <ul className="comment-editor error-messages">
-      {errors.map((error)=>{
-        return <li className="error-message">{error}</li>
-        })}
-    </ul>
-  }
-
   detectTabClass(isPreview:boolean) {
     return isPreview === this.state.preview ? 'tabnav-tab selected' : 'tabnav-tab';
   }
@@ -106,12 +94,12 @@ export default class CommentEditor extends Node {
 
     return <section className={className}>
       {this.writeTitleArea()}
-      {this.writeError(errors.title)}
+      <ErrorMessage {...{errors, name: 'title'}}/>
       <section className="comment-editor comment-area">
         <textarea name="comment" ref="editor" placeholder="内容をここに入力"
                   value={this.state.markdown}/>
       </section>
-      {this.writeError(errors.markdown)}
+      <ErrorMessage {...{errors, name: 'markdown'}}/>
     </section>
   }
 

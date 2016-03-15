@@ -14495,7 +14495,6 @@ var Context = (function (_super) {
         this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.FinishQuestion, this.setBase({}))
             .then(function () {
-            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
@@ -14523,9 +14522,6 @@ var Component = (function (_super) {
     Component.prototype.render = function () {
         var _this = this;
         var state = this.props.state;
-        if (state === state_1.State.Success) {
-            return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish registered-body"}, React.createElement("p", {"className": "finish registered-message"}, "送信完了しました")));
-        }
         return React.createElement("article", {"className": "finish body"}, React.createElement("section", {"className": "finish submit-area"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "thumbs-o-up", text: "質問を終了する", className: 'submit',
             onClick: function () { return _this.dispatch('submit'); }
@@ -14577,7 +14573,7 @@ var SubmitButton = (function (_super) {
         var className = this.className;
         switch (state) {
             case state_1.State.Submitting:
-                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon}), text);
+                return React.createElement("button", {"className": this.className, "disabled": true}, React.createElement(fa_1.default, {"icon": icon, "animation": "pulse"}), text);
             case state_1.State.Success:
             case state_1.State.Waiting:
             case state_1.State.Fail:
@@ -14923,7 +14919,7 @@ window.QuestionResponder = question_responder_1.default;
 window.ReplyToReply = reply_to_reply_1.default;
 window.AnchorColoring = anchor_coloring_1.default;
 
-},{"../anchor-coloring":13,"../question-finisher":14,"../question-responder":21,"../reply-to-reply":32}],21:[function(require,module,exports){
+},{"../anchor-coloring":13,"../question-finisher":14,"../question-responder":21,"../reply-to-reply":33}],21:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14982,7 +14978,6 @@ var Context = (function (_super) {
         this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(api, params)
             .then(function () {
-            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
@@ -15106,9 +15101,6 @@ var Component = (function (_super) {
     };
     Component.prototype.render = function () {
         var _this = this;
-        if (this.props.state === state_1.State.Success) {
-            return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond registered-body"}, React.createElement("p", {"className": "respond registered-message"}, "投稿完了しました")));
-        }
         return React.createElement("article", {"className": "respond body"}, React.createElement("section", {"className": "respond box-body"}, this.writeTitle(), React.createElement("section", {"className": "respond response"}, React.createElement("section", {"className": "respond response-type-area"}, React.createElement("div", {"className": "tabnav"}, this.writeResponderButton(), React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass('respond answer-tab', Mode.Answering), "onClick": function () { return _this.changeMode(Mode.Answering); }}, React.createElement(fa_1.default, {"icon": "thumbs-o-up"}), "回答する"), React.createElement("a", {"className": this.detectTabClass('respond assign-tab', Mode.Assigning), "onClick": function () { return _this.changeMode(Mode.Assigning); }}, React.createElement(fa_1.default, {"icon": "group"}), "知ってそうな人を招待する")))), React.createElement("section", {"className": "respond responder-area"}, this.writeResponder()))));
     };
     return Component;
@@ -15140,7 +15132,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = QuestionResponder;
 window.QuestionResponder = QuestionResponder;
 
-},{"./lib/components/assigner":22,"./lib/components/comment-editor":23,"./lib/components/submit-button":25,"./lib/eventer":26,"./lib/fa":27,"./lib/models/group":28,"./lib/models/state":29,"./lib/models/user":30,"./lib/services/strike-api":31}],22:[function(require,module,exports){
+},{"./lib/components/assigner":22,"./lib/components/comment-editor":23,"./lib/components/submit-button":26,"./lib/eventer":27,"./lib/fa":28,"./lib/models/group":29,"./lib/models/state":30,"./lib/models/user":31,"./lib/services/strike-api":32}],22:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -15197,7 +15189,7 @@ var Assigner = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Assigner;
 
-},{"../eventer":26,"../fa":27,"./error-messages":24}],23:[function(require,module,exports){
+},{"../eventer":27,"../fa":28,"./error-messages":25}],23:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -15206,6 +15198,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var eventer_1 = require('../eventer');
 var marked = require('marked');
 var fa_1 = require('../fa');
+var error_message_1 = require('./error-message');
 require("codemirror/addon/mode/overlay.js");
 require("codemirror/addon/display/placeholder.js");
 require("codemirror/mode/xml/xml.js");
@@ -15268,14 +15261,6 @@ var CommentEditor = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    CommentEditor.prototype.writeError = function (errors) {
-        if (!errors || errors.length === 0) {
-            return null;
-        }
-        return React.createElement("ul", {"className": "comment-editor error-messages"}, errors.map(function (error) {
-            return React.createElement("li", {"className": "error-message"}, error);
-        }));
-    };
     CommentEditor.prototype.detectTabClass = function (isPreview) {
         return isPreview === this.state.preview ? 'tabnav-tab selected' : 'tabnav-tab';
     };
@@ -15291,7 +15276,7 @@ var CommentEditor = (function (_super) {
         var className = this.isPreview
             ? 'comment-editor entry-area hidden'
             : 'comment-editor entry-area';
-        return React.createElement("section", {"className": className}, this.writeTitleArea(), this.writeError(errors.title), React.createElement("section", {"className": "comment-editor comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "内容をここに入力", "value": this.state.markdown})), this.writeError(errors.markdown));
+        return React.createElement("section", {"className": className}, this.writeTitleArea(), React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: 'title' })), React.createElement("section", {"className": "comment-editor comment-area"}, React.createElement("textarea", {"name": "comment", "ref": "editor", "placeholder": "内容をここに入力", "value": this.state.markdown})), React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: 'markdown' })));
     };
     CommentEditor.prototype.writePreviewArea = function () {
         if (!this.isPreview) {
@@ -15311,7 +15296,45 @@ var CommentEditor = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentEditor;
 
-},{"../eventer":26,"../fa":27,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],24:[function(require,module,exports){
+},{"../eventer":27,"../fa":28,"./error-message":24,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],24:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var ErrorMessage = (function (_super) {
+    __extends(ErrorMessage, _super);
+    function ErrorMessage() {
+        _super.apply(this, arguments);
+    }
+    ErrorMessage.prototype.wrap = function (errors) {
+        switch (true) {
+            case _.isArray(errors):
+                return errors;
+            case !errors:
+                return [];
+            default:
+                return [errors];
+        }
+    };
+    ErrorMessage.prototype.render = function () {
+        var _a = this.props, errors = _a.errors, name = _a.name;
+        if (!errors) {
+            return null;
+        }
+        var myErrors = this.wrap(errors[name]);
+        if (myErrors.length === 0) {
+            return null;
+        }
+        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error, i) { return React.createElement("li", {"className": "error-message", "key": i}, error); }));
+    };
+    return ErrorMessage;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ErrorMessage;
+
+},{"../eventer":27}],25:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -15337,13 +15360,13 @@ var ErrorMessages = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ErrorMessages;
 
-},{"../eventer":26}],25:[function(require,module,exports){
+},{"../eventer":27}],26:[function(require,module,exports){
 arguments[4][15][0].apply(exports,arguments)
-},{"../eventer":26,"../fa":27,"../models/state":29,"dup":15}],26:[function(require,module,exports){
+},{"../eventer":27,"../fa":28,"../models/state":30,"dup":15}],27:[function(require,module,exports){
 arguments[4][16][0].apply(exports,arguments)
-},{"dup":16}],27:[function(require,module,exports){
+},{"dup":16}],28:[function(require,module,exports){
 arguments[4][17][0].apply(exports,arguments)
-},{"dup":17}],28:[function(require,module,exports){
+},{"dup":17}],29:[function(require,module,exports){
 var user_1 = require("./user");
 var Group = (function () {
     function Group(params) {
@@ -15357,9 +15380,9 @@ var Group = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Group;
 
-},{"./user":30}],29:[function(require,module,exports){
+},{"./user":31}],30:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
-},{"dup":18}],30:[function(require,module,exports){
+},{"dup":18}],31:[function(require,module,exports){
 var User = (function () {
     function User(params) {
         this.name = params.name;
@@ -15371,9 +15394,9 @@ var User = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = User;
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"dup":19}],32:[function(require,module,exports){
+},{"dup":19}],33:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -15424,7 +15447,6 @@ var Context = (function (_super) {
         this.setState({ state: state_1.State.Submitting });
         strike_api_1.strike(strike_api_1.Api.ReplyToReply, this.setBase(params))
             .then(function () {
-            _this.setState({ state: state_1.State.Success });
             _this.succeed();
         })
             .catch(function (_a) {
@@ -15472,9 +15494,6 @@ var Component = (function (_super) {
         }))));
     };
     Component.prototype.render = function () {
-        if (this.props.state === state_1.State.Success) {
-            return React.createElement("article", {"className": "reply-to-reply body"}, React.createElement("section", {"className": "reply-to-reply registered-body"}, React.createElement("p", {"className": "reply-to-reply registered-message"}, "投稿完了しました")));
-        }
         return React.createElement("article", {"className": "reply-to-reply body"}, React.createElement("section", {"className": "reply-to-reply responder-area"}, this.writeResponder()));
     };
     return Component;
@@ -15498,16 +15517,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ReplyToReply;
 window.ReplyToReply = ReplyToReply;
 
-},{"./lib/components/comment-editor":33,"./lib/components/submit-button":34,"./lib/eventer":35,"./lib/models/state":37,"./lib/services/strike-api":38}],33:[function(require,module,exports){
+},{"./lib/components/comment-editor":34,"./lib/components/submit-button":36,"./lib/eventer":37,"./lib/models/state":39,"./lib/services/strike-api":40}],34:[function(require,module,exports){
 arguments[4][23][0].apply(exports,arguments)
-},{"../eventer":35,"../fa":36,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"dup":23,"marked":12}],34:[function(require,module,exports){
+},{"../eventer":37,"../fa":38,"./error-message":35,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"dup":23,"marked":12}],35:[function(require,module,exports){
+arguments[4][24][0].apply(exports,arguments)
+},{"../eventer":37,"dup":24}],36:[function(require,module,exports){
 arguments[4][15][0].apply(exports,arguments)
-},{"../eventer":35,"../fa":36,"../models/state":37,"dup":15}],35:[function(require,module,exports){
+},{"../eventer":37,"../fa":38,"../models/state":39,"dup":15}],37:[function(require,module,exports){
 arguments[4][16][0].apply(exports,arguments)
-},{"dup":16}],36:[function(require,module,exports){
+},{"dup":16}],38:[function(require,module,exports){
 arguments[4][17][0].apply(exports,arguments)
-},{"dup":17}],37:[function(require,module,exports){
+},{"dup":17}],39:[function(require,module,exports){
 arguments[4][18][0].apply(exports,arguments)
-},{"dup":18}],38:[function(require,module,exports){
+},{"dup":18}],40:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
 },{"dup":19}]},{},[20]);

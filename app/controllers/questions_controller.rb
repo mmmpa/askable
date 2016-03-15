@@ -20,6 +20,7 @@ class QuestionsController < ApplicationController
 =end
   def index
     @questions = keeper.q.index.page(page).per(per)
+    penetrate { notify '反応が反映されました' }
   end
 
   def opened
@@ -51,6 +52,7 @@ class QuestionsController < ApplicationController
 
   def create
     q = keeper.q.create!(question_params)
+    penetrate { notify '問題を作成しました' }
     render json: {id: q.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.creation_errors}, status: 400
@@ -58,21 +60,25 @@ class QuestionsController < ApplicationController
 
   def wait
     keeper.q.wait!
+    penetrate { notify '反応が反映されました' }
     render json: {id: question.id}, status: 201
   end
 
   def sorry
     keeper.q.sorry!
+    penetrate { notify '反応が反映されました' }
     render json: {id: question.id}, status: 201
   end
 
   def assign
     keeper.q.assign!(*assign_params)
+    penetrate { notify '回答者が追加されました' }
     render json: {id: question.id}, status: 201
   end
 
   def answer
     keeper.q.answer!(answer_params)
+    penetrate { notify '回答が投稿されました' }
     render json: {id: question.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.answer_errors}, status: 400
@@ -80,6 +86,7 @@ class QuestionsController < ApplicationController
 
   def reply
     replied = keeper.q.reply_to!(comment, reply_params)
+    penetrate { notify '返信が投稿されました' }
     render json: {id: replied.id}, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.answer_errors}, status: 400
@@ -87,6 +94,7 @@ class QuestionsController < ApplicationController
 
   def finish
     keeper.q.finish!
+    penetrate { notify '回答の受付を終了しました' }
     render nothing: true, status: 201
   end
 

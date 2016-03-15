@@ -29,10 +29,9 @@ class Context extends Root {
     strike(Api.DisposeGroup, this.setBase({}))
       .then((result)=> {
         this.succeed();
-        this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
-        this.setState({errors: {}, state: State.Fail});
+        this.succeed();
       });
   }
 

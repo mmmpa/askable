@@ -34,7 +34,6 @@ class Context extends Root {
     this.setState({state: State.Submitting});
     strike(Api.FinishQuestion, this.setBase({}))
       .then(()=> {
-        this.setState({state: State.Success});
         this.succeed();
       })
       .catch(({errors})=> {
@@ -57,14 +56,6 @@ class Context extends Root {
 class Component extends Node {
   render() {
     let {state} = this.props;
-
-    if (state === State.Success) {
-      return <article className="finish body">
-        <section className="finish registered-body">
-          <p className="finish registered-message">送信完了しました</p>
-        </section>
-      </article>
-    }
 
     return <article className="finish body">
       <section className="finish submit-area">

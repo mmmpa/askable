@@ -24,42 +24,61 @@ class Context extends Root {
     location.reload();
   }
 
+  target(api) {
+    this.setState({targetNow: this.detectTarget(api)});
+  }
+
+  detectTarget(api) {
+    switch (api) {
+      case Api.UpdateUser:
+        return Target.User;
+      case Api.ChangePassword:
+        return Target.Password;
+      case Api.DestroyUser:
+        return Target.Disposer;
+      default:
+        return null;
+    }
+  }
+
   update(params) {
-    this.setState({state: State.Submitting});
+    this.setState({updatingState: State.Submitting, updatingMessage: ''});
+    this.target(Api.UpdateUser);
     strike(Api.UpdateUser, params)
       .then((result)=> {
         let user = new User(result);
-        this.setState({result, user, errors: {}, state: State.Success});
+        this.setState({result, user, errors: {}, updatingState: State.Success, updatingMessage: '更新に成功しました'});
       })
       .catch((result)=> {
         let {errors} = result
-        this.setState({errors, state: State.Fail});
+        this.setState({errors, updatingState: State.Fail, passwordMessage: '更新に成功しました'});
       });
   }
 
   changePassword(params) {
-    this.setState({state: State.Submitting});
+    this.setState({passwordState: State.Submitting, passwordMessage: ''});
+    this.target(Api.ChangePassword);
     strike(Api.ChangePassword, params)
       .then((result)=> {
-        this.setState({result, errors: {}, state: State.Success});
+        this.setState({result, errors: {}, passwordState: State.Success, passwordMessage: '更新に成功しました'});
       })
       .catch((result)=> {
         let {errors} = result;
         errors.passwordNow = errors.password_now
-        this.setState({errors, state: State.Fail});
+        this.setState({errors, passwordState: State.Fail, passwordMessage: 'エラーがあります'});
       });
   }
 
   destroy() {
-    this.setState({state: State.Submitting});
+    this.setState({destroyState: State.Submitting});
+    this.target(Api.DestroyUser);
     strike(Api.DestroyUser)
       .then((result)=> {
         this.destroySucceed();
-        this.setState({result, errors: {}, state: State.Success});
       })
       .catch((result)=> {
         let {errors} = result;
-        this.setState({errors, state: State.Fail});
+        this.setState({errors, destroyState: State.Fail});
       });
   }
 
@@ -79,7 +98,12 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: State.Waiting,
+      updatingState: State.Waiting,
+      passwordState: State.Waiting,
+      destroyState: State.Waiting,
+      updatingMessage: '',
+      passwordMessage: '',
+      destroyMessage: '',
       targetNow: null,
       user: props.initial,
       errors: {}
@@ -126,8 +150,25 @@ class UserComponent extends Node {
     this.setState({name, login, email})
   }
 
+  writeMessage() {
+    switch (this.props.updatingState) {
+      case State.Success:
+        return <p className="com success-message">{this.props.updatingMessage}</p>
+      case State.Submitting:
+        return <p>
+          <Fa icon="spinner" animation="pulse"/>
+          送信中
+        </p>
+      case State.Fail:
+        return <p className="com error-message">{this.props.updatingMessage}</p>
+      case State.Waiting:
+      default:
+        return null;
+    }
+  }
+
   render() {
-    let {state, targetNow, errors} = this.props;
+    let {updatingState, errors} = this.props;
     let {name, login, email} = this.state;
 
     return <section className="com border-box-container">
@@ -138,10 +179,11 @@ class UserComponent extends Node {
         {writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors)}
         <section className="com submit-section">
           <SubmitButton {...{
-            state, targetNow, icon: "send-o", text: "変更する", className: 'submit', target: Target.User,
+            state: updatingState, icon: "send-o", text: "変更する", className: 'submit',
             onClick: ()=>this.dispatch('update', this.updatingParams)
           }}/>
         </section>
+        {this.writeMessage()}
       </div>
     </section>
   }
@@ -181,8 +223,26 @@ class PasswordComponent extends Node {
     }
   }
 
+  writeMessage() {
+    switch (this.props.passwordState) {
+      case State.Success:
+        return <p className="com success-message">{this.props.passwordMessage}</p>
+      case State.Submitting:
+        return <p>
+          <Fa icon="spinner" animation="pulse"/>
+          送信中
+        </p>;
+      case State.Fail:
+        return <p className="com error-message">{this.props.passwordMessage}</p>
+      case State.Waiting:
+      default:
+        return null;
+    }
+  }
+
+
   render() {
-    let {state, targetNow, errors} = this.props;
+    let {passwordState, errors} = this.props;
     let {passwordNow, password} = this.state;
 
     return <section className="com border-box-container">
@@ -192,10 +252,11 @@ class PasswordComponent extends Node {
         {writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors)}
         <section className="com submit-section">
           <SubmitButton {...{
-            state, targetNow, icon: "key", text: "パスワードを変更する", className: 'submit', target: Target.Password,
+            state: passwordState, icon: "key", text: "パスワードを変更する", className: 'submit',
             onClick: ()=> this.dispatch('changePassword', this.passwordParams)
           }}/>
         </section>
+        {this.writeMessage()}
       </div>
     </section>
   }
@@ -214,7 +275,7 @@ class DisposerComponent extends Node {
   }
 
   render() {
-    let {state,  targetNow} = this.props;
+    let {destroyState} = this.props;
     let {yes} = this.state;
 
     return <section className="com border-box-container">
@@ -228,7 +289,7 @@ class DisposerComponent extends Node {
         </section>
         <section className="com submit-section">
           <SubmitButton {...{
-            state, targetNow, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes, target: Target.Disposer,
+            state: destroyState, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes,
             onClick: ()=> this.dispatch('destroy')
           }}/>
         </section>

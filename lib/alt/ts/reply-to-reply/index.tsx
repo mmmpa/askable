@@ -43,7 +43,6 @@ class Context extends Root {
     this.setState({state: State.Submitting});
     strike(Api.ReplyToReply, this.setBase(params))
       .then(()=> {
-        this.setState({state: State.Success});
         this.succeed();
       })
       .catch(({errors})=> {
@@ -95,14 +94,6 @@ class Component extends Node {
   }
 
   render() {
-    if (this.props.state === State.Success) {
-      return <article className="reply-to-reply body">
-        <section className="reply-to-reply registered-body">
-          <p className="reply-to-reply registered-message">投稿完了しました</p>
-        </section>
-      </article>
-    }
-
     return <article className="reply-to-reply body">
       <section className="reply-to-reply responder-area">
         {this.writeResponder()}
