@@ -12,6 +12,10 @@ class MessagesController < ApplicationController
   end
 
   def destroy
+    message.destroy!
+    render nothing: true, status: 201
+  rescue
+    render nothing: true, status: 400
   end
 
   private

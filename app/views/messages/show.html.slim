@@ -6,8 +6,8 @@ article.message-box.body
   section.com.border-box-container
     h1.com.border-box-title-area= @message.title
     section.message-box.content.markdown-html== @message.html
-    section.message-box.controller
-      button.dispose.ready 削除
+    section.message-box.controller#message-disposer(data-id=@message.id)
 
+script src='/js/message-disposer/built.js'
 javascript:
-  MailDisposer.start(document.querySelector('button.dispose'))
+  MessageDisposer.start(document.querySelector('#message-disposer'))

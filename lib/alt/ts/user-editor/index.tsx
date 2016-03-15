@@ -5,13 +5,13 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
-import Fa from './lib/fa'
 import {Api, strike} from './lib/services/strike-api'
-import User from './lib/models/user'
 import {State} from './lib/models/state'
+import Fa from './lib/fa'
+import User from './lib/models/user'
 import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
-import InputForm from './lib/components/input-form'
+import {writeInput} from './lib/helpers/input-writer'
 
 enum Target{
   User,
@@ -130,19 +130,13 @@ class UserComponent extends Node {
     let {state, targetNow, errors} = this.props;
     let {name, login, email} = this.state;
 
-    return <section className="user-editor registering-body">
-      <h1 className="user-editor registering-title">登録内容の変更</h1>
-      <div className="inner form">
-        <section className="user-editor input-section">
-          <InputForm {...{errors, type: 'text', name: 'name', label: '表示するなまえ', value: name, onChange: (v)=> this.setState({name: v})}}/>
-        </section>
-        <section className="user-editor input-section">
-          <InputForm {...{errors, type: 'text', name: 'login', label: 'ログイン用ID', value: login, onChange: (v)=> this.setState({login: v})}}/>
-        </section>
-        <section className="user-editor input-section">
-          <InputForm {...{errors, type: 'text', name: 'email', label: 'メールアドレス', value: email, onChange: (v)=> this.setState({email: v})}}/>
-        </section>
-        <section className="user-editor submit-section">
+    return <section className="com border-box-container">
+      <h1 className="com border-box-title-area">登録内容の変更</h1>
+      <div className="com form-area">
+        {writeInput(this, 'text', 'name', '表示する名前', '表示する名前', errors)}
+        {writeInput(this, 'text', 'login', 'ログイン用ID', 'ログイン用ID', errors)}
+        {writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors)}
+        <section className="com submit-section">
           <SubmitButton {...{
             state, targetNow, icon: "send-o", text: "変更する", className: 'submit', target: Target.User,
             onClick: ()=>this.dispatch('update', this.updatingParams)
@@ -191,22 +185,12 @@ class PasswordComponent extends Node {
     let {state, targetNow, errors} = this.props;
     let {passwordNow, password} = this.state;
 
-    return <section className="user-editor registering-body">
-      <h1 className="user-editor registering-title">パスワードの変更</h1>
-      <div className="inner form">
-        <section className="user-editor input-section">
-          <InputForm {...{
-            errors, type: 'password', name: 'passwordNow', label: '旧パスワード', value: passwordNow,
-            onChange: (v)=> this.setState({passwordNow: v})
-          }}/>
-        </section>
-        <section className="user-editor input-section">
-          <InputForm {...{
-            errors, type: 'password', name: 'password', label: '新パスワード', value: password,
-            onChange: (v)=> this.setState({password: v})
-          }}/>
-        </section>
-        <section className="user-editor submit-section">
+    return <section className="com border-box-container">
+      <h1 className="com border-box-title-area">パスワードの変更</h1>
+      <div className="com form-area">
+        {writeInput(this, 'password', 'passwordNow', '旧パスワード', '旧パスワード', errors)}
+        {writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors)}
+        <section className="com submit-section">
           <SubmitButton {...{
             state, targetNow, icon: "key", text: "パスワードを変更する", className: 'submit', target: Target.Password,
             onClick: ()=> this.dispatch('changePassword', this.passwordParams)
@@ -233,16 +217,16 @@ class DisposerComponent extends Node {
     let {state,  targetNow} = this.props;
     let {yes} = this.state;
 
-    return <section className="user-editor registering-body">
-      <h1 className="user-editor registering-title">アカウントの削除</h1>
-      <div className="inner form">
+    return <section className="com border-box-container">
+      <h1 className="com border-box-title-area">アカウントの削除</h1>
+      <div className="com form-area">
         <section className="user-editor dispose-verify">
           <label>
             <input type="checkbox" name="yes" checked={yes} onChange={()=> this.setState({yes: !yes})}/>
             本当に削除する
           </label>
         </section>
-        <section className="user-editor submit-section">
+        <section className="com submit-section">
           <SubmitButton {...{
             state, targetNow, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes, target: Target.Disposer,
             onClick: ()=> this.dispatch('destroy')

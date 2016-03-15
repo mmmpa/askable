@@ -6,10 +6,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var eventer_1 = require('./lib/eventer');
 var strike_api_1 = require('./lib/services/strike-api');
-var user_1 = require('./lib/models/user');
 var state_1 = require('./lib/models/state');
+var user_1 = require('./lib/models/user');
 var submit_button_1 = require('./lib/components/submit-button');
-var input_form_1 = require('./lib/components/input-form');
+var input_writer_1 = require('./lib/helpers/input-writer');
 var Target;
 (function (Target) {
     Target[Target["User"] = 0] = "User";
@@ -126,7 +126,7 @@ var UserComponent = (function (_super) {
         var _this = this;
         var _a = this.props, state = _a.state, targetNow = _a.targetNow, errors = _a.errors;
         var _b = this.state, name = _b.name, login = _b.login, email = _b.email;
-        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "登録内容の変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'name', label: '表示するなまえ', value: name, onChange: function (v) { return _this.setState({ name: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'login', label: 'ログイン用ID', value: login, onChange: function (v) { return _this.setState({ login: v }); } }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, { errors: errors, type: 'text', name: 'email', label: 'メールアドレス', value: email, onChange: function (v) { return _this.setState({ email: v }); } }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "登録内容の変更"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'name', '表示する名前', '表示する名前', errors), input_writer_1.writeInput(this, 'text', 'login', 'ログイン用ID', 'ログイン用ID', errors), input_writer_1.writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, targetNow: targetNow, icon: "send-o", text: "変更する", className: 'submit', target: Target.User,
             onClick: function () { return _this.dispatch('update', _this.updatingParams); }
         })))));
@@ -171,13 +171,7 @@ var PasswordComponent = (function (_super) {
         var _this = this;
         var _a = this.props, state = _a.state, targetNow = _a.targetNow, errors = _a.errors;
         var _b = this.state, passwordNow = _b.passwordNow, password = _b.password;
-        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "パスワードの変更"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'password', name: 'passwordNow', label: '旧パスワード', value: passwordNow,
-            onChange: function (v) { return _this.setState({ passwordNow: v }); }
-        }))), React.createElement("section", {"className": "user-editor input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: 'password', name: 'password', label: '新パスワード', value: password,
-            onChange: function (v) { return _this.setState({ password: v }); }
-        }))), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "パスワードの変更"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'password', 'passwordNow', '旧パスワード', '旧パスワード', errors), input_writer_1.writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, targetNow: targetNow, icon: "key", text: "パスワードを変更する", className: 'submit', target: Target.Password,
             onClick: function () { return _this.dispatch('changePassword', _this.passwordParams); }
         })))));
@@ -199,7 +193,7 @@ var DisposerComponent = (function (_super) {
         var _this = this;
         var _a = this.props, state = _a.state, targetNow = _a.targetNow;
         var yes = this.state.yes;
-        return React.createElement("section", {"className": "user-editor registering-body"}, React.createElement("h1", {"className": "user-editor registering-title"}, "アカウントの削除"), React.createElement("div", {"className": "inner form"}, React.createElement("section", {"className": "user-editor dispose-verify"}, React.createElement("label", null, React.createElement("input", {"type": "checkbox", "name": "yes", "checked": yes, "onChange": function () { return _this.setState({ yes: !yes }); }}), "本当に削除する")), React.createElement("section", {"className": "user-editor submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "アカウントの削除"), React.createElement("div", {"className": "com form-area"}, React.createElement("section", {"className": "user-editor dispose-verify"}, React.createElement("label", null, React.createElement("input", {"type": "checkbox", "name": "yes", "checked": yes, "onChange": function () { return _this.setState({ yes: !yes }); }}), "本当に削除する")), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, targetNow: targetNow, icon: "trash", text: "アカウントを削除する", className: 'dispose', disabled: !yes, target: Target.Disposer,
             onClick: function () { return _this.dispatch('destroy'); }
         })))));
@@ -217,7 +211,7 @@ var UserEditor = (function () {
 })();
 window.UserEditor = UserEditor;
 
-},{"./lib/components/input-form":3,"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/models/state":7,"./lib/models/user":8,"./lib/services/strike-api":9}],2:[function(require,module,exports){
+},{"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/helpers/input-writer":7,"./lib/models/state":8,"./lib/models/user":9,"./lib/services/strike-api":10}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -286,7 +280,7 @@ var InputForm = (function (_super) {
             if (!label) {
                 return null;
             }
-            return React.createElement("label", null, label);
+            return React.createElement("label", {"className": "input-label"}, label);
         },
         enumerable: true,
         configurable: true
@@ -309,7 +303,7 @@ var InputForm = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = InputForm;
 
-},{"../eventer":5,"../models/state":7,"./error-message":2}],4:[function(require,module,exports){
+},{"../eventer":5,"../models/state":8,"./error-message":2}],4:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -349,7 +343,7 @@ var SubmitButton = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SubmitButton;
 
-},{"../eventer":5,"../fa":6,"../models/state":7}],5:[function(require,module,exports){
+},{"../eventer":5,"../fa":6,"../models/state":8}],5:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -417,16 +411,11 @@ var Root = (function (_super) {
         return { emitter: this.context.emitter || this.emitter };
     };
     Root.prototype.render = function () {
-        var props = _.merge(_.clone(this.props), this.state);
+        var props = Object.assign({}, this.props, this.state);
         delete props.children;
         var children = this.props.children;
-        if (!children.map) {
-            children = [children];
-        }
-        return React.createElement("div", null, children.map(function (child, i) {
-            props.key = i;
-            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
-        }));
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
     };
     return Root;
 })(Node);
@@ -463,6 +452,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
 },{}],7:[function(require,module,exports){
+var input_form_1 = require('../components/input-form');
+function writeInput(self, type, name, placeholder, label, errors) {
+    if (errors === void 0) { errors = {}; }
+    return React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+        errors: errors, type: type, name: name, placeholder: placeholder, label: label, value: self.state[name],
+        onChange: function (v) {
+            var p = {};
+            p[name] = v;
+            self.setState(p);
+        }
+    })));
+}
+exports.writeInput = writeInput;
+
+},{"../components/input-form":3}],8:[function(require,module,exports){
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
     State[State["Submitting"] = 1] = "Submitting";
@@ -471,7 +475,7 @@ exports.default = Fa;
 })(exports.State || (exports.State = {}));
 var State = exports.State;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var User = (function () {
     function User(params) {
         this.name = params.name;
@@ -483,7 +487,7 @@ var User = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = User;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {
@@ -494,6 +498,11 @@ var Method;
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
 exports.Api = {
+    DisposeMessage: {
+        uri: '/m/:messageId',
+        method: Method.Delete,
+        params: function (p) { return p; }
+    },
     Invite: {
         uri: '/g/:groupId/invitation',
         method: Method.Post,
@@ -611,7 +620,6 @@ function common(api, params, resolve, reject, queueResolve) {
     var uri = api.uri;
     if (uri.indexOf(':') !== -1) {
         var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-        console.log(uri, params, normalized, trimmed);
     }
     build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
@@ -666,7 +674,10 @@ function normalize(uri, trimmed) {
     delete trimmed.commentId;
     var invitationId = trimmed.invitationId;
     delete trimmed.invitationId;
+    var messageId = trimmed.messageId;
+    delete trimmed.messageId;
     var normalized = uri
+        .replace(':messageId', messageId)
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)

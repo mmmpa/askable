@@ -91,25 +91,25 @@ class Component extends Node {
 
   writeResult() {
     let {name, login, email} = this.props.result || {};
-    return <article className="user-register body">
+    return <article className="user-registered body">
       <section className="com border-box-container">
         <h1 className="com border-box-title-area">以下の内容で登録されました</h1>
         <div className="com form-area">
           <section className="com input-section">
-            <h1 className="user-register info-label">表示するなまえ</h1>
-            <p className="user-register info">{name}</p>
+            <h1 className="user-registered info-label">表示する名前</h1>
+            <p className="user-registered info">{name}</p>
           </section>
           <section className="com input-section">
-            <h1 className="user-register info-label">ログイン用ID</h1>
-            <p className="user-register info">{login}</p>
+            <h1 className="user-registered info-label">ログイン用ID</h1>
+            <p className="user-registered info">{login}</p>
           </section>
           <section className="com input-section">
-            <h1 className="user-register info-label">メールアドレス</h1>
-            <p className="user-register info">{email}</p>
+            <h1 className="user-registered info-label">メールアドレス</h1>
+            <p className="user-registered info">{email}</p>
           </section>
-          <section className="user-register link-section">
+          <section className="user-registered link-section">
             <Fa icon="sign-in"/>
-            <a href="/in">ログインページヘ</a>
+            <a href="/in">ログイン</a>
           </section>
         </div>
       </section>

@@ -1,2 +1,12 @@
-h1 Messages#index
-p Find me in app/views/messages/index.html.slim
+article.message-box.body
+  - if @messages.size == 0
+    section.portal.no-message
+      p メッセージはありません
+  - else
+    section.com.border-box-container
+      ul.message-box.message-list
+        - @messages.each do |message|
+          li.message-box.message-item
+            time= message.pretty_date
+            section.message
+              a(href=message_path(message.id))= message.title

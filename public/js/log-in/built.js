@@ -9,6 +9,7 @@ var strike_api_1 = require('./lib/services/strike-api');
 var state_1 = require('./lib/models/state');
 var fa_1 = require('./lib/fa');
 var submit_button_1 = require('./lib/components/submit-button');
+var input_writer_1 = require('./lib/helpers/input-writer');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -23,7 +24,7 @@ var Context = (function (_super) {
         strike_api_1.strike(strike_api_1.Api.LogIn, params)
             .then(function () {
             _this.succeed();
-            _this.setState({ state: state_1.State.Success });
+            _this.setState({ loggedIn: true });
         })
             .catch(function () {
             _this.setState({ state: state_1.State.Fail });
@@ -37,7 +38,8 @@ var Context = (function (_super) {
     };
     Context.prototype.initialState = function (props) {
         return {
-            state: state_1.State.Waiting
+            state: state_1.State.Waiting,
+            loggedIn: false
         };
     };
     return Context;
@@ -59,12 +61,14 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Component.prototype.writeError = function (state) {
-        switch (state) {
+    Component.prototype.writeError = function () {
+        if (this.props.loggedIn) {
+            return React.createElement("p", {"className": "com message-area success-message"}, React.createElement(fa_1.default, {"icon": "paw"}), "ログインに成功しました");
+        }
+        switch (this.props.state) {
             case state_1.State.Fail:
                 return React.createElement("p", {"className": "com message-area error-message"}, React.createElement(fa_1.default, {"icon": "ban"}), "ログインに失敗しました");
             case state_1.State.Success:
-                return React.createElement("p", {"className": "com message-area success-message"}, React.createElement(fa_1.default, {"icon": "paw"}), "ログインに成功しました");
             case state_1.State.Submitting:
             case state_1.State.Waiting:
             default:
@@ -74,10 +78,11 @@ var Component = (function (_super) {
     Component.prototype.render = function () {
         var _this = this;
         var state = this.props.state;
-        return React.createElement("article", {"className": "user-log-in body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "ログイン"), React.createElement("div", {"className": "com form-area"}, React.createElement("section", {"className": "com input-section"}, React.createElement("input", {"type": "text", "name": "login", "value": this.state.login, "placeholder": "ログインID", "onChange": function (e) { return _this.setState({ login: e.target.value }); }})), React.createElement("section", {"className": "com input-section"}, React.createElement("input", {"type": "password", "name": "password", "value": this.state.password, "placeholder": "パスワード", "onChange": function (e) { return _this.setState({ password: e.target.value }); }})), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        var _a = this.state, login = _a.login, password = _a.password;
+        return React.createElement("article", {"className": "user-log-in body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "ログイン"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'login', 'ログインID', null), input_writer_1.writeInput(this, 'password', 'password', 'パスワード', null), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "sign-in", text: "ログインする", className: 'submit',
             onClick: function () { return _this.dispatch('submit', _this.params); }
-        })))), this.writeError(state)));
+        })))), this.writeError()));
     };
     return Component;
 })(eventer_1.Node);
@@ -91,7 +96,99 @@ var LogIn = (function () {
 })();
 window.LogIn = LogIn;
 
-},{"./lib/components/submit-button":2,"./lib/eventer":3,"./lib/fa":4,"./lib/models/state":5,"./lib/services/strike-api":6}],2:[function(require,module,exports){
+},{"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/fa":6,"./lib/helpers/input-writer":7,"./lib/models/state":8,"./lib/services/strike-api":9}],2:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var ErrorMessage = (function (_super) {
+    __extends(ErrorMessage, _super);
+    function ErrorMessage() {
+        _super.apply(this, arguments);
+    }
+    ErrorMessage.prototype.wrap = function (errors) {
+        switch (true) {
+            case _.isArray(errors):
+                return errors;
+            case !errors:
+                return [];
+            default:
+                return [errors];
+        }
+    };
+    ErrorMessage.prototype.render = function () {
+        var _a = this.props, errors = _a.errors, name = _a.name;
+        if (!errors) {
+            return null;
+        }
+        var myErrors = this.wrap(errors[name]);
+        if (myErrors.length === 0) {
+            return null;
+        }
+        return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error, i) { return React.createElement("li", {"className": "error-message", "key": i}, error); }));
+    };
+    return ErrorMessage;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = ErrorMessage;
+
+},{"../eventer":5}],3:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var eventer_1 = require('../eventer');
+var state_1 = require('../models/state');
+var error_message_1 = require('./error-message');
+var InputForm = (function (_super) {
+    __extends(InputForm, _super);
+    function InputForm(props) {
+        _super.call(this, props);
+        this.state = {
+            value: this.props.initialValue
+        };
+    }
+    Object.defineProperty(InputForm.prototype, "className", {
+        get: function () {
+            var _a = this.props, className = _a.className, state = _a.state;
+            return className + (state === state_1.State.Submitting ? ' sending' : ' ready');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InputForm.prototype, "label", {
+        get: function () {
+            var label = this.props.label;
+            if (!label) {
+                return null;
+            }
+            return React.createElement("label", {"className": "input-label"}, label);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InputForm.prototype, "error", {
+        get: function () {
+            var _a = this.props, errors = _a.errors, name = _a.name;
+            return React.createElement(error_message_1.default, React.__spread({}, { errors: errors, name: name }));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InputForm.prototype.render = function () {
+        var _a = this.props, type = _a.type, name = _a.name, placeholder = _a.placeholder, value = _a.value, onChange = _a.onChange, errors = _a.errors;
+        var state = !!errors && !!errors[name] ? 'has-error' : 'calm';
+        return React.createElement("div", {"className": "input-form"}, this.label, React.createElement("input", React.__spread({"className": state}, { type: type, name: name, placeholder: placeholder, value: value, onChange: function (e) { return onChange(e.target.value); } })), this.error);
+    };
+    return InputForm;
+})(eventer_1.Node);
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = InputForm;
+
+},{"../eventer":5,"../models/state":8,"./error-message":2}],4:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -131,7 +228,7 @@ var SubmitButton = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SubmitButton;
 
-},{"../eventer":3,"../fa":4,"../models/state":5}],3:[function(require,module,exports){
+},{"../eventer":5,"../fa":6,"../models/state":8}],5:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -199,22 +296,17 @@ var Root = (function (_super) {
         return { emitter: this.context.emitter || this.emitter };
     };
     Root.prototype.render = function () {
-        var props = _.merge(_.clone(this.props), this.state);
+        var props = Object.assign({}, this.props, this.state);
         delete props.children;
         var children = this.props.children;
-        if (!children.map) {
-            children = [children];
-        }
-        return React.createElement("div", null, children.map(function (child, i) {
-            props.key = i;
-            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
-        }));
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
     };
     return Root;
 })(Node);
 exports.Root = Root;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -244,7 +336,22 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+var input_form_1 = require('../components/input-form');
+function writeInput(self, type, name, placeholder, label, errors) {
+    if (errors === void 0) { errors = {}; }
+    return React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+        errors: errors, type: type, name: name, placeholder: placeholder, label: label, value: self.state[name],
+        onChange: function (v) {
+            var p = {};
+            p[name] = v;
+            self.setState(p);
+        }
+    })));
+}
+exports.writeInput = writeInput;
+
+},{"../components/input-form":3}],8:[function(require,module,exports){
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
     State[State["Submitting"] = 1] = "Submitting";
@@ -253,7 +360,7 @@ exports.default = Fa;
 })(exports.State || (exports.State = {}));
 var State = exports.State;
 
-},{}],6:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {
@@ -264,6 +371,11 @@ var Method;
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
 exports.Api = {
+    DisposeMessage: {
+        uri: '/m/:messageId',
+        method: Method.Delete,
+        params: function (p) { return p; }
+    },
     Invite: {
         uri: '/g/:groupId/invitation',
         method: Method.Post,
@@ -381,7 +493,6 @@ function common(api, params, resolve, reject, queueResolve) {
     var uri = api.uri;
     if (uri.indexOf(':') !== -1) {
         var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-        console.log(uri, params, normalized, trimmed);
     }
     build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
@@ -436,7 +547,10 @@ function normalize(uri, trimmed) {
     delete trimmed.commentId;
     var invitationId = trimmed.invitationId;
     delete trimmed.invitationId;
+    var messageId = trimmed.messageId;
+    delete trimmed.messageId;
     var normalized = uri
+        .replace(':messageId', messageId)
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)

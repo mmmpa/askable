@@ -42,20 +42,26 @@ a.default
     border: 1px solid $border-color
     border-radius: $radius
     overflow: hidden
+    margin-bottom: 20px
   &.border-box-title-area
     display: block
+    margin: -1px 0 0 0
     padding: 14px 20px 15px
-    margin: 0
     font-size: 14px
     line-height: 17px
     background-color: #f5f5f5
     border: 1px solid $border-color
     border-width: 1px 0
-    margin: -1px 0 0 0
   &.form-area
     padding: 20px
   &.input-section
     margin: 0 0 20px
+    .input-label
+      display: block
+      margin-bottom: 5px
+    input[type="text"],
+    input[type="password"]
+      @extend .input-contrast, .input-block
   &.submit-section
     margin: 0
     text-align: right
@@ -243,6 +249,7 @@ input.has-error
 .no-response,
 .no-question,
 .no-information,
+.no-message,
 .no-group
   @extend .blankslate
   margin: 20px 0 0
@@ -261,7 +268,31 @@ input.has-error
     padding: 20px
   &.from-system
     margin: 0 0 20px 0
-
+  &.controller
+    border-top: 1px solid $border-color
+    padding: 10px 20px
+    text-align: right
+  &.message-list
+    margin: -1px 0 0 0
+  &.message-item
+    border-top: 1px solid $border-color
+    padding: 0
+    display: table-row
+    width: 100%
+    @extend .item
+    time,
+    .message
+      border-top: 1px solid $border-color
+      margin: 0
+      display: table-cell
+    time
+      margin: 0
+      width: 10px
+      white-space: nowrap
+      padding: 10px 20px
+    .message
+      width: 100%
+      padding: 20px 20px 20px 0
 .portal
   &.body
     @extend %normal-body
@@ -614,31 +645,26 @@ input.has-error
   input
     @extend .input-block
 
-.user-register,
+.user-register
+  &.body
+    @extend %small-body
+
+.user-registered
+  &.body
+    @extend %small-body
+  &.info-label
+    font-size: $size-normal
+    margin: 0 0 5px 0
+    color: $brand-gray
+  &.info
+    font-size: $size-title
+    margin: 0
+  &.link-section
+    text-align: right
+
 .user-editor
   &.body
     @extend %small-body
-  &.registered-body,
-  &.registering-body
-    @extend %boxed-group
-    .inner
-      @extend %boxed-group-inner
-      &.form
-        padding: 20px 10px
-  &.info-label
-    font-size: $size-normal
-  &.link-section
-    padding-bottom: 10px
-    text-align: right
-  &.registered-title,
-  &.registering-title
-    @extend %boxed-group-title
-  &.input-section
-    margin: 0 0 20px
-  input
-    @extend .input-contrast, .input-block
-  &.submit-section
-    @extend .form-actions
   &.dispose-verify
     input
       display: inline-block

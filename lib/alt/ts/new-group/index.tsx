@@ -5,11 +5,11 @@ declare const request;
 declare const Promise;
 
 import {Root, Node} from './lib/eventer'
+import {State} from './lib/models/state'
 import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
-import InputForm from './lib/components/input-form'
-import {State} from './lib/models/state'
+import {writeInput} from './lib/helpers/input-writer'
 
 class Context extends Root {
   succeed(groupId) {
@@ -57,19 +57,6 @@ class Component extends Node {
     return {name, description}
   }
 
-  writeInput(type, name, placeholder, errors) {
-    return <section className="com input-section">
-      <InputForm {...{
-        errors, type, name, placeholder, value: this.state[name],
-        onChange: (v)=> {
-          let p = {};
-          p[name] = v;
-          this.setState(p)
-        }
-      }}/>
-    </section>
-  }
-
   render() {
     let {state, errors} = this.props;
 
@@ -77,8 +64,8 @@ class Component extends Node {
       <div className="com border-box-container">
         <h1 className="com border-box-title-area">グループを作成する</h1>
         <section className="com form-area">
-          {this.writeInput('text', 'name', 'グループの名前', errors)}
-          {this.writeInput('text', 'description', 'グループの概要', errors)}
+          {writeInput(this, 'text', 'name', 'グループの名前', null, errors)}
+          {writeInput(this, 'text', 'description', 'グループの概要', null,  errors)}
           <section className="com submit-section">
             <SubmitButton {...{
               state, icon: "thumbs-o-up", text: "作成する", className: 'submit',

@@ -5,7 +5,12 @@ class Welcome::UsersController < ApplicationController
   end
 
   def create
-    render json: User.create!(user_params)
+    user = User.create!(user_params)
+    render json: {
+      login: user.login,
+      name: user.name,
+      email: user.email
+    }, status: 201
   rescue ActiveRecord::RecordInvalid => e
     render json: {errors: e.record.errors}, status: 400
   end

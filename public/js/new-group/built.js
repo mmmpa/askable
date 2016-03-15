@@ -5,10 +5,10 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var eventer_1 = require('./lib/eventer');
+var state_1 = require('./lib/models/state');
 var strike_api_1 = require('./lib/services/strike-api');
 var submit_button_1 = require('./lib/components/submit-button');
-var input_form_1 = require('./lib/components/input-form');
-var state_1 = require('./lib/models/state');
+var input_writer_1 = require('./lib/helpers/input-writer');
 var Context = (function (_super) {
     __extends(Context, _super);
     function Context() {
@@ -60,21 +60,10 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Component.prototype.writeInput = function (type, name, placeholder, errors) {
-        var _this = this;
-        return React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
-            errors: errors, type: type, name: name, placeholder: placeholder, value: this.state[name],
-            onChange: function (v) {
-                var p = {};
-                p[name] = v;
-                _this.setState(p);
-            }
-        })));
-    };
     Component.prototype.render = function () {
         var _this = this;
         var _a = this.props, state = _a.state, errors = _a.errors;
-        return React.createElement("article", {"className": "new-group body"}, React.createElement("div", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "グループを作成する"), React.createElement("section", {"className": "com form-area"}, this.writeInput('text', 'name', 'グループの名前', errors), this.writeInput('text', 'description', 'グループの概要', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("article", {"className": "new-group body"}, React.createElement("div", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "グループを作成する"), React.createElement("section", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'name', 'グループの名前', null, errors), input_writer_1.writeInput(this, 'text', 'description', 'グループの概要', null, errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "thumbs-o-up", text: "作成する", className: 'submit',
             onClick: function () { return _this.dispatch('submit', _this.params); }
         }))))));
@@ -94,7 +83,7 @@ var NewGroup = (function () {
 })();
 window.NewGroup = NewGroup;
 
-},{"./lib/components/input-form":3,"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/models/state":7,"./lib/services/strike-api":8}],2:[function(require,module,exports){
+},{"./lib/components/submit-button":4,"./lib/eventer":5,"./lib/helpers/input-writer":7,"./lib/models/state":8,"./lib/services/strike-api":9}],2:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -163,7 +152,7 @@ var InputForm = (function (_super) {
             if (!label) {
                 return null;
             }
-            return React.createElement("label", null, label);
+            return React.createElement("label", {"className": "input-label"}, label);
         },
         enumerable: true,
         configurable: true
@@ -186,7 +175,7 @@ var InputForm = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = InputForm;
 
-},{"../eventer":5,"../models/state":7,"./error-message":2}],4:[function(require,module,exports){
+},{"../eventer":5,"../models/state":8,"./error-message":2}],4:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -226,7 +215,7 @@ var SubmitButton = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SubmitButton;
 
-},{"../eventer":5,"../fa":6,"../models/state":7}],5:[function(require,module,exports){
+},{"../eventer":5,"../fa":6,"../models/state":8}],5:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -294,16 +283,11 @@ var Root = (function (_super) {
         return { emitter: this.context.emitter || this.emitter };
     };
     Root.prototype.render = function () {
-        var props = _.merge(_.clone(this.props), this.state);
+        var props = Object.assign({}, this.props, this.state);
         delete props.children;
         var children = this.props.children;
-        if (!children.map) {
-            children = [children];
-        }
-        return React.createElement("div", null, children.map(function (child, i) {
-            props.key = i;
-            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
-        }));
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
     };
     return Root;
 })(Node);
@@ -340,6 +324,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
 },{}],7:[function(require,module,exports){
+var input_form_1 = require('../components/input-form');
+function writeInput(self, type, name, placeholder, label, errors) {
+    if (errors === void 0) { errors = {}; }
+    return React.createElement("section", {"className": "com input-section"}, React.createElement(input_form_1.default, React.__spread({}, {
+        errors: errors, type: type, name: name, placeholder: placeholder, label: label, value: self.state[name],
+        onChange: function (v) {
+            var p = {};
+            p[name] = v;
+            self.setState(p);
+        }
+    })));
+}
+exports.writeInput = writeInput;
+
+},{"../components/input-form":3}],8:[function(require,module,exports){
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
     State[State["Submitting"] = 1] = "Submitting";
@@ -348,7 +347,7 @@ exports.default = Fa;
 })(exports.State || (exports.State = {}));
 var State = exports.State;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var jobs = Promise.resolve();
 var Method;
 (function (Method) {
@@ -359,6 +358,11 @@ var Method;
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
 exports.Api = {
+    DisposeMessage: {
+        uri: '/m/:messageId',
+        method: Method.Delete,
+        params: function (p) { return p; }
+    },
     Invite: {
         uri: '/g/:groupId/invitation',
         method: Method.Post,
@@ -476,7 +480,6 @@ function common(api, params, resolve, reject, queueResolve) {
     var uri = api.uri;
     if (uri.indexOf(':') !== -1) {
         var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-        console.log(uri, params, normalized, trimmed);
     }
     build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
@@ -531,7 +534,10 @@ function normalize(uri, trimmed) {
     delete trimmed.commentId;
     var invitationId = trimmed.invitationId;
     delete trimmed.invitationId;
+    var messageId = trimmed.messageId;
+    delete trimmed.messageId;
     var normalized = uri
+        .replace(':messageId', messageId)
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)

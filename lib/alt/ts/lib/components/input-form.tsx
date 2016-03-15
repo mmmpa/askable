@@ -24,7 +24,7 @@ export default class InputForm extends Node {
       return null
     }
 
-    return <label>{label}</label>
+    return <label className="input-label">{label}</label>
   }
 
   get error() {

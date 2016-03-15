@@ -229,16 +229,11 @@ var Root = (function (_super) {
         return { emitter: this.context.emitter || this.emitter };
     };
     Root.prototype.render = function () {
-        var props = _.merge(_.clone(this.props), this.state);
+        var props = Object.assign({}, this.props, this.state);
         delete props.children;
         var children = this.props.children;
-        if (!children.map) {
-            children = [children];
-        }
-        return React.createElement("div", null, children.map(function (child, i) {
-            props.key = i;
-            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
-        }));
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
     };
     return Root;
 })(Node);
@@ -294,6 +289,11 @@ var Method;
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
 exports.Api = {
+    DisposeMessage: {
+        uri: '/m/:messageId',
+        method: Method.Delete,
+        params: function (p) { return p; }
+    },
     Invite: {
         uri: '/g/:groupId/invitation',
         method: Method.Post,
@@ -411,7 +411,6 @@ function common(api, params, resolve, reject, queueResolve) {
     var uri = api.uri;
     if (uri.indexOf(':') !== -1) {
         var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-        console.log(uri, params, normalized, trimmed);
     }
     build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
@@ -466,7 +465,10 @@ function normalize(uri, trimmed) {
     delete trimmed.commentId;
     var invitationId = trimmed.invitationId;
     delete trimmed.invitationId;
+    var messageId = trimmed.messageId;
+    delete trimmed.messageId;
     var normalized = uri
+        .replace(':messageId', messageId)
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)

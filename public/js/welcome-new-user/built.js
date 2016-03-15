@@ -80,7 +80,7 @@ var Component = (function (_super) {
     };
     Component.prototype.writeResult = function () {
         var _a = this.props.result || {}, name = _a.name, login = _a.login, email = _a.email;
-        return React.createElement("article", {"className": "user-register body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "以下の内容で登録されました"), React.createElement("div", {"className": "com form-area"}, React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-register info-label"}, "表示するなまえ"), React.createElement("p", {"className": "user-register info"}, name)), React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-register info-label"}, "ログイン用ID"), React.createElement("p", {"className": "user-register info"}, login)), React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-register info-label"}, "メールアドレス"), React.createElement("p", {"className": "user-register info"}, email)), React.createElement("section", {"className": "user-register link-section"}, React.createElement(fa_1.default, {"icon": "sign-in"}), React.createElement("a", {"href": "/in"}, "ログインページヘ")))));
+        return React.createElement("article", {"className": "user-registered body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "以下の内容で登録されました"), React.createElement("div", {"className": "com form-area"}, React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-registered info-label"}, "表示する名前"), React.createElement("p", {"className": "user-registered info"}, name)), React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-registered info-label"}, "ログイン用ID"), React.createElement("p", {"className": "user-registered info"}, login)), React.createElement("section", {"className": "com input-section"}, React.createElement("h1", {"className": "user-registered info-label"}, "メールアドレス"), React.createElement("p", {"className": "user-registered info"}, email)), React.createElement("section", {"className": "user-registered link-section"}, React.createElement(fa_1.default, {"icon": "sign-in"}), React.createElement("a", {"href": "/in"}, "ログイン")))));
     };
     Component.prototype.render = function () {
         switch (this.props.state) {
@@ -174,7 +174,7 @@ var InputForm = (function (_super) {
             if (!label) {
                 return null;
             }
-            return React.createElement("label", null, label);
+            return React.createElement("label", {"className": "input-label"}, label);
         },
         enumerable: true,
         configurable: true
@@ -305,16 +305,11 @@ var Root = (function (_super) {
         return { emitter: this.context.emitter || this.emitter };
     };
     Root.prototype.render = function () {
-        var props = _.merge(_.clone(this.props), this.state);
+        var props = Object.assign({}, this.props, this.state);
         delete props.children;
         var children = this.props.children;
-        if (!children.map) {
-            children = [children];
-        }
-        return React.createElement("div", null, children.map(function (child, i) {
-            props.key = i;
-            return React.cloneElement(child || React.createElement("div", null, "blank"), props);
-        }));
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
     };
     return Root;
 })(Node);
@@ -370,6 +365,11 @@ var Method;
     Method[Method["Delete"] = 4] = "Delete";
 })(Method || (Method = {}));
 exports.Api = {
+    DisposeMessage: {
+        uri: '/m/:messageId',
+        method: Method.Delete,
+        params: function (p) { return p; }
+    },
     Invite: {
         uri: '/g/:groupId/invitation',
         method: Method.Post,
@@ -487,7 +487,6 @@ function common(api, params, resolve, reject, queueResolve) {
     var uri = api.uri;
     if (uri.indexOf(':') !== -1) {
         var _a = normalize(uri, params), normalized = _a.normalized, trimmed = _a.trimmed;
-        console.log(uri, params, normalized, trimmed);
     }
     build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
 }
@@ -542,7 +541,10 @@ function normalize(uri, trimmed) {
     delete trimmed.commentId;
     var invitationId = trimmed.invitationId;
     delete trimmed.invitationId;
+    var messageId = trimmed.messageId;
+    delete trimmed.messageId;
     var normalized = uri
+        .replace(':messageId', messageId)
         .replace(':invitationId', invitationId)
         .replace(':questionId', questionId)
         .replace(':commentId', commentId)

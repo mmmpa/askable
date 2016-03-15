@@ -12,6 +12,11 @@ enum Method {
 }
 
 export const Api = {
+  DisposeMessage: {
+    uri: '/m/:messageId',
+    method: Method.Delete,
+    params: (p)=> p
+  },
   Invite: {
     uri: '/g/:groupId/invitation',
     method: Method.Post,
@@ -132,7 +137,6 @@ function common(api, params, resolve, reject, queueResolve) {
   let {uri} = api;
   if (uri.indexOf(':') !== -1) {
     var {normalized, trimmed} = normalize(uri, params);
-    console.log(uri, params, normalized, trimmed)
   }
 
   build(resolve, reject, queueResolve, normalized || uri, api.method, api.params(trimmed || params));
@@ -192,7 +196,10 @@ function normalize(uri, trimmed) {
   delete trimmed.commentId;
   let invitationId = trimmed.invitationId;
   delete trimmed.invitationId;
+  let messageId = trimmed.messageId;
+  delete trimmed.messageId;
   let normalized = uri
+    .replace(':messageId', messageId)
     .replace(':invitationId', invitationId)
     .replace(':questionId', questionId)
     .replace(':commentId', commentId)

@@ -64,16 +64,15 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
   }
 
   render() {
-    let props = _.merge(_.clone(this.props), this.state);
+    let props = Object.assign({}, this.props, this.state);
     delete props.children;
+
     let {children} = this.props;
-    if (!children.map) {
-      children = [children]
-    }
-    return <div>{children.map((child, i)=> {
-      props.key = i;
-      return React.cloneElement(child || <div>blank</div>, props)
-      })}</div>;
+    let elements = !!children.map ? children : [children];
+
+    return <div className="context-wrapper">
+      {elements.map((child, i)=> React.cloneElement(child, Object.assign(props, {key: i})))}
+    </div>;
   }
 }
 

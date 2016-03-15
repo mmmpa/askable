@@ -15,9 +15,9 @@ feature 'ユーザー登録' do
     take_ss('入力済み')
     find('.user-register button').click
     take_ss('送信')
-    sleep 1
-    find('.user-register .registered-body')
-    take_ss('登録完了')
+
+    take_ss('登録完了', 1)
+    find('.user-registered.body')
   end
 
   scenario '新規ユーザー登録（エラー）' do
@@ -26,9 +26,8 @@ feature 'ユーザー登録' do
 
     find('.user-register button').click
 
-    sleep 1
-    take_ss('無入寮エラー')
-    find('.user-register .registering-body')
+    take_ss('無入寮エラー', 1)
+    find('.user-register.body')
     expect(all('.error-messages').size).not_to eq(0)
 
     find('.user-register input[name="name"]').set(SecureRandom.hex(4))
@@ -38,8 +37,7 @@ feature 'ユーザー登録' do
     take_ss('エラーを起こす入力')
     find('.user-register button').click
 
-    sleep 1
-    take_ss('一意エラー、短すぎるエラー')
+    take_ss('一意エラー、短すぎるエラー', 1)
 
     find('.user-register input[name="name"]').set(SecureRandom.hex(4))
     find('.user-register input[name="login"]').set(SecureRandom.hex(4))
@@ -49,9 +47,9 @@ feature 'ユーザー登録' do
 
     find('.user-register button').click
     take_ss('送信')
-    sleep 1
-    find('.user-register .registered-body')
-    take_ss('登録完了')
+
+    take_ss('登録完了', 1)
+    find('.user-registered.body')
   end
 end
 

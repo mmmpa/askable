@@ -8,7 +8,9 @@ import {Root, Node} from './lib/eventer'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
+import InputForm from './lib/components/input-form'
 import SubmitButton from './lib/components/submit-button'
+import {writeInput} from './lib/helpers/input-writer'
 
 class Context extends Root {
   succeed() {
@@ -20,7 +22,7 @@ class Context extends Root {
     strike(Api.LogIn, params)
       .then(()=> {
         this.succeed();
-        this.setState({state: State.Success});
+        this.setState({loggedIn: true});
       })
       .catch(()=> {
         this.setState({state: State.Fail});
@@ -35,7 +37,8 @@ class Context extends Root {
 
   initialState(props) {
     return {
-      state: State.Waiting
+      state: State.Waiting,
+      loggedIn: false
     }
   }
 }
@@ -54,18 +57,21 @@ class Component extends Node {
     return {login, password};
   }
 
-  writeError(state) {
-    switch (state) {
+  writeError() {
+    if(this.props.loggedIn){
+      return <p className="com message-area success-message">
+        <Fa icon="paw"/>
+        ログインに成功しました
+      </p>;
+    }
+
+    switch (this.props.state) {
       case State.Fail:
         return <p className="com message-area error-message">
           <Fa icon="ban"/>
           ログインに失敗しました
         </p>;
       case State.Success:
-        return <p className="com message-area success-message">
-          <Fa icon="paw"/>
-          ログインに成功しました
-        </p>;
       case State.Submitting:
       case State.Waiting:
       default:
@@ -75,19 +81,14 @@ class Component extends Node {
 
   render() {
     let {state} = this.props;
+    let {login, password} = this.state;
 
     return <article className="user-log-in body">
       <section className="com border-box-container">
         <h1 className="com border-box-title-area">ログイン</h1>
         <div className="com form-area">
-          <section className="com input-section">
-            <input type="text" name="login" value={this.state.login} placeholder="ログインID"
-                   onChange={(e)=> this.setState({login: e.target.value})}/>
-          </section>
-          <section className="com input-section">
-            <input type="password" name="password" value={this.state.password} placeholder="パスワード"
-                   onChange={(e)=> this.setState({password: e.target.value})}/>
-          </section>
+          {writeInput(this, 'text', 'login', 'ログインID', null)}
+          {writeInput(this, 'password', 'password', 'パスワード', null)}
           <section className="com submit-section">
             <SubmitButton {...{
               state, icon: "sign-in", text: "ログインする", className: 'submit',
@@ -95,7 +96,7 @@ class Component extends Node {
             }}/>
           </section>
         </div>
-        {this.writeError(state)}
+        {this.writeError()}
       </section>
     </article>
   }
