@@ -16,7 +16,7 @@ RSpec.describe "Users", type: :request do
       it '作成成功でユーザーデータが返る' do
         params = attributes_for(:user, :valid);
         post welcome_new_user_path, users: params
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(201)
         expect(json[:login]).to eq(params[:login])
       end
 
