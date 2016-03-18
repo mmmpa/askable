@@ -43,4 +43,21 @@ RSpec.describe User, type: :model do
       expect(user.invitations.size).to eq(1)
     end
   end
+
+
+  describe 'updating' do
+    context 'パスワードの変更には旧パスワードが必要' do
+      it '旧パスワードなしでエラー' do
+        expect { User.first.update_password!(password: 'a' * 8) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it '旧パスワード相違でエラー' do
+        expect { User.first.update_password!(password_now: 'b' * 8, password: 'a' * 8) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it '旧パスワード一致で変更' do
+        expect(User.first.update_password!(password_now: 'a' * 8, password: 'b' * 8)).to be_truthy
+      end
+    end
+  end
 end

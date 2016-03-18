@@ -12,11 +12,7 @@ class UserInformation
   end
 
   def information
-    converted.sort_by(&:created_at).reverse
-  end
-
-  def converted
-    all.map(&method(:convert)).compact
+    all.sort_by(&:created_at).reverse
   end
 
   def convert(model)
@@ -45,11 +41,11 @@ class UserInformation
   end
 
   def invitations
-    user.invitations
+    user.invitations.map(&method(:convert))
   end
 
   def messages
-    user.messages
+    user.messages.map(&method(:convert))
   end
 
   class Item

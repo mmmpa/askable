@@ -132,5 +132,11 @@ RSpec.describe Message, type: :model do
         expect(message.destroyed?).to be_falsey
       end
     end
+
+    context '送り主、送付主以外は削除できない' do
+      it do
+        expect { message.dispose!(User.third) }.to raise_error(Message::NotOwner)
+      end
+    end
   end
 end

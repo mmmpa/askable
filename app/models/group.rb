@@ -84,19 +84,14 @@ class Group < ActiveRecord::Base
     members
   end
 
-  def dispose!(member)
+  #alias_method :dispose!, :dispose_by!
+  def dispose_by!(member)
     member_or_die!(member)
     if owner?(member)
       destroy!
     elsif member?(member)
       remove_by!(member, member)
     end
-  end
-
-  def invite!(owner, invite_params)
-    owner_or_die!(owner)
-    target = User.normal.find_by(login: invite_params[:login]) || (raise ActiveRecord::RecordNotFound)
-    add_by!(owner, target)
   end
 
   def update_by!(owner, params)
