@@ -22,7 +22,7 @@ module MessageUserRelative
         sent_message.save(validate: false)
       end
 
-      messages.each do |message|
+      received_messages.each do |message|
         message.user = User.deleted
         message.save(validate: false)
       end
