@@ -5,7 +5,7 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
@@ -15,7 +15,7 @@ import User from "./lib/models/user";
 import Group from "./lib/models/group";
 import SubmitButton from './lib/components/submit-button'
 
-class Context extends Root {
+class Context extends Parcel {
   succeed() {
     location.reload();
   }
@@ -91,7 +91,7 @@ enum Mode{
   Assigning
 }
 
-class Component extends Node {
+class Component extends Good {
   private cm;
 
   constructor(props) {

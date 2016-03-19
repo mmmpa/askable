@@ -1,10 +1,10 @@
 declare const React;
 declare const ReactDOM;
 declare const _;
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import Fa from '../fa'
 
-export default class ErrorMessages extends Node {
+export default class ErrorMessages extends Good {
   render(){
     let errors = this.props.errors[this.props.name];
 

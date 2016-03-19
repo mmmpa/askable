@@ -70,7 +70,7 @@ feature '回答する' do
     first('.assigner.group-member').click
     take_ss('選択済み')
 
-    first('.respond.submit').click
+    first('.respond .submit').click
     take_ss('送信済み', 1)
 
     expect(after_q.assigned_count).to eq(assigned_count + 1)
@@ -90,7 +90,7 @@ feature '回答する' do
     find('.respond .CodeMirror').send_keys(content)
     take_ss('記入済み')
 
-    first('.respond.submit').click
+    first('.respond .submit').click
     take_ss('送信済み', 1)
 
     expect(after_q.responded_count).to eq(responded_count + 1)

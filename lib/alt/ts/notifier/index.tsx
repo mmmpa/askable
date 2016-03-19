@@ -1,9 +1,3 @@
-declare const React;
-declare const ReactDOM;
-declare const _;
-declare const request;
-declare const Promise;
-
 export default class Notifier {
   static risingClass(type) {
     return `body notifier ${type} rising`

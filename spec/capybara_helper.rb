@@ -9,7 +9,7 @@ Dir[Rails.root.join('spec/capybara/**/*.rb')].each { |f| require f }
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, {
-    js_errors: false,
+    js_errors: true,
     timeout: 1000,
     debug: false,
     phantomjs_options: %w(

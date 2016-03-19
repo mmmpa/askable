@@ -1,17 +1,16 @@
-import {IAnswer} from "./lib/services/strike-api";
 declare const React;
 declare const ReactDOM;
 declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 
-class Context extends Root {
+class Context extends Parcel {
   succeed() {
     location.reload();
   }
@@ -53,7 +52,7 @@ class Context extends Root {
   }
 }
 
-class Component extends Node {
+class Component extends Good {
   render() {
     let {state} = this.props;
 

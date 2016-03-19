@@ -14380,7 +14380,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var eventer_1 = require('./lib/eventer');
+var parcel_1 = require('./lib/parcel');
 var strike_api_1 = require('./lib/services/strike-api');
 var state_1 = require('./lib/models/state');
 var comment_editor_1 = require('./lib/components/comment-editor');
@@ -14445,7 +14445,7 @@ var Context = (function (_super) {
         };
     };
     return Context;
-})(eventer_1.Root);
+})(parcel_1.Parcel);
 var Component = (function (_super) {
     __extends(Component, _super);
     function Component(props) {
@@ -14475,7 +14475,7 @@ var Component = (function (_super) {
         return React.createElement("article", {"className": "reply-to-reply body"}, React.createElement("section", {"className": "reply-to-reply responder-area"}, this.writeResponder()));
     };
     return Component;
-})(eventer_1.Node);
+})(parcel_1.Good);
 var ReplyToReply = (function () {
     function ReplyToReply() {
     }
@@ -14495,13 +14495,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ReplyToReply;
 window.ReplyToReply = ReplyToReply;
 
-},{"./lib/components/comment-editor":14,"./lib/components/submit-button":16,"./lib/eventer":17,"./lib/models/state":19,"./lib/services/strike-api":20}],14:[function(require,module,exports){
+},{"./lib/components/comment-editor":14,"./lib/components/submit-button":16,"./lib/models/state":18,"./lib/parcel":19,"./lib/services/strike-api":20}],14:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var eventer_1 = require('../eventer');
+var parcel_1 = require('../parcel');
 var marked = require('marked');
 var fa_1 = require('../fa');
 var error_message_1 = require('./error-message');
@@ -14598,17 +14598,17 @@ var CommentEditor = (function (_super) {
         return React.createElement("section", {"className": "comment-editor editor-area"}, React.createElement("section", {"className": "comment-editor tabs tabnav"}, React.createElement("nav", {"className": "tabnav-tabs"}, React.createElement("a", {"className": this.detectTabClass(false), "onClick": function () { return _this.setState({ preview: false }); }}, React.createElement(fa_1.default, {"icon": "pencil"}), "書く"), React.createElement("a", {"className": this.detectTabClass(true), "onClick": function () { return _this.setState({ preview: true }); }}, React.createElement(fa_1.default, {"icon": "file-text-o"}), "プレビュー"))), React.createElement("div", {"className": "inner form"}, this.writeCommentArea(), this.writePreviewArea()));
     };
     return CommentEditor;
-})(eventer_1.Node);
+})(parcel_1.Good);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentEditor;
 
-},{"../eventer":17,"../fa":18,"./error-message":15,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],15:[function(require,module,exports){
+},{"../fa":17,"../parcel":19,"./error-message":15,"codemirror":3,"codemirror/addon/display/placeholder.js":1,"codemirror/addon/mode/overlay.js":2,"codemirror/mode/clike/clike.js":4,"codemirror/mode/css/css.js":5,"codemirror/mode/gfm/gfm.js":6,"codemirror/mode/htmlmixed/htmlmixed.js":7,"codemirror/mode/javascript/javascript.js":8,"codemirror/mode/markdown/markdown.js":9,"codemirror/mode/meta.js":10,"codemirror/mode/xml/xml.js":11,"marked":12}],15:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var eventer_1 = require('../eventer');
+var parcel_1 = require('../parcel');
 var ErrorMessage = (function (_super) {
     __extends(ErrorMessage, _super);
     function ErrorMessage() {
@@ -14636,17 +14636,17 @@ var ErrorMessage = (function (_super) {
         return React.createElement("ul", {"className": "error-messages"}, myErrors.map(function (error, i) { return React.createElement("li", {"className": "error-message", "key": i}, error); }));
     };
     return ErrorMessage;
-})(eventer_1.Node);
+})(parcel_1.Good);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ErrorMessage;
 
-},{"../eventer":17}],16:[function(require,module,exports){
+},{"../parcel":19}],16:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var eventer_1 = require('../eventer');
+var parcel_1 = require('../parcel');
 var state_1 = require('../models/state');
 var fa_1 = require('../fa');
 var SubmitButton = (function (_super) {
@@ -14676,89 +14676,11 @@ var SubmitButton = (function (_super) {
         }
     };
     return SubmitButton;
-})(eventer_1.Node);
+})(parcel_1.Good);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = SubmitButton;
 
-},{"../eventer":17,"../fa":18,"../models/state":19}],17:[function(require,module,exports){
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-exports.EventingShared = {
-    emitter: React.PropTypes.any
-};
-var Node = (function (_super) {
-    __extends(Node, _super);
-    function Node() {
-        _super.apply(this, arguments);
-    }
-    Object.defineProperty(Node, "contextTypes", {
-        get: function () {
-            return exports.EventingShared;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Node.prototype.dispatch = function (event) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-        return (_a = this.context.emitter).emit.apply(_a, [event].concat(args));
-        var _a;
-    };
-    return Node;
-})(React.Component);
-exports.Node = Node;
-var Root = (function (_super) {
-    __extends(Root, _super);
-    function Root(props) {
-        _super.call(this, props);
-        this.addedOnStore = [];
-        this.state = this.initialState(props);
-    }
-    Object.defineProperty(Root, "childContextTypes", {
-        get: function () {
-            return exports.EventingShared;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Root.prototype.componentWillUnmount = function () {
-        var _this = this;
-        var disposed = this.addedOnStore.map(function (_a) {
-            var eventName = _a.eventName, callback = _a.callback;
-            _this.emitter.removeListener(eventName, callback);
-            return eventName;
-        });
-    };
-    Root.prototype.componentWillMount = function () {
-        var _this = this;
-        if (!this.emitter) {
-            this.emitter = this.context.emitter || new EventEmitter();
-            this.listen(function (eventName, callback) {
-                _this.addedOnStore.push({ eventName: eventName, callback: callback });
-                _this.emitter.on(eventName, callback);
-            });
-        }
-    };
-    Root.prototype.getChildContext = function () {
-        return { emitter: this.context.emitter || this.emitter };
-    };
-    Root.prototype.render = function () {
-        var props = Object.assign({}, this.props, this.state);
-        delete props.children;
-        var children = this.props.children;
-        var elements = !!children.map ? children : [children];
-        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, Object.assign(props, { key: i })); }));
-    };
-    return Root;
-})(Node);
-exports.Root = Root;
-
-},{}],18:[function(require,module,exports){
+},{"../fa":17,"../models/state":18,"../parcel":19}],17:[function(require,module,exports){
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -14788,7 +14710,7 @@ var Fa = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Fa;
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (State) {
     State[State["Waiting"] = 0] = "Waiting";
     State[State["Submitting"] = 1] = "Submitting";
@@ -14796,6 +14718,84 @@ exports.default = Fa;
     State[State["Success"] = 3] = "Success";
 })(exports.State || (exports.State = {}));
 var State = exports.State;
+
+},{}],19:[function(require,module,exports){
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var EventingShared = {
+    emitter: React.PropTypes.any
+};
+var Good = (function (_super) {
+    __extends(Good, _super);
+    function Good() {
+        _super.apply(this, arguments);
+    }
+    Object.defineProperty(Good, "contextTypes", {
+        get: function () {
+            return EventingShared;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Good.prototype.dispatch = function (event) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        return (_a = this.context.emitter).emit.apply(_a, [event].concat(args));
+        var _a;
+    };
+    return Good;
+})(React.Component);
+exports.Good = Good;
+var Parcel = (function (_super) {
+    __extends(Parcel, _super);
+    function Parcel(props) {
+        _super.call(this, props);
+        this.addedOnStore = [];
+        this.state = this.initialState(props);
+    }
+    Object.defineProperty(Parcel, "childContextTypes", {
+        get: function () {
+            return EventingShared;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Parcel.prototype.componentWillUnmount = function () {
+        var _this = this;
+        this.addedOnStore.map(function (_a) {
+            var eventName = _a.eventName, callback = _a.callback;
+            _this.emitter.removeListener(eventName, callback);
+            return eventName;
+        });
+    };
+    Parcel.prototype.componentWillMount = function () {
+        var _this = this;
+        if (!this.emitter) {
+            this.emitter = this.context.emitter || new EventEmitter();
+            this.listen(function (eventName, callback) {
+                _this.addedOnStore.push({ eventName: eventName, callback: callback });
+                _this.emitter.on(eventName, callback);
+            });
+        }
+    };
+    Parcel.prototype.getChildContext = function () {
+        return { emitter: this.context.emitter || this.emitter };
+    };
+    Parcel.prototype.render = function () {
+        var props = _.assign({}, this.props, this.state);
+        delete props.children;
+        var children = this.props.children;
+        var elements = !!children.map ? children : [children];
+        return React.createElement("div", {"className": "context-wrapper"}, elements.map(function (child, i) { return React.cloneElement(child, _.assign(props, { key: i })); }));
+    };
+    return Parcel;
+})(Good);
+exports.Parcel = Parcel;
 
 },{}],20:[function(require,module,exports){
 var jobs = Promise.resolve();

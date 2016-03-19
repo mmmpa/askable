@@ -5,7 +5,7 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
@@ -15,7 +15,7 @@ import User from "./lib/models/user";
 import Group from "./lib/models/group";
 import SubmitButton from './lib/components/submit-button'
 
-class Context extends Root {
+class Context extends Parcel {
   succeed() {
     location.reload();
   }
@@ -64,7 +64,7 @@ class Context extends Root {
   }
 }
 
-class Component extends Node {
+class Component extends Good {
   private cm;
 
   constructor(props) {
@@ -109,14 +109,14 @@ export default class ReplyToReply {
       let groupId = dom.getAttribute('data-groupId');
       let commentId = dom.getAttribute('data-commentId');
       dom.addEventListener('click', (e)=> {
-        ReactDOM.render(<Context {...{commentId, questionId, groupId}}>
+        ReactDOM.render(
+          <Context {...{commentId, questionId, groupId}}>
           <Component/>
-        </Context>, e.target.parentNode);
+        </Context>
+          , e.target.parentNode);
       });
     });
   }
-
-
 }
 
 window.ReplyToReply = ReplyToReply;

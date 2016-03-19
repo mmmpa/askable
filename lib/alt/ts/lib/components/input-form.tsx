@@ -1,11 +1,11 @@
 declare const React;
 declare const ReactDOM;
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import {State} from '../models/state'
 import Fa from '../fa'
 import ErrorMessage from './error-message'
 
-export default class InputForm extends Node {
+export default class InputForm extends Good {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,13 +1,13 @@
 declare const React;
 declare const ReactDOM;
 declare const _;
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import Fa from '../fa'
 import ErrorMessages from './error-messages'
 import User from "../models/user";
 import Group from "../models/group";
 
-export default class Assigner extends Node {
+export default class Assigner extends Good {
   constructor(props) {
     super(props);
     this.state = {

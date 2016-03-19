@@ -4,13 +4,13 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 
-class Context extends Root {
+class Context extends Parcel {
   get messageId() {
     return this.props.messageId;
   }
@@ -49,8 +49,7 @@ class Context extends Root {
   }
 }
 
-
-class Component extends Node {
+class Component extends Good {
   constructor(props) {
     super(props);
   }

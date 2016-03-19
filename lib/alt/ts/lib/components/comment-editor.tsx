@@ -1,7 +1,7 @@
 declare const React;
 declare const ReactDOM;
 declare const _;
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import * as marked from 'marked'
 import Fa from '../fa'
 import ErrorMessage from './error-message'
@@ -19,7 +19,7 @@ require("codemirror/mode/meta.js");
 
 import * as CodeMirror from 'codemirror'
 
-export default class CommentEditor extends Node {
+export default class CommentEditor extends Good {
   private cm;
 
   constructor(props) {

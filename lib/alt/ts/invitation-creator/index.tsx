@@ -4,7 +4,7 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
@@ -12,7 +12,7 @@ import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
 import ErrorMessage from './lib/components/error-message'
 
-class Context extends Root {
+class Context extends Parcel {
   get groupId() {
     return this.props.groupId;
   }
@@ -48,7 +48,7 @@ class Context extends Root {
 }
 
 
-class Component extends Node {
+class Component extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -117,8 +117,8 @@ class InvitationCreator {
     let groupId = dom.getAttribute('data-id');
     ReactDOM.render(
       <Context {...{groupId}}>
-      <Component/>
-    </Context>
+        <Component/>
+      </Context>
       , dom);
   }
 }

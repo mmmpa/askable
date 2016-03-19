@@ -53,7 +53,7 @@ RSpec.configure do |config|
   end
 
   config.after :each do
-    authlogic_logout
+    #authlogic_logout
   end
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

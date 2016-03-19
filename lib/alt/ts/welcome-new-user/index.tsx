@@ -4,14 +4,14 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 import InputForm from './lib/components/input-form'
 import {State} from './lib/models/state'
 
-class Context extends Root {
+class Context extends Parcel {
   submit(params) {
     this.setState({state: State.Submitting});
     strike(Api.CreateUser, params)
@@ -37,8 +37,7 @@ class Context extends Root {
   }
 }
 
-
-class Component extends Node {
+class Component extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -131,9 +130,11 @@ class Component extends Node {
 
 class Welcome {
   static start(dom:HTMLElement) {
-    ReactDOM.render(<Context>
-      <Component/>
-    </Context>, dom);
+    ReactDOM.render(
+      <Context>
+        <Component/>
+      </Context>
+      , dom);
   }
 }
 

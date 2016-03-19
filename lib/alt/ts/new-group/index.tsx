@@ -4,14 +4,14 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {State} from './lib/models/state'
 import {Api, strike} from './lib/services/strike-api'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 import {writeInput} from './lib/helpers/input-writer'
 
-class Context extends Root {
+class Context extends Parcel {
   succeed(groupId) {
     location.href = '/g/' + groupId;
   }
@@ -27,7 +27,7 @@ class Context extends Root {
         this.setState({errors, state: State.Fail});
       });
   }
-
+  s
   listen(to) {
     to('submit', (params)=> {
       this.submit(params);
@@ -41,8 +41,7 @@ class Context extends Root {
   }
 }
 
-
-class Component extends Node {
+class Component extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,5 +90,3 @@ class NewGroup {
 }
 
 window.NewGroup = NewGroup;
-
-

@@ -4,18 +4,18 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
 import SubmitButton from './lib/components/submit-button'
 
-class Context extends Root {
+class Context extends Parcel {
   get invitationId() {
     return this.props.invitationId;
   }
 
-  succeed(){
+  succeed() {
     location.reload();
   }
 
@@ -37,8 +37,8 @@ class Context extends Root {
       });
   }
 
-  resultMessage(api){
-    switch(api){
+  resultMessage(api) {
+    switch (api) {
       case Api.AcceptInvitation:
         return '参加しました';
       case Api.RejectInvitation:
@@ -69,8 +69,7 @@ class Context extends Root {
   }
 }
 
-
-class Component extends Node {
+class Component extends Good {
   constructor(props) {
     super(props);
   }

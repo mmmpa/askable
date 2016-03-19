@@ -10,6 +10,8 @@ module RSpec
       def take_ss(name, sleeping = 0)
         sleep sleeping
 
+        return if ENV['CI']
+
         page.driver.resize(1240, @strict_height) if @strict_height
         page.save_screenshot(@ss_man.filename!(name), full: !@strict_height)
       end

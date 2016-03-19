@@ -2,11 +2,11 @@ declare const React;
 declare const ReactDOM;
 declare const _;
 
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import {State} from '../models/state'
 import Fa from '../fa'
 
-export default class ErrorMessage extends Node {
+export default class ErrorMessage extends Good {
   wrap(errors) {
     switch (true) {
       case _.isArray(errors):

@@ -7,11 +7,11 @@ feature 'ユーザー登録' do
 
   scenario '新規ユーザー登録' do
     visit welcome_new_user_path
-    take_ss('無入力')
-    find('.user-register input[name="name"]').set(SecureRandom.hex(4))
-    find('.user-register input[name="login"]').set(SecureRandom.hex(4))
-    find('.user-register input[name="email"]').set(generate_email)
-    find('.user-register input[name="password"]').set(SecureRandom.hex(4))
+    take_ss('無入力', 1)
+    find('input[name="name"]').set(SecureRandom.hex(4))
+    find('input[name="login"]').set(SecureRandom.hex(4))
+    find('input[name="email"]').set(generate_email)
+    find('input[name="password"]').set(SecureRandom.hex(4))
     take_ss('入力済み')
     find('.user-register button').click
     take_ss('送信')
@@ -30,19 +30,19 @@ feature 'ユーザー登録' do
     find('.user-register.body')
     expect(all('.error-messages').size).not_to eq(0)
 
-    find('.user-register input[name="name"]').set(SecureRandom.hex(4))
-    find('.user-register input[name="login"]').set(User.first.login)
-    find('.user-register input[name="email"]').set(User.first.email)
-    find('.user-register input[name="password"]').set('aa')
+    find('input[name="name"]').set(SecureRandom.hex(4))
+    find('input[name="login"]').set(User.first.login)
+    find('input[name="email"]').set(User.first.email)
+    find('input[name="password"]').set('aa')
     take_ss('エラーを起こす入力')
     find('.user-register button').click
 
     take_ss('一意エラー、短すぎるエラー', 1)
 
-    find('.user-register input[name="name"]').set(SecureRandom.hex(4))
-    find('.user-register input[name="login"]').set(SecureRandom.hex(4))
-    find('.user-register input[name="email"]').set(generate_email)
-    find('.user-register input[name="password"]').set(SecureRandom.hex(4))
+    find('input[name="name"]').set(SecureRandom.hex(4))
+    find('input[name="login"]').set(SecureRandom.hex(4))
+    find('input[name="email"]').set(generate_email)
+    find('input[name="password"]').set(SecureRandom.hex(4))
     take_ss('正常な入力済み')
 
     find('.user-register button').click

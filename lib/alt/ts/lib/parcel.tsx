@@ -6,14 +6,11 @@ interface IEventingShared {
   emitter: EventEmitter
 }
 
-export const EventingShared = {
+const EventingShared = {
   emitter: React.PropTypes.any
 };
 
-interface RootP {
-}
-
-export abstract class Node<P, S> extends React.Component<P, S> {
+export abstract class Good extends React.Component {
   context:IEventingShared;
 
   static get contextTypes():React.ValidationMap<any> {
@@ -25,7 +22,7 @@ export abstract class Node<P, S> extends React.Component<P, S> {
   }
 }
 
-export abstract class Root<P, S> extends Node<RootP & P, S> {
+export abstract class Parcel extends Good {
   emitter:EventEmitter;
   addedOnStore = [];
 
@@ -38,7 +35,7 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
   }
 
   componentWillUnmount() {
-    let disposed = this.addedOnStore.map(({eventName, callback})=> {
+    this.addedOnStore.map(({eventName, callback})=> {
       this.emitter.removeListener(eventName, callback);
       return eventName;
     });
@@ -64,14 +61,14 @@ export abstract class Root<P, S> extends Node<RootP & P, S> {
   }
 
   render() {
-    let props = Object.assign({}, this.props, this.state);
+    let props = _.assign({}, this.props, this.state);
     delete props.children;
 
     let {children} = this.props;
     let elements = !!children.map ? children : [children];
 
     return <div className="context-wrapper">
-      {elements.map((child, i)=> React.cloneElement(child, Object.assign(props, {key: i})))}
+      {elements.map((child, i)=> React.cloneElement(child, _.assign(props, {key: i})))}
     </div>;
   }
 }

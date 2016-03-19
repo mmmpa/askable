@@ -44,7 +44,7 @@ interface NodeRequireFunction {
     (id: string): any;
 }
 
-interface NodeRequire extends NodeRequireFunction {
+interface NodeRequire extends GoodRequireFunction {
     resolve(id:string): string;
     cache: any;
     extensions: any;
@@ -80,7 +80,7 @@ declare var SlowBuffer: {
 
 
 // Buffer class
-interface Buffer extends NodeBuffer {}
+interface Buffer extends GoodBuffer {}
 
 /**
  * Raw data is stored in instances of the Buffer class.
@@ -1706,7 +1706,7 @@ declare module "crypto" {
         digest(encoding: string): any;
         digest(): Buffer;
     }
-    export interface Hmac extends NodeJS.ReadWriteStream {
+    export interface Hmac extends GoodJS.ReadWriteStream {
         update(data: any, input_encoding?: string): Hmac;
         digest(encoding: 'buffer'): Buffer;
         digest(encoding: string): any;
@@ -1731,12 +1731,12 @@ declare module "crypto" {
         setAutoPadding(auto_padding: boolean): void;
     }
     export function createSign(algorithm: string): Signer;
-    export interface Signer extends NodeJS.WritableStream {
+    export interface Signer extends GoodJS.WritableStream {
         update(data: any): void;
         sign(private_key: string, output_format: string): string;
     }
     export function createVerify(algorith: string): Verify;
-    export interface Verify extends NodeJS.WritableStream {
+    export interface Verify extends GoodJS.WritableStream {
         update(data: any): void;
         verify(object: string, signature: string, signature_format?: string): boolean;
     }
@@ -1778,7 +1778,7 @@ declare module "stream" {
     import * as events from "events";
 
     export class Stream extends events.EventEmitter {
-        pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
+        pipe<T extends GoodJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
     }
 
     export interface ReadableOptions {
@@ -1795,8 +1795,8 @@ declare module "stream" {
         setEncoding(encoding: string): void;
         pause(): void;
         resume(): void;
-        pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
-        unpipe<T extends NodeJS.WritableStream>(destination?: T): void;
+        pipe<T extends GoodJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
+        unpipe<T extends GoodJS.WritableStream>(destination?: T): void;
         unshift(chunk: any): void;
         wrap(oldStream: NodeJS.ReadableStream): NodeJS.ReadableStream;
         push(chunk: any, encoding?: string): boolean;
@@ -1848,8 +1848,8 @@ declare module "stream" {
         setEncoding(encoding: string): void;
         pause(): void;
         resume(): void;
-        pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
-        unpipe<T extends NodeJS.WritableStream>(destination?: T): void;
+        pipe<T extends GoodJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
+        unpipe<T extends GoodJS.WritableStream>(destination?: T): void;
         unshift(chunk: any): void;
         wrap(oldStream: NodeJS.ReadableStream): NodeJS.ReadableStream;
         push(chunk: any, encoding?: string): boolean;

@@ -1,10 +1,10 @@
 declare const React;
 declare const ReactDOM;
-import {Root, Node} from '../eventer'
+import {Parcel, Good} from '../parcel'
 import {State} from '../models/state'
 import Fa from '../fa'
 
-export default class SubmitButton extends Node {
+export default class SubmitButton extends Good {
   get className() {
     let {className, state} = this.props;
     return className + (state === State.Submitting ? ' sending' : ' ready');

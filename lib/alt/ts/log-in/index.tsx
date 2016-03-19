@@ -4,7 +4,7 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
@@ -12,7 +12,7 @@ import InputForm from './lib/components/input-form'
 import SubmitButton from './lib/components/submit-button'
 import {writeInput} from './lib/helpers/input-writer'
 
-class Context extends Root {
+class Context extends Parcel {
   succeed() {
     location.reload();
   }
@@ -43,7 +43,8 @@ class Context extends Root {
   }
 }
 
-class Component extends Node {
+
+class Component extends Good {
   constructor(props) {
     super(props);
     this.state = {

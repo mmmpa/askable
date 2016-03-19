@@ -4,7 +4,7 @@ declare const _;
 declare const request;
 declare const Promise;
 
-import {Root, Node} from './lib/eventer'
+import {Parcel, Good} from './lib/parcel'
 import {Api, strike} from './lib/services/strike-api'
 import {State} from './lib/models/state'
 import Fa from './lib/fa'
@@ -19,7 +19,7 @@ enum Target{
   Disposer
 }
 
-class Context extends Root {
+class Context extends Parcel {
   destroySucceed() {
     location.reload();
   }
@@ -111,7 +111,7 @@ class Context extends Root {
   }
 }
 
-class UserComponent extends Node {
+class UserComponent extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -153,14 +153,14 @@ class UserComponent extends Node {
   writeMessage() {
     switch (this.props.updatingState) {
       case State.Success:
-        return <p className="com success-message">{this.props.updatingMessage}</p>
+        return <p className="com success-message">{this.props.updatingMessage}</p>;
       case State.Submitting:
         return <p>
           <Fa icon="spinner" animation="pulse"/>
           送信中
-        </p>
+        </p>;
       case State.Fail:
-        return <p className="com error-message">{this.props.updatingMessage}</p>
+        return <p className="com error-message">{this.props.updatingMessage}</p>;s
       case State.Waiting:
       default:
         return null;
@@ -188,7 +188,8 @@ class UserComponent extends Node {
     </section>
   }
 }
-class PasswordComponent extends Node {
+
+class PasswordComponent extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -262,7 +263,7 @@ class PasswordComponent extends Node {
   }
 }
 
-class DisposerComponent extends Node {
+class DisposerComponent extends Good {
   constructor(props) {
     super(props);
     this.state = {
@@ -312,7 +313,6 @@ class UserEditor {
       , dom);
   }
 }
-
 
 window.UserEditor = UserEditor;
 

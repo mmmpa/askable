@@ -54,7 +54,7 @@ declare module "superagent" {
       attachCookies(req: Req): void;
     }
 
-    interface Response extends NodeJS.ReadableStream {
+    interface Response extends GoodJS.ReadableStream {
       text: string;
       body: any;
       files: any;
@@ -79,7 +79,7 @@ declare module "superagent" {
       get(header: string): string;
     }
 
-    interface Request<Req extends Request<any>> /* extends NodeJS.WritableStream */ {
+    interface Request<Req extends Request<any>> /* extends GoodJS.WritableStream */ {
       abort(): void;
       accept(type: string): Req;
       attach(field: string, file: string, filename?: string): Req;
