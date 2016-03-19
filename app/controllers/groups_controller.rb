@@ -1,6 +1,9 @@
 class GroupsController < ApplicationController
   include InsideController
 
+  rescue_from Group::NotOwner,
+              with: -> { render json: {errors: {any: ['グループオーナーではありません']}}, status: 403 }
+
   def show
     @user = user
     @group = group
@@ -18,7 +21,7 @@ class GroupsController < ApplicationController
   end
 
   def invite
-    group.invite!(user, invite_params)
+    group.invite_by!(user, invite_params)
     render nothing: true, status: 201
   rescue Group::AlreadyInvited
     render json: {errors: {any: ['すでに招待済みです']}}, status: 403
@@ -27,15 +30,11 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    group.dispose!(user)
+    group.dispose_by!(user)
     render nothing: true, status: 201
   end
 
   private
-
-  def information
-    UserInformation.(user).information
-  end
 
   def invite_params
     params.require(:invitations).permit(:login)

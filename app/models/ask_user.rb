@@ -4,7 +4,7 @@ class AskUser < ActiveRecord::Base
   # answered: 回答した状態。コメントがある。
   # respond: 反応済み状態。コメントはない。
   # assigned: 他のメンバーを紹介。respondと同意。
-  # timeout: 回答せずに質問が終了した場合。
+  # timeout: 回答せずに質問が終了した場合。（未使用）
   #
   enum state: {requested: 0, answered: 1, responded: 2, assigned: 3, waited: 4, timeouted: 5}
 
@@ -57,10 +57,6 @@ class AskUser < ActiveRecord::Base
     if self.class.status[was] == self.class.status[:requested]
       question.reply_to_by!(User.system, question.root, Comment.new(use_raw: true, markdown: "#{user.name}さんは少し待ってほしいそうです"))
     end
-  end
-
-  def timeout!
-    timeouted!
   end
 end
 

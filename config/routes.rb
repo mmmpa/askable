@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
     scope 'g/:group_id', constraints: Constraint::Group.new do
       get '', to: 'groups#show', as: :group
-      post 'invitation', to: 'groups#invite'
+      post 'invitation', to: 'groups#invite', as: :new_invitation
       delete '', to: 'groups#destroy'
       delete 'remove', to: 'groups#remove'
 

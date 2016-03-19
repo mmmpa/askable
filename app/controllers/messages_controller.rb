@@ -3,6 +3,8 @@ class MessagesController < ApplicationController
 
   layout 'portal'
 
+  rescue_from ActiveRecord::RecordNotFound, with: -> { render nothing: true, status: 404 }
+
   def index
     @messages = user.received_messages.all
   end

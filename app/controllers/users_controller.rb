@@ -10,14 +10,14 @@ class UsersController < ApplicationController
     user.update!(user_params)
     render json: user_info, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors.messages}, status: 401
+    render json: {errors: e.record.errors.messages}, status: 400
   end
 
   def update_password
     user.update_password!(password_params)
     render nothing: true, status: 201
   rescue ActiveRecord::RecordInvalid => e
-    render json: {errors: e.record.errors.messages}, status: 401
+    render json: {errors: e.record.errors.messages}, status: 400
   end
 
   def destroy
