@@ -163,7 +163,7 @@ var UserComponent = (function (_super) {
         var _this = this;
         var _a = this.props, updatingState = _a.updatingState, errors = _a.errors;
         var _b = this.state, name = _b.name, login = _b.login, email = _b.email;
-        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "登録内容の変更"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'name', '表示する名前', '表示する名前', errors), input_writer_1.writeInput(this, 'text', 'login', 'ログイン用ID', 'ログイン用ID', errors), input_writer_1.writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "登録内容の変更"), React.createElement("form", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'name', '表示する名前', '表示する名前', errors), input_writer_1.writeInput(this, 'text', 'login', 'ログイン用ID', 'ログイン用ID', errors), input_writer_1.writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: updatingState, icon: "send-o", text: "変更する", className: 'submit',
             onClick: function () { return _this.dispatch('update', _this.updatingParams); }
         }))), this.writeMessage()));
@@ -221,7 +221,7 @@ var PasswordComponent = (function (_super) {
         var _this = this;
         var _a = this.props, passwordState = _a.passwordState, errors = _a.errors;
         var _b = this.state, passwordNow = _b.passwordNow, password = _b.password;
-        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "パスワードの変更"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'password', 'passwordNow', '旧パスワード', '旧パスワード', errors), input_writer_1.writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "パスワードの変更"), React.createElement("form", {"className": "com form-area"}, input_writer_1.writeInput(this, 'password', 'passwordNow', '旧パスワード', '旧パスワード', errors), input_writer_1.writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: passwordState, icon: "key", text: "パスワードを変更する", className: 'submit',
             onClick: function () { return _this.dispatch('changePassword', _this.passwordParams); }
         }))), this.writeMessage()));

@@ -79,7 +79,7 @@ var Component = (function (_super) {
         var _this = this;
         var state = this.props.state;
         var _a = this.state, login = _a.login, password = _a.password;
-        return React.createElement("article", {"className": "user-log-in body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "ログイン"), React.createElement("div", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'login', 'ログインID', null), input_writer_1.writeInput(this, 'password', 'password', 'パスワード', null), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
+        return React.createElement("article", {"className": "user-log-in body"}, React.createElement("section", {"className": "com border-box-container"}, React.createElement("h1", {"className": "com border-box-title-area"}, "ログイン"), React.createElement("form", {"className": "com form-area"}, input_writer_1.writeInput(this, 'text', 'login', 'ログインID', null), input_writer_1.writeInput(this, 'password', 'password', 'パスワード', null), React.createElement("section", {"className": "com submit-section"}, React.createElement(submit_button_1.default, React.__spread({}, {
             state: state, icon: "sign-in", text: "ログインする", className: 'submit',
             onClick: function () { return _this.dispatch('submit', _this.params); }
         })))), this.writeError()));

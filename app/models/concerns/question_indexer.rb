@@ -12,6 +12,7 @@ module QuestionIndexer
          %q{(SELECT substr("comments"."html", 0, 300)
             FROM "comments"
             WHERE "comments"."question_id" = "questions"."id"
+            ORDER BY "comments"."created_at"
             LIMIT 1
           ) AS "as_comment_html"},
          %q{COUNT(DISTINCT "comments"."id") AS as_commented_count},

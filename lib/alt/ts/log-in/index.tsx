@@ -87,7 +87,7 @@ class Component extends Good {
     return <article className="user-log-in body">
       <section className="com border-box-container">
         <h1 className="com border-box-title-area">ログイン</h1>
-        <div className="com form-area">
+        <form className="com form-area">
           {writeInput(this, 'text', 'login', 'ログインID', null)}
           {writeInput(this, 'password', 'password', 'パスワード', null)}
           <section className="com submit-section">
@@ -96,7 +96,7 @@ class Component extends Good {
               onClick: ()=>this.dispatch('submit', this.params)
             }}/>
           </section>
-        </div>
+        </form>
         {this.writeError()}
       </section>
     </article>

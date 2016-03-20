@@ -173,7 +173,7 @@ class UserComponent extends Good {
 
     return <section className="com border-box-container">
       <h1 className="com border-box-title-area">登録内容の変更</h1>
-      <div className="com form-area">
+      <form className="com form-area">
         {writeInput(this, 'text', 'name', '表示する名前', '表示する名前', errors)}
         {writeInput(this, 'text', 'login', 'ログイン用ID', 'ログイン用ID', errors)}
         {writeInput(this, 'text', 'email', 'メールアドレス', 'メールアドレス', errors)}
@@ -184,7 +184,7 @@ class UserComponent extends Good {
           }}/>
         </section>
         {this.writeMessage()}
-      </div>
+      </form>
     </section>
   }
 }
@@ -248,7 +248,7 @@ class PasswordComponent extends Good {
 
     return <section className="com border-box-container">
       <h1 className="com border-box-title-area">パスワードの変更</h1>
-      <div className="com form-area">
+      <form className="com form-area">
         {writeInput(this, 'password', 'passwordNow', '旧パスワード', '旧パスワード', errors)}
         {writeInput(this, 'password', 'password', '新パスワード', '新パスワード', errors)}
         <section className="com submit-section">
@@ -258,7 +258,7 @@ class PasswordComponent extends Good {
           }}/>
         </section>
         {this.writeMessage()}
-      </div>
+      </form>
     </section>
   }
 }
