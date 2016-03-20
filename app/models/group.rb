@@ -10,16 +10,16 @@ class Group < ActiveRecord::Base
   has_many :group_questions
   has_many :questions, through: :group_questions
   has_many :group_opened_questions, class_name: GroupQuestion
-  has_many :opened_questions, -> { where { state == Question.status[:opened] } }, through: :group_opened_questions, source: :question
+  has_many :opened_questions, -> { where { state == Question.states[:opened] } }, through: :group_opened_questions, source: :question
   has_many :group_closed_questions, class_name: GroupQuestion
-  has_many :closed_questions, -> { where { state == Question.status[:closed] } }, through: :group_closed_questions, source: :question
+  has_many :closed_questions, -> { where { state == Question.states[:closed] } }, through: :group_closed_questions, source: :question
 
   #
   # メンバー関連
   #
   has_many :group_users, dependent: :delete_all
   has_many :users, through: :group_users, inverse_of: :groups
-  has_many :group_members, -> { where { state == GroupUser.status[:accepted] } }, class_name: GroupUser
+  has_many :group_members, -> { where { state == GroupUser.states[:accepted] } }, class_name: GroupUser
   has_many :members, -> { normal }, through: :group_members, source: :user
 
   validates :name, :description, :user,
@@ -35,7 +35,7 @@ class Group < ActiveRecord::Base
        %{(SELECT
             COUNT(DISTINCT "group_users"."id")
             FROM "group_users"
-            WHERE "group_users"."state" = #{GroupUser.status[:accepted]}
+            WHERE "group_users"."state" = #{GroupUser.states[:accepted]}
               AND "group_users"."group_id" = "groups"."id"
           ) AS "as_member_count"},
        %{(SELECT
@@ -43,7 +43,7 @@ class Group < ActiveRecord::Base
             FROM "questions"
             LEFT OUTER JOIN "group_questions"
               ON "group_questions"."question_id" = "questions"."id"
-            WHERE "questions"."state" = #{Question.status[:opened]}
+            WHERE "questions"."state" = #{Question.states[:opened]}
               AND "group_questions"."group_id" = "groups"."id"
         ) AS "as_opened_count"},
       ] }
@@ -69,7 +69,7 @@ class Group < ActiveRecord::Base
 
   def be_member
     users << user
-    group_users.last.state = GroupUser.status[:accepted]
+    group_users.last.state = GroupUser.states[:accepted]
   end
 
   def member_count

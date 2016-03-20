@@ -28,11 +28,7 @@ class User < ActiveRecord::Base
   before_create -> { activate }
   after_create -> { static_mess_bus.tell_after_all(:on_user_created, self) }
 
-  scope :actives, -> { where { state == User.status[:activated] } }
-
-  class << self
-    alias_method :status, :states
-  end
+  scope :actives, -> { where { state == User.states[:activated] } }
 
   def as_json(options = {})
     super(options.merge!(only: [:name, :login]))
@@ -55,11 +51,11 @@ class User < ActiveRecord::Base
   end
 
   def activate
-    self.state = self.class.status[:activated]
+    self.state = self.class.states[:activated]
   end
 
   def destroy!
-    self.state = self.class.status[:deleted]
+    self.state = self.class.states[:deleted]
     self.name = '削除済みユーザー'
     self.email = "deleted #{SecureRandom.uuid}"
     save(validate: false)

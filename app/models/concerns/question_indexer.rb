@@ -24,13 +24,13 @@ module QuestionIndexer
             COUNT(DISTINCT "ask_users"."id")
             FROM "ask_users"
             WHERE "ask_users"."question_id" = "questions"."id"
-              AND "ask_users"."state" IN (#{AskUser.responded_status.join(',')})
+              AND "ask_users"."state" IN (#{AskUser.responded_states.join(',')})
           ) AS "as_responded_count"},
          %{(SELECT
             COUNT(DISTINCT "ask_users"."id")
             FROM "ask_users"
             WHERE "ask_users"."question_id" = "questions"."id"
-              AND "ask_users"."state" IN (#{AskUser.not_yet_status.join(',')})
+              AND "ask_users"."state" IN (#{AskUser.not_yet_states.join(',')})
               AND "ask_users"."user_id" = #{viewer.id}
           ) AS "as_my_assigned"},
         ] }
@@ -38,8 +38,8 @@ module QuestionIndexer
         .order { updated_at.desc }
     }
 
-    scope :opened, -> { where { state.in(Question.status[:opened]) } }
-    scope :closed, -> { where { state.in(Question.status[:closed]) } }
+    scope :opened, -> { where { state.in(Question.states[:opened]) } }
+    scope :closed, -> { where { state.in(Question.states[:closed]) } }
     scope :asked, ->(owner_user) { where { user == owner_user } }
     scope :requested, ->(owner_user) { where { ask_users.user_id == owner_user.id } }
   end

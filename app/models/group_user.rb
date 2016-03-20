@@ -11,12 +11,8 @@ class GroupUser < ActiveRecord::Base
 
   before_validation :initialize_value
 
-  class << self
-    alias_method :status, :states
-  end
-
   def initialize_value
-    self.state ||= self.class.status[:invited]
+    self.state ||= self.class.states[:invited]
   end
 
   def accept!

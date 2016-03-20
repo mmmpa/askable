@@ -13,20 +13,18 @@ class AskUser < ActiveRecord::Base
   belongs_to :question
   belongs_to :comment
 
-  scope :not_yet, -> { where { state.in(AskUser.not_yet_status) } }
-  scope :responded, -> { where { state.in(AskUser.responded_status) } }
+  scope :not_yet, -> { where { state.in(AskUser.not_yet_states) } }
+  scope :responded, -> { where { state.in(AskUser.responded_states) } }
 
   before_validation :initialize_value
 
   class << self
-    alias_method :status, :states
-
-    def not_yet_status
-      [status[:requested], status[:waited]]
+    def not_yet_states
+      [states[:requested], states[:waited]]
     end
 
-    def responded_status
-      cloned = status.clone
+    def responded_states
+      cloned = states.clone
       cloned.delete(:requested)
       cloned.delete(:waited)
       cloned.each_value.inject([]) { |a, value| a << value }
@@ -34,7 +32,7 @@ class AskUser < ActiveRecord::Base
   end
 
   def initialize_value
-    self.state ||= self.class.status[:requested]
+    self.state ||= self.class.states[:requested]
   end
 
   def answer!
@@ -54,7 +52,7 @@ class AskUser < ActiveRecord::Base
   def wait!
     was = state
     waited!
-    if self.class.status[was] == self.class.status[:requested]
+    if self.class.states[was] == self.class.states[:requested]
       question.reply_to_by!(User.system, question.root, Comment.new(use_raw: true, markdown: "#{user.name}さんは少し待ってほしいそうです"))
     end
   end

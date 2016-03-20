@@ -30,12 +30,10 @@ class Question < ActiveRecord::Base
   before_validation :check_not_yet_completed
 
   def check_not_yet_completed
-    raise AlreadyClosed if self.class.status[state_was] == self.class.status[:closed]
+    raise AlreadyClosed if self.class.states[state_was] == self.class.states[:closed]
   end
 
   class << self
-    alias_method :status, :states
-
     def create_by!(user, question_params)
       comment = Comment.new(user: user, markdown: question_params.delete(:markdown))
 
@@ -65,7 +63,7 @@ class Question < ActiveRecord::Base
   end
 
   def initialize_value
-    self.state ||= self.class.status[:opened]
+    self.state ||= self.class.states[:opened]
   end
 
   def owner?(owner)
