@@ -53,6 +53,11 @@ class Question < ActiveRecord::Base
           when User
             user
           else
+            begin
+              User.find_by(login: user)
+            rescue => e
+              p e
+            end
             User.find_by(login: user) || (raise ActiveRecord::RecordNotFound)
         end
       }.compact

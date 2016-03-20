@@ -2,7 +2,7 @@ module SpecialUser
   extend ActiveSupport::Concern
 
   included do |klass|
-    scope :normal, -> { where { length(login) >= 3 } }
+    scope :normal, -> { actives.where { (length(login) >= 3) } }
 
     class << klass
       def system
@@ -19,10 +19,6 @@ module SpecialUser
 
       def invitation
         find_by(login: 'd')
-      end
-
-      def deleted
-        find_by(login: 'z')
       end
     end
 

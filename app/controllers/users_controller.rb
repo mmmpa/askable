@@ -21,7 +21,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    user.destroy!
+    User.transaction do
+      user.destroy!
+      UserSession.find.try(:destroy)
+    end
     render nothing: true, status: 201
   rescue ActiveRecord::RecordNotDestroyed
     render nothing: true, status: 400

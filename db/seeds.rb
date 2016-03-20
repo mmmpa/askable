@@ -3,9 +3,8 @@ begin
   User.new(login: 'b', name: 'information', password: SecureRandom.uuid, email: 'b').save(validate: false)
   User.new(login: 'c', name: 'error', password: SecureRandom.uuid, email: 'c').save(validate: false)
   User.new(login: 'd', name: 'invitation', password: SecureRandom.uuid, email: 'd').save(validate: false)
-  User.new(login: 'z', name: '退会ユーザー', password: SecureRandom.uuid, email: 'e').save(validate: false)
-rescue
-  p 'Users are already initialized.'
+rescue => e
+  p "Users are already initialized, or #{e}"
 end
 
 if Group.where { user == User.system }.size == 0

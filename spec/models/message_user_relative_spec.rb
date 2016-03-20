@@ -20,25 +20,4 @@ RSpec.describe MessageUserRelative, type: :model do
       expect(User.first.messages.size).to eq(3)
     end
   end
-
-  describe 'ユーザー削除時' do
-    let!(:messages) { User.first.received_messages }
-    let!(:sent_messages) { User.first.sent_messages }
-
-    before :each do
-      User.first.destroy!
-    end
-
-    it '自分宛のメッセージは受取人が削除済みユーザーとなる' do
-      messages.each do |message|
-        expect(message.user).to eq(User.deleted)
-      end
-    end
-
-    it '自分宛のメッセージは送り主が削除済みユーザーとなる' do
-      sent_messages.each do |message|
-        expect(message.user).to eq(User.deleted)
-      end
-    end
-  end
 end

@@ -5,6 +5,13 @@ class User < ActiveRecord::Base
   include MessageUserRelative
   include AskableUser
 
+  #
+  # created: 作成直後
+  # activated: 有効ユーザー
+  # deactivated: メンバーになっている
+  #
+  enum state: {created: 0, activated: 1, deactivated: 2, deleted: 3}
+
   attr_accessor :password_now
 
   acts_as_authentic do |c|
@@ -18,10 +25,22 @@ class User < ActiveRecord::Base
             presence: true,
             if: -> { password_now.present? }
 
+  before_create -> { activate }
   after_create -> { static_mess_bus.tell_after_all(:on_user_created, self) }
+
+  scope :actives, -> { where { state == User.status[:activated] } }
+
+  class << self
+    alias_method :status, :states
+  end
 
   def as_json(options = {})
     super(options.merge!(only: [:name, :login]))
+  end
+
+  def valid_password?(*)
+    raise NotActive unless activated?
+    super
   end
 
   def update_password!(params)
@@ -33,6 +52,21 @@ class User < ActiveRecord::Base
 
     self.password = params[:password]
     save!
+  end
+
+  def activate
+    self.state = self.class.status[:activated]
+  end
+
+  def destroy!
+    self.state = self.class.status[:deleted]
+    self.name = '削除済みユーザー'
+    self.email = "deleted #{SecureRandom.uuid}"
+    save(validate: false)
+  end
+
+  class NotActive < StandardError
+
   end
 end
 
@@ -52,6 +86,7 @@ end
 #  perishable_token    :string
 #  persistence_token   :string
 #  single_access_token :string
+#  state               :integer          default(0), not null
 #  updated_at          :datetime         not null
 #
 # Indexes

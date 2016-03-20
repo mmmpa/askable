@@ -48,20 +48,23 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'destroy' do
-    let(:target) { create(:user, :valid) }
+    let(:target) { create(:user, :valid, password: 't' * 8) }
     before :each do
       authlogic_login(target)
     end
 
     it '削除' do
+      UserSession.create!(login: target.login, password: 't' * 8)
       expect {
         delete edit_user_path
-      }.to change(User, :count).by(-1)
+      }.not_to change(User, :count)
       expect(response).to have_http_status(201)
+
+      expect { UserSession.create!(login: target.login, password: 't' * 8) }.to raise_error(Authlogic::Session::Activation::NotActivatedError)
     end
 
     it 'なんらかの失敗' do
-      allow_any_instance_of(User).to receive(:destroy!){
+      allow_any_instance_of(User).to receive(:destroy!) {
         raise raise ActiveRecord::RecordNotDestroyed, target
       }
       expect {

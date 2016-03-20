@@ -17,10 +17,6 @@ RSpec.describe User, type: :model do
     it '招待者' do
       expect(User.invitation).to be_a(User)
     end
-
-    it '削除済みユーザー' do
-      expect(User.deleted).to be_a(User)
-    end
   end
 
   describe 'テストユーザーか否か' do
