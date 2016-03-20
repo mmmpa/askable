@@ -13,4 +13,4 @@ cache:
   directories:
     - vendor/bundle
 script:
-  - CI=true bundle exec rake
+  - CI=true bundle exec rspec -fdc --exclude-pattern "**/features/**/*_spec.rb"
