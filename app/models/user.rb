@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   end
 
   def valid_password?(*)
+    raise NotUser if system?
     raise NotActive unless activated?
     super
   end
@@ -59,6 +60,10 @@ class User < ActiveRecord::Base
     self.name = '削除済みユーザー'
     self.email = "deleted #{SecureRandom.uuid}"
     save(validate: false)
+  end
+
+  class NotUser < StandardError
+
   end
 
   class NotActive < StandardError

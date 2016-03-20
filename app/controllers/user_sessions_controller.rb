@@ -7,7 +7,8 @@ class UserSessionsController < ApplicationController
   def create
     UserSession.create!(session_params)
     render nothing: true, status: 201
-  rescue
+  rescue => e
+    p e
     render nothing: true, status: 401
   end
 
