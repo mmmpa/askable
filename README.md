@@ -6,5 +6,3 @@
 # Askable
 
 Askableは「回答のしやすさ」を以って「質問のしやすさ」を志向したグループウェアです。
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
