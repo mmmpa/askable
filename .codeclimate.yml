@@ -16,5 +16,5 @@ ratings:
   paths:
   - app/**
 exclude_paths:
-  - spec/**/*
-  - lib/**/*
+- spec/**/*
+- app/assets/**/*
