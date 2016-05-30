@@ -1,2 +1,20 @@
-languages:
-  Ruby: true
+engines:
+  rubocop:
+    enabled: true
+  brakeman:
+    enabled: true
+  eslint:
+    enabled: false
+  csslint:
+    enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+ratings:
+  paths:
+  - app/**
+exclude_paths:
+  - spec/**/*
+  - lib/**/*
