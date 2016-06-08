@@ -11,10 +11,10 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
+        - ruby
 ratings:
   paths:
-  - app/**
+    - app/**
 exclude_paths:
-- spec/**/*
-- app/assets/**/*
+  - spec/**/*
+  - app/assets/**/*
