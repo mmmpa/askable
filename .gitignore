@@ -2,4 +2,4 @@
 /log/*
 !/log/.keep
 /tmp
-out
+out/*.js
