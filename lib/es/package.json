@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "watchify --extension=js ./built/index.js -o ./out/built.js -v",
-    "buildHere": "watchify -t babelify --extension=js $C_D/index.js -o $C_D/out/built.js -v",
+    "buildHere": "watchify -t babelify --extension=js $C_D/index.js -o $C_D/built.js -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -38,30 +38,38 @@
     "global": "^4.3.0",
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.0",
     "gulp-espower": "^1.0.2",
     "gulp-gzip": "^1.4.0",
     "gulp-minify-css": "^1.2.4",
     "gulp-mocha": "^3.0.1",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.0.4",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
     "gulp-shell": "^0.5.2",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.9",
+    "gulp-watchify": "^0.6.0",
     "isparta": "^4.0.0",
     "istanbul": "^0.4.4",
     "jquery": "^3.1.0",
     "jsdom": "^9.4.2",
     "licensify": "^3.1.2",
+    "lodash": "^4.15.0",
     "mocha": "^3.0.2",
     "nock": "^8.0.0",
+    "path": "^0.12.7",
     "power-assert": "^1.4.1",
     "react-addons-test-utils": "^15.3.0",
     "react-unit": "^1.3.4",
     "sinon": "^1.17.5",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "yargs": "^5.0.0"
   }
 }
