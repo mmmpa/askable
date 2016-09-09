@@ -1,9 +1,14 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(global,factory){if(typeof define === 'function' && define.amd){define(['exports'],factory);}else if(typeof exports !== 'undefined'){factory(exports);}else {var mod={exports:{}};factory(mod.exports);global.decko = mod.exports;}})(this,function(exports){'use strict';exports.__esModule = true;var EMPTY={};var HOP=Object.prototype.hasOwnProperty;var fns={memoize:function memoize(fn){var opt=arguments.length <= 1 || arguments[1] === undefined?EMPTY:arguments[1];var cache=opt.cache || {};return function(){for(var _len=arguments.length,a=Array(_len),_key=0;_key < _len;_key++) {a[_key] = arguments[_key];}var k=String(a[0]);if(opt.caseSensitive === false)k = k.toLowerCase();return HOP.call(cache,k)?cache[k]:cache[k] = fn.apply(this,a);};},debounce:function debounce(fn,opts){if(typeof opts === 'function'){var p=fn;fn = opts;opts = p;}var delay=opts && opts.delay || opts || 0,args=undefined,context=undefined,timer=undefined;return function(){for(var _len2=arguments.length,a=Array(_len2),_key2=0;_key2 < _len2;_key2++) {a[_key2] = arguments[_key2];}args = a;context = this;if(!timer)timer = setTimeout(function(){fn.apply(context,args);args = context = timer = null;},delay);};},bind:function bind(target,key,_ref){var fn=_ref.value;return {configurable:true,get:function get(){var value=fn.bind(this);Object.defineProperty(this,key,{value:value,configurable:true,writable:true});return value;}};}};var memoize=multiMethod(fns.memoize),debounce=multiMethod(fns.debounce),bind=multiMethod(function(f,c){return f.bind(c);},function(){return fns.bind;});exports.memoize = memoize;exports.debounce = debounce;exports.bind = bind;exports['default'] = {memoize:memoize,debounce:debounce,bind:bind};function multiMethod(inner,deco){deco = deco || inner.decorate || decorator(inner);var d=deco();return function(){for(var _len3=arguments.length,args=Array(_len3),_key3=0;_key3 < _len3;_key3++) {args[_key3] = arguments[_key3];}var l=args.length;return (l < 2?deco:l > 2?d:inner).apply(undefined,args);};}function decorator(fn){return function(opt){return typeof opt === 'function'?fn(opt):function(target,key,desc){desc.value = fn(desc.value,opt,target,key,desc);};};}});
+
+
+},{}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -29,7 +34,7 @@ var ErrorMessage = function (_ComponentComponent) {
   function ErrorMessage() {
     _classCallCheck(this, ErrorMessage);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ErrorMessage).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ErrorMessage.__proto__ || Object.getPrototypeOf(ErrorMessage)).apply(this, arguments));
   }
 
   _createClass(ErrorMessage, [{
@@ -60,11 +65,11 @@ var ErrorMessage = function (_ComponentComponent) {
         return null;
       }
 
-      return h(
+      return React.createElement(
         'ul',
         { className: 'error-messages' },
         myErrors.map(function (error, i) {
-          return h(
+          return React.createElement(
             'li',
             { className: 'error-message', key: i },
             error
@@ -79,12 +84,13 @@ var ErrorMessage = function (_ComponentComponent) {
 
 exports.default = ErrorMessage;
 
-},{"../fa":4,"../models/state":6,"../parcel":7}],2:[function(require,module,exports){
+},{"../fa":5,"../models/state":8,"../parcel":9}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -116,7 +122,7 @@ var InputForm = function (_ComponentComponent) {
   function InputForm(props) {
     _classCallCheck(this, InputForm);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(InputForm).call(this, props));
+    var _this = _possibleConstructorReturn(this, (InputForm.__proto__ || Object.getPrototypeOf(InputForm)).call(this, props));
 
     _this.state = {
       value: _this.props.initialValue
@@ -138,11 +144,11 @@ var InputForm = function (_ComponentComponent) {
 
       var state = !!errors && !!errors[name] ? 'has-error' : 'calm';
 
-      return h(
+      return React.createElement(
         'div',
         { className: 'input-form' },
         this.label,
-        h('input', _extends({ className: state }, { type: type, name: name, placeholder: placeholder, value: value, onChange: function onChange(e) {
+        React.createElement('input', _extends({ className: state }, { type: type, name: name, placeholder: placeholder, value: value, onChange: function onChange(e) {
             return _onChange(e.target.value);
           } })),
         this.error
@@ -166,7 +172,7 @@ var InputForm = function (_ComponentComponent) {
         return null;
       }
 
-      return h(
+      return React.createElement(
         'label',
         { className: 'input-label' },
         label
@@ -179,7 +185,7 @@ var InputForm = function (_ComponentComponent) {
       var errors = _props3.errors;
       var name = _props3.name;
 
-      return h(_errorMessage2.default, { errors: errors, name: name });
+      return React.createElement(_errorMessage2.default, { errors: errors, name: name });
     }
   }]);
 
@@ -188,12 +194,13 @@ var InputForm = function (_ComponentComponent) {
 
 exports.default = InputForm;
 
-},{"../fa":4,"../models/state":6,"../parcel":7,"./error-message":1}],3:[function(require,module,exports){
+},{"../fa":5,"../models/state":8,"../parcel":9,"./error-message":2}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -219,7 +226,7 @@ var SubmitButton = function (_ComponentComponent) {
   function SubmitButton() {
     _classCallCheck(this, SubmitButton);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(SubmitButton).apply(this, arguments));
+    return _possibleConstructorReturn(this, (SubmitButton.__proto__ || Object.getPrototypeOf(SubmitButton)).apply(this, arguments));
   }
 
   _createClass(SubmitButton, [{
@@ -227,7 +234,7 @@ var SubmitButton = function (_ComponentComponent) {
     value: function render() {
       var _props = this.props;
       var text = _props.text;
-      var onClick = _props.onClick;
+      var _onClick = _props.onClick;
       var icon = _props.icon;
       var state = _props.state;
       var disabled = _props.disabled;
@@ -236,20 +243,23 @@ var SubmitButton = function (_ComponentComponent) {
 
       switch (state) {
         case _state.State.Submitting:
-          return h(
+          return React.createElement(
             'button',
             { className: this.className, disabled: true },
-            h(_fa2.default, { icon: icon, animation: 'pulse' }),
+            React.createElement(_fa2.default, { icon: icon, animation: 'pulse' }),
             text
           );
         case _state.State.Success:
         case _state.State.Waiting:
         case _state.State.Fail:
         default:
-          return h(
+          return React.createElement(
             'button',
-            { className: className, disabled: disabled, onClick: onClick },
-            h(_fa2.default, { icon: icon }),
+            { className: className, disabled: disabled, onClick: function onClick(e) {
+                e.preventDefault();
+                _onClick(e);
+              } },
+            React.createElement(_fa2.default, { icon: icon }),
             text
           );
       }
@@ -270,7 +280,7 @@ var SubmitButton = function (_ComponentComponent) {
 
 exports.default = SubmitButton;
 
-},{"../fa":4,"../models/state":6,"../parcel":7}],4:[function(require,module,exports){
+},{"../fa":5,"../models/state":8,"../parcel":9}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -291,7 +301,7 @@ var Fa = function (_React$Component) {
   function Fa() {
     _classCallCheck(this, Fa);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Fa).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Fa.__proto__ || Object.getPrototypeOf(Fa)).apply(this, arguments));
   }
 
   _createClass(Fa, [{
@@ -309,7 +319,7 @@ var Fa = function (_React$Component) {
       p.rotate && classes.push("fa-rotate-" + p.rotate);
       p.flip && classes.push("fa-flip-" + p.flip);
 
-      return h("i", { className: classes.join(' ') });
+      return React.createElement("i", { className: classes.join(' ') });
     }
   }]);
 
@@ -318,7 +328,7 @@ var Fa = function (_React$Component) {
 
 exports.default = Fa;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -335,10 +345,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function writeInput(self, type, name, placeholder, label) {
   var errors = arguments.length <= 5 || arguments[5] === undefined ? {} : arguments[5];
 
-  return h(
+  return React.createElement(
     "section",
     { className: "com input-section" },
-    h(_inputForm2.default, {
+    React.createElement(_inputForm2.default, {
       errors: errors, type: type, name: name, placeholder: placeholder, label: label, value: self.state[name],
       onChange: function onChange(v) {
         var p = {};
@@ -349,7 +359,90 @@ function writeInput(self, type, name, placeholder, label) {
   );
 }
 
-},{"../components/input-form":2}],6:[function(require,module,exports){
+},{"../components/input-form":3}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var receiver = exports.receiver = function receiver(klass) {
+  klass.prototype.dispatch = function (event) {
+    var _context$emitter;
+
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return (_context$emitter = this.context.emitter).emit.apply(_context$emitter, [event].concat(args));
+  };
+};
+
+var provider = exports.provider = function provider(klass) {
+  klass.prototype = {
+    __proto__: klass.prototype,
+    get addedOnStore() {
+      this._addedOnStore || (this._addedOnStore = []);
+      return this._addedOnStore;
+    }
+  };
+
+  var componentWillUnmount = klass.prototype.componentWillUnmount;
+  klass.prototype.componentWillUnmount = function () {
+    var _this = this;
+
+    componentWillUnmount && componentWillUnmount.call(this);
+
+    this.addedOnStore.map(function (_ref) {
+      var eventName = _ref.eventName;
+      var callback = _ref.callback;
+
+      _this.emitter.removeListener(eventName, callback);
+      return eventName;
+    });
+  };
+
+  var componentWillMount = klass.prototype.componentWillMount;
+
+  klass.prototype.componentWillMount = function () {
+    var _this2 = this;
+
+    componentWillMount && componentWillMount.call(this);
+
+    if (!this.emitter) {
+      this.emitter = this.context.emitter || new EventEmitter();
+      this.listen(function (eventName, callback) {
+        _this2.addedOnStore.push({ eventName: eventName, callback: callback });
+        _this2.emitter.on(eventName, callback);
+      });
+    }
+  };
+
+  var getChildContext = klass.prototype.getChildContext;
+
+  klass.prototype.getChildContext = function () {
+    var base = getChildContext ? getChildContext.call(this) : {};
+
+    return Object.assign(base, { emitter: this.context.emitter || this.emitter });
+  };
+
+  klass.prototype.render = function () {
+    var props = Object.assign({}, this.props, this.state);
+    delete props.children;
+
+    var children = this.props.children;
+
+
+    return React.createElement(
+      "div",
+      { className: "context-wrapper" },
+      children.map(function (child, i) {
+        return React.cloneElement(child, Object.assign(props, { key: i }));
+      })
+    );
+  };
+};
+
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -362,7 +455,7 @@ var State = exports.State = {
   Success: 3
 };
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -385,7 +478,7 @@ var ComponentComponent = exports.ComponentComponent = function (_React$Component
   function ComponentComponent() {
     _classCallCheck(this, ComponentComponent);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentComponent).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ComponentComponent.__proto__ || Object.getPrototypeOf(ComponentComponent)).apply(this, arguments));
   }
 
   _createClass(ComponentComponent, [{
@@ -420,7 +513,7 @@ var ContextComponent = exports.ContextComponent = function (_ComponentComponent)
   function ContextComponent(props) {
     _classCallCheck(this, ContextComponent);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(ContextComponent).call(this, props));
+    return _possibleConstructorReturn(this, (ContextComponent.__proto__ || Object.getPrototypeOf(ContextComponent)).call(this, props));
   }
 
   _createClass(ContextComponent, [{
@@ -441,7 +534,7 @@ var ContextComponent = exports.ContextComponent = function (_ComponentComponent)
     value: function componentWillMount() {
       var _this4 = this;
 
-      _get(Object.getPrototypeOf(ContextComponent.prototype), "componentWillMount", this).call(this);
+      _get(ContextComponent.prototype.__proto__ || Object.getPrototypeOf(ContextComponent.prototype), "componentWillMount", this).call(this);
 
       if (!this.emitter) {
         this.emitter = this.context.emitter || new EventEmitter();
@@ -465,7 +558,7 @@ var ContextComponent = exports.ContextComponent = function (_ComponentComponent)
       var children = this.props.children;
 
 
-      return h(
+      return React.createElement(
         "div",
         { className: "context-wrapper" },
         children.map(function (child, i) {
@@ -484,7 +577,7 @@ var ContextComponent = exports.ContextComponent = function (_ComponentComponent)
   return ContextComponent;
 }(ComponentComponent);
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -759,8 +852,10 @@ function token() {
   }
 }
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
+
+var _class2, _class3;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -782,6 +877,10 @@ var _submitButton2 = _interopRequireDefault(_submitButton);
 
 var _inputWriter = require('./lib/helpers/input-writer');
 
+var _decko = require('decko');
+
+var _hubMixins = require('./lib/hub-mixins');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -798,10 +897,10 @@ window.LogIn = function () {
   _createClass(_class, null, [{
     key: 'start',
     value: function start(dom) {
-      ReactDOM.render(h(
+      ReactDOM.render(React.createElement(
         Context,
         null,
-        h(Component, null)
+        React.createElement(Component, null)
       ), dom);
     }
   }]);
@@ -809,22 +908,22 @@ window.LogIn = function () {
   return _class;
 }();
 
-var Context = function (_ContextComponent) {
-  _inherits(Context, _ContextComponent);
+var Context = (0, _hubMixins.provider)(_class2 = function (_React$Component) {
+  _inherits(Context, _React$Component);
 
   function Context() {
     _classCallCheck(this, Context);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Context).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Context.__proto__ || Object.getPrototypeOf(Context)).apply(this, arguments));
   }
 
   _createClass(Context, [{
-    key: 'initialState',
-    value: function initialState(props) {
-      return {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.setState({
         state: _state2.State.Waiting,
         loggedIn: false
-      };
+      });
     }
   }, {
     key: 'succeed',
@@ -856,43 +955,43 @@ var Context = function (_ContextComponent) {
   }]);
 
   return Context;
-}(_parcel.ContextComponent);
+}(React.Component)) || _class2;
 
-var Component = function (_ComponentComponent) {
-  _inherits(Component, _ComponentComponent);
+var Component = (0, _hubMixins.receiver)(_class3 = function (_React$Component2) {
+  _inherits(Component, _React$Component2);
 
   function Component() {
     _classCallCheck(this, Component);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Component).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).apply(this, arguments));
   }
 
   _createClass(Component, [{
-    key: 'initialState',
-    value: function initialState(props) {
-      return {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.setState({
         login: '',
         password: ''
-      };
+      });
     }
   }, {
     key: 'writeError',
     value: function writeError() {
       if (this.props.loggedIn) {
-        return h(
+        return React.createElement(
           'p',
           { className: 'com message-area success-message' },
-          h(_fa2.default, { icon: 'paw' }),
+          React.createElement(_fa2.default, { icon: 'paw' }),
           'ログインに成功しました'
         );
       }
 
       switch (this.props.state) {
         case _state2.State.Fail:
-          return h(
+          return React.createElement(
             'p',
             { className: 'com message-area error-message' },
-            h(_fa2.default, { icon: 'ban' }),
+            React.createElement(_fa2.default, { icon: 'ban' }),
             'ログインに失敗しました'
           );
         case _state2.State.Success:
@@ -910,26 +1009,26 @@ var Component = function (_ComponentComponent) {
       var state = this.props.state;
 
 
-      return h(
+      return React.createElement(
         'article',
         { className: 'user-log-in body' },
-        h(
+        React.createElement(
           'section',
           { className: 'com border-box-container' },
-          h(
+          React.createElement(
             'h1',
             { className: 'com border-box-title-area' },
             'ログイン'
           ),
-          h(
+          React.createElement(
             'form',
             { className: 'com form-area' },
             (0, _inputWriter.writeInput)(this, 'text', 'login', 'ログインID', null),
             (0, _inputWriter.writeInput)(this, 'password', 'password', 'パスワード', null),
-            h(
+            React.createElement(
               'section',
               { className: 'com submit-section' },
-              h(_submitButton2.default, {
+              React.createElement(_submitButton2.default, {
                 state: state, icon: "sign-in", text: "ログインする", className: 'submit',
                 onClick: function onClick() {
                   return _this5.dispatch('submit', _this5.params);
@@ -953,6 +1052,6 @@ var Component = function (_ComponentComponent) {
   }]);
 
   return Component;
-}(_parcel.ComponentComponent);
+}(React.Component)) || _class3;
 
-},{"./lib/components/submit-button":3,"./lib/fa":4,"./lib/helpers/input-writer":5,"./lib/models/state":6,"./lib/parcel":7,"./lib/services/strike-api":8}]},{},[9]);
+},{"./lib/components/submit-button":4,"./lib/fa":5,"./lib/helpers/input-writer":6,"./lib/hub-mixins":7,"./lib/models/state":8,"./lib/parcel":9,"./lib/services/strike-api":10,"decko":1}]},{},[11]);
