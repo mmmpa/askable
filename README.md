@@ -4,6 +4,10 @@
 [![Code Climate](https://codeclimate.com/github/mmmpa/askable/badges/gpa.svg)](https://codeclimate.com/github/mmmpa/askable)
 [![Code Climate issues](https://codeclimate.com/github/mmmpa/askable/badges/issue_count.svg)](https://codeclimate.com/github/mmmpa/askable)
 
+# WIP
+
+TypeScript -> ES2015
+
 # Askable
 
 Askableは「回答のしやすさ」を以って「質問のしやすさ」を志向したグループウェアです。
