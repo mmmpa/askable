@@ -31427,7 +31427,6 @@ var UnrenderingTextarea = function (_ComponentComponent) {
       this.cm.on('change', function (e) {
         return _this2.props.changeComment(e.doc.getValue());
       });
-      this.cm.setSize('100%', 300);
       this.cm.setValue(this.state.markdown);
     }
   }, {
