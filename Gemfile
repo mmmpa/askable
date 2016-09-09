@@ -19,8 +19,6 @@ group :development do
   gem 'spring'
 end
 
-gem 'arel', path: '../arel', branch: '6'
-
 group :default do
   gem 'penetration'
   gem "request_store"
