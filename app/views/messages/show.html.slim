@@ -8,6 +8,6 @@ article.message-box.body
     section.message-box.content.markdown-html== @message.html
     section.message-box.controller#message-disposer(data-id=@message.id)
 
-script src='/js/message-disposer/built.js'
+script src='/js/message-disposer.js'
 javascript:
   MessageDisposer.start(document.querySelector('#message-disposer'))

@@ -4,14 +4,14 @@ html
     title おしえてください
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
-    script src='/js/common/built.js'
+    script src='/js/common.js'
   body
     include inside_header
     article.inner.body
       include portal_header
       = yield
 
-  script src='/js/log-out/built.js'
-  script src='/js/notifier/built.js'
+  script src='/js/log-out.js'
+  script src='/js/notifier.js'
 javascript:
   LogOut.start(document.querySelectorAll('.log-out'));

@@ -1,0 +1,752 @@
+@import './primer/primer.scss'
+@import './gfm/github-markdown'
+
+$size-big-title: 24px
+$size-title: 18px
+$size-normal: 12px
+$check-size: 16px
+
+$radius: 3px
+$border-color: #d8d8d8
+$background-gray: #f5f5f5
+$background-gray-sub: #fafafa
+
+button,
+a
+  &.submit
+    &.ready
+      @extend .btn, .btn-primary
+    &.sending
+      @extend .btn, .btn-form
+  &.sending
+    @extend .btn
+  &.block,
+  &.dispose
+    &.ready
+      @extend .btn, .btn-danger
+    &.sending
+      @extend .btn, .btn-form
+  &.reject
+    &.ready
+      @extend .btn, .btn-form
+    &.sending
+      @extend .btn, .btn-form
+
+button.default,
+a.default
+  @extend .btn, .btn-form
+
+.com
+  &.border-box-container
+    border: 1px solid $border-color
+    border-radius: $radius
+    overflow: hidden
+    margin-bottom: 20px
+  &.border-box-title-area
+    display: block
+    margin: -1px 0 0 0
+    padding: 14px 20px 15px
+    font-size: 14px
+    line-height: 17px
+    background-color: #f5f5f5
+    border: 1px solid $border-color
+    border-width: 1px 0
+  &.form-area
+    padding: 20px
+  &.input-section
+    margin: 0 0 20px
+    .input-label
+      display: block
+      margin-bottom: 5px
+    input[type="text"],
+    input[type="password"]
+      @extend .input-contrast, .input-block
+  &.submit-section
+    margin: 0
+    text-align: right
+  &.message-area
+    padding: 0 20px 20px 20px
+    margin: 0
+  &.success-message
+    color: $brand-green
+    font-weight: bold
+  &.error-message
+    color: $brand-red
+    font-weight: bold
+
+%boxed-group
+  position: relative
+  margin-bottom: 30px
+  border-radius: 3px
+
+%boxed-group-inner
+  padding: 1px 20px
+  font-size: 13px
+  color: #666
+  background: #fff
+  border: 1px solid $border-color
+  border-bottom-right-radius: $radius
+  border-bottom-left-radius: $radius
+
+%boxed-group-title
+  display: block
+  padding: 14px 20px 15px
+  margin: 0
+  font-size: 14px
+  line-height: 17px
+  background-color: #f5f5f5
+  border: 1px solid $border-color
+  border-bottom: 0
+  border-radius: $radius $radius 0 0
+
+%small-body
+  max-width: 400px
+  margin: 0 auto
+
+%normal-body
+  max-width: 900px
+  margin: 0 auto
+
+%min-cell
+  width: 1px
+  white-space: nowrap
+
+body
+  margin: 0
+  padding: 0
+
+.outer
+  &.body
+    padding: 20px 0 0 0
+
+.inner
+  &.body
+    padding: 20px 0 0 0
+
+.sub-header
+  &.wrapper
+    margin: -20px 0 20px 0
+    background: $background-gray-sub
+    border-bottom: 1px solid $border-color
+    &.with-nav
+      border: 0
+  &.body
+    @extend %normal-body
+  &.title
+    padding: 20px 0
+    font-size: $size-title
+    margin: 0
+  &.description
+    margin: -5px 0 0 0
+    padding: 0 0 20px
+    font-size: $size-normal
+  .tabnav-tabs
+    margin-bottom: -1px
+  &.sub-nav
+    border-bottom: 1px solid $border-color
+    .tabnav-tab
+      padding: 7px 15px 8px
+  .selected
+    padding-top: 6px
+  .opened,
+  .asked
+    &.selected
+      border-top: 2px solid $brand-red
+  .requested
+    &.selected
+      border-top: 2px solid $brand-orange
+  .closed
+    &.selected
+      border-top: 2px solid $brand-green
+  .all
+    &.selected
+      border-top: 2px solid $brand-gray
+
+.global-header
+  &.wrapper
+    background: $background-gray
+    border-bottom: 1px solid $border-color
+  &.body
+    padding: 8px 0
+    @extend %normal-body
+    overflow: hidden
+  &.title
+    font-size: $size-title
+    float: left
+    line-height: 34px
+    margin: 0
+    padding: 0
+    a
+      color: #333
+  .global-menu
+    @extend .right
+    li
+      display: inline-block
+      white-space: nowrap
+      padding-left: 10px
+  .block-link
+    display: inline-block
+    line-height: 34px
+    padding-left: 10px
+    i.fa
+      color: #333
+
+i.fa
+  margin-right: 0.2em
+
+.input-input,
+.input-label
+  display: inline-block
+  white-space: nowrap
+  vertical-align: top
+  line-height: $check-size
+
+.input-input
+  padding-right: 5px
+
+a,
+label
+  cursor: pointer
+
+body
+  padding: 0
+  margin: 0
+  overflow: scroll
+
+input.has-error
+  border-color: $brand-red
+
+.markdown-html
+  @extend %markdown-body
+  line-height: 200%
+  letter-spacing: 1px
+  h1
+    font-size: $size-big-title
+  h2
+    font-size: $size-title
+  h3, h4, h5, h6
+    font-size: $size-normal
+  h4, h5, h6
+    font-weight: normal
+
+.error-messages
+  margin: 10px 0
+  .error-message
+    margin: 5px 0
+    color: $brand-red
+    font-weight: bold
+    list-style: none
+
+.success-messages
+  margin: 10px 0
+  .success-message
+    margin: 5px 0
+    color: $brand-green
+    font-weight: bold
+    list-style: none
+
+.no-response,
+.no-question,
+.no-information,
+.no-message,
+.no-group
+  @extend .blankslate
+  margin: 20px 0 0
+  p
+    @extend h3
+    font-weight: 600
+
+.no-group
+  margin: 0 0 20px
+  border-radius: 0 0 $radius $radius
+
+.message-box
+  &.body
+    @extend %normal-body
+  &.content
+    padding: 20px
+  &.from-system
+    margin: 0 0 20px 0
+  &.controller
+    border-top: 1px solid $border-color
+    padding: 10px 20px
+    text-align: right
+  &.message-list
+    margin: -1px 0 0 0
+  &.message-item
+    border-top: 1px solid $border-color
+    padding: 0
+    display: table-row
+    width: 100%
+    // @extend .item
+    time,
+    .message
+      border-top: 1px solid $border-color
+      margin: 0
+      display: table-cell
+    time
+      margin: 0
+      width: 10px
+      white-space: nowrap
+      padding: 10px 20px
+    .message
+      width: 100%
+      padding: 10px 20px 10px 0
+
+.portal
+  &.body
+    @extend %normal-body
+  &.group-table-header,
+  &.information-header
+    @extend %boxed-group-title
+  &.information-area,
+  &.group-list-area
+    margin-bottom: 20px
+  &.information-table
+    border: 1px solid $border-color
+    border-radius: 0 0 $radius $radius
+    margin-top: -1px
+  &.information-table-item
+    list-style: none
+    border-top: 1px solid $border-color
+    margin-top: -1px
+    time,
+    .message,
+    .controller
+      display: table-cell
+    time,
+    .controller
+      width: 10px
+      white-space: nowrap
+      padding: 10px 20px
+    .message
+      width: 100%
+      padding: 10px 0
+
+.invitation,
+.disposer
+  &.body
+    padding: 20px
+    .error-messages
+      margin-bottom: -5px
+  &.login-area
+    display: inline-block
+    input
+      width: 300px
+      border-radius: $radius 0 0 $radius
+  &.input-area
+    .submit,
+    .dispose
+      border-radius: 0 $radius $radius 0
+      margin-left: -2px
+  &.success
+    color: $brand-green
+  &.message-area
+    height: 34px
+    margin-bottom: -10px
+    overflow: hidden
+    p
+      margin: 10px 0 0 0
+      font-size: $size-normal
+
+.group-portal
+  &.body
+    @extend %normal-body
+  &.editor-area,
+  &.information-area
+    margin: 0 0 20px
+    border: 1px solid $border-color
+    border-radius: $radius
+    overflow: hidden
+  &.title
+    @extend %boxed-group-title
+    border: 1px solid $border-color
+    border-width: 1px 0
+    border-radius: 0
+    margin: -1px 0
+  &.name
+    font-size: $size-title
+    padding: 20px
+  &.description
+    font-size: $size-normal
+    line-height: 200%
+    padding: 20px
+  &.members
+    font-size: $size-normal
+    line-height: 200%
+    padding: 20px 0 20px 20px
+    .member
+      display: inline-block
+      padding: 0 20px 0 0
+      white-space: nowrap
+    list-style: none
+
+.show-question
+  &.body
+    @extend %normal-body
+  &.header
+    @extend %boxed-group-title
+  &.author
+    margin: 0 0 10px 0
+    font-size: $size-normal
+    time
+      font-weight: normal
+      margin-left: 10px
+  &.title
+    margin: 0
+    font-size: $size-title
+  &.question-area
+    @extend %boxed-group-inner
+    padding: 20px
+  &.closed
+    @extend .flash
+    margin-bottom: 20px
+    p
+      margin: 0
+  &.assigned-users
+    @extend .columns
+    border-top: 1px solid $border-color
+    margin: 20px -20px 0
+  &.responded-users,
+  &.not-yet-users
+    @extend .one-half, .column
+    padding: 0 20px
+    .fa.fa-sorryed
+      // @extend .fa-paw
+    .fa.fa-assigned
+      // @extend .fa-group
+    .fa.fa-answered
+      // @extend .fa-thumbs-o-up
+    .fa.fa-waited
+      // @extend .fa-clock-o
+  &.assigned-title
+    font-size: $size-title
+  &.assigned-user
+    display: inline-block
+    white-space: nowrap
+    padding-right: 20px
+  &.responses
+    margin-top: 20px
+    border: 1px solid $border-color
+    border-radius: $radius
+    overflow: hidden
+  &.response-owner
+    @extend %boxed-group-title
+    border: 1px solid $border-color
+    border-width: 1px 0
+    margin: -1px 0 0 0
+    border-radius: 0
+  &.response-comment
+    padding: 20px
+  &.reply-to-reply-area
+    padding: 10px 20px
+    border-top: 1px dotted $border-color
+    overflow: hidden
+    .preview-area
+      min-height: 302px !important
+  &.reply-to-reply-button
+    @extend .btn, .btn-sm, .right, .btn-form
+  &.from-system
+    @extend .flash, .flash-warn
+    border-radius: 0
+    border-width: 1px 0
+    margin: -1px 0
+    time
+      margin-right: 5px
+  &.response
+    .wrap
+      margin: 0 0 0 40px
+      border-left: 1px dotted $border-color
+      background: #fff
+      .response-owner
+      //background: none
+      .reply-anchor
+        color: $brand-blue
+        cursor: pointer
+    .permalink
+      @extend .right
+      time
+        font-weight: normal
+
+.finish
+  &.body
+    margin: 10px -20px -10px
+    padding: 10px 20px 0
+    border-top: 1px solid $border-color
+    text-align: right
+
+.normal-list
+  &.list-body
+    @extend .menu
+  &.list-item
+    @extend .menu-item
+  &.item-title
+    font-size: $size-title
+  &.item-author
+    font-size: $size-normal
+  &.item-description
+    font-weight: normal
+    font-size: $size-normal
+    line-height: 150%
+  &.item-icon
+    font-size: $size-title
+    .fa.fa-assigned
+      // @extend .fa-hand-o-right
+      color: $brand-red
+    .fa.fa-all-responded
+      // @extend .fa-smile-o
+      color: $brand-gray-dark
+    .fa.fa-opened
+      // @extend .fa-meh-o
+      color: $brand-gray-light
+    .fa.fa-closed
+      // @extend .fa-thumbs-o-up
+  &.item-icon,
+  &.item-content,
+  &.item-status
+    display: table-cell
+  &.item-icon,
+  &.item-status
+    @extend %min-cell
+  &.item-content
+    width: 100%
+    padding: 0 10px
+  &.item-status
+    div
+      font-size: $size-title
+      display: inline-block
+      padding-left: 10px
+      em
+        padding-left: 2px
+
+.respond
+  &.body
+    margin: 20px 0 0 0
+  &.title
+    @extend %boxed-group-title
+    font-size: $size-title
+  &.response
+    @extend %boxed-group-inner
+    padding: 20px
+  &.response-type-area
+    .tabnav
+      padding-left: 20px
+      padding-right: 20px
+      margin: 0 -20px
+  &.sorry
+    @extend .btn, .btn-sm, .right, .btn-danger
+  &.wait
+    @extend .btn, .btn-sm, .right, .btn-form
+    margin-right: 5px
+  &.opener
+    margin: 20px 0 0 0
+    @extend .btn, .btn-block, .btn-form
+  &.responder-area
+    margin: 20px 0 0 0
+  &.submit-section
+    margin: 10px 0 0 0
+    @extend .form-actions
+  .assigner
+    &.group-members
+      height: 302px
+  .preview-area
+    min-height: 302px !important
+
+.reply-to-reply
+  &.submit
+    margin: 10px 0 0 0
+    @extend .right
+  &.sending
+    margin: 10px 0 0 0
+    @extend .right
+
+.index-pager
+  &.body
+    display: inline-block
+    white-space: nowrap
+    border: 1px solid $border-color
+    border-radius: $radius
+    oberflow: hidden
+  &.next
+    margin-right: -1px
+  &.next,
+  &.prev,
+  &.page,
+  &.gap
+    color: $brand-gray-light
+    font-weight: bold
+    height: 34px
+    line-height: 34px
+    padding: 0 10px
+    border: 1px solid $border-color
+    border-width: 0 1px
+    display: inline-block
+    margin-left: -1px
+    &.current
+      background: $brand-blue
+      color: #fff
+    a
+      text-decoration: none
+      padding: 0 10px
+      height: 34px
+      line-height: 34px
+      margin: 0 -10px
+      display: inline-block
+      &:hover
+        background: $brand-blue
+        color: #fff
+
+.question-index
+  &.body
+    @extend %normal-body
+  &.pager-area
+    margin: 0 0 20px 0
+    text-align: center
+
+.new-question
+  &.body
+    @extend %normal-body
+  &.editor-area
+    @extend .two-thirds, .column
+  &.assigning-area
+    @extend .one-third, .column
+    overflow: hidden
+  &.blank-comment
+    color: $brand-gray-light
+  &.submit-section
+    @extend .form-actions
+    margin: 10px 0 0 0
+  &.registered-message
+    color: $brand-green
+
+.assigner
+  &.group-members
+    @extend .menu
+    height: 346px
+    overflow-y: scroll
+    margin: 0
+  &.group-member
+    @extend .menu-item
+    input
+      width: $check-size
+      height: $check-size
+
+.comment-editor
+  &.preview-area
+    min-height: 346px
+    margin: 10px 0 0
+    border: 1px solid $border-color
+    padding: 10px
+    border-radius: $radius
+  &.comment-area
+    margin: 10px 0 0
+    border: 1px solid $border-color
+    border-radius: $radius
+  input
+    @extend .input-block
+
+.user-register
+  &.body
+    @extend %small-body
+
+.user-registered
+  &.body
+    @extend %small-body
+  &.info-label
+    font-size: $size-normal
+    margin: 0 0 5px 0
+    color: $brand-gray
+  &.info
+    font-size: $size-title
+    margin: 0
+  &.link-section
+    text-align: right
+
+.notifier
+  &.body
+    position: fixed
+    bottom: 0
+    left: 20px
+    right: 20px
+    transition: all 0.2s ease-out
+    opacity: 0
+  &.rising
+    margin: auto 0
+    bottom: 20px
+    opacity: 1
+    &.fading
+      transition: all 0.2s ease-out
+      opacity: 0
+
+  &.alert
+    @extend .flash-warn
+  &.notify
+    @extend .flash
+  p
+    margin: 0
+    font-weight: bold
+    font-size: $size-title
+    text-align: center
+
+.user-editor
+  &.body
+    @extend %small-body
+  &.dispose-verify
+    input
+      display: inline-block
+      width: $check-size
+      height: $check-size
+      margin-right: 5px
+    span
+      line-height: $check-size
+      display: inline-block
+      vertical-align: top
+  p
+    margin-bottom: 0
+
+.user-log-in
+  &.body
+    @extend %small-body
+  input
+    @extend .input-contrast, .input-block
+
+.new-group
+  &.body
+    @extend %small-body
+  &.registering-body
+    @extend %boxed-group-inner
+    padding: 20px
+    &.form
+      padding: 20px 10px
+  &.info-label
+    font-size: $size-normal
+  &.link-section
+    padding-bottom: 10px
+    text-align: right
+  &.registering-title
+    @extend %boxed-group-title
+  &.input-section
+    margin: 0 0 20px
+  input,
+  textarea
+    @extend .input-contrast, .input-block
+  &.submit-section
+    @extend .form-actions
+
+.reactor
+  &.completed
+    line-height: 26px
+    height: 28px
+  button.submit,
+  button.reject,
+  button.block
+    padding: 0 10px
+    line-height: 26px
+    height: 28px
+  button.submit
+    border-radius: $radius 0 0 $radius
+  button.reject
+    border-radius: 0
+    margin: 0 -1px
+  button.block
+    border-radius: 0 $radius $radius 0

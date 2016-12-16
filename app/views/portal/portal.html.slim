@@ -47,6 +47,6 @@ article.portal.body
     h1.portal.group-table-header 参加中のグループ
     = writer.(@user.groups.index.load)
 
-script src='/js/invitation-reactor/built.js'
+script src='/js/invitation-reactor.js'
 javascript:
   InvitationReactor.start(document.querySelectorAll('.invitation .controller'))

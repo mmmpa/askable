@@ -32,8 +32,8 @@ article.group-portal.body
         | グループを脱退する
       section.group-portal#disposer(data-id=@group.id data-name=@group.name data-owner="false")
 
-  script src='/js/invitation-creator/built.js'
-  script src='/js/group-disposer/built.js'
+  script src='/js/invitation-creator.js'
+  script src='/js/group-disposer.js'
 javascript:
   InvitationCreator.start(document.querySelector('#invitation'));
   GroupDisposer.start(document.querySelector('#disposer'));

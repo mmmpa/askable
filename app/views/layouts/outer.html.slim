@@ -4,7 +4,7 @@ html
     title Welcome to おしえてください
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
-    script src='/js/common/built.js'
+    script src='/js/common.js'
   body
     header.global-header.wrapper
       div.global-header.body
@@ -23,4 +23,4 @@ html
               | ログイン
     article.outer.body
       = yield
-    script src='/js/notifier/built.js'
+    script src='/js/notifier.js'

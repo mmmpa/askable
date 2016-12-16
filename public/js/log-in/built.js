@@ -1,1 +1,0 @@
-console.error("SyntaxError: /home/ten/ruby_project/askable/lib/es/src/lib/hub-mixins.js: Unexpected token (45:4) while parsing file: /home/ten/ruby_project/askable/lib/es/src/lib/hub-mixins.js");
