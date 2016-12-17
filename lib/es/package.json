@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "webpack --progress --colors --watch --config ./webpack/dev.config.js",
+    "watch-server": "webpack-dev-server --progress --colors --inline --hot --content-base http://localhost:5000 --config ./webpack/dev.config.js --port 5001",
     "pro-pack": "webpack --config ./webpack/pro.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -69,6 +70,7 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
     "webpack": "2.1.0-beta.28",
+    "webpack-dev-server": "^1.16.2",
     "yargs": "^5.0.0"
   }
 }
