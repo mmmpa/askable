@@ -8,8 +8,9 @@ $size-normal: 12px
 $check-size: 16px
 
 $btn-height: 38px
+$btn-radius: 0.25rem
 
-$radius: 2px
+$radius: 3px
 $border-color: #d8d8d8
 $background-gray: #f5f5f5
 $background-gray-sub: #fafafa
@@ -20,10 +21,10 @@ $brand-orange: $brand-info
 $brand-gray: #ccc
 $brand-gray-dark: #999
 $brand-gray-light: #eee
-$brand-blue: #00f
+$brand-blue: $brand-primary
 
-body
-  font-family: Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif
+body, h1, h2, h3, h4, h5, h6
+  font-family: "Quicksand", "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif !important
 
 button,
 a
@@ -55,7 +56,6 @@ a
       @extend .btn, .btn-secondary
     &.sending
       @extend .btn, .btn-secondary
-
 
 .com
   &.border-box-container
@@ -119,7 +119,8 @@ a
   display: block
   padding: 14px 20px 15px
   margin: 0
-  font-size: 14px
+  @extend .h5
+  font-weight: normal
   line-height: 17px
   background-color: #f5f5f5
   border: 1px solid $border-color
@@ -158,7 +159,7 @@ body
     &.with-nav
       border: 0
   &.body
-    @extend %normal-body
+    @extend .container
   &.title
     padding: 20px 0
     font-size: $size-title
@@ -171,23 +172,31 @@ body
     margin-bottom: -1px
   &.sub-nav
     border-bottom: 1px solid $border-color
-    .tabnav-tab
-      padding: 7px 15px 8px
+  .tabnav-tab
+    display: inline-block
+    padding: 0.5rem 1rem
+    vertical-align: bottom
+    color: #333
   .selected
-    padding-top: 6px
+    border-radius: $radius $radius 0 0
+    border: 1px solid $border-color
+    border-bottom: 0
+    background: #fff
+    padding: 0.5rem 1rem
+    overflow: hidden
   .opened,
   .asked
     &.selected
-      border-top: 2px solid $brand-red
+      border-top: 3px solid $brand-blue
   .requested
     &.selected
-      border-top: 2px solid $brand-orange
+      border-top: 3px solid $brand-orange
   .closed
     &.selected
-      border-top: 2px solid $brand-green
+      border-top: 3px solid $brand-green
   .all
     &.selected
-      border-top: 2px solid $brand-gray
+      border-top: 3px solid $brand-gray
 
 .global-header
   &.wrapper
@@ -209,11 +218,11 @@ body
     @extend .float-sm-right, .nav, .navbar-nav
     li
       @extend .nav-item
-    li+li
+    li + li
       margin-left: 0.6rem
   .block-link
     display: inline-block
-    line-height: 34px
+    line-height: $btn-height
     padding-left: 10px
     i.fa
       color: #333
@@ -354,14 +363,17 @@ body
     .error-messages
       margin-bottom: -5px
   &.login-area
+    height: $btn-height
     display: inline-block
+    vertical-align: middle
     input
+      @extend .form-control
       width: 300px
-      border-radius: $radius 0 0 $radius
+      border-radius: $btn-radius 0 0 $btn-radius
   &.input-area
     .submit,
     .dispose
-      border-radius: 0 $radius $radius 0
+      border-radius: 0 $btn-radius $btn-radius 0
       margin-left: -2px
   &.success
     color: $brand-green
@@ -375,7 +387,7 @@ body
 
 .group-portal
   &.body
-    @extend %normal-body
+    @extend .container
   &.editor-area,
   &.information-area
     margin: 0 0 20px
@@ -399,6 +411,7 @@ body
     font-size: $size-normal
     line-height: 200%
     padding: 20px 0 20px 20px
+    margin: 0
     .member
       display: inline-block
       padding: 0 20px 0 0
@@ -436,13 +449,13 @@ body
     // @extend .one-half, .column
     padding: 0 20px
     .fa.fa-sorryed
-      // @extend .fa-paw
+    // @extend .fa-paw
     .fa.fa-assigned
-      // @extend .fa-group
+    // @extend .fa-group
     .fa.fa-answered
-      // @extend .fa-thumbs-o-up
+    // @extend .fa-thumbs-o-up
     .fa.fa-waited
-      // @extend .fa-clock-o
+  // @extend .fa-clock-o
   &.assigned-title
     font-size: $size-title
   &.assigned-user
@@ -524,7 +537,7 @@ body
       // @extend .fa-meh-o
       color: $brand-gray-light
     .fa.fa-closed
-      // @extend .fa-thumbs-o-up
+  // @extend .fa-thumbs-o-up
   &.item-icon,
   &.item-content,
   &.item-status
@@ -569,7 +582,7 @@ body
     margin: 20px 0 0 0
   &.submit-section
     margin: 10px 0 0 0
-    // @extend .form-actions
+  // @extend .form-actions
   .assigner
     &.group-members
       height: 302px
@@ -667,7 +680,7 @@ body
     border: 1px solid $border-color
     border-radius: $radius
   input
-    // @extend .input-block
+// @extend .input-block
 
 .user-register
   &.body
@@ -703,9 +716,9 @@ body
       opacity: 0
 
   &.alert
-    // @extend .flash-warn
+  // @extend .flash-warn
   &.notify
-    // @extend .flash
+  // @extend .flash
   p
     margin: 0
     font-weight: bold
@@ -732,7 +745,7 @@ body
   &.body
     @extend %small-body
   input
-    // @extend .input-contrast, .input-block
+// @extend .input-contrast, .input-block
 
 .new-group
   &.body
@@ -753,9 +766,9 @@ body
     margin: 0 0 20px
   input,
   textarea
-    // @extend .input-contrast, .input-block
+  // @extend .input-contrast, .input-block
   &.submit-section
-    // @extend .form-actions
+// @extend .form-actions
 
 .reactor
   &.completed

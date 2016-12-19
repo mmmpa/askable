@@ -138,7 +138,7 @@
     -ms-user-select: none;
     user-select: none; }
   .markdown-html .octicon-link:before {
-    content: '\f05c'; }
+    content: '\F05C'; }
   .markdown-html:before {
     display: table;
     content: ""; }
@@ -322,7 +322,7 @@
     border-radius: 3px; }
     .markdown-html code:before, .markdown-html code:after {
       letter-spacing: -0.2em;
-      content: "\00a0"; }
+      content: "\A0"; }
   .markdown-html pre > code {
     padding: 0;
     margin: 0;
@@ -1037,7 +1037,7 @@ mark,
   color: #818a91; }
 
 .blockquote-footer::before {
-  content: "\2014 \00A0"; }
+  content: "\2014   \A0"; }
 
 .blockquote-reverse {
   padding-right: 1rem;
@@ -1050,7 +1050,7 @@ mark,
   content: ""; }
 
 .blockquote-reverse .blockquote-footer::after {
-  content: "\00A0 \2014"; }
+  content: "\A0   \2014"; }
 
 dl.row > dd + dt {
   clear: left; }
@@ -7447,7 +7447,7 @@ a.default.ready:hover, .input-group-btn:not(:first-child) > .show-question.reply
   overflow: hidden; }
 
 .navbar-divider::before {
-  content: "\00a0"; }
+  content: "\A0"; }
 
 .navbar-text {
   display: inline-block;
@@ -9147,7 +9147,7 @@ button.close {
   content: "\2039"; }
 
 .carousel-control .icon-next::before {
-  content: "\203a"; }
+  content: "\203A"; }
 
 .carousel-indicators {
   position: absolute;
@@ -9764,7 +9764,7 @@ body, h1, h2, h3, .no-response p,
 .no-information p,
 .no-message p,
 .no-group p, h4, h5, h6 {
-  font-family: "Quicksand", "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif !important; }
+  font-family: "Quicksand", "\6E38\30B4\30B7\30C3\30AF\4F53", "Yu Gothic", YuGothic, "\30D2\30E9\30AE\30CE\89D2\30B4\30B7\30C3\30AF   Pro", "Hiragino Kaku Gothic Pro", "\30E1\30A4\30EA\30AA", Meiryo, Osaka, "\FF2D\FF33   \FF30\30B4\30B7\30C3\30AF", "MS PGothic", sans-serif !important; }
 
 .com.border-box-container {
   border: 1px solid #d8d8d8;

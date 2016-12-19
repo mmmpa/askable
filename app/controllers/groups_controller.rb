@@ -24,9 +24,9 @@ class GroupsController < ApplicationController
     group.invite_by!(user, invite_params)
     render nothing: true, status: 201
   rescue Group::AlreadyInvited
-    render json: {errors: {any: ['すでに招待済みです']}}, status: 403
+    render json: {errors: {any: ['Already invited.']}}, status: 403
   rescue ActiveRecord::RecordNotFound
-    render json: {errors: {any: ['ユーザーが見つかりません']}}, status: 404
+    render json: {errors: {any: ['Not found.']}}, status: 404
   end
 
   def destroy

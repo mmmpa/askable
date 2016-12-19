@@ -2,15 +2,15 @@ article.group-portal.body
   section.group-portal.information-area
     h1.group-portal.title
       i.fa.fa-child
-      | グループ名
+      | Group name
     section.group-portal.name= @group.name
     h1.group-portal.title
       i.fa.fa-info-circle
-      | 概要
+      | Desctiprition
     section.group-portal.description= @group.description
     h1.group-portal.title
       i.fa.fa-group
-      | 参加メンバー（順不同）
+      | Members
     section.group-portal.members-area
       ul.group-portal.members
         - @group.members.each do |member|
@@ -19,17 +19,17 @@ article.group-portal.body
     section.group-portal.editor-area
       h1.group-portal.title
         i.fa.fa-paper-plane-o
-        | グループに招待する
+        | Invite new member
       section.group-portal#invitation(data-id=@group.id)
       h1.group-portal.title
         i.fa.fa-remove
-        | グループを解散する
+        | Dismiss this group
       section.group-portal#disposer(data-id=@group.id data-name=@group.name data-owner="true")
   -else
     section.group-portal.editor-area
       h1.group-portal.title
         i.fa.fa-remove
-        | グループを脱退する
+        | Leave from this group
       section.group-portal#disposer(data-id=@group.id data-name=@group.name data-owner="false")
 
   script src='/js/invitation-creator.js'
