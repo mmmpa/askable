@@ -1,9 +1,11 @@
 doctype html
 html
   head
-    title Welcome to おしえてください
+    title Welcome to Let me know
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
+    link rel="stylesheet" href="//fonts.googleapis.com/css?family=Quicksand:400,700"
+    link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"
     script src='/js/common.js'
   body
     header.global-header.wrapper
@@ -11,16 +13,16 @@ html
         h1.global-header.title
           a[href="/"]
             i.fa.fa-question-circle
-            | おしえてください
+            | Let me know
         ul.header.global-menu.outer
           li
-            a.global-menu.welcome.submit.ready[href=welcome_new_user_path]
+            a.global-menu.welcome.link.ready[href=welcome_new_user_path]
               i.fa.fa-pencil
-              | 新規登録
+              | Sign up
           li
             a.global-menu.log-in.default.ready[href=log_in_path]
               i.fa.fa-sign-in
-              | ログイン
+              | Sign in
     article.outer.body
       = yield
     script src='/js/notifier.js'

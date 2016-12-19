@@ -1,40 +1,61 @@
-@import './primer/primer.scss'
 @import './gfm/github-markdown'
+@import './bootstrap/bootstrap'
+@import './bootstrap/variables'
 
 $size-big-title: 24px
 $size-title: 18px
 $size-normal: 12px
 $check-size: 16px
 
-$radius: 3px
+$btn-height: 38px
+
+$radius: 2px
 $border-color: #d8d8d8
 $background-gray: #f5f5f5
 $background-gray-sub: #fafafa
 
+$brand-green: $brand-success
+$brand-red: $brand-danger
+$brand-orange: $brand-info
+$brand-gray: #ccc
+$brand-gray-dark: #999
+$brand-gray-light: #eee
+$brand-blue: #00f
+
+body
+  font-family: Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif
+
 button,
 a
-  &.submit
+  &.link
     &.ready
       @extend .btn, .btn-primary
     &.sending
-      @extend .btn, .btn-form
+      @extend .btn, .btn-secondary
+  &.submit
+    &.ready
+      @extend .btn, .btn-success
+    &.sending
+      @extend .btn, .btn-secondary
   &.sending
-    @extend .btn
+    @extend .btn, .btn-secondary
   &.block,
   &.dispose
     &.ready
       @extend .btn, .btn-danger
     &.sending
-      @extend .btn, .btn-form
+      @extend .btn, .btn-secondary
   &.reject
     &.ready
-      @extend .btn, .btn-form
+      @extend .btn, .btn-secondary
     &.sending
-      @extend .btn, .btn-form
+      @extend .btn, .btn-secondary
+  &.default
+    &.ready
+      @extend .btn, .btn-secondary
+    &.sending
+      @extend .btn, .btn-secondary
 
-button.default,
-a.default
-  @extend .btn, .btn-form
 
 .com
   &.border-box-container
@@ -60,7 +81,10 @@ a.default
       margin-bottom: 5px
     input[type="text"],
     input[type="password"]
-      @extend .input-contrast, .input-block
+      @extend .form-control
+    input.has-error
+      border-color: $brand-red
+
   &.submit-section
     margin: 0
     text-align: right
@@ -73,6 +97,9 @@ a.default
   &.error-message
     color: $brand-red
     font-weight: bold
+  &.submitting-message
+    color: $brand-gray
+    font-weight: normal
 
 %boxed-group
   position: relative
@@ -166,24 +193,24 @@ body
   &.wrapper
     background: $background-gray
     border-bottom: 1px solid $border-color
+    padding: 0.6rem 0
   &.body
-    padding: 8px 0
-    @extend %normal-body
-    overflow: hidden
+    @extend .container
   &.title
-    font-size: $size-title
-    float: left
-    line-height: 34px
-    margin: 0
+    @extend .navbar-brand
     padding: 0
+    margin: 0
+    line-height: $btn-height
+    font-size: $size-title
     a
+      line-height: $btn-height
       color: #333
   .global-menu
-    @extend .right
+    @extend .float-sm-right, .nav, .navbar-nav
     li
-      display: inline-block
-      white-space: nowrap
-      padding-left: 10px
+      @extend .nav-item
+    li+li
+      margin-left: 0.6rem
   .block-link
     display: inline-block
     line-height: 34px
@@ -192,7 +219,7 @@ body
       color: #333
 
 i.fa
-  margin-right: 0.2em
+  margin-right: 0.5em
 
 .input-input,
 .input-label
@@ -213,9 +240,6 @@ body
   margin: 0
   overflow: scroll
 
-input.has-error
-  border-color: $brand-red
-
 .markdown-html
   @extend %markdown-body
   line-height: 200%
@@ -235,7 +259,7 @@ input.has-error
     margin: 5px 0
     color: $brand-red
     font-weight: bold
-    list-style: none
+    list-style: square
 
 .success-messages
   margin: 10px 0
@@ -250,7 +274,7 @@ input.has-error
 .no-information,
 .no-message,
 .no-group
-  @extend .blankslate
+  // @extend .blankslate
   margin: 20px 0 0
   p
     @extend h3
@@ -399,17 +423,17 @@ input.has-error
     @extend %boxed-group-inner
     padding: 20px
   &.closed
-    @extend .flash
+    // @extend .flash
     margin-bottom: 20px
     p
       margin: 0
   &.assigned-users
-    @extend .columns
+    // @extend .columns
     border-top: 1px solid $border-color
     margin: 20px -20px 0
   &.responded-users,
   &.not-yet-users
-    @extend .one-half, .column
+    // @extend .one-half, .column
     padding: 0 20px
     .fa.fa-sorryed
       // @extend .fa-paw
@@ -445,9 +469,9 @@ input.has-error
     .preview-area
       min-height: 302px !important
   &.reply-to-reply-button
-    @extend .btn, .btn-sm, .right, .btn-form
+    @extend .btn, .btn-sm, .float-sm-right
   &.from-system
-    @extend .flash, .flash-warn
+    // @extend .flash, .flash-warn
     border-radius: 0
     border-width: 1px 0
     margin: -1px 0
@@ -464,7 +488,7 @@ input.has-error
         color: $brand-blue
         cursor: pointer
     .permalink
-      @extend .right
+      @extend .float-sm-right
       time
         font-weight: normal
 
@@ -477,9 +501,9 @@ input.has-error
 
 .normal-list
   &.list-body
-    @extend .menu
+    // @extend .menu
   &.list-item
-    @extend .menu-item
+    // @extend .menu-item
   &.item-title
     font-size: $size-title
   &.item-author
@@ -534,18 +558,18 @@ input.has-error
       padding-right: 20px
       margin: 0 -20px
   &.sorry
-    @extend .btn, .btn-sm, .right, .btn-danger
+    @extend .btn, .btn-sm, .float-sm-right, .btn-danger
   &.wait
-    @extend .btn, .btn-sm, .right, .btn-form
+    @extend .btn, .btn-sm, .float-sm-right
     margin-right: 5px
   &.opener
     margin: 20px 0 0 0
-    @extend .btn, .btn-block, .btn-form
+    @extend .btn, .btn-block
   &.responder-area
     margin: 20px 0 0 0
   &.submit-section
     margin: 10px 0 0 0
-    @extend .form-actions
+    // @extend .form-actions
   .assigner
     &.group-members
       height: 302px
@@ -555,10 +579,10 @@ input.has-error
 .reply-to-reply
   &.submit
     margin: 10px 0 0 0
-    @extend .right
+    @extend .float-sm-right
   &.sending
     margin: 10px 0 0 0
-    @extend .right
+    @extend .float-sm-right
 
 .index-pager
   &.body
@@ -607,26 +631,26 @@ input.has-error
   &.body
     @extend %normal-body
   &.editor-area
-    @extend .two-thirds, .column
+    // @extend .two-thirds, .column
   &.assigning-area
-    @extend .one-third, .column
+    // @extend .one-third, .column
     overflow: hidden
   &.blank-comment
     color: $brand-gray-light
   &.submit-section
-    @extend .form-actions
+    // @extend .form-actions
     margin: 10px 0 0 0
   &.registered-message
     color: $brand-green
 
 .assigner
   &.group-members
-    @extend .menu
+    // @extend .menu
     height: 346px
     overflow-y: scroll
     margin: 0
   &.group-member
-    @extend .menu-item
+    // @extend .menu-item
     input
       width: $check-size
       height: $check-size
@@ -643,7 +667,7 @@ input.has-error
     border: 1px solid $border-color
     border-radius: $radius
   input
-    @extend .input-block
+    // @extend .input-block
 
 .user-register
   &.body
@@ -679,9 +703,9 @@ input.has-error
       opacity: 0
 
   &.alert
-    @extend .flash-warn
+    // @extend .flash-warn
   &.notify
-    @extend .flash
+    // @extend .flash
   p
     margin: 0
     font-weight: bold
@@ -708,7 +732,7 @@ input.has-error
   &.body
     @extend %small-body
   input
-    @extend .input-contrast, .input-block
+    // @extend .input-contrast, .input-block
 
 .new-group
   &.body
@@ -729,9 +753,9 @@ input.has-error
     margin: 0 0 20px
   input,
   textarea
-    @extend .input-contrast, .input-block
+    // @extend .input-contrast, .input-block
   &.submit-section
-    @extend .form-actions
+    // @extend .form-actions
 
 .reactor
   &.completed
