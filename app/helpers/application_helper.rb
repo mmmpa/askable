@@ -2,15 +2,15 @@ module ApplicationHelper
   def detect_respond_icon(state)
     case state
       when AskUser.states[:answered]
-        %q{<i class="fa fa-answered"></i>}.html_safe
+        %q{<i class="fa fa-answered fa-thumbs-o-up"></i>}.html_safe
       when AskUser.states[:responded]
-        %q{<i class="fa fa-sorryed"></i>}.html_safe
+        %q{<i class="fa fa-sorryed fa-paw"></i>}.html_safe
       when AskUser.states[:assigned]
-        %q{<i class="fa fa-assigned"></i>}.html_safe
+        %q{<i class="fa fa-assigned fa-group"></i>}.html_safe
       when AskUser.states[:waited]
-        %q{<i class="fa fa-waited"></i>}.html_safe
+        %q{<i class="fa fa-waited fa-clock-o"></i>}.html_safe
       else
-        nil
+        %q{<i class="fa fa-assigned fa-group"></i>}.html_safe
     end
   end
 

@@ -3,7 +3,7 @@
 section.show-question.body
   - if @question.closed?
     section.show-question.closed.flash
-      p この質問は終了しています
+      p This question is finished.
 
   section.show-question.root
     header.show-question.header
@@ -20,7 +20,7 @@ section.show-question.body
           section.show-question.not-yet-users
             h1.show-question.assigned-title
               i.fa.fa-hourglass-half
-              | 反応まち
+              | Not yet answer
             ul.show-question.not-yet-list
               - @question.not_yet_user.map do |user|
                 li.show-question.assigned-user
@@ -29,7 +29,7 @@ section.show-question.body
           section.show-question.responded-users
             h1.show-question.assigned-title
               i.fa.fa-check
-              | 反応ずみ
+              | Already answered
             ul.show-question.responded-list
               - @question.responded_user.map do |user|
                 li.show-question.assigned-user
@@ -41,11 +41,11 @@ section.show-question.body
     div#response-to-question(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
       button.respond.opener
         i.fa.fa-folder-open-o
-        | 回答フォームを開く
+        | Add a comment
   - if @question.responses.count == 0
     - if @question.opened?
       section.show-question.no-response
-        p まだ回答はありません
+        p Not yet any answers.
   - else
     section.show-question.response-area
       ul.show-question.responses
@@ -65,10 +65,13 @@ section.show-question.body
                         - if parent
                           - parents.map do |p|
                             i.fa.fa-reply.reply-anchor(data-targetId=p.id)
-                          = "#{parent.author_name}さんへ#{child.author_name}さん曰く"
+                          span= child.author_name
+                          = " reply to "
+                          span= parent.author_name
                         - else
                           i.fa.fa-graduation-cap
-                          = "#{child.author_name}さん曰く"
+                          span= child.author_name
+                          = " says"
                         a.permalink(href="#comment-#{child.id}" data-targetId=child.id)
                           i.fa.fa-link
                           time= child.pretty_date
@@ -77,12 +80,12 @@ section.show-question.body
                         div.show-question.reply-to-reply-area
                           button.show-question.reply-to-reply-button(data-groupId=@group.id data-questionId=@question.id data-commentId=child.id)
                             i.fa.fa-reply
-                            | この回答に返信、もしくは補足する
+                            | Reply or supplement
   - if @question.opened?
     div#response-to-question-foot(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
       button.respond.opener
         i.fa.fa-folder-open-o
-        | 回答フォームを開く
+        | Add a comment
 script src='/js/question-page-set.js'
 javascript:
   (function () {

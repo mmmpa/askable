@@ -10,7 +10,7 @@ $check-size: 16px
 $btn-height: 38px
 $btn-radius: 0.25rem
 
-$radius: 3px
+$radius: 4px
 $border-color: #d8d8d8
 $background-gray: #f5f5f5
 $background-gray-sub: #fafafa
@@ -25,6 +25,9 @@ $brand-blue: $brand-primary
 
 body, h1, h2, h3, h4, h5, h6
   font-family: "Quicksand", "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif !important
+
+.hidden
+  display: none
 
 button,
 a
@@ -101,6 +104,24 @@ a
     color: $brand-gray
     font-weight: normal
 
+.tabnav
+  border-bottom: 1px solid $border-color
+  margin-bottom: 10px
+
+.tabnav-tab
+  display: inline-block
+  padding: 0.5rem 1rem
+  vertical-align: bottom
+  color: #333
+  margin-bottom: -1px
+  &.selected
+    border-radius: $radius $radius 0 0
+    border: 1px solid $border-color
+    border-bottom: 0
+    background: #fff
+    padding: 0.5rem 1rem
+    overflow: hidden
+
 %boxed-group
   position: relative
   margin-bottom: 30px
@@ -132,8 +153,7 @@ a
   margin: 0 auto
 
 %normal-body
-  max-width: 900px
-  margin: 0 auto
+  @extend .container
 
 %min-cell
   width: 1px
@@ -159,7 +179,7 @@ body
     &.with-nav
       border: 0
   &.body
-    @extend .container
+    @extend %normal-body
   &.title
     padding: 20px 0
     font-size: $size-title
@@ -168,22 +188,8 @@ body
     margin: -5px 0 0 0
     padding: 0 0 20px
     font-size: $size-normal
-  .tabnav-tabs
-    margin-bottom: -1px
   &.sub-nav
     border-bottom: 1px solid $border-color
-  .tabnav-tab
-    display: inline-block
-    padding: 0.5rem 1rem
-    vertical-align: bottom
-    color: #333
-  .selected
-    border-radius: $radius $radius 0 0
-    border: 1px solid $border-color
-    border-bottom: 0
-    background: #fff
-    padding: 0.5rem 1rem
-    overflow: hidden
   .opened,
   .asked
     &.selected
@@ -204,7 +210,7 @@ body
     border-bottom: 1px solid $border-color
     padding: 0.6rem 0
   &.body
-    @extend .container
+    @extend %normal-body
   &.title
     @extend .navbar-brand
     padding: 0
@@ -283,11 +289,15 @@ body
 .no-information,
 .no-message,
 .no-group
-  // @extend .blankslate
+  border: 1px solid $border-color
+  background: $background-gray-sub
+  padding: 100px
+  text-align: center
   margin: 20px 0 0
   p
     @extend h3
-    font-weight: 600
+    font-weight: 400
+    margin: 0
 
 .no-group
   margin: 0 0 20px
@@ -375,6 +385,7 @@ body
     .dispose
       border-radius: 0 $btn-radius $btn-radius 0
       margin-left: -2px
+      width: 130px
   &.success
     color: $brand-green
   &.message-area
@@ -387,7 +398,7 @@ body
 
 .group-portal
   &.body
-    @extend .container
+    @extend %normal-body
   &.editor-area,
   &.information-area
     margin: 0 0 20px
@@ -441,13 +452,17 @@ body
     p
       margin: 0
   &.assigned-users
-    // @extend .columns
+    @extend .row
     border-top: 1px solid $border-color
     margin: 20px -20px 0
+  &.not-yet-list,
+  &.responded-list
+    margin: 10px 0 0
+    padding: 0
   &.responded-users,
   &.not-yet-users
-    // @extend .one-half, .column
-    padding: 0 20px
+    @extend .col-xs-6
+    padding: 10px 20px 0
     .fa.fa-sorryed
     // @extend .fa-paw
     .fa.fa-assigned
@@ -455,7 +470,10 @@ body
     .fa.fa-answered
     // @extend .fa-thumbs-o-up
     .fa.fa-waited
-  // @extend .fa-clock-o
+    // @extend .fa-clock-o
+    li
+      margin: 0
+      padding: 0
   &.assigned-title
     font-size: $size-title
   &.assigned-user
@@ -467,12 +485,16 @@ body
     border: 1px solid $border-color
     border-radius: $radius
     overflow: hidden
+    padding: 0
   &.response-owner
     @extend %boxed-group-title
+    font-size: 0.75rem
     border: 1px solid $border-color
     border-width: 1px 0
     margin: -1px 0 0 0
     border-radius: 0
+    span
+      @extend .h5
   &.response-comment
     padding: 20px
   &.reply-to-reply-area
@@ -482,7 +504,8 @@ body
     .preview-area
       min-height: 302px !important
   &.reply-to-reply-button
-    @extend .btn, .btn-sm, .float-sm-right
+    @extend .btn, .float-sm-right, .btn-secondary
+    color: $brand-blue
   &.from-system
     // @extend .flash, .flash-warn
     border-radius: 0
@@ -491,6 +514,7 @@ body
     time
       margin-right: 5px
   &.response
+    list-style: none
     .wrap
       margin: 0 0 0 40px
       border-left: 1px dotted $border-color
@@ -502,6 +526,7 @@ body
         cursor: pointer
     .permalink
       @extend .float-sm-right
+      color: #333
       time
         font-weight: normal
 
@@ -514,9 +539,16 @@ body
 
 .normal-list
   &.list-body
-    // @extend .menu
+    border: 1px solid $border-color
+    border-radius: 0 0 $border-radius $border-radius
+    border-top: 0
+    padding: 0
   &.list-item
-    // @extend .menu-item
+    border-top: 1px solid $border-color
+
+    list-style: none
+    padding: 10px 20px
+    margin: 0
   &.item-title
     font-size: $size-title
   &.item-author
@@ -577,7 +609,10 @@ body
     margin-right: 5px
   &.opener
     margin: 20px 0 0 0
-    @extend .btn, .btn-block
+    @extend .btn, .btn-secondary
+    width: 100%
+    color: $brand-blue
+    font-weight: 600
   &.responder-area
     margin: 20px 0 0 0
   &.submit-section
@@ -643,27 +678,33 @@ body
 .new-question
   &.body
     @extend %normal-body
+  &.box-body
+    @extend .row
   &.editor-area
-    // @extend .two-thirds, .column
+    @extend .col-xs-8
   &.assigning-area
-    // @extend .one-third, .column
+    @extend .col-xs-4
     overflow: hidden
   &.blank-comment
     color: $brand-gray-light
   &.submit-section
-    // @extend .form-actions
+    //@extend .form-actions
     margin: 10px 0 0 0
   &.registered-message
     color: $brand-green
 
 .assigner
   &.group-members
-    // @extend .menu
+    border: 1px solid $border-color
+    border-radius: $radius
     height: 346px
     overflow-y: scroll
     margin: 0
   &.group-member
-    // @extend .menu-item
+    border-top: 1px solid $border-color
+    display: block
+    padding: 7px 10px 5px
+    margin: -1px 0 0 0
     input
       width: $check-size
       height: $check-size
@@ -680,8 +721,7 @@ body
     border: 1px solid $border-color
     border-radius: $radius
   input
-// @extend .input-block
-
+    @extend .form-control
 .user-register
   &.body
     @extend %small-body
@@ -727,7 +767,9 @@ body
 
 .user-editor
   &.body
-    @extend %small-body
+    @extend %normal-body
+  &.box-wrapper
+    @extend .row
   &.dispose-verify
     input
       display: inline-block
@@ -740,7 +782,8 @@ body
       vertical-align: top
   p
     margin-bottom: 0
-
+  &.border-box-container
+    @extend .col-xs-4
 .user-log-in
   &.body
     @extend %small-body
@@ -773,13 +816,12 @@ body
 .reactor
   &.completed
     line-height: 26px
-    height: 28px
   button.submit,
   button.reject,
   button.block
     padding: 0 10px
-    line-height: 26px
-    height: 28px
+    line-height: $btn-height
+    width: 110px
   button.submit
     border-radius: $radius 0 0 $radius
   button.reject

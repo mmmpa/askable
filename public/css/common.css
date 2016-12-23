@@ -943,7 +943,7 @@ h1, h2, h3, .no-response p,
 .no-information p,
 .no-message p,
 .no-group p, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .h6 {
+.h1, .h2, .h3, .h4, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .show-question.response-owner span, .h6 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.1;
@@ -965,7 +965,7 @@ h3, .no-response p,
 h4, .h4 {
   font-size: 1.5rem; }
 
-h5, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title {
+h5, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .show-question.response-owner span {
   font-size: 1.25rem; }
 
 h6, .h6 {
@@ -1052,7 +1052,7 @@ mark,
 .blockquote-reverse .blockquote-footer::after {
   content: "\00A0 \2014"; }
 
-dl.row > dd + dt {
+dl.row > dd + dt, dl.show-question.assigned-users > dd + dt, dl.new-question.box-body > dd + dt, dl.user-editor.box-wrapper > dd + dt {
   clear: left; }
 
 .img-fluid, .carousel-inner > .carousel-item > img,
@@ -1125,34 +1125,34 @@ pre code {
   max-height: 340px;
   overflow-y: scroll; }
 
-.container, .sub-header.body, .global-header.body, .group-portal.body {
+.container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
   margin-left: auto;
   margin-right: auto;
   padding-left: 15px;
   padding-right: 15px; }
 
-.container::after, .sub-header.body::after, .global-header.body::after, .group-portal.body::after {
+.container::after, .sub-header.body::after, .global-header.body::after, .message-box.body::after, .portal.body::after, .group-portal.body::after, .show-question.body::after, .question-index.body::after, .new-question.body::after, .user-editor.body::after {
   content: "";
   display: table;
   clear: both; }
 
 @media (min-width: 576px) {
-  .container, .sub-header.body, .global-header.body, .group-portal.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
     width: 540px;
     max-width: 100%; } }
 
 @media (min-width: 768px) {
-  .container, .sub-header.body, .global-header.body, .group-portal.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
     width: 720px;
     max-width: 100%; } }
 
 @media (min-width: 992px) {
-  .container, .sub-header.body, .global-header.body, .group-portal.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
     width: 960px;
     max-width: 100%; } }
 
 @media (min-width: 1200px) {
-  .container, .sub-header.body, .global-header.body, .group-portal.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
     width: 1140px;
     max-width: 100%; } }
 
@@ -1167,58 +1167,58 @@ pre code {
   display: table;
   clear: both; }
 
-.row {
+.row, .show-question.assigned-users, .new-question.box-body, .user-editor.box-wrapper {
   margin-right: -15px;
   margin-left: -15px; }
 
-.row::after {
+.row::after, .show-question.assigned-users::after, .new-question.box-body::after, .user-editor.box-wrapper::after {
   content: "";
   display: table;
   clear: both; }
 
 @media (min-width: 576px) {
-  .row {
+  .row, .show-question.assigned-users, .new-question.box-body, .user-editor.box-wrapper {
     margin-right: -15px;
     margin-left: -15px; } }
 
 @media (min-width: 768px) {
-  .row {
+  .row, .show-question.assigned-users, .new-question.box-body, .user-editor.box-wrapper {
     margin-right: -15px;
     margin-left: -15px; } }
 
 @media (min-width: 992px) {
-  .row {
+  .row, .show-question.assigned-users, .new-question.box-body, .user-editor.box-wrapper {
     margin-right: -15px;
     margin-left: -15px; } }
 
 @media (min-width: 1200px) {
-  .row {
+  .row, .show-question.assigned-users, .new-question.box-body, .user-editor.box-wrapper {
     margin-right: -15px;
     margin-left: -15px; } }
 
-.col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+.col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .new-question.assigning-area, .user-editor.border-box-container, .col-xs-5, .col-xs-6, .show-question.responded-users, .show-question.not-yet-users, .col-xs-7, .col-xs-8, .new-question.editor-area, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
   position: relative;
   min-height: 1px;
   padding-right: 15px;
   padding-left: 15px; }
 
 @media (min-width: 576px) {
-  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .new-question.assigning-area, .user-editor.border-box-container, .col-xs-5, .col-xs-6, .show-question.responded-users, .show-question.not-yet-users, .col-xs-7, .col-xs-8, .new-question.editor-area, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
     padding-right: 15px;
     padding-left: 15px; } }
 
 @media (min-width: 768px) {
-  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .new-question.assigning-area, .user-editor.border-box-container, .col-xs-5, .col-xs-6, .show-question.responded-users, .show-question.not-yet-users, .col-xs-7, .col-xs-8, .new-question.editor-area, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
     padding-right: 15px;
     padding-left: 15px; } }
 
 @media (min-width: 992px) {
-  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .new-question.assigning-area, .user-editor.border-box-container, .col-xs-5, .col-xs-6, .show-question.responded-users, .show-question.not-yet-users, .col-xs-7, .col-xs-8, .new-question.editor-area, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
     padding-right: 15px;
     padding-left: 15px; } }
 
 @media (min-width: 1200px) {
-  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
+  .col-xs, .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .new-question.assigning-area, .user-editor.border-box-container, .col-xs-5, .col-xs-6, .show-question.responded-users, .show-question.not-yet-users, .col-xs-7, .col-xs-8, .new-question.editor-area, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-xl, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12 {
     padding-right: 15px;
     padding-left: 15px; } }
 
@@ -1234,7 +1234,7 @@ pre code {
   float: left;
   width: 25%; }
 
-.col-xs-4 {
+.col-xs-4, .new-question.assigning-area, .user-editor.border-box-container {
   float: left;
   width: 33.333333%; }
 
@@ -1242,7 +1242,7 @@ pre code {
   float: left;
   width: 41.666667%; }
 
-.col-xs-6 {
+.col-xs-6, .show-question.responded-users, .show-question.not-yet-users {
   float: left;
   width: 50%; }
 
@@ -1250,7 +1250,7 @@ pre code {
   float: left;
   width: 58.333333%; }
 
-.col-xs-8 {
+.col-xs-8, .new-question.editor-area {
   float: left;
   width: 66.666667%; }
 
@@ -1999,7 +1999,7 @@ pre code {
 
 .form-control, .com.input-section input[type="text"],
 .com.input-section input[type="password"], .invitation.login-area input,
-.disposer.login-area input {
+.disposer.login-area input, .comment-editor input {
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -2015,13 +2015,13 @@ pre code {
 
 .form-control::-ms-expand, .com.input-section input[type="text"]::-ms-expand,
 .com.input-section input[type="password"]::-ms-expand, .invitation.login-area input::-ms-expand,
-.disposer.login-area input::-ms-expand {
+.disposer.login-area input::-ms-expand, .comment-editor input::-ms-expand {
   background-color: transparent;
   border: 0; }
 
 .form-control:focus, .com.input-section input[type="text"]:focus,
 .com.input-section input[type="password"]:focus, .invitation.login-area input:focus,
-.disposer.login-area input:focus {
+.disposer.login-area input:focus, .comment-editor input:focus {
   color: #55595c;
   background-color: #fff;
   border-color: #66afe9;
@@ -2029,39 +2029,39 @@ pre code {
 
 .form-control::-webkit-input-placeholder, .com.input-section input[type="text"]::-webkit-input-placeholder,
 .com.input-section input[type="password"]::-webkit-input-placeholder, .invitation.login-area input::-webkit-input-placeholder,
-.disposer.login-area input::-webkit-input-placeholder {
+.disposer.login-area input::-webkit-input-placeholder, .comment-editor input::-webkit-input-placeholder {
   color: #999;
   opacity: 1; }
 
 .form-control::-moz-placeholder, .com.input-section input[type="text"]::-moz-placeholder,
 .com.input-section input[type="password"]::-moz-placeholder, .invitation.login-area input::-moz-placeholder,
-.disposer.login-area input::-moz-placeholder {
+.disposer.login-area input::-moz-placeholder, .comment-editor input::-moz-placeholder {
   color: #999;
   opacity: 1; }
 
 .form-control:-ms-input-placeholder, .com.input-section input[type="text"]:-ms-input-placeholder,
 .com.input-section input[type="password"]:-ms-input-placeholder, .invitation.login-area input:-ms-input-placeholder,
-.disposer.login-area input:-ms-input-placeholder {
+.disposer.login-area input:-ms-input-placeholder, .comment-editor input:-ms-input-placeholder {
   color: #999;
   opacity: 1; }
 
 .form-control::placeholder, .com.input-section input[type="text"]::placeholder,
 .com.input-section input[type="password"]::placeholder, .invitation.login-area input::placeholder,
-.disposer.login-area input::placeholder {
+.disposer.login-area input::placeholder, .comment-editor input::placeholder {
   color: #999;
   opacity: 1; }
 
 .form-control:disabled, .com.input-section input[type="text"]:disabled,
 .com.input-section input[type="password"]:disabled, .invitation.login-area input:disabled,
-.disposer.login-area input:disabled, .form-control[readonly], .com.input-section input[readonly][type="text"],
+.disposer.login-area input:disabled, .comment-editor input:disabled, .form-control[readonly], .com.input-section input[readonly][type="text"],
 .com.input-section input[readonly][type="password"], .invitation.login-area input[readonly],
-.disposer.login-area input[readonly] {
+.disposer.login-area input[readonly], .comment-editor input[readonly] {
   background-color: #eceeef;
   opacity: 1; }
 
 .form-control:disabled, .com.input-section input[type="text"]:disabled,
 .com.input-section input[type="password"]:disabled, .invitation.login-area input:disabled,
-.disposer.login-area input:disabled {
+.disposer.login-area input:disabled, .comment-editor input:disabled {
   cursor: not-allowed; }
 
 select.form-control:not([size]):not([multiple]) {
@@ -2105,7 +2105,7 @@ select.form-control:focus::-ms-value {
 
 .form-control-static.form-control-sm, .input-group-sm > .form-control-static.form-control, .com.input-section .input-group-sm > input.form-control-static[type="text"],
 .com.input-section .input-group-sm > input.form-control-static[type="password"], .invitation.login-area .input-group-sm > input.form-control-static,
-.disposer.login-area .input-group-sm > input.form-control-static,
+.disposer.login-area .input-group-sm > input.form-control-static, .comment-editor .input-group-sm > input.form-control-static,
 .input-group-sm > .form-control-static.input-group-addon,
 .input-group-sm > .input-group-btn > .form-control-static.btn,
 .input-group-sm > .input-group-btn > button.form-control-static.link.ready,
@@ -2134,7 +2134,7 @@ a.form-control-static.default.ready,
 .input-group-sm > .input-group-btn > .form-control-static.respond.wait,
 .input-group-sm > .input-group-btn > .form-control-static.respond.opener, .form-control-static.form-control-lg, .input-group-lg > .form-control-static.form-control, .com.input-section .input-group-lg > input.form-control-static[type="text"],
 .com.input-section .input-group-lg > input.form-control-static[type="password"], .invitation.login-area .input-group-lg > input.form-control-static,
-.disposer.login-area .input-group-lg > input.form-control-static,
+.disposer.login-area .input-group-lg > input.form-control-static, .comment-editor .input-group-lg > input.form-control-static,
 .input-group-lg > .form-control-static.input-group-addon,
 .input-group-lg > .input-group-btn > .form-control-static.btn,
 .input-group-lg > .input-group-btn > button.form-control-static.link.ready,
@@ -2167,7 +2167,7 @@ a.form-control-static.default.ready,
 
 .form-control-sm, .input-group-sm > .form-control, .com.input-section .input-group-sm > input[type="text"],
 .com.input-section .input-group-sm > input[type="password"], .invitation.login-area .input-group-sm > input,
-.disposer.login-area .input-group-sm > input,
+.disposer.login-area .input-group-sm > input, .comment-editor .input-group-sm > input,
 .input-group-sm > .input-group-addon,
 .input-group-sm > .input-group-btn > .btn,
 .input-group-sm > .input-group-btn > button.link.ready,
@@ -2210,7 +2210,7 @@ select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.for
 
 .form-control-lg, .input-group-lg > .form-control, .com.input-section .input-group-lg > input[type="text"],
 .com.input-section .input-group-lg > input[type="password"], .invitation.login-area .input-group-lg > input,
-.disposer.login-area .input-group-lg > input,
+.disposer.login-area .input-group-lg > input, .comment-editor .input-group-lg > input,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .input-group-btn > .btn,
 .input-group-lg > .input-group-btn > button.link.ready,
@@ -2321,14 +2321,14 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 .com.input-section input[type="password"],
 .com.input-section .has-success input[type="password"], .has-success .invitation.login-area input, .invitation.login-area .has-success input, .has-success
 .disposer.login-area input,
-.disposer.login-area .has-success input {
+.disposer.login-area .has-success input, .has-success .comment-editor input, .comment-editor .has-success input {
   border-color: #5cb85c; }
 
 .has-success .form-control:focus, .has-success .com.input-section input[type="text"]:focus, .com.input-section .has-success input[type="text"]:focus, .has-success
 .com.input-section input[type="password"]:focus,
 .com.input-section .has-success input[type="password"]:focus, .has-success .invitation.login-area input:focus, .invitation.login-area .has-success input:focus, .has-success
 .disposer.login-area input:focus,
-.disposer.login-area .has-success input:focus {
+.disposer.login-area .has-success input:focus, .has-success .comment-editor input:focus, .comment-editor .has-success input:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #a3d7a3;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #a3d7a3; }
 
@@ -2351,14 +2351,14 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 .com.input-section input[type="password"],
 .com.input-section .has-warning input[type="password"], .has-warning .invitation.login-area input, .invitation.login-area .has-warning input, .has-warning
 .disposer.login-area input,
-.disposer.login-area .has-warning input {
+.disposer.login-area .has-warning input, .has-warning .comment-editor input, .comment-editor .has-warning input {
   border-color: #f0ad4e; }
 
 .has-warning .form-control:focus, .has-warning .com.input-section input[type="text"]:focus, .com.input-section .has-warning input[type="text"]:focus, .has-warning
 .com.input-section input[type="password"]:focus,
 .com.input-section .has-warning input[type="password"]:focus, .has-warning .invitation.login-area input:focus, .invitation.login-area .has-warning input:focus, .has-warning
 .disposer.login-area input:focus,
-.disposer.login-area .has-warning input:focus {
+.disposer.login-area .has-warning input:focus, .has-warning .comment-editor input:focus, .comment-editor .has-warning input:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f8d9ac;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f8d9ac; }
 
@@ -2381,14 +2381,14 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 .com.input-section input[type="password"],
 .com.input-section .has-danger input[type="password"], .has-danger .invitation.login-area input, .invitation.login-area .has-danger input, .has-danger
 .disposer.login-area input,
-.disposer.login-area .has-danger input {
+.disposer.login-area .has-danger input, .has-danger .comment-editor input, .comment-editor .has-danger input {
   border-color: #d9534f; }
 
 .has-danger .form-control:focus, .has-danger .com.input-section input[type="text"]:focus, .com.input-section .has-danger input[type="text"]:focus, .has-danger
 .com.input-section input[type="password"]:focus,
 .com.input-section .has-danger input[type="password"]:focus, .has-danger .invitation.login-area input:focus, .invitation.login-area .has-danger input:focus, .has-danger
 .disposer.login-area input:focus,
-.disposer.login-area .has-danger input:focus {
+.disposer.login-area .has-danger input:focus, .has-danger .comment-editor input:focus, .comment-editor .has-danger input:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #eba5a3;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #eba5a3; }
 
@@ -2409,7 +2409,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   .com.input-section input[type="password"],
   .com.input-section .form-inline input[type="password"], .form-inline .invitation.login-area input, .invitation.login-area .form-inline input, .form-inline
   .disposer.login-area input,
-  .disposer.login-area .form-inline input {
+  .disposer.login-area .form-inline input, .form-inline .comment-editor input, .comment-editor .form-inline input {
     display: inline-block;
     width: auto;
     vertical-align: middle; }
@@ -2433,13 +2433,15 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   .form-inline .input-group
   .disposer.login-area input,
   .disposer.login-area
+  .form-inline .input-group input,
+  .form-inline .input-group .comment-editor input, .comment-editor
   .form-inline .input-group input {
     width: auto; }
   .form-inline .input-group > .form-control, .form-inline .com.input-section .input-group > input[type="text"], .com.input-section .form-inline .input-group > input[type="text"], .form-inline
   .com.input-section .input-group > input[type="password"],
   .com.input-section .form-inline .input-group > input[type="password"], .form-inline .invitation.login-area .input-group > input, .invitation.login-area .form-inline .input-group > input, .form-inline
   .disposer.login-area .input-group > input,
-  .disposer.login-area .form-inline .input-group > input {
+  .disposer.login-area .form-inline .input-group > input, .form-inline .comment-editor .input-group > input, .comment-editor .form-inline .input-group > input {
     width: 100%; }
   .form-inline .form-control-label {
     margin-bottom: 0;
@@ -2702,7 +2704,7 @@ a.dispose.sending, button.reject.ready,
 a.reject.ready, button.reject.sending,
 a.reject.sending, button.default.ready,
 a.default.ready, button.default.sending,
-a.default.sending {
+a.default.sending, .show-question.reply-to-reply-button, .respond.opener {
   color: #373a3c;
   background-color: #fff;
   border-color: #ccc; }
@@ -2710,7 +2712,7 @@ a.default.sending {
 .btn-secondary:hover, button.sending:hover,
 a.sending:hover, button.reject.ready:hover,
 a.reject.ready:hover, button.default.ready:hover,
-a.default.ready:hover {
+a.default.ready:hover, .show-question.reply-to-reply-button:hover, .respond.opener:hover {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2718,10 +2720,10 @@ a.default.ready:hover {
 .btn-secondary:focus, button.sending:focus,
 a.sending:focus, button.reject.ready:focus,
 a.reject.ready:focus, button.default.ready:focus,
-a.default.ready:focus, .btn-secondary.focus, button.focus.sending,
+a.default.ready:focus, .show-question.reply-to-reply-button:focus, .respond.opener:focus, .btn-secondary.focus, button.focus.sending,
 a.focus.sending, button.focus.reject.ready,
 a.focus.reject.ready, button.focus.default.ready,
-a.focus.default.ready {
+a.focus.default.ready, .focus.show-question.reply-to-reply-button, .focus.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2729,10 +2731,10 @@ a.focus.default.ready {
 .btn-secondary:active, button.sending:active,
 a.sending:active, button.reject.ready:active,
 a.reject.ready:active, button.default.ready:active,
-a.default.ready:active, .btn-secondary.active, button.active.sending,
+a.default.ready:active, .show-question.reply-to-reply-button:active, .respond.opener:active, .btn-secondary.active, button.active.sending,
 a.active.sending, button.active.reject.ready,
 a.active.reject.ready, button.active.default.ready,
-a.active.default.ready,
+a.active.default.ready, .active.show-question.reply-to-reply-button, .active.respond.opener,
 .open > .btn-secondary.dropdown-toggle,
 .open > button.dropdown-toggle.sending,
 .open >
@@ -2742,7 +2744,9 @@ a.dropdown-toggle.sending,
 a.dropdown-toggle.reject.ready,
 .open > button.dropdown-toggle.default.ready,
 .open >
-a.dropdown-toggle.default.ready {
+a.dropdown-toggle.default.ready,
+.open > .dropdown-toggle.show-question.reply-to-reply-button,
+.open > .dropdown-toggle.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad;
@@ -2751,22 +2755,22 @@ a.dropdown-toggle.default.ready {
 .btn-secondary:active:hover, button.sending:active:hover,
 a.sending:active:hover, button.reject.ready:active:hover,
 a.reject.ready:active:hover, button.default.ready:active:hover,
-a.default.ready:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
+a.default.ready:active:hover, .show-question.reply-to-reply-button:active:hover, .respond.opener:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
 a.sending:active:focus, button.reject.ready:active:focus,
 a.reject.ready:active:focus, button.default.ready:active:focus,
-a.default.ready:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
+a.default.ready:active:focus, .show-question.reply-to-reply-button:active:focus, .respond.opener:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
 a.sending:active.focus, button.reject.ready:active.focus,
 a.reject.ready:active.focus, button.default.ready:active.focus,
-a.default.ready:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
+a.default.ready:active.focus, .show-question.reply-to-reply-button:active.focus, .respond.opener:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
 a.active.sending:hover, button.active.reject.ready:hover,
 a.active.reject.ready:hover, button.active.default.ready:hover,
-a.active.default.ready:hover, .btn-secondary.active:focus, button.active.sending:focus,
+a.active.default.ready:hover, .active.show-question.reply-to-reply-button:hover, .active.respond.opener:hover, .btn-secondary.active:focus, button.active.sending:focus,
 a.active.sending:focus, button.active.reject.ready:focus,
 a.active.reject.ready:focus, button.active.default.ready:focus,
-a.active.default.ready:focus, .btn-secondary.active.focus, button.active.focus.sending,
+a.active.default.ready:focus, .active.show-question.reply-to-reply-button:focus, .active.respond.opener:focus, .btn-secondary.active.focus, button.active.focus.sending,
 a.active.focus.sending, button.active.focus.reject.ready,
 a.active.focus.reject.ready, button.active.focus.default.ready,
-a.active.focus.default.ready,
+a.active.focus.default.ready, .active.focus.show-question.reply-to-reply-button, .active.focus.respond.opener,
 .open > .btn-secondary.dropdown-toggle:hover,
 .open > button.dropdown-toggle.sending:hover,
 .open >
@@ -2777,6 +2781,8 @@ a.dropdown-toggle.reject.ready:hover,
 .open > button.dropdown-toggle.default.ready:hover,
 .open >
 a.dropdown-toggle.default.ready:hover,
+.open > .dropdown-toggle.show-question.reply-to-reply-button:hover,
+.open > .dropdown-toggle.respond.opener:hover,
 .open > .btn-secondary.dropdown-toggle:focus,
 .open > button.dropdown-toggle.sending:focus,
 .open >
@@ -2787,6 +2793,8 @@ a.dropdown-toggle.reject.ready:focus,
 .open > button.dropdown-toggle.default.ready:focus,
 .open >
 a.dropdown-toggle.default.ready:focus,
+.open > .dropdown-toggle.show-question.reply-to-reply-button:focus,
+.open > .dropdown-toggle.respond.opener:focus,
 .open > .btn-secondary.dropdown-toggle.focus,
 .open > button.dropdown-toggle.focus.sending,
 .open >
@@ -2796,7 +2804,9 @@ a.dropdown-toggle.focus.sending,
 a.dropdown-toggle.focus.reject.ready,
 .open > button.dropdown-toggle.focus.default.ready,
 .open >
-a.dropdown-toggle.focus.default.ready {
+a.dropdown-toggle.focus.default.ready,
+.open > .dropdown-toggle.focus.show-question.reply-to-reply-button,
+.open > .dropdown-toggle.focus.respond.opener {
   color: #373a3c;
   background-color: #d4d4d4;
   border-color: #8c8c8c; }
@@ -2804,26 +2814,26 @@ a.dropdown-toggle.focus.default.ready {
 .btn-secondary.disabled:focus, button.disabled.sending:focus,
 a.disabled.sending:focus, button.disabled.reject.ready:focus,
 a.disabled.reject.ready:focus, button.disabled.default.ready:focus,
-a.disabled.default.ready:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
+a.disabled.default.ready:focus, .disabled.show-question.reply-to-reply-button:focus, .disabled.respond.opener:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
 a.disabled.focus.sending, button.disabled.focus.reject.ready,
 a.disabled.focus.reject.ready, button.disabled.focus.default.ready,
-a.disabled.focus.default.ready, .btn-secondary:disabled:focus, button.sending:disabled:focus,
+a.disabled.focus.default.ready, .disabled.focus.show-question.reply-to-reply-button, .disabled.focus.respond.opener, .btn-secondary:disabled:focus, button.sending:disabled:focus,
 a.sending:disabled:focus, button.reject.ready:disabled:focus,
 a.reject.ready:disabled:focus, button.default.ready:disabled:focus,
-a.default.ready:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
+a.default.ready:disabled:focus, .show-question.reply-to-reply-button:disabled:focus, .respond.opener:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
 a.sending:disabled.focus, button.reject.ready:disabled.focus,
 a.reject.ready:disabled.focus, button.default.ready:disabled.focus,
-a.default.ready:disabled.focus {
+a.default.ready:disabled.focus, .show-question.reply-to-reply-button:disabled.focus, .respond.opener:disabled.focus {
   background-color: #fff;
   border-color: #ccc; }
 
 .btn-secondary.disabled:hover, button.disabled.sending:hover,
 a.disabled.sending:hover, button.disabled.reject.ready:hover,
 a.disabled.reject.ready:hover, button.disabled.default.ready:hover,
-a.disabled.default.ready:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
+a.disabled.default.ready:hover, .disabled.show-question.reply-to-reply-button:hover, .disabled.respond.opener:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
 a.sending:disabled:hover, button.reject.ready:disabled:hover,
 a.reject.ready:disabled:hover, button.default.ready:disabled:hover,
-a.default.ready:disabled:hover {
+a.default.ready:disabled:hover, .show-question.reply-to-reply-button:disabled:hover, .respond.opener:disabled:hover {
   background-color: #fff;
   border-color: #ccc; }
 
@@ -3324,7 +3334,7 @@ a.default.ready, .btn-group-lg > .show-question.reply-to-reply-button, .btn-grou
   font-size: 1.25rem;
   border-radius: 0.3rem; }
 
-.btn-sm, .show-question.reply-to-reply-button, .respond.sorry, .respond.wait, .btn-group-sm > .btn, .btn-group-sm > button.link.ready, .btn-group-sm >
+.btn-sm, .respond.sorry, .respond.wait, .btn-group-sm > .btn, .btn-group-sm > button.link.ready, .btn-group-sm >
 a.link.ready, .btn-group-sm > button.submit.ready, .btn-group-sm >
 a.submit.ready, .btn-group-sm > button.sending, .btn-group-sm >
 a.sending, .btn-group-sm > button.block.ready, .btn-group-sm > button.dispose.ready, .btn-group-sm >
@@ -3336,18 +3346,16 @@ a.default.ready, .btn-group-sm > .show-question.reply-to-reply-button, .btn-grou
   font-size: 0.875rem;
   border-radius: 0.2rem; }
 
-.btn-block, .respond.opener {
+.btn-block {
   display: block;
   width: 100%; }
 
-.btn-block + .btn-block, .respond.opener + .btn-block, .btn-block + .respond.opener, .respond.opener + .respond.opener {
+.btn-block + .btn-block {
   margin-top: 0.5rem; }
 
-input[type="submit"].btn-block, input[type="submit"].respond.opener,
+input[type="submit"].btn-block,
 input[type="reset"].btn-block,
-input[type="reset"].respond.opener,
-input[type="button"].btn-block,
-input[type="button"].respond.opener {
+input[type="button"].btn-block {
   width: 100%; }
 
 .fade {
@@ -4680,7 +4688,7 @@ a.reject.ready + .dropdown-toggle-split::after, button.default.ready + .dropdown
 a.default.ready + .dropdown-toggle-split::after, .show-question.reply-to-reply-button + .dropdown-toggle-split::after, .respond.sorry + .dropdown-toggle-split::after, .respond.wait + .dropdown-toggle-split::after, .respond.opener + .dropdown-toggle-split::after {
   margin-left: 0; }
 
-.btn-sm + .dropdown-toggle-split, .show-question.reply-to-reply-button + .dropdown-toggle-split, .respond.sorry + .dropdown-toggle-split, .respond.wait + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .btn-group-sm > button.link.ready + .dropdown-toggle-split, .btn-group-sm >
+.btn-sm + .dropdown-toggle-split, .respond.sorry + .dropdown-toggle-split, .respond.wait + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .btn-group-sm > button.link.ready + .dropdown-toggle-split, .btn-group-sm >
 a.link.ready + .dropdown-toggle-split, .btn-group-sm > button.submit.ready + .dropdown-toggle-split, .btn-group-sm >
 a.submit.ready + .dropdown-toggle-split, .btn-group-sm > button.sending + .dropdown-toggle-split, .btn-group-sm >
 a.sending + .dropdown-toggle-split, .btn-group-sm > button.block.ready + .dropdown-toggle-split, .btn-group-sm > button.dispose.ready + .dropdown-toggle-split, .btn-group-sm >
@@ -5816,7 +5824,7 @@ a.default.ready input[type="checkbox"],
 .com.input-section input[type="password"],
 .com.input-section .input-group input[type="password"], .input-group .invitation.login-area input, .invitation.login-area .input-group input, .input-group
 .disposer.login-area input,
-.disposer.login-area .input-group input {
+.disposer.login-area .input-group input, .input-group .comment-editor input, .comment-editor .input-group input {
   position: relative;
   z-index: 2;
   float: left;
@@ -5827,15 +5835,15 @@ a.default.ready input[type="checkbox"],
 .com.input-section input[type="password"]:focus,
 .com.input-section .input-group input[type="password"]:focus, .input-group .invitation.login-area input:focus, .invitation.login-area .input-group input:focus, .input-group
 .disposer.login-area input:focus,
-.disposer.login-area .input-group input:focus, .input-group .form-control:active, .input-group .com.input-section input[type="text"]:active, .com.input-section .input-group input[type="text"]:active, .input-group
+.disposer.login-area .input-group input:focus, .input-group .comment-editor input:focus, .comment-editor .input-group input:focus, .input-group .form-control:active, .input-group .com.input-section input[type="text"]:active, .com.input-section .input-group input[type="text"]:active, .input-group
 .com.input-section input[type="password"]:active,
 .com.input-section .input-group input[type="password"]:active, .input-group .invitation.login-area input:active, .invitation.login-area .input-group input:active, .input-group
 .disposer.login-area input:active,
-.disposer.login-area .input-group input:active, .input-group .form-control:hover, .input-group .com.input-section input[type="text"]:hover, .com.input-section .input-group input[type="text"]:hover, .input-group
+.disposer.login-area .input-group input:active, .input-group .comment-editor input:active, .comment-editor .input-group input:active, .input-group .form-control:hover, .input-group .com.input-section input[type="text"]:hover, .com.input-section .input-group input[type="text"]:hover, .input-group
 .com.input-section input[type="password"]:hover,
 .com.input-section .input-group input[type="password"]:hover, .input-group .invitation.login-area input:hover, .invitation.login-area .input-group input:hover, .input-group
 .disposer.login-area input:hover,
-.disposer.login-area .input-group input:hover {
+.disposer.login-area .input-group input:hover, .input-group .comment-editor input:hover, .comment-editor .input-group input:hover {
   z-index: 3; }
 
 .input-group-addon,
@@ -5852,6 +5860,8 @@ a.default.ready input[type="checkbox"],
 .input-group
 .disposer.login-area input,
 .disposer.login-area
+.input-group input,
+.input-group .comment-editor input, .comment-editor
 .input-group input {
   display: table-cell; }
 
@@ -5869,6 +5879,8 @@ a.default.ready input[type="checkbox"],
 .input-group
 .disposer.login-area input:not(:first-child):not(:last-child),
 .disposer.login-area
+.input-group input:not(:first-child):not(:last-child),
+.input-group .comment-editor input:not(:first-child):not(:last-child), .comment-editor
 .input-group input:not(:first-child):not(:last-child) {
   border-radius: 0; }
 
@@ -5962,7 +5974,7 @@ a.input-group-addon.default.ready,
 .com.input-section input[type="password"]:not(:last-child),
 .com.input-section .input-group input[type="password"]:not(:last-child), .input-group .invitation.login-area input:not(:last-child), .invitation.login-area .input-group input:not(:last-child), .input-group
 .disposer.login-area input:not(:last-child),
-.disposer.login-area .input-group input:not(:last-child),
+.disposer.login-area .input-group input:not(:last-child), .input-group .comment-editor input:not(:last-child), .comment-editor .input-group input:not(:last-child),
 .input-group-addon:not(:last-child),
 .input-group-btn:not(:last-child) > .btn,
 .input-group-btn:not(:last-child) > button.link.ready,
@@ -6079,7 +6091,7 @@ a.default.ready,
 .com.input-section input[type="password"]:not(:first-child),
 .com.input-section .input-group input[type="password"]:not(:first-child), .input-group .invitation.login-area input:not(:first-child), .invitation.login-area .input-group input:not(:first-child), .input-group
 .disposer.login-area input:not(:first-child),
-.disposer.login-area .input-group input:not(:first-child),
+.disposer.login-area .input-group input:not(:first-child), .input-group .comment-editor input:not(:first-child), .comment-editor .input-group input:not(:first-child),
 .input-group-addon:not(:first-child),
 .input-group-btn:not(:first-child) > .btn,
 .input-group-btn:not(:first-child) > button.link.ready,
@@ -6191,7 +6203,7 @@ a.default.ready,
 
 .form-control + .input-group-addon:not(:first-child), .com.input-section input[type="text"] + .input-group-addon:not(:first-child),
 .com.input-section input[type="password"] + .input-group-addon:not(:first-child), .invitation.login-area input + .input-group-addon:not(:first-child),
-.disposer.login-area input + .input-group-addon:not(:first-child) {
+.disposer.login-area input + .input-group-addon:not(:first-child), .comment-editor input + .input-group-addon:not(:first-child) {
   border-left: 0; }
 
 .input-group-btn {
@@ -9766,9 +9778,12 @@ body, h1, h2, h3, .no-response p,
 .no-group p, h4, h5, h6 {
   font-family: "Quicksand", "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif !important; }
 
+.hidden {
+  display: none; }
+
 .com.border-box-container {
   border: 1px solid #d8d8d8;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: 20px; }
 
@@ -9813,14 +9828,32 @@ body, h1, h2, h3, .no-response p,
   color: #ccc;
   font-weight: normal; }
 
+.tabnav {
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 10px; }
+
+.tabnav-tab {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  vertical-align: bottom;
+  color: #333;
+  margin-bottom: -1px; }
+  .tabnav-tab.selected {
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #d8d8d8;
+    border-bottom: 0;
+    background: #fff;
+    padding: 0.5rem 1rem;
+    overflow: hidden; }
+
 .show-question.question-area, .respond.response, .new-group.registering-body {
   padding: 1px 20px;
   font-size: 13px;
   color: #666;
   background: #fff;
   border: 1px solid #d8d8d8;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px; }
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px; }
 
 .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title {
   display: block;
@@ -9831,14 +9864,10 @@ body, h1, h2, h3, .no-response p,
   background-color: #f5f5f5;
   border: 1px solid #d8d8d8;
   border-bottom: 0;
-  border-radius: 3px 3px 0 0; }
+  border-radius: 4px 4px 0 0; }
 
-.user-register.body, .user-registered.body, .user-editor.body, .user-log-in.body, .new-group.body {
+.user-register.body, .user-registered.body, .user-log-in.body, .new-group.body {
   max-width: 400px;
-  margin: 0 auto; }
-
-.message-box.body, .portal.body, .show-question.body, .question-index.body, .new-question.body {
-  max-width: 900px;
   margin: 0 auto; }
 
 .normal-list.item-icon, .normal-list.item-status {
@@ -9872,25 +9901,8 @@ body {
   padding: 0 0 20px;
   font-size: 12px; }
 
-.sub-header .tabnav-tabs {
-  margin-bottom: -1px; }
-
 .sub-header.sub-nav {
   border-bottom: 1px solid #d8d8d8; }
-
-.sub-header .tabnav-tab {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  vertical-align: bottom;
-  color: #333; }
-
-.sub-header .selected {
-  border-radius: 3px 3px 0 0;
-  border: 1px solid #d8d8d8;
-  border-bottom: 0;
-  background: #fff;
-  padding: 0.5rem 1rem;
-  overflow: hidden; }
 
 .sub-header .opened.selected,
 .sub-header .asked.selected {
@@ -9992,17 +10004,22 @@ body {
 .no-information,
 .no-message,
 .no-group {
+  border: 1px solid #d8d8d8;
+  background: #fafafa;
+  padding: 100px;
+  text-align: center;
   margin: 20px 0 0; }
   .no-response p,
   .no-question p,
   .no-information p,
   .no-message p,
   .no-group p {
-    font-weight: 600; }
+    font-weight: 400;
+    margin: 0; }
 
 .no-group {
   margin: 0 0 20px;
-  border-radius: 0 0 3px 3px; }
+  border-radius: 0 0 4px 4px; }
 
 .message-box.content {
   padding: 20px; }
@@ -10042,7 +10059,7 @@ body {
 
 .portal.information-table {
   border: 1px solid #d8d8d8;
-  border-radius: 0 0 3px 3px;
+  border-radius: 0 0 4px 4px;
   margin-top: -1px; }
 
 .portal.information-table-item {
@@ -10084,7 +10101,8 @@ body {
 .disposer.input-area .submit,
 .disposer.input-area .dispose {
   border-radius: 0 0.25rem 0.25rem 0;
-  margin-left: -2px; }
+  margin-left: -2px;
+  width: 130px; }
 
 .invitation.success,
 .disposer.success {
@@ -10103,7 +10121,7 @@ body {
 .group-portal.editor-area, .group-portal.information-area {
   margin: 0 0 20px;
   border: 1px solid #d8d8d8;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden; }
 
 .group-portal.title {
@@ -10155,8 +10173,15 @@ body {
   border-top: 1px solid #d8d8d8;
   margin: 20px -20px 0; }
 
+.show-question.not-yet-list, .show-question.responded-list {
+  margin: 10px 0 0;
+  padding: 0; }
+
 .show-question.responded-users, .show-question.not-yet-users {
-  padding: 0 20px; }
+  padding: 10px 20px 0; }
+  .show-question.responded-users li, .show-question.not-yet-users li {
+    margin: 0;
+    padding: 0; }
 
 .show-question.assigned-title {
   font-size: 18px; }
@@ -10169,10 +10194,12 @@ body {
 .show-question.responses {
   margin-top: 20px;
   border: 1px solid #d8d8d8;
-  border-radius: 3px;
-  overflow: hidden; }
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 0; }
 
 .show-question.response-owner {
+  font-size: 0.75rem;
   border: 1px solid #d8d8d8;
   border-width: 1px 0;
   margin: -1px 0 0 0;
@@ -10188,6 +10215,9 @@ body {
   .show-question.reply-to-reply-area .preview-area {
     min-height: 302px !important; }
 
+.show-question.reply-to-reply-button {
+  color: #0275d8; }
+
 .show-question.from-system {
   border-radius: 0;
   border-width: 1px 0;
@@ -10195,22 +10225,37 @@ body {
   .show-question.from-system time {
     margin-right: 5px; }
 
-.show-question.response .wrap {
-  margin: 0 0 0 40px;
-  border-left: 1px dotted #d8d8d8;
-  background: #fff; }
-  .show-question.response .wrap .reply-anchor {
-    color: #0275d8;
-    cursor: pointer; }
-
-.show-question.response .permalink time {
-  font-weight: normal; }
+.show-question.response {
+  list-style: none; }
+  .show-question.response .wrap {
+    margin: 0 0 0 40px;
+    border-left: 1px dotted #d8d8d8;
+    background: #fff; }
+    .show-question.response .wrap .reply-anchor {
+      color: #0275d8;
+      cursor: pointer; }
+  .show-question.response .permalink {
+    color: #333; }
+    .show-question.response .permalink time {
+      font-weight: normal; }
 
 .finish.body {
   margin: 10px -20px -10px;
   padding: 10px 20px 0;
   border-top: 1px solid #d8d8d8;
   text-align: right; }
+
+.normal-list.list-body {
+  border: 1px solid #d8d8d8;
+  border-radius: 0 0 0.25rem 0.25rem;
+  border-top: 0;
+  padding: 0; }
+
+.normal-list.list-item {
+  border-top: 1px solid #d8d8d8;
+  list-style: none;
+  padding: 10px 20px;
+  margin: 0; }
 
 .normal-list.item-title {
   font-size: 18px; }
@@ -10264,7 +10309,10 @@ body {
   margin-right: 5px; }
 
 .respond.opener {
-  margin: 20px 0 0 0; }
+  margin: 20px 0 0 0;
+  width: 100%;
+  color: #0275d8;
+  font-weight: 600; }
 
 .respond.responder-area {
   margin: 20px 0 0 0; }
@@ -10288,7 +10336,7 @@ body {
   display: inline-block;
   white-space: nowrap;
   border: 1px solid #d8d8d8;
-  border-radius: 3px;
+  border-radius: 4px;
   oberflow: hidden; }
 
 .index-pager.next {
@@ -10335,25 +10383,32 @@ body {
   color: #5cb85c; }
 
 .assigner.group-members {
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
   height: 346px;
   overflow-y: scroll;
   margin: 0; }
 
-.assigner.group-member input {
-  width: 16px;
-  height: 16px; }
+.assigner.group-member {
+  border-top: 1px solid #d8d8d8;
+  display: block;
+  padding: 7px 10px 5px;
+  margin: -1px 0 0 0; }
+  .assigner.group-member input {
+    width: 16px;
+    height: 16px; }
 
 .comment-editor.preview-area {
   min-height: 346px;
   margin: 10px 0 0;
   border: 1px solid #d8d8d8;
   padding: 10px;
-  border-radius: 3px; }
+  border-radius: 4px; }
 
 .comment-editor.comment-area {
   margin: 10px 0 0;
   border: 1px solid #d8d8d8;
-  border-radius: 3px; }
+  border-radius: 4px; }
 
 .user-registered.info-label {
   font-size: 12px;
@@ -10419,22 +10474,21 @@ body {
   margin: 0 0 20px; }
 
 .reactor.completed {
-  line-height: 26px;
-  height: 28px; }
+  line-height: 26px; }
 
 .reactor button.submit,
 .reactor button.reject,
 .reactor button.block {
   padding: 0 10px;
-  line-height: 26px;
-  height: 28px; }
+  line-height: 38px;
+  width: 110px; }
 
 .reactor button.submit {
-  border-radius: 3px 0 0 3px; }
+  border-radius: 4px 0 0 4px; }
 
 .reactor button.reject {
   border-radius: 0;
   margin: 0 -1px; }
 
 .reactor button.block {
-  border-radius: 0 3px 3px 0; }
+  border-radius: 0 4px 4px 0; }

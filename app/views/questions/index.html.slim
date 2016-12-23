@@ -1,7 +1,7 @@
 article.question-index.body
   - if @questions.to_a.size == 0
     section.question-index.no-question
-      p 該当する質問がありません
+      p No question in this category.
   - else
     section.question-index.pager-area
       = paginate @questions

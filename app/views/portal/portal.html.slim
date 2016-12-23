@@ -2,9 +2,9 @@ article.portal.body
   section.portal.information-area
     - if @information.size == 0
       section.portal.no-information
-        p お知らせはありません
+        p No information for you.
     - else
-      h1.portal.information-header おしらせ
+      h1.portal.information-header Information
       section.portal.information-table-area
         ul.portal.information-table
           - @information.each do |information|
@@ -20,7 +20,7 @@ article.portal.body
   - writer = write_group_table do |groups|
     - if groups.size == 0
       section.portal.no-group
-        p グループはありません
+        p No group you belong to.
     - else
       section.portal.group-list-area
         ul.portal.normal-list.list-body
@@ -41,10 +41,10 @@ article.portal.body
                   em= group.member_count
 
   section.portal.group.mine
-    h1.portal.group-table-header 自分が作成したグループ
+    h1.portal.group-table-header Groups you created.
     = writer.(@user.my_groups.index.load)
   section.portal.group
-    h1.portal.group-table-header 参加中のグループ
+    h1.portal.group-table-header Groups you joined in.
     = writer.(@user.groups.index.load)
 
 script src='/js/invitation-reactor.js'
