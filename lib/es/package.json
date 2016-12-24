@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "webpack-dev-server --progress --progress --colors --config ./webpack/dev.config.js --port 5001 --content-base ../../public",
-    "watch-sass": "node-sass --watch ./sass/common.sass ../../public/css/common.css",
+    "watch-sass": "node-sass --watch ./sass/common.sass ../../public/stylesheets/common.css",
     "pro-pack": "webpack --config ./webpack/pro.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
