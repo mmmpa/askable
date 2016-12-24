@@ -82,11 +82,11 @@ section.show-question.body
                             i.fa.fa-reply
                             | Reply or supplement
   - if @question.opened?
-    div#response-to-question-foot(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
+    div.show-question.foot-respond-area#response-to-question-foot(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionId=@question.id data-responded=@question.responded?(@user).to_s data-already=@question.users.pluck(:login).to_json)
       button.respond.opener
         i.fa.fa-folder-open-o
         | Add a comment
-script src='/js/question-page-set.js'
+= javascript_include_tag('question-page-set.js')
 javascript:
   (function () {
     var doc = document;

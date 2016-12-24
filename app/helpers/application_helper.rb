@@ -10,7 +10,7 @@ module ApplicationHelper
       when AskUser.states[:waited]
         %q{<i class="fa fa-waited fa-clock-o"></i>}.html_safe
       else
-        %q{<i class="fa fa-assigned fa-group"></i>}.html_safe
+        %q{<i class="fa fa-assigned fa-user"></i>}.html_safe
     end
   end
 

@@ -5,14 +5,15 @@ html
     = stylesheet_link_tag '/css/common.css', media: 'all'
     = csrf_meta_tags
     link rel="stylesheet" href="//fonts.googleapis.com/css?family=Quicksand:400,700"
-    script src='/js/common.js'
+    = javascript_include_tag('common.js')
     link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"
   body
     include inside_header
     article.inner.body
       include group_header
       = yield
-  script src='/js/log-out.js'
-  script src='/js/notifier.js'
+    include footer
+  = javascript_include_tag('log-out.js')
+  = javascript_include_tag('notifier.js')
 javascript:
   LogOut.start(document.querySelectorAll('.log-out'));

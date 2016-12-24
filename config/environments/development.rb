@@ -17,4 +17,6 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+
+  config.action_controller.asset_host = 'http://localhost:5001'
 end

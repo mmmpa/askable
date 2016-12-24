@@ -715,7 +715,7 @@ textarea {
   a.block.ready > .caret,
   a.dispose.ready > .caret, button.reject.ready > .caret,
   a.reject.ready > .caret, button.default.ready > .caret,
-  a.default.ready > .caret, .show-question.reply-to-reply-button > .caret, .respond.sorry > .caret, .respond.wait > .caret, .respond.opener > .caret,
+  a.default.ready > .caret, .respond.sorry > .caret, .respond.wait > .caret, .respond.opener > .caret,
   .dropup > .btn > .caret,
   .dropup > button.link.ready > .caret,
   .dropup >
@@ -738,7 +738,6 @@ textarea {
   .dropup > button.default.ready > .caret,
   .dropup >
   a.default.ready > .caret,
-  .dropup > .show-question.reply-to-reply-button > .caret,
   .dropup > .respond.sorry > .caret,
   .dropup > .respond.wait > .caret,
   .dropup > .respond.opener > .caret {
@@ -943,7 +942,7 @@ h1, h2, h3, .no-response p,
 .no-information p,
 .no-message p,
 .no-group p, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .show-question.response-owner span, .h6 {
+.h1, .h2, .h3, .h4, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .h6 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.1;
@@ -965,7 +964,7 @@ h3, .no-response p,
 h4, .h4 {
   font-size: 1.5rem; }
 
-h5, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title, .show-question.response-owner span {
+h5, .h5, .portal.group-table-header, .portal.information-header, .group-portal.title, .show-question.header, .show-question.response-owner, .respond.title, .new-group.registering-title {
   font-size: 1.25rem; }
 
 h6, .h6 {
@@ -1125,34 +1124,34 @@ pre code {
   max-height: 340px;
   overflow-y: scroll; }
 
-.container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
+.container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body, .global-footer.body {
   margin-left: auto;
   margin-right: auto;
   padding-left: 15px;
   padding-right: 15px; }
 
-.container::after, .sub-header.body::after, .global-header.body::after, .message-box.body::after, .portal.body::after, .group-portal.body::after, .show-question.body::after, .question-index.body::after, .new-question.body::after, .user-editor.body::after {
+.container::after, .sub-header.body::after, .global-header.body::after, .message-box.body::after, .portal.body::after, .group-portal.body::after, .show-question.body::after, .question-index.body::after, .new-question.body::after, .user-editor.body::after, .global-footer.body::after {
   content: "";
   display: table;
   clear: both; }
 
 @media (min-width: 576px) {
-  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body, .global-footer.body {
     width: 540px;
     max-width: 100%; } }
 
 @media (min-width: 768px) {
-  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body, .global-footer.body {
     width: 720px;
     max-width: 100%; } }
 
 @media (min-width: 992px) {
-  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body, .global-footer.body {
     width: 960px;
     max-width: 100%; } }
 
 @media (min-width: 1200px) {
-  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body {
+  .container, .sub-header.body, .global-header.body, .message-box.body, .portal.body, .group-portal.body, .show-question.body, .question-index.body, .new-question.body, .user-editor.body, .global-footer.body {
     width: 1140px;
     max-width: 100%; } }
 
@@ -2129,7 +2128,6 @@ a.form-control-static.reject.ready,
 .input-group-sm > .input-group-btn > button.form-control-static.default.ready,
 .input-group-sm > .input-group-btn >
 a.form-control-static.default.ready,
-.input-group-sm > .input-group-btn > .form-control-static.show-question.reply-to-reply-button,
 .input-group-sm > .input-group-btn > .form-control-static.respond.sorry,
 .input-group-sm > .input-group-btn > .form-control-static.respond.wait,
 .input-group-sm > .input-group-btn > .form-control-static.respond.opener, .form-control-static.form-control-lg, .input-group-lg > .form-control-static.form-control, .com.input-section .input-group-lg > input.form-control-static[type="text"],
@@ -2158,7 +2156,6 @@ a.form-control-static.reject.ready,
 .input-group-lg > .input-group-btn > button.form-control-static.default.ready,
 .input-group-lg > .input-group-btn >
 a.form-control-static.default.ready,
-.input-group-lg > .input-group-btn > .form-control-static.show-question.reply-to-reply-button,
 .input-group-lg > .input-group-btn > .form-control-static.respond.sorry,
 .input-group-lg > .input-group-btn > .form-control-static.respond.wait,
 .input-group-lg > .input-group-btn > .form-control-static.respond.opener {
@@ -2191,7 +2188,6 @@ a.reject.ready,
 .input-group-sm > .input-group-btn > button.default.ready,
 .input-group-sm > .input-group-btn >
 a.default.ready,
-.input-group-sm > .input-group-btn > .show-question.reply-to-reply-button,
 .input-group-sm > .input-group-btn > .respond.sorry,
 .input-group-sm > .input-group-btn > .respond.wait,
 .input-group-sm > .input-group-btn > .respond.opener {
@@ -2202,7 +2198,6 @@ a.default.ready,
 select.form-control-sm:not([size]):not([multiple]), .input-group-sm > select.form-control:not([size]):not([multiple]),
 .input-group-sm > select.input-group-addon:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.btn:not([size]):not([multiple]),
-.input-group-sm > .input-group-btn > select.show-question.reply-to-reply-button:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.respond.sorry:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.respond.wait:not([size]):not([multiple]),
 .input-group-sm > .input-group-btn > select.respond.opener:not([size]):not([multiple]) {
@@ -2234,7 +2229,6 @@ a.reject.ready,
 .input-group-lg > .input-group-btn > button.default.ready,
 .input-group-lg > .input-group-btn >
 a.default.ready,
-.input-group-lg > .input-group-btn > .show-question.reply-to-reply-button,
 .input-group-lg > .input-group-btn > .respond.sorry,
 .input-group-lg > .input-group-btn > .respond.wait,
 .input-group-lg > .input-group-btn > .respond.opener {
@@ -2245,7 +2239,6 @@ a.default.ready,
 select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.form-control:not([size]):not([multiple]),
 .input-group-lg > select.input-group-addon:not([size]):not([multiple]),
 .input-group-lg > .input-group-btn > select.btn:not([size]):not([multiple]),
-.input-group-lg > .input-group-btn > select.show-question.reply-to-reply-button:not([size]):not([multiple]),
 .input-group-lg > .input-group-btn > select.respond.sorry:not([size]):not([multiple]),
 .input-group-lg > .input-group-btn > select.respond.wait:not([size]):not([multiple]),
 .input-group-lg > .input-group-btn > select.respond.opener:not([size]):not([multiple]) {
@@ -2472,7 +2465,7 @@ a.dispose.sending, button.reject.ready,
 a.reject.ready, button.reject.sending,
 a.reject.sending, button.default.ready,
 a.default.ready, button.default.sending,
-a.default.sending, .show-question.reply-to-reply-button, .respond.sorry, .respond.wait, .respond.opener {
+a.default.sending, .respond.sorry, .respond.wait, .respond.opener {
   display: inline-block;
   font-weight: normal;
   line-height: 1.25;
@@ -2496,42 +2489,42 @@ a.sending:focus, button.block.ready:focus, button.dispose.ready:focus,
 a.block.ready:focus,
 a.dispose.ready:focus, button.reject.ready:focus,
 a.reject.ready:focus, button.default.ready:focus,
-a.default.ready:focus, .show-question.reply-to-reply-button:focus, .respond.sorry:focus, .respond.wait:focus, .respond.opener:focus, .btn.focus, button.focus.link.ready,
+a.default.ready:focus, .respond.sorry:focus, .respond.wait:focus, .respond.opener:focus, .btn.focus, button.focus.link.ready,
 a.focus.link.ready, button.focus.submit.ready,
 a.focus.submit.ready, button.focus.sending,
 a.focus.sending, button.focus.block.ready, button.focus.dispose.ready,
 a.focus.block.ready,
 a.focus.dispose.ready, button.focus.reject.ready,
 a.focus.reject.ready, button.focus.default.ready,
-a.focus.default.ready, .focus.show-question.reply-to-reply-button, .focus.respond.sorry, .focus.respond.wait, .focus.respond.opener, .btn:active:focus, button.link.ready:active:focus,
+a.focus.default.ready, .focus.respond.sorry, .focus.respond.wait, .focus.respond.opener, .btn:active:focus, button.link.ready:active:focus,
 a.link.ready:active:focus, button.submit.ready:active:focus,
 a.submit.ready:active:focus, button.sending:active:focus,
 a.sending:active:focus, button.block.ready:active:focus, button.dispose.ready:active:focus,
 a.block.ready:active:focus,
 a.dispose.ready:active:focus, button.reject.ready:active:focus,
 a.reject.ready:active:focus, button.default.ready:active:focus,
-a.default.ready:active:focus, .show-question.reply-to-reply-button:active:focus, .respond.sorry:active:focus, .respond.wait:active:focus, .respond.opener:active:focus, .btn:active.focus, button.link.ready:active.focus,
+a.default.ready:active:focus, .respond.sorry:active:focus, .respond.wait:active:focus, .respond.opener:active:focus, .btn:active.focus, button.link.ready:active.focus,
 a.link.ready:active.focus, button.submit.ready:active.focus,
 a.submit.ready:active.focus, button.sending:active.focus,
 a.sending:active.focus, button.block.ready:active.focus, button.dispose.ready:active.focus,
 a.block.ready:active.focus,
 a.dispose.ready:active.focus, button.reject.ready:active.focus,
 a.reject.ready:active.focus, button.default.ready:active.focus,
-a.default.ready:active.focus, .show-question.reply-to-reply-button:active.focus, .respond.sorry:active.focus, .respond.wait:active.focus, .respond.opener:active.focus, .btn.active:focus, button.active.link.ready:focus,
+a.default.ready:active.focus, .respond.sorry:active.focus, .respond.wait:active.focus, .respond.opener:active.focus, .btn.active:focus, button.active.link.ready:focus,
 a.active.link.ready:focus, button.active.submit.ready:focus,
 a.active.submit.ready:focus, button.active.sending:focus,
 a.active.sending:focus, button.active.block.ready:focus, button.active.dispose.ready:focus,
 a.active.block.ready:focus,
 a.active.dispose.ready:focus, button.active.reject.ready:focus,
 a.active.reject.ready:focus, button.active.default.ready:focus,
-a.active.default.ready:focus, .active.show-question.reply-to-reply-button:focus, .active.respond.sorry:focus, .active.respond.wait:focus, .active.respond.opener:focus, .btn.active.focus, button.active.focus.link.ready,
+a.active.default.ready:focus, .active.respond.sorry:focus, .active.respond.wait:focus, .active.respond.opener:focus, .btn.active.focus, button.active.focus.link.ready,
 a.active.focus.link.ready, button.active.focus.submit.ready,
 a.active.focus.submit.ready, button.active.focus.sending,
 a.active.focus.sending, button.active.focus.block.ready, button.active.focus.dispose.ready,
 a.active.focus.block.ready,
 a.active.focus.dispose.ready, button.active.focus.reject.ready,
 a.active.focus.reject.ready, button.active.focus.default.ready,
-a.active.focus.default.ready, .active.focus.show-question.reply-to-reply-button, .active.focus.respond.sorry, .active.focus.respond.wait, .active.focus.respond.opener {
+a.active.focus.default.ready, .active.focus.respond.sorry, .active.focus.respond.wait, .active.focus.respond.opener {
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px; }
 
@@ -2542,14 +2535,14 @@ a.sending:focus, button.block.ready:focus, button.dispose.ready:focus,
 a.block.ready:focus,
 a.dispose.ready:focus, button.reject.ready:focus,
 a.reject.ready:focus, button.default.ready:focus,
-a.default.ready:focus, .show-question.reply-to-reply-button:focus, .respond.sorry:focus, .respond.wait:focus, .respond.opener:focus, .btn:hover, button.link.ready:hover,
+a.default.ready:focus, .respond.sorry:focus, .respond.wait:focus, .respond.opener:focus, .btn:hover, button.link.ready:hover,
 a.link.ready:hover, button.submit.ready:hover,
 a.submit.ready:hover, button.sending:hover,
 a.sending:hover, button.block.ready:hover, button.dispose.ready:hover,
 a.block.ready:hover,
 a.dispose.ready:hover, button.reject.ready:hover,
 a.reject.ready:hover, button.default.ready:hover,
-a.default.ready:hover, .show-question.reply-to-reply-button:hover, .respond.sorry:hover, .respond.wait:hover, .respond.opener:hover {
+a.default.ready:hover, .respond.sorry:hover, .respond.wait:hover, .respond.opener:hover {
   text-decoration: none; }
 
 .btn.focus, button.focus.link.ready,
@@ -2559,7 +2552,7 @@ a.focus.sending, button.focus.block.ready, button.focus.dispose.ready,
 a.focus.block.ready,
 a.focus.dispose.ready, button.focus.reject.ready,
 a.focus.reject.ready, button.focus.default.ready,
-a.focus.default.ready, .focus.show-question.reply-to-reply-button, .focus.respond.sorry, .focus.respond.wait, .focus.respond.opener {
+a.focus.default.ready, .focus.respond.sorry, .focus.respond.wait, .focus.respond.opener {
   text-decoration: none; }
 
 .btn:active, button.link.ready:active,
@@ -2569,14 +2562,14 @@ a.sending:active, button.block.ready:active, button.dispose.ready:active,
 a.block.ready:active,
 a.dispose.ready:active, button.reject.ready:active,
 a.reject.ready:active, button.default.ready:active,
-a.default.ready:active, .show-question.reply-to-reply-button:active, .respond.sorry:active, .respond.wait:active, .respond.opener:active, .btn.active, button.active.link.ready,
+a.default.ready:active, .respond.sorry:active, .respond.wait:active, .respond.opener:active, .btn.active, button.active.link.ready,
 a.active.link.ready, button.active.submit.ready,
 a.active.submit.ready, button.active.sending,
 a.active.sending, button.active.block.ready, button.active.dispose.ready,
 a.active.block.ready,
 a.active.dispose.ready, button.active.reject.ready,
 a.active.reject.ready, button.active.default.ready,
-a.active.default.ready, .active.show-question.reply-to-reply-button, .active.respond.sorry, .active.respond.wait, .active.respond.opener {
+a.active.default.ready, .active.respond.sorry, .active.respond.wait, .active.respond.opener {
   background-image: none;
   outline: 0; }
 
@@ -2587,14 +2580,14 @@ a.disabled.sending, button.disabled.block.ready, button.disabled.dispose.ready,
 a.disabled.block.ready,
 a.disabled.dispose.ready, button.disabled.reject.ready,
 a.disabled.reject.ready, button.disabled.default.ready,
-a.disabled.default.ready, .disabled.show-question.reply-to-reply-button, .disabled.respond.sorry, .disabled.respond.wait, .disabled.respond.opener, .btn:disabled, button.link.ready:disabled,
+a.disabled.default.ready, .disabled.respond.sorry, .disabled.respond.wait, .disabled.respond.opener, .btn:disabled, button.link.ready:disabled,
 a.link.ready:disabled, button.submit.ready:disabled,
 a.submit.ready:disabled, button.sending:disabled,
 a.sending:disabled, button.block.ready:disabled, button.dispose.ready:disabled,
 a.block.ready:disabled,
 a.dispose.ready:disabled, button.reject.ready:disabled,
 a.reject.ready:disabled, button.default.ready:disabled,
-a.default.ready:disabled, .show-question.reply-to-reply-button:disabled, .respond.sorry:disabled, .respond.wait:disabled, .respond.opener:disabled {
+a.default.ready:disabled, .respond.sorry:disabled, .respond.wait:disabled, .respond.opener:disabled {
   cursor: not-allowed;
   opacity: .65; }
 
@@ -2605,7 +2598,7 @@ a.disabled.sending,
 a.disabled.block.ready,
 a.disabled.dispose.ready,
 a.disabled.reject.ready,
-a.disabled.default.ready, a.disabled.show-question.reply-to-reply-button, a.disabled.respond.sorry, a.disabled.respond.wait, a.disabled.respond.opener,
+a.disabled.default.ready, a.disabled.respond.sorry, a.disabled.respond.wait, a.disabled.respond.opener,
 fieldset[disabled] a.btn,
 fieldset[disabled]
 a.link.ready,
@@ -2621,7 +2614,6 @@ fieldset[disabled]
 a.reject.ready,
 fieldset[disabled]
 a.default.ready,
-fieldset[disabled] a.show-question.reply-to-reply-button,
 fieldset[disabled] a.respond.sorry,
 fieldset[disabled] a.respond.wait,
 fieldset[disabled] a.respond.opener {
@@ -2704,7 +2696,7 @@ a.dispose.sending, button.reject.ready,
 a.reject.ready, button.reject.sending,
 a.reject.sending, button.default.ready,
 a.default.ready, button.default.sending,
-a.default.sending, .show-question.reply-to-reply-button, .respond.opener {
+a.default.sending, .respond.opener {
   color: #373a3c;
   background-color: #fff;
   border-color: #ccc; }
@@ -2712,7 +2704,7 @@ a.default.sending, .show-question.reply-to-reply-button, .respond.opener {
 .btn-secondary:hover, button.sending:hover,
 a.sending:hover, button.reject.ready:hover,
 a.reject.ready:hover, button.default.ready:hover,
-a.default.ready:hover, .show-question.reply-to-reply-button:hover, .respond.opener:hover {
+a.default.ready:hover, .respond.opener:hover {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2720,10 +2712,10 @@ a.default.ready:hover, .show-question.reply-to-reply-button:hover, .respond.open
 .btn-secondary:focus, button.sending:focus,
 a.sending:focus, button.reject.ready:focus,
 a.reject.ready:focus, button.default.ready:focus,
-a.default.ready:focus, .show-question.reply-to-reply-button:focus, .respond.opener:focus, .btn-secondary.focus, button.focus.sending,
+a.default.ready:focus, .respond.opener:focus, .btn-secondary.focus, button.focus.sending,
 a.focus.sending, button.focus.reject.ready,
 a.focus.reject.ready, button.focus.default.ready,
-a.focus.default.ready, .focus.show-question.reply-to-reply-button, .focus.respond.opener {
+a.focus.default.ready, .focus.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2731,10 +2723,10 @@ a.focus.default.ready, .focus.show-question.reply-to-reply-button, .focus.respon
 .btn-secondary:active, button.sending:active,
 a.sending:active, button.reject.ready:active,
 a.reject.ready:active, button.default.ready:active,
-a.default.ready:active, .show-question.reply-to-reply-button:active, .respond.opener:active, .btn-secondary.active, button.active.sending,
+a.default.ready:active, .respond.opener:active, .btn-secondary.active, button.active.sending,
 a.active.sending, button.active.reject.ready,
 a.active.reject.ready, button.active.default.ready,
-a.active.default.ready, .active.show-question.reply-to-reply-button, .active.respond.opener,
+a.active.default.ready, .active.respond.opener,
 .open > .btn-secondary.dropdown-toggle,
 .open > button.dropdown-toggle.sending,
 .open >
@@ -2745,7 +2737,6 @@ a.dropdown-toggle.reject.ready,
 .open > button.dropdown-toggle.default.ready,
 .open >
 a.dropdown-toggle.default.ready,
-.open > .dropdown-toggle.show-question.reply-to-reply-button,
 .open > .dropdown-toggle.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
@@ -2755,22 +2746,22 @@ a.dropdown-toggle.default.ready,
 .btn-secondary:active:hover, button.sending:active:hover,
 a.sending:active:hover, button.reject.ready:active:hover,
 a.reject.ready:active:hover, button.default.ready:active:hover,
-a.default.ready:active:hover, .show-question.reply-to-reply-button:active:hover, .respond.opener:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
+a.default.ready:active:hover, .respond.opener:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
 a.sending:active:focus, button.reject.ready:active:focus,
 a.reject.ready:active:focus, button.default.ready:active:focus,
-a.default.ready:active:focus, .show-question.reply-to-reply-button:active:focus, .respond.opener:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
+a.default.ready:active:focus, .respond.opener:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
 a.sending:active.focus, button.reject.ready:active.focus,
 a.reject.ready:active.focus, button.default.ready:active.focus,
-a.default.ready:active.focus, .show-question.reply-to-reply-button:active.focus, .respond.opener:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
+a.default.ready:active.focus, .respond.opener:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
 a.active.sending:hover, button.active.reject.ready:hover,
 a.active.reject.ready:hover, button.active.default.ready:hover,
-a.active.default.ready:hover, .active.show-question.reply-to-reply-button:hover, .active.respond.opener:hover, .btn-secondary.active:focus, button.active.sending:focus,
+a.active.default.ready:hover, .active.respond.opener:hover, .btn-secondary.active:focus, button.active.sending:focus,
 a.active.sending:focus, button.active.reject.ready:focus,
 a.active.reject.ready:focus, button.active.default.ready:focus,
-a.active.default.ready:focus, .active.show-question.reply-to-reply-button:focus, .active.respond.opener:focus, .btn-secondary.active.focus, button.active.focus.sending,
+a.active.default.ready:focus, .active.respond.opener:focus, .btn-secondary.active.focus, button.active.focus.sending,
 a.active.focus.sending, button.active.focus.reject.ready,
 a.active.focus.reject.ready, button.active.focus.default.ready,
-a.active.focus.default.ready, .active.focus.show-question.reply-to-reply-button, .active.focus.respond.opener,
+a.active.focus.default.ready, .active.focus.respond.opener,
 .open > .btn-secondary.dropdown-toggle:hover,
 .open > button.dropdown-toggle.sending:hover,
 .open >
@@ -2781,7 +2772,6 @@ a.dropdown-toggle.reject.ready:hover,
 .open > button.dropdown-toggle.default.ready:hover,
 .open >
 a.dropdown-toggle.default.ready:hover,
-.open > .dropdown-toggle.show-question.reply-to-reply-button:hover,
 .open > .dropdown-toggle.respond.opener:hover,
 .open > .btn-secondary.dropdown-toggle:focus,
 .open > button.dropdown-toggle.sending:focus,
@@ -2793,7 +2783,6 @@ a.dropdown-toggle.reject.ready:focus,
 .open > button.dropdown-toggle.default.ready:focus,
 .open >
 a.dropdown-toggle.default.ready:focus,
-.open > .dropdown-toggle.show-question.reply-to-reply-button:focus,
 .open > .dropdown-toggle.respond.opener:focus,
 .open > .btn-secondary.dropdown-toggle.focus,
 .open > button.dropdown-toggle.focus.sending,
@@ -2805,7 +2794,6 @@ a.dropdown-toggle.focus.reject.ready,
 .open > button.dropdown-toggle.focus.default.ready,
 .open >
 a.dropdown-toggle.focus.default.ready,
-.open > .dropdown-toggle.focus.show-question.reply-to-reply-button,
 .open > .dropdown-toggle.focus.respond.opener {
   color: #373a3c;
   background-color: #d4d4d4;
@@ -2814,26 +2802,26 @@ a.dropdown-toggle.focus.default.ready,
 .btn-secondary.disabled:focus, button.disabled.sending:focus,
 a.disabled.sending:focus, button.disabled.reject.ready:focus,
 a.disabled.reject.ready:focus, button.disabled.default.ready:focus,
-a.disabled.default.ready:focus, .disabled.show-question.reply-to-reply-button:focus, .disabled.respond.opener:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
+a.disabled.default.ready:focus, .disabled.respond.opener:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
 a.disabled.focus.sending, button.disabled.focus.reject.ready,
 a.disabled.focus.reject.ready, button.disabled.focus.default.ready,
-a.disabled.focus.default.ready, .disabled.focus.show-question.reply-to-reply-button, .disabled.focus.respond.opener, .btn-secondary:disabled:focus, button.sending:disabled:focus,
+a.disabled.focus.default.ready, .disabled.focus.respond.opener, .btn-secondary:disabled:focus, button.sending:disabled:focus,
 a.sending:disabled:focus, button.reject.ready:disabled:focus,
 a.reject.ready:disabled:focus, button.default.ready:disabled:focus,
-a.default.ready:disabled:focus, .show-question.reply-to-reply-button:disabled:focus, .respond.opener:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
+a.default.ready:disabled:focus, .respond.opener:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
 a.sending:disabled.focus, button.reject.ready:disabled.focus,
 a.reject.ready:disabled.focus, button.default.ready:disabled.focus,
-a.default.ready:disabled.focus, .show-question.reply-to-reply-button:disabled.focus, .respond.opener:disabled.focus {
+a.default.ready:disabled.focus, .respond.opener:disabled.focus {
   background-color: #fff;
   border-color: #ccc; }
 
 .btn-secondary.disabled:hover, button.disabled.sending:hover,
 a.disabled.sending:hover, button.disabled.reject.ready:hover,
 a.disabled.reject.ready:hover, button.disabled.default.ready:hover,
-a.disabled.default.ready:hover, .disabled.show-question.reply-to-reply-button:hover, .disabled.respond.opener:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
+a.disabled.default.ready:hover, .disabled.respond.opener:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
 a.sending:disabled:hover, button.reject.ready:disabled:hover,
 a.reject.ready:disabled:hover, button.default.ready:disabled:hover,
-a.default.ready:disabled:hover, .show-question.reply-to-reply-button:disabled:hover, .respond.opener:disabled:hover {
+a.default.ready:disabled:hover, .respond.opener:disabled:hover {
   background-color: #fff;
   border-color: #ccc; }
 
@@ -3329,7 +3317,7 @@ a.sending, .btn-group-lg > button.block.ready, .btn-group-lg > button.dispose.re
 a.block.ready, .btn-group-lg >
 a.dispose.ready, .btn-group-lg > button.reject.ready, .btn-group-lg >
 a.reject.ready, .btn-group-lg > button.default.ready, .btn-group-lg >
-a.default.ready, .btn-group-lg > .show-question.reply-to-reply-button, .btn-group-lg > .respond.sorry, .btn-group-lg > .respond.wait, .btn-group-lg > .respond.opener {
+a.default.ready, .btn-group-lg > .respond.sorry, .btn-group-lg > .respond.wait, .btn-group-lg > .respond.opener {
   padding: 0.75rem 1.5rem;
   font-size: 1.25rem;
   border-radius: 0.3rem; }
@@ -3341,7 +3329,7 @@ a.sending, .btn-group-sm > button.block.ready, .btn-group-sm > button.dispose.re
 a.block.ready, .btn-group-sm >
 a.dispose.ready, .btn-group-sm > button.reject.ready, .btn-group-sm >
 a.reject.ready, .btn-group-sm > button.default.ready, .btn-group-sm >
-a.default.ready, .btn-group-sm > .show-question.reply-to-reply-button, .btn-group-sm > .respond.sorry, .btn-group-sm > .respond.wait, .btn-group-sm > .respond.opener {
+a.default.ready, .btn-group-sm > .respond.sorry, .btn-group-sm > .respond.wait, .btn-group-sm > .respond.opener {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   border-radius: 0.2rem; }
@@ -3529,7 +3517,7 @@ a.sending, .btn-group > button.block.ready, .btn-group > button.dispose.ready, .
 a.block.ready, .btn-group >
 a.dispose.ready, .btn-group > button.reject.ready, .btn-group >
 a.reject.ready, .btn-group > button.default.ready, .btn-group >
-a.default.ready, .btn-group > .show-question.reply-to-reply-button, .btn-group > .respond.sorry, .btn-group > .respond.wait, .btn-group > .respond.opener,
+a.default.ready, .btn-group > .respond.sorry, .btn-group > .respond.wait, .btn-group > .respond.opener,
 .btn-group-vertical > .btn,
 .btn-group-vertical > button.link.ready,
 .btn-group-vertical >
@@ -3552,7 +3540,6 @@ a.reject.ready,
 .btn-group-vertical > button.default.ready,
 .btn-group-vertical >
 a.default.ready,
-.btn-group-vertical > .show-question.reply-to-reply-button,
 .btn-group-vertical > .respond.sorry,
 .btn-group-vertical > .respond.wait,
 .btn-group-vertical > .respond.opener {
@@ -3567,21 +3554,21 @@ a.sending:focus, .btn-group > button.block.ready:focus, .btn-group > button.disp
 a.block.ready:focus, .btn-group >
 a.dispose.ready:focus, .btn-group > button.reject.ready:focus, .btn-group >
 a.reject.ready:focus, .btn-group > button.default.ready:focus, .btn-group >
-a.default.ready:focus, .btn-group > .show-question.reply-to-reply-button:focus, .btn-group > .respond.sorry:focus, .btn-group > .respond.wait:focus, .btn-group > .respond.opener:focus, .btn-group > .btn:active, .btn-group > button.link.ready:active, .btn-group >
+a.default.ready:focus, .btn-group > .respond.sorry:focus, .btn-group > .respond.wait:focus, .btn-group > .respond.opener:focus, .btn-group > .btn:active, .btn-group > button.link.ready:active, .btn-group >
 a.link.ready:active, .btn-group > button.submit.ready:active, .btn-group >
 a.submit.ready:active, .btn-group > button.sending:active, .btn-group >
 a.sending:active, .btn-group > button.block.ready:active, .btn-group > button.dispose.ready:active, .btn-group >
 a.block.ready:active, .btn-group >
 a.dispose.ready:active, .btn-group > button.reject.ready:active, .btn-group >
 a.reject.ready:active, .btn-group > button.default.ready:active, .btn-group >
-a.default.ready:active, .btn-group > .show-question.reply-to-reply-button:active, .btn-group > .respond.sorry:active, .btn-group > .respond.wait:active, .btn-group > .respond.opener:active, .btn-group > .btn.active, .btn-group > button.active.link.ready, .btn-group >
+a.default.ready:active, .btn-group > .respond.sorry:active, .btn-group > .respond.wait:active, .btn-group > .respond.opener:active, .btn-group > .btn.active, .btn-group > button.active.link.ready, .btn-group >
 a.active.link.ready, .btn-group > button.active.submit.ready, .btn-group >
 a.active.submit.ready, .btn-group > button.active.sending, .btn-group >
 a.active.sending, .btn-group > button.active.block.ready, .btn-group > button.active.dispose.ready, .btn-group >
 a.active.block.ready, .btn-group >
 a.active.dispose.ready, .btn-group > button.active.reject.ready, .btn-group >
 a.active.reject.ready, .btn-group > button.active.default.ready, .btn-group >
-a.active.default.ready, .btn-group > .active.show-question.reply-to-reply-button, .btn-group > .active.respond.sorry, .btn-group > .active.respond.wait, .btn-group > .active.respond.opener,
+a.active.default.ready, .btn-group > .active.respond.sorry, .btn-group > .active.respond.wait, .btn-group > .active.respond.opener,
 .btn-group-vertical > .btn:focus,
 .btn-group-vertical > button.link.ready:focus,
 .btn-group-vertical >
@@ -3604,7 +3591,6 @@ a.reject.ready:focus,
 .btn-group-vertical > button.default.ready:focus,
 .btn-group-vertical >
 a.default.ready:focus,
-.btn-group-vertical > .show-question.reply-to-reply-button:focus,
 .btn-group-vertical > .respond.sorry:focus,
 .btn-group-vertical > .respond.wait:focus,
 .btn-group-vertical > .respond.opener:focus,
@@ -3630,7 +3616,6 @@ a.reject.ready:active,
 .btn-group-vertical > button.default.ready:active,
 .btn-group-vertical >
 a.default.ready:active,
-.btn-group-vertical > .show-question.reply-to-reply-button:active,
 .btn-group-vertical > .respond.sorry:active,
 .btn-group-vertical > .respond.wait:active,
 .btn-group-vertical > .respond.opener:active,
@@ -3656,7 +3641,6 @@ a.active.reject.ready,
 .btn-group-vertical > button.active.default.ready,
 .btn-group-vertical >
 a.active.default.ready,
-.btn-group-vertical > .active.show-question.reply-to-reply-button,
 .btn-group-vertical > .active.respond.sorry,
 .btn-group-vertical > .active.respond.wait,
 .btn-group-vertical > .active.respond.opener {
@@ -3669,7 +3653,7 @@ a.sending:hover, .btn-group > button.block.ready:hover, .btn-group > button.disp
 a.block.ready:hover, .btn-group >
 a.dispose.ready:hover, .btn-group > button.reject.ready:hover, .btn-group >
 a.reject.ready:hover, .btn-group > button.default.ready:hover, .btn-group >
-a.default.ready:hover, .btn-group > .show-question.reply-to-reply-button:hover, .btn-group > .respond.sorry:hover, .btn-group > .respond.wait:hover, .btn-group > .respond.opener:hover,
+a.default.ready:hover, .btn-group > .respond.sorry:hover, .btn-group > .respond.wait:hover, .btn-group > .respond.opener:hover,
 .btn-group-vertical > .btn:hover,
 .btn-group-vertical > button.link.ready:hover,
 .btn-group-vertical >
@@ -3692,7 +3676,6 @@ a.reject.ready:hover,
 .btn-group-vertical > button.default.ready:hover,
 .btn-group-vertical >
 a.default.ready:hover,
-.btn-group-vertical > .show-question.reply-to-reply-button:hover,
 .btn-group-vertical > .respond.sorry:hover,
 .btn-group-vertical > .respond.wait:hover,
 .btn-group-vertical > .respond.opener:hover {
@@ -3711,7 +3694,7 @@ a.dispose.sending + .btn, .btn-group button.reject.ready + .btn, .btn-group
 a.reject.ready + .btn, .btn-group button.reject.sending + .btn, .btn-group
 a.reject.sending + .btn, .btn-group button.default.ready + .btn, .btn-group
 a.default.ready + .btn, .btn-group button.default.sending + .btn, .btn-group
-a.default.sending + .btn, .btn-group .show-question.reply-to-reply-button + .btn, .btn-group .respond.sorry + .btn, .btn-group .respond.wait + .btn, .btn-group .respond.opener + .btn, .btn-group .btn + button.link.ready, .btn-group button.link.ready + button.link.ready, .btn-group
+a.default.sending + .btn, .btn-group .respond.sorry + .btn, .btn-group .respond.wait + .btn, .btn-group .respond.opener + .btn, .btn-group .btn + button.link.ready, .btn-group button.link.ready + button.link.ready, .btn-group
 a.link.ready + button.link.ready, .btn-group button.link.sending + button.link.ready, .btn-group
 a.link.sending + button.link.ready, .btn-group button.submit.ready + button.link.ready, .btn-group
 a.submit.ready + button.link.ready, .btn-group button.submit.sending + button.link.ready, .btn-group
@@ -3724,7 +3707,7 @@ a.dispose.sending + button.link.ready, .btn-group button.reject.ready + button.l
 a.reject.ready + button.link.ready, .btn-group button.reject.sending + button.link.ready, .btn-group
 a.reject.sending + button.link.ready, .btn-group button.default.ready + button.link.ready, .btn-group
 a.default.ready + button.link.ready, .btn-group button.default.sending + button.link.ready, .btn-group
-a.default.sending + button.link.ready, .btn-group .show-question.reply-to-reply-button + button.link.ready, .btn-group .respond.sorry + button.link.ready, .btn-group .respond.wait + button.link.ready, .btn-group .respond.opener + button.link.ready, .btn-group .btn +
+a.default.sending + button.link.ready, .btn-group .respond.sorry + button.link.ready, .btn-group .respond.wait + button.link.ready, .btn-group .respond.opener + button.link.ready, .btn-group .btn +
 a.link.ready, .btn-group button.link.ready +
 a.link.ready, .btn-group
 a.link.ready +
@@ -3764,7 +3747,6 @@ a.default.ready +
 a.link.ready, .btn-group button.default.sending +
 a.link.ready, .btn-group
 a.default.sending +
-a.link.ready, .btn-group .show-question.reply-to-reply-button +
 a.link.ready, .btn-group .respond.sorry +
 a.link.ready, .btn-group .respond.wait +
 a.link.ready, .btn-group .respond.opener +
@@ -3781,7 +3763,7 @@ a.dispose.sending + button.link.sending, .btn-group button.reject.ready + button
 a.reject.ready + button.link.sending, .btn-group button.reject.sending + button.link.sending, .btn-group
 a.reject.sending + button.link.sending, .btn-group button.default.ready + button.link.sending, .btn-group
 a.default.ready + button.link.sending, .btn-group button.default.sending + button.link.sending, .btn-group
-a.default.sending + button.link.sending, .btn-group .show-question.reply-to-reply-button + button.link.sending, .btn-group .respond.sorry + button.link.sending, .btn-group .respond.wait + button.link.sending, .btn-group .respond.opener + button.link.sending, .btn-group .btn +
+a.default.sending + button.link.sending, .btn-group .respond.sorry + button.link.sending, .btn-group .respond.wait + button.link.sending, .btn-group .respond.opener + button.link.sending, .btn-group .btn +
 a.link.sending, .btn-group button.link.ready +
 a.link.sending, .btn-group
 a.link.ready +
@@ -3821,7 +3803,6 @@ a.default.ready +
 a.link.sending, .btn-group button.default.sending +
 a.link.sending, .btn-group
 a.default.sending +
-a.link.sending, .btn-group .show-question.reply-to-reply-button +
 a.link.sending, .btn-group .respond.sorry +
 a.link.sending, .btn-group .respond.wait +
 a.link.sending, .btn-group .respond.opener +
@@ -3838,7 +3819,7 @@ a.dispose.sending + button.submit.ready, .btn-group button.reject.ready + button
 a.reject.ready + button.submit.ready, .btn-group button.reject.sending + button.submit.ready, .btn-group
 a.reject.sending + button.submit.ready, .btn-group button.default.ready + button.submit.ready, .btn-group
 a.default.ready + button.submit.ready, .btn-group button.default.sending + button.submit.ready, .btn-group
-a.default.sending + button.submit.ready, .btn-group .show-question.reply-to-reply-button + button.submit.ready, .btn-group .respond.sorry + button.submit.ready, .btn-group .respond.wait + button.submit.ready, .btn-group .respond.opener + button.submit.ready, .btn-group .btn +
+a.default.sending + button.submit.ready, .btn-group .respond.sorry + button.submit.ready, .btn-group .respond.wait + button.submit.ready, .btn-group .respond.opener + button.submit.ready, .btn-group .btn +
 a.submit.ready, .btn-group button.link.ready +
 a.submit.ready, .btn-group
 a.link.ready +
@@ -3878,7 +3859,6 @@ a.default.ready +
 a.submit.ready, .btn-group button.default.sending +
 a.submit.ready, .btn-group
 a.default.sending +
-a.submit.ready, .btn-group .show-question.reply-to-reply-button +
 a.submit.ready, .btn-group .respond.sorry +
 a.submit.ready, .btn-group .respond.wait +
 a.submit.ready, .btn-group .respond.opener +
@@ -3895,7 +3875,7 @@ a.dispose.sending + button.submit.sending, .btn-group button.reject.ready + butt
 a.reject.ready + button.submit.sending, .btn-group button.reject.sending + button.submit.sending, .btn-group
 a.reject.sending + button.submit.sending, .btn-group button.default.ready + button.submit.sending, .btn-group
 a.default.ready + button.submit.sending, .btn-group button.default.sending + button.submit.sending, .btn-group
-a.default.sending + button.submit.sending, .btn-group .show-question.reply-to-reply-button + button.submit.sending, .btn-group .respond.sorry + button.submit.sending, .btn-group .respond.wait + button.submit.sending, .btn-group .respond.opener + button.submit.sending, .btn-group .btn +
+a.default.sending + button.submit.sending, .btn-group .respond.sorry + button.submit.sending, .btn-group .respond.wait + button.submit.sending, .btn-group .respond.opener + button.submit.sending, .btn-group .btn +
 a.submit.sending, .btn-group button.link.ready +
 a.submit.sending, .btn-group
 a.link.ready +
@@ -3935,7 +3915,6 @@ a.default.ready +
 a.submit.sending, .btn-group button.default.sending +
 a.submit.sending, .btn-group
 a.default.sending +
-a.submit.sending, .btn-group .show-question.reply-to-reply-button +
 a.submit.sending, .btn-group .respond.sorry +
 a.submit.sending, .btn-group .respond.wait +
 a.submit.sending, .btn-group .respond.opener +
@@ -3952,7 +3931,7 @@ a.dispose.sending + button.sending, .btn-group button.reject.ready + button.send
 a.reject.ready + button.sending, .btn-group button.reject.sending + button.sending, .btn-group
 a.reject.sending + button.sending, .btn-group button.default.ready + button.sending, .btn-group
 a.default.ready + button.sending, .btn-group button.default.sending + button.sending, .btn-group
-a.default.sending + button.sending, .btn-group .show-question.reply-to-reply-button + button.sending, .btn-group .respond.sorry + button.sending, .btn-group .respond.wait + button.sending, .btn-group .respond.opener + button.sending, .btn-group .btn +
+a.default.sending + button.sending, .btn-group .respond.sorry + button.sending, .btn-group .respond.wait + button.sending, .btn-group .respond.opener + button.sending, .btn-group .btn +
 a.sending, .btn-group button.link.ready +
 a.sending, .btn-group
 a.link.ready +
@@ -3992,7 +3971,6 @@ a.default.ready +
 a.sending, .btn-group button.default.sending +
 a.sending, .btn-group
 a.default.sending +
-a.sending, .btn-group .show-question.reply-to-reply-button +
 a.sending, .btn-group .respond.sorry +
 a.sending, .btn-group .respond.wait +
 a.sending, .btn-group .respond.opener +
@@ -4009,7 +3987,7 @@ a.dispose.sending + button.block.ready, .btn-group button.reject.ready + button.
 a.reject.ready + button.block.ready, .btn-group button.reject.sending + button.block.ready, .btn-group
 a.reject.sending + button.block.ready, .btn-group button.default.ready + button.block.ready, .btn-group
 a.default.ready + button.block.ready, .btn-group button.default.sending + button.block.ready, .btn-group
-a.default.sending + button.block.ready, .btn-group .show-question.reply-to-reply-button + button.block.ready, .btn-group .respond.sorry + button.block.ready, .btn-group .respond.wait + button.block.ready, .btn-group .respond.opener + button.block.ready, .btn-group .btn + button.dispose.ready, .btn-group button.link.ready + button.dispose.ready, .btn-group
+a.default.sending + button.block.ready, .btn-group .respond.sorry + button.block.ready, .btn-group .respond.wait + button.block.ready, .btn-group .respond.opener + button.block.ready, .btn-group .btn + button.dispose.ready, .btn-group button.link.ready + button.dispose.ready, .btn-group
 a.link.ready + button.dispose.ready, .btn-group button.link.sending + button.dispose.ready, .btn-group
 a.link.sending + button.dispose.ready, .btn-group button.submit.ready + button.dispose.ready, .btn-group
 a.submit.ready + button.dispose.ready, .btn-group button.submit.sending + button.dispose.ready, .btn-group
@@ -4022,7 +4000,7 @@ a.dispose.sending + button.dispose.ready, .btn-group button.reject.ready + butto
 a.reject.ready + button.dispose.ready, .btn-group button.reject.sending + button.dispose.ready, .btn-group
 a.reject.sending + button.dispose.ready, .btn-group button.default.ready + button.dispose.ready, .btn-group
 a.default.ready + button.dispose.ready, .btn-group button.default.sending + button.dispose.ready, .btn-group
-a.default.sending + button.dispose.ready, .btn-group .show-question.reply-to-reply-button + button.dispose.ready, .btn-group .respond.sorry + button.dispose.ready, .btn-group .respond.wait + button.dispose.ready, .btn-group .respond.opener + button.dispose.ready, .btn-group .btn +
+a.default.sending + button.dispose.ready, .btn-group .respond.sorry + button.dispose.ready, .btn-group .respond.wait + button.dispose.ready, .btn-group .respond.opener + button.dispose.ready, .btn-group .btn +
 a.block.ready, .btn-group button.link.ready +
 a.block.ready, .btn-group
 a.link.ready +
@@ -4062,7 +4040,6 @@ a.default.ready +
 a.block.ready, .btn-group button.default.sending +
 a.block.ready, .btn-group
 a.default.sending +
-a.block.ready, .btn-group .show-question.reply-to-reply-button +
 a.block.ready, .btn-group .respond.sorry +
 a.block.ready, .btn-group .respond.wait +
 a.block.ready, .btn-group .respond.opener +
@@ -4106,7 +4083,6 @@ a.default.ready +
 a.dispose.ready, .btn-group button.default.sending +
 a.dispose.ready, .btn-group
 a.default.sending +
-a.dispose.ready, .btn-group .show-question.reply-to-reply-button +
 a.dispose.ready, .btn-group .respond.sorry +
 a.dispose.ready, .btn-group .respond.wait +
 a.dispose.ready, .btn-group .respond.opener +
@@ -4123,7 +4099,7 @@ a.dispose.sending + button.block.sending, .btn-group button.reject.ready + butto
 a.reject.ready + button.block.sending, .btn-group button.reject.sending + button.block.sending, .btn-group
 a.reject.sending + button.block.sending, .btn-group button.default.ready + button.block.sending, .btn-group
 a.default.ready + button.block.sending, .btn-group button.default.sending + button.block.sending, .btn-group
-a.default.sending + button.block.sending, .btn-group .show-question.reply-to-reply-button + button.block.sending, .btn-group .respond.sorry + button.block.sending, .btn-group .respond.wait + button.block.sending, .btn-group .respond.opener + button.block.sending, .btn-group .btn + button.dispose.sending, .btn-group button.link.ready + button.dispose.sending, .btn-group
+a.default.sending + button.block.sending, .btn-group .respond.sorry + button.block.sending, .btn-group .respond.wait + button.block.sending, .btn-group .respond.opener + button.block.sending, .btn-group .btn + button.dispose.sending, .btn-group button.link.ready + button.dispose.sending, .btn-group
 a.link.ready + button.dispose.sending, .btn-group button.link.sending + button.dispose.sending, .btn-group
 a.link.sending + button.dispose.sending, .btn-group button.submit.ready + button.dispose.sending, .btn-group
 a.submit.ready + button.dispose.sending, .btn-group button.submit.sending + button.dispose.sending, .btn-group
@@ -4136,7 +4112,7 @@ a.dispose.sending + button.dispose.sending, .btn-group button.reject.ready + but
 a.reject.ready + button.dispose.sending, .btn-group button.reject.sending + button.dispose.sending, .btn-group
 a.reject.sending + button.dispose.sending, .btn-group button.default.ready + button.dispose.sending, .btn-group
 a.default.ready + button.dispose.sending, .btn-group button.default.sending + button.dispose.sending, .btn-group
-a.default.sending + button.dispose.sending, .btn-group .show-question.reply-to-reply-button + button.dispose.sending, .btn-group .respond.sorry + button.dispose.sending, .btn-group .respond.wait + button.dispose.sending, .btn-group .respond.opener + button.dispose.sending, .btn-group .btn +
+a.default.sending + button.dispose.sending, .btn-group .respond.sorry + button.dispose.sending, .btn-group .respond.wait + button.dispose.sending, .btn-group .respond.opener + button.dispose.sending, .btn-group .btn +
 a.block.sending, .btn-group button.link.ready +
 a.block.sending, .btn-group
 a.link.ready +
@@ -4176,7 +4152,6 @@ a.default.ready +
 a.block.sending, .btn-group button.default.sending +
 a.block.sending, .btn-group
 a.default.sending +
-a.block.sending, .btn-group .show-question.reply-to-reply-button +
 a.block.sending, .btn-group .respond.sorry +
 a.block.sending, .btn-group .respond.wait +
 a.block.sending, .btn-group .respond.opener +
@@ -4220,7 +4195,6 @@ a.default.ready +
 a.dispose.sending, .btn-group button.default.sending +
 a.dispose.sending, .btn-group
 a.default.sending +
-a.dispose.sending, .btn-group .show-question.reply-to-reply-button +
 a.dispose.sending, .btn-group .respond.sorry +
 a.dispose.sending, .btn-group .respond.wait +
 a.dispose.sending, .btn-group .respond.opener +
@@ -4237,7 +4211,7 @@ a.dispose.sending + button.reject.ready, .btn-group button.reject.ready + button
 a.reject.ready + button.reject.ready, .btn-group button.reject.sending + button.reject.ready, .btn-group
 a.reject.sending + button.reject.ready, .btn-group button.default.ready + button.reject.ready, .btn-group
 a.default.ready + button.reject.ready, .btn-group button.default.sending + button.reject.ready, .btn-group
-a.default.sending + button.reject.ready, .btn-group .show-question.reply-to-reply-button + button.reject.ready, .btn-group .respond.sorry + button.reject.ready, .btn-group .respond.wait + button.reject.ready, .btn-group .respond.opener + button.reject.ready, .btn-group .btn +
+a.default.sending + button.reject.ready, .btn-group .respond.sorry + button.reject.ready, .btn-group .respond.wait + button.reject.ready, .btn-group .respond.opener + button.reject.ready, .btn-group .btn +
 a.reject.ready, .btn-group button.link.ready +
 a.reject.ready, .btn-group
 a.link.ready +
@@ -4277,7 +4251,6 @@ a.default.ready +
 a.reject.ready, .btn-group button.default.sending +
 a.reject.ready, .btn-group
 a.default.sending +
-a.reject.ready, .btn-group .show-question.reply-to-reply-button +
 a.reject.ready, .btn-group .respond.sorry +
 a.reject.ready, .btn-group .respond.wait +
 a.reject.ready, .btn-group .respond.opener +
@@ -4294,7 +4267,7 @@ a.dispose.sending + button.reject.sending, .btn-group button.reject.ready + butt
 a.reject.ready + button.reject.sending, .btn-group button.reject.sending + button.reject.sending, .btn-group
 a.reject.sending + button.reject.sending, .btn-group button.default.ready + button.reject.sending, .btn-group
 a.default.ready + button.reject.sending, .btn-group button.default.sending + button.reject.sending, .btn-group
-a.default.sending + button.reject.sending, .btn-group .show-question.reply-to-reply-button + button.reject.sending, .btn-group .respond.sorry + button.reject.sending, .btn-group .respond.wait + button.reject.sending, .btn-group .respond.opener + button.reject.sending, .btn-group .btn +
+a.default.sending + button.reject.sending, .btn-group .respond.sorry + button.reject.sending, .btn-group .respond.wait + button.reject.sending, .btn-group .respond.opener + button.reject.sending, .btn-group .btn +
 a.reject.sending, .btn-group button.link.ready +
 a.reject.sending, .btn-group
 a.link.ready +
@@ -4334,7 +4307,6 @@ a.default.ready +
 a.reject.sending, .btn-group button.default.sending +
 a.reject.sending, .btn-group
 a.default.sending +
-a.reject.sending, .btn-group .show-question.reply-to-reply-button +
 a.reject.sending, .btn-group .respond.sorry +
 a.reject.sending, .btn-group .respond.wait +
 a.reject.sending, .btn-group .respond.opener +
@@ -4351,7 +4323,7 @@ a.dispose.sending + button.default.ready, .btn-group button.reject.ready + butto
 a.reject.ready + button.default.ready, .btn-group button.reject.sending + button.default.ready, .btn-group
 a.reject.sending + button.default.ready, .btn-group button.default.ready + button.default.ready, .btn-group
 a.default.ready + button.default.ready, .btn-group button.default.sending + button.default.ready, .btn-group
-a.default.sending + button.default.ready, .btn-group .show-question.reply-to-reply-button + button.default.ready, .btn-group .respond.sorry + button.default.ready, .btn-group .respond.wait + button.default.ready, .btn-group .respond.opener + button.default.ready, .btn-group .btn +
+a.default.sending + button.default.ready, .btn-group .respond.sorry + button.default.ready, .btn-group .respond.wait + button.default.ready, .btn-group .respond.opener + button.default.ready, .btn-group .btn +
 a.default.ready, .btn-group button.link.ready +
 a.default.ready, .btn-group
 a.link.ready +
@@ -4391,7 +4363,6 @@ a.default.ready +
 a.default.ready, .btn-group button.default.sending +
 a.default.ready, .btn-group
 a.default.sending +
-a.default.ready, .btn-group .show-question.reply-to-reply-button +
 a.default.ready, .btn-group .respond.sorry +
 a.default.ready, .btn-group .respond.wait +
 a.default.ready, .btn-group .respond.opener +
@@ -4408,7 +4379,7 @@ a.dispose.sending + button.default.sending, .btn-group button.reject.ready + but
 a.reject.ready + button.default.sending, .btn-group button.reject.sending + button.default.sending, .btn-group
 a.reject.sending + button.default.sending, .btn-group button.default.ready + button.default.sending, .btn-group
 a.default.ready + button.default.sending, .btn-group button.default.sending + button.default.sending, .btn-group
-a.default.sending + button.default.sending, .btn-group .show-question.reply-to-reply-button + button.default.sending, .btn-group .respond.sorry + button.default.sending, .btn-group .respond.wait + button.default.sending, .btn-group .respond.opener + button.default.sending, .btn-group .btn +
+a.default.sending + button.default.sending, .btn-group .respond.sorry + button.default.sending, .btn-group .respond.wait + button.default.sending, .btn-group .respond.opener + button.default.sending, .btn-group .btn +
 a.default.sending, .btn-group button.link.ready +
 a.default.sending, .btn-group
 a.link.ready +
@@ -4448,24 +4419,10 @@ a.default.ready +
 a.default.sending, .btn-group button.default.sending +
 a.default.sending, .btn-group
 a.default.sending +
-a.default.sending, .btn-group .show-question.reply-to-reply-button +
 a.default.sending, .btn-group .respond.sorry +
 a.default.sending, .btn-group .respond.wait +
 a.default.sending, .btn-group .respond.opener +
-a.default.sending, .btn-group .btn + .show-question.reply-to-reply-button, .btn-group button.link.ready + .show-question.reply-to-reply-button, .btn-group
-a.link.ready + .show-question.reply-to-reply-button, .btn-group button.link.sending + .show-question.reply-to-reply-button, .btn-group
-a.link.sending + .show-question.reply-to-reply-button, .btn-group button.submit.ready + .show-question.reply-to-reply-button, .btn-group
-a.submit.ready + .show-question.reply-to-reply-button, .btn-group button.submit.sending + .show-question.reply-to-reply-button, .btn-group
-a.submit.sending + .show-question.reply-to-reply-button, .btn-group button.sending + .show-question.reply-to-reply-button, .btn-group
-a.sending + .show-question.reply-to-reply-button, .btn-group button.block.ready + .show-question.reply-to-reply-button, .btn-group button.dispose.ready + .show-question.reply-to-reply-button, .btn-group
-a.block.ready + .show-question.reply-to-reply-button, .btn-group
-a.dispose.ready + .show-question.reply-to-reply-button, .btn-group button.block.sending + .show-question.reply-to-reply-button, .btn-group button.dispose.sending + .show-question.reply-to-reply-button, .btn-group
-a.block.sending + .show-question.reply-to-reply-button, .btn-group
-a.dispose.sending + .show-question.reply-to-reply-button, .btn-group button.reject.ready + .show-question.reply-to-reply-button, .btn-group
-a.reject.ready + .show-question.reply-to-reply-button, .btn-group button.reject.sending + .show-question.reply-to-reply-button, .btn-group
-a.reject.sending + .show-question.reply-to-reply-button, .btn-group button.default.ready + .show-question.reply-to-reply-button, .btn-group
-a.default.ready + .show-question.reply-to-reply-button, .btn-group button.default.sending + .show-question.reply-to-reply-button, .btn-group
-a.default.sending + .show-question.reply-to-reply-button, .btn-group .show-question.reply-to-reply-button + .show-question.reply-to-reply-button, .btn-group .respond.sorry + .show-question.reply-to-reply-button, .btn-group .respond.wait + .show-question.reply-to-reply-button, .btn-group .respond.opener + .show-question.reply-to-reply-button, .btn-group .btn + .respond.sorry, .btn-group button.link.ready + .respond.sorry, .btn-group
+a.default.sending, .btn-group .btn + .respond.sorry, .btn-group button.link.ready + .respond.sorry, .btn-group
 a.link.ready + .respond.sorry, .btn-group button.link.sending + .respond.sorry, .btn-group
 a.link.sending + .respond.sorry, .btn-group button.submit.ready + .respond.sorry, .btn-group
 a.submit.ready + .respond.sorry, .btn-group button.submit.sending + .respond.sorry, .btn-group
@@ -4478,7 +4435,7 @@ a.dispose.sending + .respond.sorry, .btn-group button.reject.ready + .respond.so
 a.reject.ready + .respond.sorry, .btn-group button.reject.sending + .respond.sorry, .btn-group
 a.reject.sending + .respond.sorry, .btn-group button.default.ready + .respond.sorry, .btn-group
 a.default.ready + .respond.sorry, .btn-group button.default.sending + .respond.sorry, .btn-group
-a.default.sending + .respond.sorry, .btn-group .show-question.reply-to-reply-button + .respond.sorry, .btn-group .respond.sorry + .respond.sorry, .btn-group .respond.wait + .respond.sorry, .btn-group .respond.opener + .respond.sorry, .btn-group .btn + .respond.wait, .btn-group button.link.ready + .respond.wait, .btn-group
+a.default.sending + .respond.sorry, .btn-group .respond.sorry + .respond.sorry, .btn-group .respond.wait + .respond.sorry, .btn-group .respond.opener + .respond.sorry, .btn-group .btn + .respond.wait, .btn-group button.link.ready + .respond.wait, .btn-group
 a.link.ready + .respond.wait, .btn-group button.link.sending + .respond.wait, .btn-group
 a.link.sending + .respond.wait, .btn-group button.submit.ready + .respond.wait, .btn-group
 a.submit.ready + .respond.wait, .btn-group button.submit.sending + .respond.wait, .btn-group
@@ -4491,7 +4448,7 @@ a.dispose.sending + .respond.wait, .btn-group button.reject.ready + .respond.wai
 a.reject.ready + .respond.wait, .btn-group button.reject.sending + .respond.wait, .btn-group
 a.reject.sending + .respond.wait, .btn-group button.default.ready + .respond.wait, .btn-group
 a.default.ready + .respond.wait, .btn-group button.default.sending + .respond.wait, .btn-group
-a.default.sending + .respond.wait, .btn-group .show-question.reply-to-reply-button + .respond.wait, .btn-group .respond.sorry + .respond.wait, .btn-group .respond.wait + .respond.wait, .btn-group .respond.opener + .respond.wait, .btn-group .btn + .respond.opener, .btn-group button.link.ready + .respond.opener, .btn-group
+a.default.sending + .respond.wait, .btn-group .respond.sorry + .respond.wait, .btn-group .respond.wait + .respond.wait, .btn-group .respond.opener + .respond.wait, .btn-group .btn + .respond.opener, .btn-group button.link.ready + .respond.opener, .btn-group
 a.link.ready + .respond.opener, .btn-group button.link.sending + .respond.opener, .btn-group
 a.link.sending + .respond.opener, .btn-group button.submit.ready + .respond.opener, .btn-group
 a.submit.ready + .respond.opener, .btn-group button.submit.sending + .respond.opener, .btn-group
@@ -4504,7 +4461,7 @@ a.dispose.sending + .respond.opener, .btn-group button.reject.ready + .respond.o
 a.reject.ready + .respond.opener, .btn-group button.reject.sending + .respond.opener, .btn-group
 a.reject.sending + .respond.opener, .btn-group button.default.ready + .respond.opener, .btn-group
 a.default.ready + .respond.opener, .btn-group button.default.sending + .respond.opener, .btn-group
-a.default.sending + .respond.opener, .btn-group .show-question.reply-to-reply-button + .respond.opener, .btn-group .respond.sorry + .respond.opener, .btn-group .respond.wait + .respond.opener, .btn-group .respond.opener + .respond.opener,
+a.default.sending + .respond.opener, .btn-group .respond.sorry + .respond.opener, .btn-group .respond.wait + .respond.opener, .btn-group .respond.opener + .respond.opener,
 .btn-group .btn + .btn-group,
 .btn-group button.link.ready + .btn-group,
 .btn-group
@@ -4527,7 +4484,6 @@ a.reject.ready + .btn-group,
 .btn-group button.default.ready + .btn-group,
 .btn-group
 a.default.ready + .btn-group,
-.btn-group .show-question.reply-to-reply-button + .btn-group,
 .btn-group .respond.sorry + .btn-group,
 .btn-group .respond.wait + .btn-group,
 .btn-group .respond.opener + .btn-group,
@@ -4553,7 +4509,6 @@ a.reject.ready,
 .btn-group .btn-group + button.default.ready,
 .btn-group .btn-group +
 a.default.ready,
-.btn-group .btn-group + .show-question.reply-to-reply-button,
 .btn-group .btn-group + .respond.sorry,
 .btn-group .btn-group + .respond.wait,
 .btn-group .btn-group + .respond.opener,
@@ -4579,7 +4534,7 @@ a.sending, .btn-toolbar > button.block.ready, .btn-toolbar > button.dispose.read
 a.block.ready, .btn-toolbar >
 a.dispose.ready, .btn-toolbar > button.reject.ready, .btn-toolbar >
 a.reject.ready, .btn-toolbar > button.default.ready, .btn-toolbar >
-a.default.ready, .btn-toolbar > .show-question.reply-to-reply-button, .btn-toolbar > .respond.sorry, .btn-toolbar > .respond.wait, .btn-toolbar > .respond.opener,
+a.default.ready, .btn-toolbar > .respond.sorry, .btn-toolbar > .respond.wait, .btn-toolbar > .respond.opener,
 .btn-toolbar > .btn-group,
 .btn-toolbar > .input-group {
   margin-left: 0.5rem; }
@@ -4591,7 +4546,7 @@ a.sending:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group >
 a.block.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group >
 a.dispose.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > button.reject.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group >
 a.reject.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > button.default.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group >
-a.default.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .show-question.reply-to-reply-button:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.sorry:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.wait:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.opener:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+a.default.ready:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.sorry:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.wait:not(:first-child):not(:last-child):not(.dropdown-toggle), .btn-group > .respond.opener:not(:first-child):not(:last-child):not(.dropdown-toggle) {
   border-radius: 0; }
 
 .btn-group > .btn:first-child, .btn-group > button.link.ready:first-child, .btn-group >
@@ -4601,7 +4556,7 @@ a.sending:first-child, .btn-group > button.block.ready:first-child, .btn-group >
 a.block.ready:first-child, .btn-group >
 a.dispose.ready:first-child, .btn-group > button.reject.ready:first-child, .btn-group >
 a.reject.ready:first-child, .btn-group > button.default.ready:first-child, .btn-group >
-a.default.ready:first-child, .btn-group > .show-question.reply-to-reply-button:first-child, .btn-group > .respond.sorry:first-child, .btn-group > .respond.wait:first-child, .btn-group > .respond.opener:first-child {
+a.default.ready:first-child, .btn-group > .respond.sorry:first-child, .btn-group > .respond.wait:first-child, .btn-group > .respond.opener:first-child {
   margin-left: 0; }
 
 .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > button.link.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group >
@@ -4611,7 +4566,7 @@ a.sending:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > butto
 a.block.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group >
 a.dispose.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > button.reject.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group >
 a.reject.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > button.default.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group >
-a.default.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .show-question.reply-to-reply-button:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.sorry:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.wait:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.opener:first-child:not(:last-child):not(.dropdown-toggle) {
+a.default.ready:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.sorry:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.wait:first-child:not(:last-child):not(.dropdown-toggle), .btn-group > .respond.opener:first-child:not(:last-child):not(.dropdown-toggle) {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0; }
 
@@ -4622,7 +4577,7 @@ a.sending:last-child:not(:first-child), .btn-group > button.block.ready:last-chi
 a.block.ready:last-child:not(:first-child), .btn-group >
 a.dispose.ready:last-child:not(:first-child), .btn-group > button.reject.ready:last-child:not(:first-child), .btn-group >
 a.reject.ready:last-child:not(:first-child), .btn-group > button.default.ready:last-child:not(:first-child), .btn-group >
-a.default.ready:last-child:not(:first-child), .btn-group > .show-question.reply-to-reply-button:last-child:not(:first-child), .btn-group > .respond.sorry:last-child:not(:first-child), .btn-group > .respond.wait:last-child:not(:first-child), .btn-group > .respond.opener:last-child:not(:first-child),
+a.default.ready:last-child:not(:first-child), .btn-group > .respond.sorry:last-child:not(:first-child), .btn-group > .respond.wait:last-child:not(:first-child), .btn-group > .respond.opener:last-child:not(:first-child),
 .btn-group > .dropdown-toggle:not(:first-child) {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0; }
@@ -4637,7 +4592,7 @@ a.sending, .btn-group > .btn-group:not(:first-child):not(:last-child) > button.b
 a.block.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) >
 a.dispose.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) > button.reject.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) >
 a.reject.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) > button.default.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) >
-a.default.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) > .show-question.reply-to-reply-button, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.sorry, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.wait, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.opener {
+a.default.ready, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.sorry, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.wait, .btn-group > .btn-group:not(:first-child):not(:last-child) > .respond.opener {
   border-radius: 0; }
 
 .btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child, .btn-group > .btn-group:first-child:not(:last-child) > button.link.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) >
@@ -4647,7 +4602,7 @@ a.sending:last-child, .btn-group > .btn-group:first-child:not(:last-child) > but
 a.block.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) >
 a.dispose.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) > button.reject.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) >
 a.reject.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) > button.default.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) >
-a.default.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .show-question.reply-to-reply-button:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.sorry:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.wait:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.opener:last-child,
+a.default.ready:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.sorry:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.wait:last-child, .btn-group > .btn-group:first-child:not(:last-child) > .respond.opener:last-child,
 .btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
   border-bottom-right-radius: 0;
   border-top-right-radius: 0; }
@@ -4659,7 +4614,7 @@ a.sending:first-child, .btn-group > .btn-group:last-child:not(:first-child) > bu
 a.block.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) >
 a.dispose.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) > button.reject.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) >
 a.reject.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) > button.default.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) >
-a.default.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .show-question.reply-to-reply-button:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.sorry:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.wait:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.opener:first-child {
+a.default.ready:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.sorry:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.wait:first-child, .btn-group > .btn-group:last-child:not(:first-child) > .respond.opener:first-child {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0; }
 
@@ -4674,7 +4629,7 @@ a.sending + .dropdown-toggle-split, button.block.ready + .dropdown-toggle-split,
 a.block.ready + .dropdown-toggle-split,
 a.dispose.ready + .dropdown-toggle-split, button.reject.ready + .dropdown-toggle-split,
 a.reject.ready + .dropdown-toggle-split, button.default.ready + .dropdown-toggle-split,
-a.default.ready + .dropdown-toggle-split, .show-question.reply-to-reply-button + .dropdown-toggle-split, .respond.sorry + .dropdown-toggle-split, .respond.wait + .dropdown-toggle-split, .respond.opener + .dropdown-toggle-split {
+a.default.ready + .dropdown-toggle-split, .respond.sorry + .dropdown-toggle-split, .respond.wait + .dropdown-toggle-split, .respond.opener + .dropdown-toggle-split {
   padding-right: 0.75rem;
   padding-left: 0.75rem; }
 
@@ -4685,7 +4640,7 @@ a.sending + .dropdown-toggle-split::after, button.block.ready + .dropdown-toggle
 a.block.ready + .dropdown-toggle-split::after,
 a.dispose.ready + .dropdown-toggle-split::after, button.reject.ready + .dropdown-toggle-split::after,
 a.reject.ready + .dropdown-toggle-split::after, button.default.ready + .dropdown-toggle-split::after,
-a.default.ready + .dropdown-toggle-split::after, .show-question.reply-to-reply-button + .dropdown-toggle-split::after, .respond.sorry + .dropdown-toggle-split::after, .respond.wait + .dropdown-toggle-split::after, .respond.opener + .dropdown-toggle-split::after {
+a.default.ready + .dropdown-toggle-split::after, .respond.sorry + .dropdown-toggle-split::after, .respond.wait + .dropdown-toggle-split::after, .respond.opener + .dropdown-toggle-split::after {
   margin-left: 0; }
 
 .btn-sm + .dropdown-toggle-split, .respond.sorry + .dropdown-toggle-split, .respond.wait + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split, .btn-group-sm > button.link.ready + .dropdown-toggle-split, .btn-group-sm >
@@ -4695,7 +4650,7 @@ a.sending + .dropdown-toggle-split, .btn-group-sm > button.block.ready + .dropdo
 a.block.ready + .dropdown-toggle-split, .btn-group-sm >
 a.dispose.ready + .dropdown-toggle-split, .btn-group-sm > button.reject.ready + .dropdown-toggle-split, .btn-group-sm >
 a.reject.ready + .dropdown-toggle-split, .btn-group-sm > button.default.ready + .dropdown-toggle-split, .btn-group-sm >
-a.default.ready + .dropdown-toggle-split, .btn-group-sm > .show-question.reply-to-reply-button + .dropdown-toggle-split, .btn-group-sm > .respond.sorry + .dropdown-toggle-split, .btn-group-sm > .respond.wait + .dropdown-toggle-split, .btn-group-sm > .respond.opener + .dropdown-toggle-split {
+a.default.ready + .dropdown-toggle-split, .btn-group-sm > .respond.sorry + .dropdown-toggle-split, .btn-group-sm > .respond.wait + .dropdown-toggle-split, .btn-group-sm > .respond.opener + .dropdown-toggle-split {
   padding-right: 0.375rem;
   padding-left: 0.375rem; }
 
@@ -4706,7 +4661,7 @@ a.sending + .dropdown-toggle-split, .btn-group-lg > button.block.ready + .dropdo
 a.block.ready + .dropdown-toggle-split, .btn-group-lg >
 a.dispose.ready + .dropdown-toggle-split, .btn-group-lg > button.reject.ready + .dropdown-toggle-split, .btn-group-lg >
 a.reject.ready + .dropdown-toggle-split, .btn-group-lg > button.default.ready + .dropdown-toggle-split, .btn-group-lg >
-a.default.ready + .dropdown-toggle-split, .btn-group-lg > .show-question.reply-to-reply-button + .dropdown-toggle-split, .btn-group-lg > .respond.sorry + .dropdown-toggle-split, .btn-group-lg > .respond.wait + .dropdown-toggle-split, .btn-group-lg > .respond.opener + .dropdown-toggle-split {
+a.default.ready + .dropdown-toggle-split, .btn-group-lg > .respond.sorry + .dropdown-toggle-split, .btn-group-lg > .respond.wait + .dropdown-toggle-split, .btn-group-lg > .respond.opener + .dropdown-toggle-split {
   padding-right: 1.125rem;
   padding-left: 1.125rem; }
 
@@ -4717,7 +4672,7 @@ a.sending .caret, button.block.ready .caret, button.dispose.ready .caret,
 a.block.ready .caret,
 a.dispose.ready .caret, button.reject.ready .caret,
 a.reject.ready .caret, button.default.ready .caret,
-a.default.ready .caret, .show-question.reply-to-reply-button .caret, .respond.sorry .caret, .respond.wait .caret, .respond.opener .caret {
+a.default.ready .caret, .respond.sorry .caret, .respond.wait .caret, .respond.opener .caret {
   margin-left: 0; }
 
 .btn-lg .caret, .btn-group-lg > .btn .caret, .btn-group-lg > button.link.ready .caret, .btn-group-lg >
@@ -4727,7 +4682,7 @@ a.sending .caret, .btn-group-lg > button.block.ready .caret, .btn-group-lg > but
 a.block.ready .caret, .btn-group-lg >
 a.dispose.ready .caret, .btn-group-lg > button.reject.ready .caret, .btn-group-lg >
 a.reject.ready .caret, .btn-group-lg > button.default.ready .caret, .btn-group-lg >
-a.default.ready .caret, .btn-group-lg > .show-question.reply-to-reply-button .caret, .btn-group-lg > .respond.sorry .caret, .btn-group-lg > .respond.wait .caret, .btn-group-lg > .respond.opener .caret {
+a.default.ready .caret, .btn-group-lg > .respond.sorry .caret, .btn-group-lg > .respond.wait .caret, .btn-group-lg > .respond.opener .caret {
   border-width: 0.3em 0.3em 0;
   border-bottom-width: 0; }
 
@@ -4738,7 +4693,7 @@ a.sending .caret, .dropup .btn-group-lg > button.block.ready .caret, .dropup .bt
 a.block.ready .caret, .dropup .btn-group-lg >
 a.dispose.ready .caret, .dropup .btn-group-lg > button.reject.ready .caret, .dropup .btn-group-lg >
 a.reject.ready .caret, .dropup .btn-group-lg > button.default.ready .caret, .dropup .btn-group-lg >
-a.default.ready .caret, .dropup .btn-group-lg > .show-question.reply-to-reply-button .caret, .dropup .btn-group-lg > .respond.sorry .caret, .dropup .btn-group-lg > .respond.wait .caret, .dropup .btn-group-lg > .respond.opener .caret {
+a.default.ready .caret, .dropup .btn-group-lg > .respond.sorry .caret, .dropup .btn-group-lg > .respond.wait .caret, .dropup .btn-group-lg > .respond.opener .caret {
   border-width: 0 0.3em 0.3em; }
 
 .btn-group-vertical > .btn, .btn-group-vertical > button.link.ready, .btn-group-vertical >
@@ -4748,7 +4703,7 @@ a.sending, .btn-group-vertical > button.block.ready, .btn-group-vertical > butto
 a.block.ready, .btn-group-vertical >
 a.dispose.ready, .btn-group-vertical > button.reject.ready, .btn-group-vertical >
 a.reject.ready, .btn-group-vertical > button.default.ready, .btn-group-vertical >
-a.default.ready, .btn-group-vertical > .show-question.reply-to-reply-button, .btn-group-vertical > .respond.sorry, .btn-group-vertical > .respond.wait, .btn-group-vertical > .respond.opener,
+a.default.ready, .btn-group-vertical > .respond.sorry, .btn-group-vertical > .respond.wait, .btn-group-vertical > .respond.opener,
 .btn-group-vertical > .btn-group,
 .btn-group-vertical > .btn-group > .btn,
 .btn-group-vertical > .btn-group > button.link.ready,
@@ -4772,7 +4727,6 @@ a.reject.ready,
 .btn-group-vertical > .btn-group > button.default.ready,
 .btn-group-vertical > .btn-group >
 a.default.ready,
-.btn-group-vertical > .btn-group > .show-question.reply-to-reply-button,
 .btn-group-vertical > .btn-group > .respond.sorry,
 .btn-group-vertical > .btn-group > .respond.wait,
 .btn-group-vertical > .btn-group > .respond.opener {
@@ -4793,7 +4747,7 @@ a.sending, .btn-group-vertical > .btn-group > button.block.ready, .btn-group-ver
 a.block.ready, .btn-group-vertical > .btn-group >
 a.dispose.ready, .btn-group-vertical > .btn-group > button.reject.ready, .btn-group-vertical > .btn-group >
 a.reject.ready, .btn-group-vertical > .btn-group > button.default.ready, .btn-group-vertical > .btn-group >
-a.default.ready, .btn-group-vertical > .btn-group > .show-question.reply-to-reply-button, .btn-group-vertical > .btn-group > .respond.sorry, .btn-group-vertical > .btn-group > .respond.wait, .btn-group-vertical > .btn-group > .respond.opener {
+a.default.ready, .btn-group-vertical > .btn-group > .respond.sorry, .btn-group-vertical > .btn-group > .respond.wait, .btn-group-vertical > .btn-group > .respond.opener {
   float: none; }
 
 .btn-group-vertical > .btn + .btn, .btn-group-vertical > button.link.ready + .btn, .btn-group-vertical >
@@ -4809,7 +4763,7 @@ a.dispose.sending + .btn, .btn-group-vertical > button.reject.ready + .btn, .btn
 a.reject.ready + .btn, .btn-group-vertical > button.reject.sending + .btn, .btn-group-vertical >
 a.reject.sending + .btn, .btn-group-vertical > button.default.ready + .btn, .btn-group-vertical >
 a.default.ready + .btn, .btn-group-vertical > button.default.sending + .btn, .btn-group-vertical >
-a.default.sending + .btn, .btn-group-vertical > .show-question.reply-to-reply-button + .btn, .btn-group-vertical > .respond.sorry + .btn, .btn-group-vertical > .respond.wait + .btn, .btn-group-vertical > .respond.opener + .btn, .btn-group-vertical > .btn + button.link.ready, .btn-group-vertical > button.link.ready + button.link.ready, .btn-group-vertical >
+a.default.sending + .btn, .btn-group-vertical > .respond.sorry + .btn, .btn-group-vertical > .respond.wait + .btn, .btn-group-vertical > .respond.opener + .btn, .btn-group-vertical > .btn + button.link.ready, .btn-group-vertical > button.link.ready + button.link.ready, .btn-group-vertical >
 a.link.ready + button.link.ready, .btn-group-vertical > button.link.sending + button.link.ready, .btn-group-vertical >
 a.link.sending + button.link.ready, .btn-group-vertical > button.submit.ready + button.link.ready, .btn-group-vertical >
 a.submit.ready + button.link.ready, .btn-group-vertical > button.submit.sending + button.link.ready, .btn-group-vertical >
@@ -4822,7 +4776,7 @@ a.dispose.sending + button.link.ready, .btn-group-vertical > button.reject.ready
 a.reject.ready + button.link.ready, .btn-group-vertical > button.reject.sending + button.link.ready, .btn-group-vertical >
 a.reject.sending + button.link.ready, .btn-group-vertical > button.default.ready + button.link.ready, .btn-group-vertical >
 a.default.ready + button.link.ready, .btn-group-vertical > button.default.sending + button.link.ready, .btn-group-vertical >
-a.default.sending + button.link.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.link.ready, .btn-group-vertical > .respond.sorry + button.link.ready, .btn-group-vertical > .respond.wait + button.link.ready, .btn-group-vertical > .respond.opener + button.link.ready, .btn-group-vertical > .btn +
+a.default.sending + button.link.ready, .btn-group-vertical > .respond.sorry + button.link.ready, .btn-group-vertical > .respond.wait + button.link.ready, .btn-group-vertical > .respond.opener + button.link.ready, .btn-group-vertical > .btn +
 a.link.ready, .btn-group-vertical > button.link.ready +
 a.link.ready, .btn-group-vertical >
 a.link.ready +
@@ -4862,7 +4816,6 @@ a.default.ready +
 a.link.ready, .btn-group-vertical > button.default.sending +
 a.link.ready, .btn-group-vertical >
 a.default.sending +
-a.link.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.link.ready, .btn-group-vertical > .respond.sorry +
 a.link.ready, .btn-group-vertical > .respond.wait +
 a.link.ready, .btn-group-vertical > .respond.opener +
@@ -4879,7 +4832,7 @@ a.dispose.sending + button.link.sending, .btn-group-vertical > button.reject.rea
 a.reject.ready + button.link.sending, .btn-group-vertical > button.reject.sending + button.link.sending, .btn-group-vertical >
 a.reject.sending + button.link.sending, .btn-group-vertical > button.default.ready + button.link.sending, .btn-group-vertical >
 a.default.ready + button.link.sending, .btn-group-vertical > button.default.sending + button.link.sending, .btn-group-vertical >
-a.default.sending + button.link.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.link.sending, .btn-group-vertical > .respond.sorry + button.link.sending, .btn-group-vertical > .respond.wait + button.link.sending, .btn-group-vertical > .respond.opener + button.link.sending, .btn-group-vertical > .btn +
+a.default.sending + button.link.sending, .btn-group-vertical > .respond.sorry + button.link.sending, .btn-group-vertical > .respond.wait + button.link.sending, .btn-group-vertical > .respond.opener + button.link.sending, .btn-group-vertical > .btn +
 a.link.sending, .btn-group-vertical > button.link.ready +
 a.link.sending, .btn-group-vertical >
 a.link.ready +
@@ -4919,7 +4872,6 @@ a.default.ready +
 a.link.sending, .btn-group-vertical > button.default.sending +
 a.link.sending, .btn-group-vertical >
 a.default.sending +
-a.link.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.link.sending, .btn-group-vertical > .respond.sorry +
 a.link.sending, .btn-group-vertical > .respond.wait +
 a.link.sending, .btn-group-vertical > .respond.opener +
@@ -4936,7 +4888,7 @@ a.dispose.sending + button.submit.ready, .btn-group-vertical > button.reject.rea
 a.reject.ready + button.submit.ready, .btn-group-vertical > button.reject.sending + button.submit.ready, .btn-group-vertical >
 a.reject.sending + button.submit.ready, .btn-group-vertical > button.default.ready + button.submit.ready, .btn-group-vertical >
 a.default.ready + button.submit.ready, .btn-group-vertical > button.default.sending + button.submit.ready, .btn-group-vertical >
-a.default.sending + button.submit.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.submit.ready, .btn-group-vertical > .respond.sorry + button.submit.ready, .btn-group-vertical > .respond.wait + button.submit.ready, .btn-group-vertical > .respond.opener + button.submit.ready, .btn-group-vertical > .btn +
+a.default.sending + button.submit.ready, .btn-group-vertical > .respond.sorry + button.submit.ready, .btn-group-vertical > .respond.wait + button.submit.ready, .btn-group-vertical > .respond.opener + button.submit.ready, .btn-group-vertical > .btn +
 a.submit.ready, .btn-group-vertical > button.link.ready +
 a.submit.ready, .btn-group-vertical >
 a.link.ready +
@@ -4976,7 +4928,6 @@ a.default.ready +
 a.submit.ready, .btn-group-vertical > button.default.sending +
 a.submit.ready, .btn-group-vertical >
 a.default.sending +
-a.submit.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.submit.ready, .btn-group-vertical > .respond.sorry +
 a.submit.ready, .btn-group-vertical > .respond.wait +
 a.submit.ready, .btn-group-vertical > .respond.opener +
@@ -4993,7 +4944,7 @@ a.dispose.sending + button.submit.sending, .btn-group-vertical > button.reject.r
 a.reject.ready + button.submit.sending, .btn-group-vertical > button.reject.sending + button.submit.sending, .btn-group-vertical >
 a.reject.sending + button.submit.sending, .btn-group-vertical > button.default.ready + button.submit.sending, .btn-group-vertical >
 a.default.ready + button.submit.sending, .btn-group-vertical > button.default.sending + button.submit.sending, .btn-group-vertical >
-a.default.sending + button.submit.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.submit.sending, .btn-group-vertical > .respond.sorry + button.submit.sending, .btn-group-vertical > .respond.wait + button.submit.sending, .btn-group-vertical > .respond.opener + button.submit.sending, .btn-group-vertical > .btn +
+a.default.sending + button.submit.sending, .btn-group-vertical > .respond.sorry + button.submit.sending, .btn-group-vertical > .respond.wait + button.submit.sending, .btn-group-vertical > .respond.opener + button.submit.sending, .btn-group-vertical > .btn +
 a.submit.sending, .btn-group-vertical > button.link.ready +
 a.submit.sending, .btn-group-vertical >
 a.link.ready +
@@ -5033,7 +4984,6 @@ a.default.ready +
 a.submit.sending, .btn-group-vertical > button.default.sending +
 a.submit.sending, .btn-group-vertical >
 a.default.sending +
-a.submit.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.submit.sending, .btn-group-vertical > .respond.sorry +
 a.submit.sending, .btn-group-vertical > .respond.wait +
 a.submit.sending, .btn-group-vertical > .respond.opener +
@@ -5050,7 +5000,7 @@ a.dispose.sending + button.sending, .btn-group-vertical > button.reject.ready + 
 a.reject.ready + button.sending, .btn-group-vertical > button.reject.sending + button.sending, .btn-group-vertical >
 a.reject.sending + button.sending, .btn-group-vertical > button.default.ready + button.sending, .btn-group-vertical >
 a.default.ready + button.sending, .btn-group-vertical > button.default.sending + button.sending, .btn-group-vertical >
-a.default.sending + button.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.sending, .btn-group-vertical > .respond.sorry + button.sending, .btn-group-vertical > .respond.wait + button.sending, .btn-group-vertical > .respond.opener + button.sending, .btn-group-vertical > .btn +
+a.default.sending + button.sending, .btn-group-vertical > .respond.sorry + button.sending, .btn-group-vertical > .respond.wait + button.sending, .btn-group-vertical > .respond.opener + button.sending, .btn-group-vertical > .btn +
 a.sending, .btn-group-vertical > button.link.ready +
 a.sending, .btn-group-vertical >
 a.link.ready +
@@ -5090,7 +5040,6 @@ a.default.ready +
 a.sending, .btn-group-vertical > button.default.sending +
 a.sending, .btn-group-vertical >
 a.default.sending +
-a.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.sending, .btn-group-vertical > .respond.sorry +
 a.sending, .btn-group-vertical > .respond.wait +
 a.sending, .btn-group-vertical > .respond.opener +
@@ -5107,7 +5056,7 @@ a.dispose.sending + button.block.ready, .btn-group-vertical > button.reject.read
 a.reject.ready + button.block.ready, .btn-group-vertical > button.reject.sending + button.block.ready, .btn-group-vertical >
 a.reject.sending + button.block.ready, .btn-group-vertical > button.default.ready + button.block.ready, .btn-group-vertical >
 a.default.ready + button.block.ready, .btn-group-vertical > button.default.sending + button.block.ready, .btn-group-vertical >
-a.default.sending + button.block.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.block.ready, .btn-group-vertical > .respond.sorry + button.block.ready, .btn-group-vertical > .respond.wait + button.block.ready, .btn-group-vertical > .respond.opener + button.block.ready, .btn-group-vertical > .btn + button.dispose.ready, .btn-group-vertical > button.link.ready + button.dispose.ready, .btn-group-vertical >
+a.default.sending + button.block.ready, .btn-group-vertical > .respond.sorry + button.block.ready, .btn-group-vertical > .respond.wait + button.block.ready, .btn-group-vertical > .respond.opener + button.block.ready, .btn-group-vertical > .btn + button.dispose.ready, .btn-group-vertical > button.link.ready + button.dispose.ready, .btn-group-vertical >
 a.link.ready + button.dispose.ready, .btn-group-vertical > button.link.sending + button.dispose.ready, .btn-group-vertical >
 a.link.sending + button.dispose.ready, .btn-group-vertical > button.submit.ready + button.dispose.ready, .btn-group-vertical >
 a.submit.ready + button.dispose.ready, .btn-group-vertical > button.submit.sending + button.dispose.ready, .btn-group-vertical >
@@ -5120,7 +5069,7 @@ a.dispose.sending + button.dispose.ready, .btn-group-vertical > button.reject.re
 a.reject.ready + button.dispose.ready, .btn-group-vertical > button.reject.sending + button.dispose.ready, .btn-group-vertical >
 a.reject.sending + button.dispose.ready, .btn-group-vertical > button.default.ready + button.dispose.ready, .btn-group-vertical >
 a.default.ready + button.dispose.ready, .btn-group-vertical > button.default.sending + button.dispose.ready, .btn-group-vertical >
-a.default.sending + button.dispose.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.dispose.ready, .btn-group-vertical > .respond.sorry + button.dispose.ready, .btn-group-vertical > .respond.wait + button.dispose.ready, .btn-group-vertical > .respond.opener + button.dispose.ready, .btn-group-vertical > .btn +
+a.default.sending + button.dispose.ready, .btn-group-vertical > .respond.sorry + button.dispose.ready, .btn-group-vertical > .respond.wait + button.dispose.ready, .btn-group-vertical > .respond.opener + button.dispose.ready, .btn-group-vertical > .btn +
 a.block.ready, .btn-group-vertical > button.link.ready +
 a.block.ready, .btn-group-vertical >
 a.link.ready +
@@ -5160,7 +5109,6 @@ a.default.ready +
 a.block.ready, .btn-group-vertical > button.default.sending +
 a.block.ready, .btn-group-vertical >
 a.default.sending +
-a.block.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.block.ready, .btn-group-vertical > .respond.sorry +
 a.block.ready, .btn-group-vertical > .respond.wait +
 a.block.ready, .btn-group-vertical > .respond.opener +
@@ -5204,7 +5152,6 @@ a.default.ready +
 a.dispose.ready, .btn-group-vertical > button.default.sending +
 a.dispose.ready, .btn-group-vertical >
 a.default.sending +
-a.dispose.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.dispose.ready, .btn-group-vertical > .respond.sorry +
 a.dispose.ready, .btn-group-vertical > .respond.wait +
 a.dispose.ready, .btn-group-vertical > .respond.opener +
@@ -5221,7 +5168,7 @@ a.dispose.sending + button.block.sending, .btn-group-vertical > button.reject.re
 a.reject.ready + button.block.sending, .btn-group-vertical > button.reject.sending + button.block.sending, .btn-group-vertical >
 a.reject.sending + button.block.sending, .btn-group-vertical > button.default.ready + button.block.sending, .btn-group-vertical >
 a.default.ready + button.block.sending, .btn-group-vertical > button.default.sending + button.block.sending, .btn-group-vertical >
-a.default.sending + button.block.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.block.sending, .btn-group-vertical > .respond.sorry + button.block.sending, .btn-group-vertical > .respond.wait + button.block.sending, .btn-group-vertical > .respond.opener + button.block.sending, .btn-group-vertical > .btn + button.dispose.sending, .btn-group-vertical > button.link.ready + button.dispose.sending, .btn-group-vertical >
+a.default.sending + button.block.sending, .btn-group-vertical > .respond.sorry + button.block.sending, .btn-group-vertical > .respond.wait + button.block.sending, .btn-group-vertical > .respond.opener + button.block.sending, .btn-group-vertical > .btn + button.dispose.sending, .btn-group-vertical > button.link.ready + button.dispose.sending, .btn-group-vertical >
 a.link.ready + button.dispose.sending, .btn-group-vertical > button.link.sending + button.dispose.sending, .btn-group-vertical >
 a.link.sending + button.dispose.sending, .btn-group-vertical > button.submit.ready + button.dispose.sending, .btn-group-vertical >
 a.submit.ready + button.dispose.sending, .btn-group-vertical > button.submit.sending + button.dispose.sending, .btn-group-vertical >
@@ -5234,7 +5181,7 @@ a.dispose.sending + button.dispose.sending, .btn-group-vertical > button.reject.
 a.reject.ready + button.dispose.sending, .btn-group-vertical > button.reject.sending + button.dispose.sending, .btn-group-vertical >
 a.reject.sending + button.dispose.sending, .btn-group-vertical > button.default.ready + button.dispose.sending, .btn-group-vertical >
 a.default.ready + button.dispose.sending, .btn-group-vertical > button.default.sending + button.dispose.sending, .btn-group-vertical >
-a.default.sending + button.dispose.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.dispose.sending, .btn-group-vertical > .respond.sorry + button.dispose.sending, .btn-group-vertical > .respond.wait + button.dispose.sending, .btn-group-vertical > .respond.opener + button.dispose.sending, .btn-group-vertical > .btn +
+a.default.sending + button.dispose.sending, .btn-group-vertical > .respond.sorry + button.dispose.sending, .btn-group-vertical > .respond.wait + button.dispose.sending, .btn-group-vertical > .respond.opener + button.dispose.sending, .btn-group-vertical > .btn +
 a.block.sending, .btn-group-vertical > button.link.ready +
 a.block.sending, .btn-group-vertical >
 a.link.ready +
@@ -5274,7 +5221,6 @@ a.default.ready +
 a.block.sending, .btn-group-vertical > button.default.sending +
 a.block.sending, .btn-group-vertical >
 a.default.sending +
-a.block.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.block.sending, .btn-group-vertical > .respond.sorry +
 a.block.sending, .btn-group-vertical > .respond.wait +
 a.block.sending, .btn-group-vertical > .respond.opener +
@@ -5318,7 +5264,6 @@ a.default.ready +
 a.dispose.sending, .btn-group-vertical > button.default.sending +
 a.dispose.sending, .btn-group-vertical >
 a.default.sending +
-a.dispose.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.dispose.sending, .btn-group-vertical > .respond.sorry +
 a.dispose.sending, .btn-group-vertical > .respond.wait +
 a.dispose.sending, .btn-group-vertical > .respond.opener +
@@ -5335,7 +5280,7 @@ a.dispose.sending + button.reject.ready, .btn-group-vertical > button.reject.rea
 a.reject.ready + button.reject.ready, .btn-group-vertical > button.reject.sending + button.reject.ready, .btn-group-vertical >
 a.reject.sending + button.reject.ready, .btn-group-vertical > button.default.ready + button.reject.ready, .btn-group-vertical >
 a.default.ready + button.reject.ready, .btn-group-vertical > button.default.sending + button.reject.ready, .btn-group-vertical >
-a.default.sending + button.reject.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.reject.ready, .btn-group-vertical > .respond.sorry + button.reject.ready, .btn-group-vertical > .respond.wait + button.reject.ready, .btn-group-vertical > .respond.opener + button.reject.ready, .btn-group-vertical > .btn +
+a.default.sending + button.reject.ready, .btn-group-vertical > .respond.sorry + button.reject.ready, .btn-group-vertical > .respond.wait + button.reject.ready, .btn-group-vertical > .respond.opener + button.reject.ready, .btn-group-vertical > .btn +
 a.reject.ready, .btn-group-vertical > button.link.ready +
 a.reject.ready, .btn-group-vertical >
 a.link.ready +
@@ -5375,7 +5320,6 @@ a.default.ready +
 a.reject.ready, .btn-group-vertical > button.default.sending +
 a.reject.ready, .btn-group-vertical >
 a.default.sending +
-a.reject.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.reject.ready, .btn-group-vertical > .respond.sorry +
 a.reject.ready, .btn-group-vertical > .respond.wait +
 a.reject.ready, .btn-group-vertical > .respond.opener +
@@ -5392,7 +5336,7 @@ a.dispose.sending + button.reject.sending, .btn-group-vertical > button.reject.r
 a.reject.ready + button.reject.sending, .btn-group-vertical > button.reject.sending + button.reject.sending, .btn-group-vertical >
 a.reject.sending + button.reject.sending, .btn-group-vertical > button.default.ready + button.reject.sending, .btn-group-vertical >
 a.default.ready + button.reject.sending, .btn-group-vertical > button.default.sending + button.reject.sending, .btn-group-vertical >
-a.default.sending + button.reject.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.reject.sending, .btn-group-vertical > .respond.sorry + button.reject.sending, .btn-group-vertical > .respond.wait + button.reject.sending, .btn-group-vertical > .respond.opener + button.reject.sending, .btn-group-vertical > .btn +
+a.default.sending + button.reject.sending, .btn-group-vertical > .respond.sorry + button.reject.sending, .btn-group-vertical > .respond.wait + button.reject.sending, .btn-group-vertical > .respond.opener + button.reject.sending, .btn-group-vertical > .btn +
 a.reject.sending, .btn-group-vertical > button.link.ready +
 a.reject.sending, .btn-group-vertical >
 a.link.ready +
@@ -5432,7 +5376,6 @@ a.default.ready +
 a.reject.sending, .btn-group-vertical > button.default.sending +
 a.reject.sending, .btn-group-vertical >
 a.default.sending +
-a.reject.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.reject.sending, .btn-group-vertical > .respond.sorry +
 a.reject.sending, .btn-group-vertical > .respond.wait +
 a.reject.sending, .btn-group-vertical > .respond.opener +
@@ -5449,7 +5392,7 @@ a.dispose.sending + button.default.ready, .btn-group-vertical > button.reject.re
 a.reject.ready + button.default.ready, .btn-group-vertical > button.reject.sending + button.default.ready, .btn-group-vertical >
 a.reject.sending + button.default.ready, .btn-group-vertical > button.default.ready + button.default.ready, .btn-group-vertical >
 a.default.ready + button.default.ready, .btn-group-vertical > button.default.sending + button.default.ready, .btn-group-vertical >
-a.default.sending + button.default.ready, .btn-group-vertical > .show-question.reply-to-reply-button + button.default.ready, .btn-group-vertical > .respond.sorry + button.default.ready, .btn-group-vertical > .respond.wait + button.default.ready, .btn-group-vertical > .respond.opener + button.default.ready, .btn-group-vertical > .btn +
+a.default.sending + button.default.ready, .btn-group-vertical > .respond.sorry + button.default.ready, .btn-group-vertical > .respond.wait + button.default.ready, .btn-group-vertical > .respond.opener + button.default.ready, .btn-group-vertical > .btn +
 a.default.ready, .btn-group-vertical > button.link.ready +
 a.default.ready, .btn-group-vertical >
 a.link.ready +
@@ -5489,7 +5432,6 @@ a.default.ready +
 a.default.ready, .btn-group-vertical > button.default.sending +
 a.default.ready, .btn-group-vertical >
 a.default.sending +
-a.default.ready, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.default.ready, .btn-group-vertical > .respond.sorry +
 a.default.ready, .btn-group-vertical > .respond.wait +
 a.default.ready, .btn-group-vertical > .respond.opener +
@@ -5506,7 +5448,7 @@ a.dispose.sending + button.default.sending, .btn-group-vertical > button.reject.
 a.reject.ready + button.default.sending, .btn-group-vertical > button.reject.sending + button.default.sending, .btn-group-vertical >
 a.reject.sending + button.default.sending, .btn-group-vertical > button.default.ready + button.default.sending, .btn-group-vertical >
 a.default.ready + button.default.sending, .btn-group-vertical > button.default.sending + button.default.sending, .btn-group-vertical >
-a.default.sending + button.default.sending, .btn-group-vertical > .show-question.reply-to-reply-button + button.default.sending, .btn-group-vertical > .respond.sorry + button.default.sending, .btn-group-vertical > .respond.wait + button.default.sending, .btn-group-vertical > .respond.opener + button.default.sending, .btn-group-vertical > .btn +
+a.default.sending + button.default.sending, .btn-group-vertical > .respond.sorry + button.default.sending, .btn-group-vertical > .respond.wait + button.default.sending, .btn-group-vertical > .respond.opener + button.default.sending, .btn-group-vertical > .btn +
 a.default.sending, .btn-group-vertical > button.link.ready +
 a.default.sending, .btn-group-vertical >
 a.link.ready +
@@ -5546,24 +5488,10 @@ a.default.ready +
 a.default.sending, .btn-group-vertical > button.default.sending +
 a.default.sending, .btn-group-vertical >
 a.default.sending +
-a.default.sending, .btn-group-vertical > .show-question.reply-to-reply-button +
 a.default.sending, .btn-group-vertical > .respond.sorry +
 a.default.sending, .btn-group-vertical > .respond.wait +
 a.default.sending, .btn-group-vertical > .respond.opener +
-a.default.sending, .btn-group-vertical > .btn + .show-question.reply-to-reply-button, .btn-group-vertical > button.link.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.link.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.link.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.link.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.submit.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.submit.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.submit.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.submit.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.block.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.dispose.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.block.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.dispose.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.block.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.dispose.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.block.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.dispose.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.reject.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.reject.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.reject.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.reject.sending + .show-question.reply-to-reply-button, .btn-group-vertical > button.default.ready + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.default.ready + .show-question.reply-to-reply-button, .btn-group-vertical > button.default.sending + .show-question.reply-to-reply-button, .btn-group-vertical >
-a.default.sending + .show-question.reply-to-reply-button, .btn-group-vertical > .show-question.reply-to-reply-button + .show-question.reply-to-reply-button, .btn-group-vertical > .respond.sorry + .show-question.reply-to-reply-button, .btn-group-vertical > .respond.wait + .show-question.reply-to-reply-button, .btn-group-vertical > .respond.opener + .show-question.reply-to-reply-button, .btn-group-vertical > .btn + .respond.sorry, .btn-group-vertical > button.link.ready + .respond.sorry, .btn-group-vertical >
+a.default.sending, .btn-group-vertical > .btn + .respond.sorry, .btn-group-vertical > button.link.ready + .respond.sorry, .btn-group-vertical >
 a.link.ready + .respond.sorry, .btn-group-vertical > button.link.sending + .respond.sorry, .btn-group-vertical >
 a.link.sending + .respond.sorry, .btn-group-vertical > button.submit.ready + .respond.sorry, .btn-group-vertical >
 a.submit.ready + .respond.sorry, .btn-group-vertical > button.submit.sending + .respond.sorry, .btn-group-vertical >
@@ -5576,7 +5504,7 @@ a.dispose.sending + .respond.sorry, .btn-group-vertical > button.reject.ready + 
 a.reject.ready + .respond.sorry, .btn-group-vertical > button.reject.sending + .respond.sorry, .btn-group-vertical >
 a.reject.sending + .respond.sorry, .btn-group-vertical > button.default.ready + .respond.sorry, .btn-group-vertical >
 a.default.ready + .respond.sorry, .btn-group-vertical > button.default.sending + .respond.sorry, .btn-group-vertical >
-a.default.sending + .respond.sorry, .btn-group-vertical > .show-question.reply-to-reply-button + .respond.sorry, .btn-group-vertical > .respond.sorry + .respond.sorry, .btn-group-vertical > .respond.wait + .respond.sorry, .btn-group-vertical > .respond.opener + .respond.sorry, .btn-group-vertical > .btn + .respond.wait, .btn-group-vertical > button.link.ready + .respond.wait, .btn-group-vertical >
+a.default.sending + .respond.sorry, .btn-group-vertical > .respond.sorry + .respond.sorry, .btn-group-vertical > .respond.wait + .respond.sorry, .btn-group-vertical > .respond.opener + .respond.sorry, .btn-group-vertical > .btn + .respond.wait, .btn-group-vertical > button.link.ready + .respond.wait, .btn-group-vertical >
 a.link.ready + .respond.wait, .btn-group-vertical > button.link.sending + .respond.wait, .btn-group-vertical >
 a.link.sending + .respond.wait, .btn-group-vertical > button.submit.ready + .respond.wait, .btn-group-vertical >
 a.submit.ready + .respond.wait, .btn-group-vertical > button.submit.sending + .respond.wait, .btn-group-vertical >
@@ -5589,7 +5517,7 @@ a.dispose.sending + .respond.wait, .btn-group-vertical > button.reject.ready + .
 a.reject.ready + .respond.wait, .btn-group-vertical > button.reject.sending + .respond.wait, .btn-group-vertical >
 a.reject.sending + .respond.wait, .btn-group-vertical > button.default.ready + .respond.wait, .btn-group-vertical >
 a.default.ready + .respond.wait, .btn-group-vertical > button.default.sending + .respond.wait, .btn-group-vertical >
-a.default.sending + .respond.wait, .btn-group-vertical > .show-question.reply-to-reply-button + .respond.wait, .btn-group-vertical > .respond.sorry + .respond.wait, .btn-group-vertical > .respond.wait + .respond.wait, .btn-group-vertical > .respond.opener + .respond.wait, .btn-group-vertical > .btn + .respond.opener, .btn-group-vertical > button.link.ready + .respond.opener, .btn-group-vertical >
+a.default.sending + .respond.wait, .btn-group-vertical > .respond.sorry + .respond.wait, .btn-group-vertical > .respond.wait + .respond.wait, .btn-group-vertical > .respond.opener + .respond.wait, .btn-group-vertical > .btn + .respond.opener, .btn-group-vertical > button.link.ready + .respond.opener, .btn-group-vertical >
 a.link.ready + .respond.opener, .btn-group-vertical > button.link.sending + .respond.opener, .btn-group-vertical >
 a.link.sending + .respond.opener, .btn-group-vertical > button.submit.ready + .respond.opener, .btn-group-vertical >
 a.submit.ready + .respond.opener, .btn-group-vertical > button.submit.sending + .respond.opener, .btn-group-vertical >
@@ -5602,7 +5530,7 @@ a.dispose.sending + .respond.opener, .btn-group-vertical > button.reject.ready +
 a.reject.ready + .respond.opener, .btn-group-vertical > button.reject.sending + .respond.opener, .btn-group-vertical >
 a.reject.sending + .respond.opener, .btn-group-vertical > button.default.ready + .respond.opener, .btn-group-vertical >
 a.default.ready + .respond.opener, .btn-group-vertical > button.default.sending + .respond.opener, .btn-group-vertical >
-a.default.sending + .respond.opener, .btn-group-vertical > .show-question.reply-to-reply-button + .respond.opener, .btn-group-vertical > .respond.sorry + .respond.opener, .btn-group-vertical > .respond.wait + .respond.opener, .btn-group-vertical > .respond.opener + .respond.opener,
+a.default.sending + .respond.opener, .btn-group-vertical > .respond.sorry + .respond.opener, .btn-group-vertical > .respond.wait + .respond.opener, .btn-group-vertical > .respond.opener + .respond.opener,
 .btn-group-vertical > .btn + .btn-group,
 .btn-group-vertical > button.link.ready + .btn-group,
 .btn-group-vertical >
@@ -5625,7 +5553,6 @@ a.reject.ready + .btn-group,
 .btn-group-vertical > button.default.ready + .btn-group,
 .btn-group-vertical >
 a.default.ready + .btn-group,
-.btn-group-vertical > .show-question.reply-to-reply-button + .btn-group,
 .btn-group-vertical > .respond.sorry + .btn-group,
 .btn-group-vertical > .respond.wait + .btn-group,
 .btn-group-vertical > .respond.opener + .btn-group,
@@ -5651,7 +5578,6 @@ a.reject.ready,
 .btn-group-vertical > .btn-group + button.default.ready,
 .btn-group-vertical > .btn-group +
 a.default.ready,
-.btn-group-vertical > .btn-group + .show-question.reply-to-reply-button,
 .btn-group-vertical > .btn-group + .respond.sorry,
 .btn-group-vertical > .btn-group + .respond.wait,
 .btn-group-vertical > .btn-group + .respond.opener,
@@ -5666,7 +5592,7 @@ a.sending:not(:first-child):not(:last-child), .btn-group-vertical > button.block
 a.block.ready:not(:first-child):not(:last-child), .btn-group-vertical >
 a.dispose.ready:not(:first-child):not(:last-child), .btn-group-vertical > button.reject.ready:not(:first-child):not(:last-child), .btn-group-vertical >
 a.reject.ready:not(:first-child):not(:last-child), .btn-group-vertical > button.default.ready:not(:first-child):not(:last-child), .btn-group-vertical >
-a.default.ready:not(:first-child):not(:last-child), .btn-group-vertical > .show-question.reply-to-reply-button:not(:first-child):not(:last-child), .btn-group-vertical > .respond.sorry:not(:first-child):not(:last-child), .btn-group-vertical > .respond.wait:not(:first-child):not(:last-child), .btn-group-vertical > .respond.opener:not(:first-child):not(:last-child) {
+a.default.ready:not(:first-child):not(:last-child), .btn-group-vertical > .respond.sorry:not(:first-child):not(:last-child), .btn-group-vertical > .respond.wait:not(:first-child):not(:last-child), .btn-group-vertical > .respond.opener:not(:first-child):not(:last-child) {
   border-radius: 0; }
 
 .btn-group-vertical > .btn:first-child:not(:last-child), .btn-group-vertical > button.link.ready:first-child:not(:last-child), .btn-group-vertical >
@@ -5676,7 +5602,7 @@ a.sending:first-child:not(:last-child), .btn-group-vertical > button.block.ready
 a.block.ready:first-child:not(:last-child), .btn-group-vertical >
 a.dispose.ready:first-child:not(:last-child), .btn-group-vertical > button.reject.ready:first-child:not(:last-child), .btn-group-vertical >
 a.reject.ready:first-child:not(:last-child), .btn-group-vertical > button.default.ready:first-child:not(:last-child), .btn-group-vertical >
-a.default.ready:first-child:not(:last-child), .btn-group-vertical > .show-question.reply-to-reply-button:first-child:not(:last-child), .btn-group-vertical > .respond.sorry:first-child:not(:last-child), .btn-group-vertical > .respond.wait:first-child:not(:last-child), .btn-group-vertical > .respond.opener:first-child:not(:last-child) {
+a.default.ready:first-child:not(:last-child), .btn-group-vertical > .respond.sorry:first-child:not(:last-child), .btn-group-vertical > .respond.wait:first-child:not(:last-child), .btn-group-vertical > .respond.opener:first-child:not(:last-child) {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0; }
 
@@ -5687,7 +5613,7 @@ a.sending:last-child:not(:first-child), .btn-group-vertical > button.block.ready
 a.block.ready:last-child:not(:first-child), .btn-group-vertical >
 a.dispose.ready:last-child:not(:first-child), .btn-group-vertical > button.reject.ready:last-child:not(:first-child), .btn-group-vertical >
 a.reject.ready:last-child:not(:first-child), .btn-group-vertical > button.default.ready:last-child:not(:first-child), .btn-group-vertical >
-a.default.ready:last-child:not(:first-child), .btn-group-vertical > .show-question.reply-to-reply-button:last-child:not(:first-child), .btn-group-vertical > .respond.sorry:last-child:not(:first-child), .btn-group-vertical > .respond.wait:last-child:not(:first-child), .btn-group-vertical > .respond.opener:last-child:not(:first-child) {
+a.default.ready:last-child:not(:first-child), .btn-group-vertical > .respond.sorry:last-child:not(:first-child), .btn-group-vertical > .respond.wait:last-child:not(:first-child), .btn-group-vertical > .respond.opener:last-child:not(:first-child) {
   border-top-right-radius: 0;
   border-top-left-radius: 0; }
 
@@ -5698,7 +5624,7 @@ a.sending, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) >
 a.block.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) >
 a.dispose.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > button.reject.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) >
 a.reject.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > button.default.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) >
-a.default.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .show-question.reply-to-reply-button, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.sorry, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.wait, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.opener {
+a.default.ready, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.sorry, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.wait, .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .respond.opener {
   border-radius: 0; }
 
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .btn:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > button.link.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) >
@@ -5708,7 +5634,7 @@ a.sending:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-chi
 a.block.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) >
 a.dispose.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > button.reject.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) >
 a.reject.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > button.default.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) >
-a.default.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .show-question.reply-to-reply-button:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.sorry:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.wait:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.opener:last-child,
+a.default.ready:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.sorry:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.wait:last-child, .btn-group-vertical > .btn-group:first-child:not(:last-child) > .respond.opener:last-child,
 .btn-group-vertical > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0; }
@@ -5720,7 +5646,7 @@ a.sending:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-ch
 a.block.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) >
 a.dispose.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > button.reject.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) >
 a.reject.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > button.default.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) >
-a.default.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .show-question.reply-to-reply-button:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.sorry:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.wait:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.opener:first-child {
+a.default.ready:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.sorry:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.wait:first-child, .btn-group-vertical > .btn-group:last-child:not(:first-child) > .respond.opener:first-child {
   border-top-right-radius: 0;
   border-top-left-radius: 0; }
 
@@ -5731,7 +5657,7 @@ a.sending input[type="radio"], [data-toggle="buttons"] > button.block.ready inpu
 a.block.ready input[type="radio"], [data-toggle="buttons"] >
 a.dispose.ready input[type="radio"], [data-toggle="buttons"] > button.reject.ready input[type="radio"], [data-toggle="buttons"] >
 a.reject.ready input[type="radio"], [data-toggle="buttons"] > button.default.ready input[type="radio"], [data-toggle="buttons"] >
-a.default.ready input[type="radio"], [data-toggle="buttons"] > .show-question.reply-to-reply-button input[type="radio"], [data-toggle="buttons"] > .respond.sorry input[type="radio"], [data-toggle="buttons"] > .respond.wait input[type="radio"], [data-toggle="buttons"] > .respond.opener input[type="radio"],
+a.default.ready input[type="radio"], [data-toggle="buttons"] > .respond.sorry input[type="radio"], [data-toggle="buttons"] > .respond.wait input[type="radio"], [data-toggle="buttons"] > .respond.opener input[type="radio"],
 [data-toggle="buttons"] > .btn input[type="checkbox"],
 [data-toggle="buttons"] > button.link.ready input[type="checkbox"],
 [data-toggle="buttons"] >
@@ -5754,7 +5680,6 @@ a.reject.ready input[type="checkbox"],
 [data-toggle="buttons"] > button.default.ready input[type="checkbox"],
 [data-toggle="buttons"] >
 a.default.ready input[type="checkbox"],
-[data-toggle="buttons"] > .show-question.reply-to-reply-button input[type="checkbox"],
 [data-toggle="buttons"] > .respond.sorry input[type="checkbox"],
 [data-toggle="buttons"] > .respond.wait input[type="checkbox"],
 [data-toggle="buttons"] > .respond.opener input[type="checkbox"],
@@ -5780,7 +5705,6 @@ a.reject.ready input[type="radio"],
 [data-toggle="buttons"] > .btn-group > button.default.ready input[type="radio"],
 [data-toggle="buttons"] > .btn-group >
 a.default.ready input[type="radio"],
-[data-toggle="buttons"] > .btn-group > .show-question.reply-to-reply-button input[type="radio"],
 [data-toggle="buttons"] > .btn-group > .respond.sorry input[type="radio"],
 [data-toggle="buttons"] > .btn-group > .respond.wait input[type="radio"],
 [data-toggle="buttons"] > .btn-group > .respond.opener input[type="radio"],
@@ -5806,7 +5730,6 @@ a.reject.ready input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group > button.default.ready input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group >
 a.default.ready input[type="checkbox"],
-[data-toggle="buttons"] > .btn-group > .show-question.reply-to-reply-button input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group > .respond.sorry input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group > .respond.wait input[type="checkbox"],
 [data-toggle="buttons"] > .btn-group > .respond.opener input[type="checkbox"] {
@@ -5926,7 +5849,6 @@ a.input-group-addon.reject.ready,
 .input-group-sm > .input-group-btn > button.input-group-addon.default.ready,
 .input-group-sm > .input-group-btn >
 a.input-group-addon.default.ready,
-.input-group-sm > .input-group-btn > .input-group-addon.show-question.reply-to-reply-button,
 .input-group-sm > .input-group-btn > .input-group-addon.respond.sorry,
 .input-group-sm > .input-group-btn > .input-group-addon.respond.wait,
 .input-group-sm > .input-group-btn > .input-group-addon.respond.opener {
@@ -5958,7 +5880,6 @@ a.input-group-addon.reject.ready,
 .input-group-lg > .input-group-btn > button.input-group-addon.default.ready,
 .input-group-lg > .input-group-btn >
 a.input-group-addon.default.ready,
-.input-group-lg > .input-group-btn > .input-group-addon.show-question.reply-to-reply-button,
 .input-group-lg > .input-group-btn > .input-group-addon.respond.sorry,
 .input-group-lg > .input-group-btn > .input-group-addon.respond.wait,
 .input-group-lg > .input-group-btn > .input-group-addon.respond.opener {
@@ -5998,7 +5919,6 @@ a.reject.ready,
 .input-group-btn:not(:last-child) > button.default.ready,
 .input-group-btn:not(:last-child) >
 a.default.ready,
-.input-group-btn:not(:last-child) > .show-question.reply-to-reply-button,
 .input-group-btn:not(:last-child) > .respond.sorry,
 .input-group-btn:not(:last-child) > .respond.wait,
 .input-group-btn:not(:last-child) > .respond.opener,
@@ -6024,7 +5944,6 @@ a.reject.ready,
 .input-group-btn:not(:last-child) > .btn-group > button.default.ready,
 .input-group-btn:not(:last-child) > .btn-group >
 a.default.ready,
-.input-group-btn:not(:last-child) > .btn-group > .show-question.reply-to-reply-button,
 .input-group-btn:not(:last-child) > .btn-group > .respond.sorry,
 .input-group-btn:not(:last-child) > .btn-group > .respond.wait,
 .input-group-btn:not(:last-child) > .btn-group > .respond.opener,
@@ -6051,7 +5970,6 @@ a.reject.ready:not(:last-child):not(.dropdown-toggle),
 .input-group-btn:not(:first-child) > button.default.ready:not(:last-child):not(.dropdown-toggle),
 .input-group-btn:not(:first-child) >
 a.default.ready:not(:last-child):not(.dropdown-toggle),
-.input-group-btn:not(:first-child) > .show-question.reply-to-reply-button:not(:last-child):not(.dropdown-toggle),
 .input-group-btn:not(:first-child) > .respond.sorry:not(:last-child):not(.dropdown-toggle),
 .input-group-btn:not(:first-child) > .respond.wait:not(:last-child):not(.dropdown-toggle),
 .input-group-btn:not(:first-child) > .respond.opener:not(:last-child):not(.dropdown-toggle),
@@ -6077,7 +5995,6 @@ a.reject.ready,
 .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > button.default.ready,
 .input-group-btn:not(:first-child) > .btn-group:not(:last-child) >
 a.default.ready,
-.input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .show-question.reply-to-reply-button,
 .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .respond.sorry,
 .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .respond.wait,
 .input-group-btn:not(:first-child) > .btn-group:not(:last-child) > .respond.opener {
@@ -6115,7 +6032,6 @@ a.reject.ready,
 .input-group-btn:not(:first-child) > button.default.ready,
 .input-group-btn:not(:first-child) >
 a.default.ready,
-.input-group-btn:not(:first-child) > .show-question.reply-to-reply-button,
 .input-group-btn:not(:first-child) > .respond.sorry,
 .input-group-btn:not(:first-child) > .respond.wait,
 .input-group-btn:not(:first-child) > .respond.opener,
@@ -6141,7 +6057,6 @@ a.reject.ready,
 .input-group-btn:not(:first-child) > .btn-group > button.default.ready,
 .input-group-btn:not(:first-child) > .btn-group >
 a.default.ready,
-.input-group-btn:not(:first-child) > .btn-group > .show-question.reply-to-reply-button,
 .input-group-btn:not(:first-child) > .btn-group > .respond.sorry,
 .input-group-btn:not(:first-child) > .btn-group > .respond.wait,
 .input-group-btn:not(:first-child) > .btn-group > .respond.opener,
@@ -6168,7 +6083,6 @@ a.reject.ready:not(:first-child),
 .input-group-btn:not(:last-child) > button.default.ready:not(:first-child),
 .input-group-btn:not(:last-child) >
 a.default.ready:not(:first-child),
-.input-group-btn:not(:last-child) > .show-question.reply-to-reply-button:not(:first-child),
 .input-group-btn:not(:last-child) > .respond.sorry:not(:first-child),
 .input-group-btn:not(:last-child) > .respond.wait:not(:first-child),
 .input-group-btn:not(:last-child) > .respond.opener:not(:first-child),
@@ -6194,7 +6108,6 @@ a.reject.ready,
 .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > button.default.ready,
 .input-group-btn:not(:last-child) > .btn-group:not(:first-child) >
 a.default.ready,
-.input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .show-question.reply-to-reply-button,
 .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .respond.sorry,
 .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .respond.wait,
 .input-group-btn:not(:last-child) > .btn-group:not(:first-child) > .respond.opener {
@@ -6218,7 +6131,7 @@ a.sending, .input-group-btn > button.block.ready, .input-group-btn > button.disp
 a.block.ready, .input-group-btn >
 a.dispose.ready, .input-group-btn > button.reject.ready, .input-group-btn >
 a.reject.ready, .input-group-btn > button.default.ready, .input-group-btn >
-a.default.ready, .input-group-btn > .show-question.reply-to-reply-button, .input-group-btn > .respond.sorry, .input-group-btn > .respond.wait, .input-group-btn > .respond.opener {
+a.default.ready, .input-group-btn > .respond.sorry, .input-group-btn > .respond.wait, .input-group-btn > .respond.opener {
   position: relative; }
 
 .input-group-btn > .btn + .btn, .input-group-btn > button.link.ready + .btn, .input-group-btn >
@@ -6234,7 +6147,7 @@ a.dispose.sending + .btn, .input-group-btn > button.reject.ready + .btn, .input-
 a.reject.ready + .btn, .input-group-btn > button.reject.sending + .btn, .input-group-btn >
 a.reject.sending + .btn, .input-group-btn > button.default.ready + .btn, .input-group-btn >
 a.default.ready + .btn, .input-group-btn > button.default.sending + .btn, .input-group-btn >
-a.default.sending + .btn, .input-group-btn > .show-question.reply-to-reply-button + .btn, .input-group-btn > .respond.sorry + .btn, .input-group-btn > .respond.wait + .btn, .input-group-btn > .respond.opener + .btn, .input-group-btn > .btn + button.link.ready, .input-group-btn > button.link.ready + button.link.ready, .input-group-btn >
+a.default.sending + .btn, .input-group-btn > .respond.sorry + .btn, .input-group-btn > .respond.wait + .btn, .input-group-btn > .respond.opener + .btn, .input-group-btn > .btn + button.link.ready, .input-group-btn > button.link.ready + button.link.ready, .input-group-btn >
 a.link.ready + button.link.ready, .input-group-btn > button.link.sending + button.link.ready, .input-group-btn >
 a.link.sending + button.link.ready, .input-group-btn > button.submit.ready + button.link.ready, .input-group-btn >
 a.submit.ready + button.link.ready, .input-group-btn > button.submit.sending + button.link.ready, .input-group-btn >
@@ -6247,7 +6160,7 @@ a.dispose.sending + button.link.ready, .input-group-btn > button.reject.ready + 
 a.reject.ready + button.link.ready, .input-group-btn > button.reject.sending + button.link.ready, .input-group-btn >
 a.reject.sending + button.link.ready, .input-group-btn > button.default.ready + button.link.ready, .input-group-btn >
 a.default.ready + button.link.ready, .input-group-btn > button.default.sending + button.link.ready, .input-group-btn >
-a.default.sending + button.link.ready, .input-group-btn > .show-question.reply-to-reply-button + button.link.ready, .input-group-btn > .respond.sorry + button.link.ready, .input-group-btn > .respond.wait + button.link.ready, .input-group-btn > .respond.opener + button.link.ready, .input-group-btn > .btn +
+a.default.sending + button.link.ready, .input-group-btn > .respond.sorry + button.link.ready, .input-group-btn > .respond.wait + button.link.ready, .input-group-btn > .respond.opener + button.link.ready, .input-group-btn > .btn +
 a.link.ready, .input-group-btn > button.link.ready +
 a.link.ready, .input-group-btn >
 a.link.ready +
@@ -6287,7 +6200,6 @@ a.default.ready +
 a.link.ready, .input-group-btn > button.default.sending +
 a.link.ready, .input-group-btn >
 a.default.sending +
-a.link.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.link.ready, .input-group-btn > .respond.sorry +
 a.link.ready, .input-group-btn > .respond.wait +
 a.link.ready, .input-group-btn > .respond.opener +
@@ -6304,7 +6216,7 @@ a.dispose.sending + button.link.sending, .input-group-btn > button.reject.ready 
 a.reject.ready + button.link.sending, .input-group-btn > button.reject.sending + button.link.sending, .input-group-btn >
 a.reject.sending + button.link.sending, .input-group-btn > button.default.ready + button.link.sending, .input-group-btn >
 a.default.ready + button.link.sending, .input-group-btn > button.default.sending + button.link.sending, .input-group-btn >
-a.default.sending + button.link.sending, .input-group-btn > .show-question.reply-to-reply-button + button.link.sending, .input-group-btn > .respond.sorry + button.link.sending, .input-group-btn > .respond.wait + button.link.sending, .input-group-btn > .respond.opener + button.link.sending, .input-group-btn > .btn +
+a.default.sending + button.link.sending, .input-group-btn > .respond.sorry + button.link.sending, .input-group-btn > .respond.wait + button.link.sending, .input-group-btn > .respond.opener + button.link.sending, .input-group-btn > .btn +
 a.link.sending, .input-group-btn > button.link.ready +
 a.link.sending, .input-group-btn >
 a.link.ready +
@@ -6344,7 +6256,6 @@ a.default.ready +
 a.link.sending, .input-group-btn > button.default.sending +
 a.link.sending, .input-group-btn >
 a.default.sending +
-a.link.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.link.sending, .input-group-btn > .respond.sorry +
 a.link.sending, .input-group-btn > .respond.wait +
 a.link.sending, .input-group-btn > .respond.opener +
@@ -6361,7 +6272,7 @@ a.dispose.sending + button.submit.ready, .input-group-btn > button.reject.ready 
 a.reject.ready + button.submit.ready, .input-group-btn > button.reject.sending + button.submit.ready, .input-group-btn >
 a.reject.sending + button.submit.ready, .input-group-btn > button.default.ready + button.submit.ready, .input-group-btn >
 a.default.ready + button.submit.ready, .input-group-btn > button.default.sending + button.submit.ready, .input-group-btn >
-a.default.sending + button.submit.ready, .input-group-btn > .show-question.reply-to-reply-button + button.submit.ready, .input-group-btn > .respond.sorry + button.submit.ready, .input-group-btn > .respond.wait + button.submit.ready, .input-group-btn > .respond.opener + button.submit.ready, .input-group-btn > .btn +
+a.default.sending + button.submit.ready, .input-group-btn > .respond.sorry + button.submit.ready, .input-group-btn > .respond.wait + button.submit.ready, .input-group-btn > .respond.opener + button.submit.ready, .input-group-btn > .btn +
 a.submit.ready, .input-group-btn > button.link.ready +
 a.submit.ready, .input-group-btn >
 a.link.ready +
@@ -6401,7 +6312,6 @@ a.default.ready +
 a.submit.ready, .input-group-btn > button.default.sending +
 a.submit.ready, .input-group-btn >
 a.default.sending +
-a.submit.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.submit.ready, .input-group-btn > .respond.sorry +
 a.submit.ready, .input-group-btn > .respond.wait +
 a.submit.ready, .input-group-btn > .respond.opener +
@@ -6418,7 +6328,7 @@ a.dispose.sending + button.submit.sending, .input-group-btn > button.reject.read
 a.reject.ready + button.submit.sending, .input-group-btn > button.reject.sending + button.submit.sending, .input-group-btn >
 a.reject.sending + button.submit.sending, .input-group-btn > button.default.ready + button.submit.sending, .input-group-btn >
 a.default.ready + button.submit.sending, .input-group-btn > button.default.sending + button.submit.sending, .input-group-btn >
-a.default.sending + button.submit.sending, .input-group-btn > .show-question.reply-to-reply-button + button.submit.sending, .input-group-btn > .respond.sorry + button.submit.sending, .input-group-btn > .respond.wait + button.submit.sending, .input-group-btn > .respond.opener + button.submit.sending, .input-group-btn > .btn +
+a.default.sending + button.submit.sending, .input-group-btn > .respond.sorry + button.submit.sending, .input-group-btn > .respond.wait + button.submit.sending, .input-group-btn > .respond.opener + button.submit.sending, .input-group-btn > .btn +
 a.submit.sending, .input-group-btn > button.link.ready +
 a.submit.sending, .input-group-btn >
 a.link.ready +
@@ -6458,7 +6368,6 @@ a.default.ready +
 a.submit.sending, .input-group-btn > button.default.sending +
 a.submit.sending, .input-group-btn >
 a.default.sending +
-a.submit.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.submit.sending, .input-group-btn > .respond.sorry +
 a.submit.sending, .input-group-btn > .respond.wait +
 a.submit.sending, .input-group-btn > .respond.opener +
@@ -6475,7 +6384,7 @@ a.dispose.sending + button.sending, .input-group-btn > button.reject.ready + but
 a.reject.ready + button.sending, .input-group-btn > button.reject.sending + button.sending, .input-group-btn >
 a.reject.sending + button.sending, .input-group-btn > button.default.ready + button.sending, .input-group-btn >
 a.default.ready + button.sending, .input-group-btn > button.default.sending + button.sending, .input-group-btn >
-a.default.sending + button.sending, .input-group-btn > .show-question.reply-to-reply-button + button.sending, .input-group-btn > .respond.sorry + button.sending, .input-group-btn > .respond.wait + button.sending, .input-group-btn > .respond.opener + button.sending, .input-group-btn > .btn +
+a.default.sending + button.sending, .input-group-btn > .respond.sorry + button.sending, .input-group-btn > .respond.wait + button.sending, .input-group-btn > .respond.opener + button.sending, .input-group-btn > .btn +
 a.sending, .input-group-btn > button.link.ready +
 a.sending, .input-group-btn >
 a.link.ready +
@@ -6515,7 +6424,6 @@ a.default.ready +
 a.sending, .input-group-btn > button.default.sending +
 a.sending, .input-group-btn >
 a.default.sending +
-a.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.sending, .input-group-btn > .respond.sorry +
 a.sending, .input-group-btn > .respond.wait +
 a.sending, .input-group-btn > .respond.opener +
@@ -6532,7 +6440,7 @@ a.dispose.sending + button.block.ready, .input-group-btn > button.reject.ready +
 a.reject.ready + button.block.ready, .input-group-btn > button.reject.sending + button.block.ready, .input-group-btn >
 a.reject.sending + button.block.ready, .input-group-btn > button.default.ready + button.block.ready, .input-group-btn >
 a.default.ready + button.block.ready, .input-group-btn > button.default.sending + button.block.ready, .input-group-btn >
-a.default.sending + button.block.ready, .input-group-btn > .show-question.reply-to-reply-button + button.block.ready, .input-group-btn > .respond.sorry + button.block.ready, .input-group-btn > .respond.wait + button.block.ready, .input-group-btn > .respond.opener + button.block.ready, .input-group-btn > .btn + button.dispose.ready, .input-group-btn > button.link.ready + button.dispose.ready, .input-group-btn >
+a.default.sending + button.block.ready, .input-group-btn > .respond.sorry + button.block.ready, .input-group-btn > .respond.wait + button.block.ready, .input-group-btn > .respond.opener + button.block.ready, .input-group-btn > .btn + button.dispose.ready, .input-group-btn > button.link.ready + button.dispose.ready, .input-group-btn >
 a.link.ready + button.dispose.ready, .input-group-btn > button.link.sending + button.dispose.ready, .input-group-btn >
 a.link.sending + button.dispose.ready, .input-group-btn > button.submit.ready + button.dispose.ready, .input-group-btn >
 a.submit.ready + button.dispose.ready, .input-group-btn > button.submit.sending + button.dispose.ready, .input-group-btn >
@@ -6545,7 +6453,7 @@ a.dispose.sending + button.dispose.ready, .input-group-btn > button.reject.ready
 a.reject.ready + button.dispose.ready, .input-group-btn > button.reject.sending + button.dispose.ready, .input-group-btn >
 a.reject.sending + button.dispose.ready, .input-group-btn > button.default.ready + button.dispose.ready, .input-group-btn >
 a.default.ready + button.dispose.ready, .input-group-btn > button.default.sending + button.dispose.ready, .input-group-btn >
-a.default.sending + button.dispose.ready, .input-group-btn > .show-question.reply-to-reply-button + button.dispose.ready, .input-group-btn > .respond.sorry + button.dispose.ready, .input-group-btn > .respond.wait + button.dispose.ready, .input-group-btn > .respond.opener + button.dispose.ready, .input-group-btn > .btn +
+a.default.sending + button.dispose.ready, .input-group-btn > .respond.sorry + button.dispose.ready, .input-group-btn > .respond.wait + button.dispose.ready, .input-group-btn > .respond.opener + button.dispose.ready, .input-group-btn > .btn +
 a.block.ready, .input-group-btn > button.link.ready +
 a.block.ready, .input-group-btn >
 a.link.ready +
@@ -6585,7 +6493,6 @@ a.default.ready +
 a.block.ready, .input-group-btn > button.default.sending +
 a.block.ready, .input-group-btn >
 a.default.sending +
-a.block.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.block.ready, .input-group-btn > .respond.sorry +
 a.block.ready, .input-group-btn > .respond.wait +
 a.block.ready, .input-group-btn > .respond.opener +
@@ -6629,7 +6536,6 @@ a.default.ready +
 a.dispose.ready, .input-group-btn > button.default.sending +
 a.dispose.ready, .input-group-btn >
 a.default.sending +
-a.dispose.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.dispose.ready, .input-group-btn > .respond.sorry +
 a.dispose.ready, .input-group-btn > .respond.wait +
 a.dispose.ready, .input-group-btn > .respond.opener +
@@ -6646,7 +6552,7 @@ a.dispose.sending + button.block.sending, .input-group-btn > button.reject.ready
 a.reject.ready + button.block.sending, .input-group-btn > button.reject.sending + button.block.sending, .input-group-btn >
 a.reject.sending + button.block.sending, .input-group-btn > button.default.ready + button.block.sending, .input-group-btn >
 a.default.ready + button.block.sending, .input-group-btn > button.default.sending + button.block.sending, .input-group-btn >
-a.default.sending + button.block.sending, .input-group-btn > .show-question.reply-to-reply-button + button.block.sending, .input-group-btn > .respond.sorry + button.block.sending, .input-group-btn > .respond.wait + button.block.sending, .input-group-btn > .respond.opener + button.block.sending, .input-group-btn > .btn + button.dispose.sending, .input-group-btn > button.link.ready + button.dispose.sending, .input-group-btn >
+a.default.sending + button.block.sending, .input-group-btn > .respond.sorry + button.block.sending, .input-group-btn > .respond.wait + button.block.sending, .input-group-btn > .respond.opener + button.block.sending, .input-group-btn > .btn + button.dispose.sending, .input-group-btn > button.link.ready + button.dispose.sending, .input-group-btn >
 a.link.ready + button.dispose.sending, .input-group-btn > button.link.sending + button.dispose.sending, .input-group-btn >
 a.link.sending + button.dispose.sending, .input-group-btn > button.submit.ready + button.dispose.sending, .input-group-btn >
 a.submit.ready + button.dispose.sending, .input-group-btn > button.submit.sending + button.dispose.sending, .input-group-btn >
@@ -6659,7 +6565,7 @@ a.dispose.sending + button.dispose.sending, .input-group-btn > button.reject.rea
 a.reject.ready + button.dispose.sending, .input-group-btn > button.reject.sending + button.dispose.sending, .input-group-btn >
 a.reject.sending + button.dispose.sending, .input-group-btn > button.default.ready + button.dispose.sending, .input-group-btn >
 a.default.ready + button.dispose.sending, .input-group-btn > button.default.sending + button.dispose.sending, .input-group-btn >
-a.default.sending + button.dispose.sending, .input-group-btn > .show-question.reply-to-reply-button + button.dispose.sending, .input-group-btn > .respond.sorry + button.dispose.sending, .input-group-btn > .respond.wait + button.dispose.sending, .input-group-btn > .respond.opener + button.dispose.sending, .input-group-btn > .btn +
+a.default.sending + button.dispose.sending, .input-group-btn > .respond.sorry + button.dispose.sending, .input-group-btn > .respond.wait + button.dispose.sending, .input-group-btn > .respond.opener + button.dispose.sending, .input-group-btn > .btn +
 a.block.sending, .input-group-btn > button.link.ready +
 a.block.sending, .input-group-btn >
 a.link.ready +
@@ -6699,7 +6605,6 @@ a.default.ready +
 a.block.sending, .input-group-btn > button.default.sending +
 a.block.sending, .input-group-btn >
 a.default.sending +
-a.block.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.block.sending, .input-group-btn > .respond.sorry +
 a.block.sending, .input-group-btn > .respond.wait +
 a.block.sending, .input-group-btn > .respond.opener +
@@ -6743,7 +6648,6 @@ a.default.ready +
 a.dispose.sending, .input-group-btn > button.default.sending +
 a.dispose.sending, .input-group-btn >
 a.default.sending +
-a.dispose.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.dispose.sending, .input-group-btn > .respond.sorry +
 a.dispose.sending, .input-group-btn > .respond.wait +
 a.dispose.sending, .input-group-btn > .respond.opener +
@@ -6760,7 +6664,7 @@ a.dispose.sending + button.reject.ready, .input-group-btn > button.reject.ready 
 a.reject.ready + button.reject.ready, .input-group-btn > button.reject.sending + button.reject.ready, .input-group-btn >
 a.reject.sending + button.reject.ready, .input-group-btn > button.default.ready + button.reject.ready, .input-group-btn >
 a.default.ready + button.reject.ready, .input-group-btn > button.default.sending + button.reject.ready, .input-group-btn >
-a.default.sending + button.reject.ready, .input-group-btn > .show-question.reply-to-reply-button + button.reject.ready, .input-group-btn > .respond.sorry + button.reject.ready, .input-group-btn > .respond.wait + button.reject.ready, .input-group-btn > .respond.opener + button.reject.ready, .input-group-btn > .btn +
+a.default.sending + button.reject.ready, .input-group-btn > .respond.sorry + button.reject.ready, .input-group-btn > .respond.wait + button.reject.ready, .input-group-btn > .respond.opener + button.reject.ready, .input-group-btn > .btn +
 a.reject.ready, .input-group-btn > button.link.ready +
 a.reject.ready, .input-group-btn >
 a.link.ready +
@@ -6800,7 +6704,6 @@ a.default.ready +
 a.reject.ready, .input-group-btn > button.default.sending +
 a.reject.ready, .input-group-btn >
 a.default.sending +
-a.reject.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.reject.ready, .input-group-btn > .respond.sorry +
 a.reject.ready, .input-group-btn > .respond.wait +
 a.reject.ready, .input-group-btn > .respond.opener +
@@ -6817,7 +6720,7 @@ a.dispose.sending + button.reject.sending, .input-group-btn > button.reject.read
 a.reject.ready + button.reject.sending, .input-group-btn > button.reject.sending + button.reject.sending, .input-group-btn >
 a.reject.sending + button.reject.sending, .input-group-btn > button.default.ready + button.reject.sending, .input-group-btn >
 a.default.ready + button.reject.sending, .input-group-btn > button.default.sending + button.reject.sending, .input-group-btn >
-a.default.sending + button.reject.sending, .input-group-btn > .show-question.reply-to-reply-button + button.reject.sending, .input-group-btn > .respond.sorry + button.reject.sending, .input-group-btn > .respond.wait + button.reject.sending, .input-group-btn > .respond.opener + button.reject.sending, .input-group-btn > .btn +
+a.default.sending + button.reject.sending, .input-group-btn > .respond.sorry + button.reject.sending, .input-group-btn > .respond.wait + button.reject.sending, .input-group-btn > .respond.opener + button.reject.sending, .input-group-btn > .btn +
 a.reject.sending, .input-group-btn > button.link.ready +
 a.reject.sending, .input-group-btn >
 a.link.ready +
@@ -6857,7 +6760,6 @@ a.default.ready +
 a.reject.sending, .input-group-btn > button.default.sending +
 a.reject.sending, .input-group-btn >
 a.default.sending +
-a.reject.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.reject.sending, .input-group-btn > .respond.sorry +
 a.reject.sending, .input-group-btn > .respond.wait +
 a.reject.sending, .input-group-btn > .respond.opener +
@@ -6874,7 +6776,7 @@ a.dispose.sending + button.default.ready, .input-group-btn > button.reject.ready
 a.reject.ready + button.default.ready, .input-group-btn > button.reject.sending + button.default.ready, .input-group-btn >
 a.reject.sending + button.default.ready, .input-group-btn > button.default.ready + button.default.ready, .input-group-btn >
 a.default.ready + button.default.ready, .input-group-btn > button.default.sending + button.default.ready, .input-group-btn >
-a.default.sending + button.default.ready, .input-group-btn > .show-question.reply-to-reply-button + button.default.ready, .input-group-btn > .respond.sorry + button.default.ready, .input-group-btn > .respond.wait + button.default.ready, .input-group-btn > .respond.opener + button.default.ready, .input-group-btn > .btn +
+a.default.sending + button.default.ready, .input-group-btn > .respond.sorry + button.default.ready, .input-group-btn > .respond.wait + button.default.ready, .input-group-btn > .respond.opener + button.default.ready, .input-group-btn > .btn +
 a.default.ready, .input-group-btn > button.link.ready +
 a.default.ready, .input-group-btn >
 a.link.ready +
@@ -6914,7 +6816,6 @@ a.default.ready +
 a.default.ready, .input-group-btn > button.default.sending +
 a.default.ready, .input-group-btn >
 a.default.sending +
-a.default.ready, .input-group-btn > .show-question.reply-to-reply-button +
 a.default.ready, .input-group-btn > .respond.sorry +
 a.default.ready, .input-group-btn > .respond.wait +
 a.default.ready, .input-group-btn > .respond.opener +
@@ -6931,7 +6832,7 @@ a.dispose.sending + button.default.sending, .input-group-btn > button.reject.rea
 a.reject.ready + button.default.sending, .input-group-btn > button.reject.sending + button.default.sending, .input-group-btn >
 a.reject.sending + button.default.sending, .input-group-btn > button.default.ready + button.default.sending, .input-group-btn >
 a.default.ready + button.default.sending, .input-group-btn > button.default.sending + button.default.sending, .input-group-btn >
-a.default.sending + button.default.sending, .input-group-btn > .show-question.reply-to-reply-button + button.default.sending, .input-group-btn > .respond.sorry + button.default.sending, .input-group-btn > .respond.wait + button.default.sending, .input-group-btn > .respond.opener + button.default.sending, .input-group-btn > .btn +
+a.default.sending + button.default.sending, .input-group-btn > .respond.sorry + button.default.sending, .input-group-btn > .respond.wait + button.default.sending, .input-group-btn > .respond.opener + button.default.sending, .input-group-btn > .btn +
 a.default.sending, .input-group-btn > button.link.ready +
 a.default.sending, .input-group-btn >
 a.link.ready +
@@ -6971,24 +6872,10 @@ a.default.ready +
 a.default.sending, .input-group-btn > button.default.sending +
 a.default.sending, .input-group-btn >
 a.default.sending +
-a.default.sending, .input-group-btn > .show-question.reply-to-reply-button +
 a.default.sending, .input-group-btn > .respond.sorry +
 a.default.sending, .input-group-btn > .respond.wait +
 a.default.sending, .input-group-btn > .respond.opener +
-a.default.sending, .input-group-btn > .btn + .show-question.reply-to-reply-button, .input-group-btn > button.link.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.link.ready + .show-question.reply-to-reply-button, .input-group-btn > button.link.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.link.sending + .show-question.reply-to-reply-button, .input-group-btn > button.submit.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.submit.ready + .show-question.reply-to-reply-button, .input-group-btn > button.submit.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.submit.sending + .show-question.reply-to-reply-button, .input-group-btn > button.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.sending + .show-question.reply-to-reply-button, .input-group-btn > button.block.ready + .show-question.reply-to-reply-button, .input-group-btn > button.dispose.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.block.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.dispose.ready + .show-question.reply-to-reply-button, .input-group-btn > button.block.sending + .show-question.reply-to-reply-button, .input-group-btn > button.dispose.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.block.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.dispose.sending + .show-question.reply-to-reply-button, .input-group-btn > button.reject.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.reject.ready + .show-question.reply-to-reply-button, .input-group-btn > button.reject.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.reject.sending + .show-question.reply-to-reply-button, .input-group-btn > button.default.ready + .show-question.reply-to-reply-button, .input-group-btn >
-a.default.ready + .show-question.reply-to-reply-button, .input-group-btn > button.default.sending + .show-question.reply-to-reply-button, .input-group-btn >
-a.default.sending + .show-question.reply-to-reply-button, .input-group-btn > .show-question.reply-to-reply-button + .show-question.reply-to-reply-button, .input-group-btn > .respond.sorry + .show-question.reply-to-reply-button, .input-group-btn > .respond.wait + .show-question.reply-to-reply-button, .input-group-btn > .respond.opener + .show-question.reply-to-reply-button, .input-group-btn > .btn + .respond.sorry, .input-group-btn > button.link.ready + .respond.sorry, .input-group-btn >
+a.default.sending, .input-group-btn > .btn + .respond.sorry, .input-group-btn > button.link.ready + .respond.sorry, .input-group-btn >
 a.link.ready + .respond.sorry, .input-group-btn > button.link.sending + .respond.sorry, .input-group-btn >
 a.link.sending + .respond.sorry, .input-group-btn > button.submit.ready + .respond.sorry, .input-group-btn >
 a.submit.ready + .respond.sorry, .input-group-btn > button.submit.sending + .respond.sorry, .input-group-btn >
@@ -7001,7 +6888,7 @@ a.dispose.sending + .respond.sorry, .input-group-btn > button.reject.ready + .re
 a.reject.ready + .respond.sorry, .input-group-btn > button.reject.sending + .respond.sorry, .input-group-btn >
 a.reject.sending + .respond.sorry, .input-group-btn > button.default.ready + .respond.sorry, .input-group-btn >
 a.default.ready + .respond.sorry, .input-group-btn > button.default.sending + .respond.sorry, .input-group-btn >
-a.default.sending + .respond.sorry, .input-group-btn > .show-question.reply-to-reply-button + .respond.sorry, .input-group-btn > .respond.sorry + .respond.sorry, .input-group-btn > .respond.wait + .respond.sorry, .input-group-btn > .respond.opener + .respond.sorry, .input-group-btn > .btn + .respond.wait, .input-group-btn > button.link.ready + .respond.wait, .input-group-btn >
+a.default.sending + .respond.sorry, .input-group-btn > .respond.sorry + .respond.sorry, .input-group-btn > .respond.wait + .respond.sorry, .input-group-btn > .respond.opener + .respond.sorry, .input-group-btn > .btn + .respond.wait, .input-group-btn > button.link.ready + .respond.wait, .input-group-btn >
 a.link.ready + .respond.wait, .input-group-btn > button.link.sending + .respond.wait, .input-group-btn >
 a.link.sending + .respond.wait, .input-group-btn > button.submit.ready + .respond.wait, .input-group-btn >
 a.submit.ready + .respond.wait, .input-group-btn > button.submit.sending + .respond.wait, .input-group-btn >
@@ -7014,7 +6901,7 @@ a.dispose.sending + .respond.wait, .input-group-btn > button.reject.ready + .res
 a.reject.ready + .respond.wait, .input-group-btn > button.reject.sending + .respond.wait, .input-group-btn >
 a.reject.sending + .respond.wait, .input-group-btn > button.default.ready + .respond.wait, .input-group-btn >
 a.default.ready + .respond.wait, .input-group-btn > button.default.sending + .respond.wait, .input-group-btn >
-a.default.sending + .respond.wait, .input-group-btn > .show-question.reply-to-reply-button + .respond.wait, .input-group-btn > .respond.sorry + .respond.wait, .input-group-btn > .respond.wait + .respond.wait, .input-group-btn > .respond.opener + .respond.wait, .input-group-btn > .btn + .respond.opener, .input-group-btn > button.link.ready + .respond.opener, .input-group-btn >
+a.default.sending + .respond.wait, .input-group-btn > .respond.sorry + .respond.wait, .input-group-btn > .respond.wait + .respond.wait, .input-group-btn > .respond.opener + .respond.wait, .input-group-btn > .btn + .respond.opener, .input-group-btn > button.link.ready + .respond.opener, .input-group-btn >
 a.link.ready + .respond.opener, .input-group-btn > button.link.sending + .respond.opener, .input-group-btn >
 a.link.sending + .respond.opener, .input-group-btn > button.submit.ready + .respond.opener, .input-group-btn >
 a.submit.ready + .respond.opener, .input-group-btn > button.submit.sending + .respond.opener, .input-group-btn >
@@ -7027,7 +6914,7 @@ a.dispose.sending + .respond.opener, .input-group-btn > button.reject.ready + .r
 a.reject.ready + .respond.opener, .input-group-btn > button.reject.sending + .respond.opener, .input-group-btn >
 a.reject.sending + .respond.opener, .input-group-btn > button.default.ready + .respond.opener, .input-group-btn >
 a.default.ready + .respond.opener, .input-group-btn > button.default.sending + .respond.opener, .input-group-btn >
-a.default.sending + .respond.opener, .input-group-btn > .show-question.reply-to-reply-button + .respond.opener, .input-group-btn > .respond.sorry + .respond.opener, .input-group-btn > .respond.wait + .respond.opener, .input-group-btn > .respond.opener + .respond.opener {
+a.default.sending + .respond.opener, .input-group-btn > .respond.sorry + .respond.opener, .input-group-btn > .respond.wait + .respond.opener, .input-group-btn > .respond.opener + .respond.opener {
   margin-left: -1px; }
 
 .input-group-btn > .btn:focus, .input-group-btn > button.link.ready:focus, .input-group-btn >
@@ -7037,21 +6924,21 @@ a.sending:focus, .input-group-btn > button.block.ready:focus, .input-group-btn >
 a.block.ready:focus, .input-group-btn >
 a.dispose.ready:focus, .input-group-btn > button.reject.ready:focus, .input-group-btn >
 a.reject.ready:focus, .input-group-btn > button.default.ready:focus, .input-group-btn >
-a.default.ready:focus, .input-group-btn > .show-question.reply-to-reply-button:focus, .input-group-btn > .respond.sorry:focus, .input-group-btn > .respond.wait:focus, .input-group-btn > .respond.opener:focus, .input-group-btn > .btn:active, .input-group-btn > button.link.ready:active, .input-group-btn >
+a.default.ready:focus, .input-group-btn > .respond.sorry:focus, .input-group-btn > .respond.wait:focus, .input-group-btn > .respond.opener:focus, .input-group-btn > .btn:active, .input-group-btn > button.link.ready:active, .input-group-btn >
 a.link.ready:active, .input-group-btn > button.submit.ready:active, .input-group-btn >
 a.submit.ready:active, .input-group-btn > button.sending:active, .input-group-btn >
 a.sending:active, .input-group-btn > button.block.ready:active, .input-group-btn > button.dispose.ready:active, .input-group-btn >
 a.block.ready:active, .input-group-btn >
 a.dispose.ready:active, .input-group-btn > button.reject.ready:active, .input-group-btn >
 a.reject.ready:active, .input-group-btn > button.default.ready:active, .input-group-btn >
-a.default.ready:active, .input-group-btn > .show-question.reply-to-reply-button:active, .input-group-btn > .respond.sorry:active, .input-group-btn > .respond.wait:active, .input-group-btn > .respond.opener:active, .input-group-btn > .btn:hover, .input-group-btn > button.link.ready:hover, .input-group-btn >
+a.default.ready:active, .input-group-btn > .respond.sorry:active, .input-group-btn > .respond.wait:active, .input-group-btn > .respond.opener:active, .input-group-btn > .btn:hover, .input-group-btn > button.link.ready:hover, .input-group-btn >
 a.link.ready:hover, .input-group-btn > button.submit.ready:hover, .input-group-btn >
 a.submit.ready:hover, .input-group-btn > button.sending:hover, .input-group-btn >
 a.sending:hover, .input-group-btn > button.block.ready:hover, .input-group-btn > button.dispose.ready:hover, .input-group-btn >
 a.block.ready:hover, .input-group-btn >
 a.dispose.ready:hover, .input-group-btn > button.reject.ready:hover, .input-group-btn >
 a.reject.ready:hover, .input-group-btn > button.default.ready:hover, .input-group-btn >
-a.default.ready:hover, .input-group-btn > .show-question.reply-to-reply-button:hover, .input-group-btn > .respond.sorry:hover, .input-group-btn > .respond.wait:hover, .input-group-btn > .respond.opener:hover {
+a.default.ready:hover, .input-group-btn > .respond.sorry:hover, .input-group-btn > .respond.wait:hover, .input-group-btn > .respond.opener:hover {
   z-index: 3; }
 
 .input-group-btn:not(:last-child) > .btn, .input-group-btn:not(:last-child) > button.link.ready, .input-group-btn:not(:last-child) >
@@ -7061,7 +6948,7 @@ a.sending, .input-group-btn:not(:last-child) > button.block.ready, .input-group-
 a.block.ready, .input-group-btn:not(:last-child) >
 a.dispose.ready, .input-group-btn:not(:last-child) > button.reject.ready, .input-group-btn:not(:last-child) >
 a.reject.ready, .input-group-btn:not(:last-child) > button.default.ready, .input-group-btn:not(:last-child) >
-a.default.ready, .input-group-btn:not(:last-child) > .show-question.reply-to-reply-button, .input-group-btn:not(:last-child) > .respond.sorry, .input-group-btn:not(:last-child) > .respond.wait, .input-group-btn:not(:last-child) > .respond.opener,
+a.default.ready, .input-group-btn:not(:last-child) > .respond.sorry, .input-group-btn:not(:last-child) > .respond.wait, .input-group-btn:not(:last-child) > .respond.opener,
 .input-group-btn:not(:last-child) > .btn-group {
   margin-right: -1px; }
 
@@ -7072,7 +6959,7 @@ a.sending, .input-group-btn:not(:first-child) > button.block.ready, .input-group
 a.block.ready, .input-group-btn:not(:first-child) >
 a.dispose.ready, .input-group-btn:not(:first-child) > button.reject.ready, .input-group-btn:not(:first-child) >
 a.reject.ready, .input-group-btn:not(:first-child) > button.default.ready, .input-group-btn:not(:first-child) >
-a.default.ready, .input-group-btn:not(:first-child) > .show-question.reply-to-reply-button, .input-group-btn:not(:first-child) > .respond.sorry, .input-group-btn:not(:first-child) > .respond.wait, .input-group-btn:not(:first-child) > .respond.opener,
+a.default.ready, .input-group-btn:not(:first-child) > .respond.sorry, .input-group-btn:not(:first-child) > .respond.wait, .input-group-btn:not(:first-child) > .respond.opener,
 .input-group-btn:not(:first-child) > .btn-group {
   z-index: 2;
   margin-left: -1px; }
@@ -7084,21 +6971,21 @@ a.sending:focus, .input-group-btn:not(:first-child) > button.block.ready:focus, 
 a.block.ready:focus, .input-group-btn:not(:first-child) >
 a.dispose.ready:focus, .input-group-btn:not(:first-child) > button.reject.ready:focus, .input-group-btn:not(:first-child) >
 a.reject.ready:focus, .input-group-btn:not(:first-child) > button.default.ready:focus, .input-group-btn:not(:first-child) >
-a.default.ready:focus, .input-group-btn:not(:first-child) > .show-question.reply-to-reply-button:focus, .input-group-btn:not(:first-child) > .respond.sorry:focus, .input-group-btn:not(:first-child) > .respond.wait:focus, .input-group-btn:not(:first-child) > .respond.opener:focus, .input-group-btn:not(:first-child) > .btn:active, .input-group-btn:not(:first-child) > button.link.ready:active, .input-group-btn:not(:first-child) >
+a.default.ready:focus, .input-group-btn:not(:first-child) > .respond.sorry:focus, .input-group-btn:not(:first-child) > .respond.wait:focus, .input-group-btn:not(:first-child) > .respond.opener:focus, .input-group-btn:not(:first-child) > .btn:active, .input-group-btn:not(:first-child) > button.link.ready:active, .input-group-btn:not(:first-child) >
 a.link.ready:active, .input-group-btn:not(:first-child) > button.submit.ready:active, .input-group-btn:not(:first-child) >
 a.submit.ready:active, .input-group-btn:not(:first-child) > button.sending:active, .input-group-btn:not(:first-child) >
 a.sending:active, .input-group-btn:not(:first-child) > button.block.ready:active, .input-group-btn:not(:first-child) > button.dispose.ready:active, .input-group-btn:not(:first-child) >
 a.block.ready:active, .input-group-btn:not(:first-child) >
 a.dispose.ready:active, .input-group-btn:not(:first-child) > button.reject.ready:active, .input-group-btn:not(:first-child) >
 a.reject.ready:active, .input-group-btn:not(:first-child) > button.default.ready:active, .input-group-btn:not(:first-child) >
-a.default.ready:active, .input-group-btn:not(:first-child) > .show-question.reply-to-reply-button:active, .input-group-btn:not(:first-child) > .respond.sorry:active, .input-group-btn:not(:first-child) > .respond.wait:active, .input-group-btn:not(:first-child) > .respond.opener:active, .input-group-btn:not(:first-child) > .btn:hover, .input-group-btn:not(:first-child) > button.link.ready:hover, .input-group-btn:not(:first-child) >
+a.default.ready:active, .input-group-btn:not(:first-child) > .respond.sorry:active, .input-group-btn:not(:first-child) > .respond.wait:active, .input-group-btn:not(:first-child) > .respond.opener:active, .input-group-btn:not(:first-child) > .btn:hover, .input-group-btn:not(:first-child) > button.link.ready:hover, .input-group-btn:not(:first-child) >
 a.link.ready:hover, .input-group-btn:not(:first-child) > button.submit.ready:hover, .input-group-btn:not(:first-child) >
 a.submit.ready:hover, .input-group-btn:not(:first-child) > button.sending:hover, .input-group-btn:not(:first-child) >
 a.sending:hover, .input-group-btn:not(:first-child) > button.block.ready:hover, .input-group-btn:not(:first-child) > button.dispose.ready:hover, .input-group-btn:not(:first-child) >
 a.block.ready:hover, .input-group-btn:not(:first-child) >
 a.dispose.ready:hover, .input-group-btn:not(:first-child) > button.reject.ready:hover, .input-group-btn:not(:first-child) >
 a.reject.ready:hover, .input-group-btn:not(:first-child) > button.default.ready:hover, .input-group-btn:not(:first-child) >
-a.default.ready:hover, .input-group-btn:not(:first-child) > .show-question.reply-to-reply-button:hover, .input-group-btn:not(:first-child) > .respond.sorry:hover, .input-group-btn:not(:first-child) > .respond.wait:hover, .input-group-btn:not(:first-child) > .respond.opener:hover,
+a.default.ready:hover, .input-group-btn:not(:first-child) > .respond.sorry:hover, .input-group-btn:not(:first-child) > .respond.wait:hover, .input-group-btn:not(:first-child) > .respond.opener:hover,
 .input-group-btn:not(:first-child) > .btn-group:focus,
 .input-group-btn:not(:first-child) > .btn-group:active,
 .input-group-btn:not(:first-child) > .btn-group:hover {
@@ -8118,7 +8005,7 @@ a.sending .tag, button.block.ready .tag, button.dispose.ready .tag,
 a.block.ready .tag,
 a.dispose.ready .tag, button.reject.ready .tag,
 a.reject.ready .tag, button.default.ready .tag,
-a.default.ready .tag, .show-question.reply-to-reply-button .tag, .respond.sorry .tag, .respond.wait .tag, .respond.opener .tag {
+a.default.ready .tag, .respond.sorry .tag, .respond.wait .tag, .respond.opener .tag {
   position: relative;
   top: -1px; }
 
@@ -9208,7 +9095,7 @@ a.sending, .carousel-caption button.block.ready, .carousel-caption button.dispos
 a.block.ready, .carousel-caption
 a.dispose.ready, .carousel-caption button.reject.ready, .carousel-caption
 a.reject.ready, .carousel-caption button.default.ready, .carousel-caption
-a.default.ready, .carousel-caption .show-question.reply-to-reply-button, .carousel-caption .respond.sorry, .carousel-caption .respond.wait, .carousel-caption .respond.opener {
+a.default.ready, .carousel-caption .respond.sorry, .carousel-caption .respond.wait, .carousel-caption .respond.opener {
   text-shadow: none; }
 
 @media (min-width: 576px) {
@@ -9781,6 +9668,14 @@ body, h1, h2, h3, .no-response p,
 .hidden {
   display: none; }
 
+ul, ol {
+  margin: 0;
+  padding: 0; }
+
+button,
+a {
+  cursor: pointer; }
+
 .com.border-box-container {
   border: 1px solid #d8d8d8;
   border-radius: 4px;
@@ -9882,7 +9777,8 @@ body {
   padding: 20px 0 0 0; }
 
 .inner.body {
-  padding: 20px 0 0 0; }
+  padding: 20px 0 1px 0;
+  background: #fff; }
 
 .sub-header.wrapper {
   margin: -20px 0 20px 0;
@@ -10150,6 +10046,9 @@ body {
     padding: 0 20px 0 0;
     white-space: nowrap; }
 
+.show-question.body {
+  padding-bottom: 20px; }
+
 .show-question.author {
   margin: 0 0 10px 0;
   font-size: 12px; }
@@ -10179,9 +10078,6 @@ body {
 
 .show-question.responded-users, .show-question.not-yet-users {
   padding: 10px 20px 0; }
-  .show-question.responded-users li, .show-question.not-yet-users li {
-    margin: 0;
-    padding: 0; }
 
 .show-question.assigned-title {
   font-size: 18px; }
@@ -10196,7 +10092,8 @@ body {
   border: 1px solid #d8d8d8;
   border-radius: 4px;
   overflow: hidden;
-  padding: 0; }
+  padding: 0;
+  font-size: 13px; }
 
 .show-question.response-owner {
   font-size: 0.75rem;
@@ -10204,18 +10101,22 @@ body {
   border-width: 1px 0;
   margin: -1px 0 0 0;
   border-radius: 0; }
+  .show-question.response-owner span {
+    font-size: 1.5em; }
 
 .show-question.response-comment {
   padding: 20px; }
 
 .show-question.reply-to-reply-area {
-  padding: 10px 20px;
-  border-top: 1px dotted #d8d8d8;
+  padding: 0 20px 10px;
   overflow: hidden; }
   .show-question.reply-to-reply-area .preview-area {
     min-height: 302px !important; }
 
 .show-question.reply-to-reply-button {
+  background: none;
+  padding: 0;
+  border: 0;
   color: #0275d8; }
 
 .show-question.from-system {
@@ -10226,14 +10127,20 @@ body {
     margin-right: 5px; }
 
 .show-question.response {
-  list-style: none; }
+  list-style: none;
+  font-size: 13px; }
   .show-question.response .wrap {
     margin: 0 0 0 40px;
     border-left: 1px dotted #d8d8d8;
     background: #fff; }
+    .show-question.response .wrap .response-owner {
+      padding: 10px 20px;
+      font-size: 0.8em; }
     .show-question.response .wrap .reply-anchor {
       color: #0275d8;
       cursor: pointer; }
+    .show-question.response .wrap .response-comment {
+      padding: 10px 20px; }
   .show-question.response .permalink {
     color: #333; }
     .show-question.response .permalink time {
@@ -10298,7 +10205,8 @@ body {
   font-size: 18px; }
 
 .respond.response {
-  padding: 20px; }
+  padding: 20px;
+  font-size: 13px; }
 
 .respond.response-type-area .tabnav {
   padding-left: 20px;
@@ -10369,6 +10277,9 @@ body {
 .question-index.pager-area {
   margin: 0 0 20px 0;
   text-align: center; }
+
+.new-question.box-body {
+  margin-bottom: 20px; }
 
 .new-question.assigning-area {
   overflow: hidden; }
@@ -10492,3 +10403,12 @@ body {
 
 .reactor button.block {
   border-radius: 0 4px 4px 0; }
+
+.global-footer {
+  display: none; }
+  .global-footer.wrapper {
+    border-top: 1px solid #d8d8d8;
+    padding: 20px 0 0 0;
+    background: #f7f7f9; }
+  .global-footer.body {
+    text-align: center; }

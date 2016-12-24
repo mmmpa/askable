@@ -1,6 +1,6 @@
 = stylesheet_link_tag '/css/codemirror.css', media: 'all'
 div#new-question(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionPage=question_path(question_id: ":questionId"))
 
-script src='/js/new-question.js'
+= javascript_include_tag('new-question')
 javascript:
   NewQuestion.start(document.querySelector('#new-question'));

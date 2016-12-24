@@ -1,6 +1,6 @@
 div#userEditor(data-user=@user_info.to_json)
 
 
-script src='/js/user-editor.js'
+= javascript_include_tag('user-editor.js')
 javascript:
   UserEditor.start(document.querySelector('#userEditor'))
