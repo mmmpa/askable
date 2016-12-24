@@ -4,7 +4,7 @@
   "description": "note",
   "main": "index.js",
   "scripts": {
-    "watch": "webpack --progress --colors --watch --config ./webpack/dev.config.js",
+    "watch": "webpack-dev-server --progress --progress --colors --config ./webpack/dev.config.js --port 5001",
     "watch-sass": "node-sass --watch ./sass/common.sass ../../public/css/common.css",
     "watch-server": "webpack-dev-server --progress --colors --inline --hot --content-base http://localhost:5000 --config ./webpack/dev.config.js --port 5001",
     "pro-pack": "webpack --config ./webpack/pro.config.js",
