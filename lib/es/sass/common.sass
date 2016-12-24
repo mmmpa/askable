@@ -29,8 +29,13 @@ body, h1, h2, h3, h4, h5, h6
 .hidden
   display: none
 
+ul, ol
+  margin: 0
+  padding: 0
+
 button,
 a
+  cursor: pointer
   &.link
     &.ready
       @extend .btn, .btn-primary
@@ -162,6 +167,7 @@ a
 body
   margin: 0
   padding: 0
+  background: $gray-lightest
 
 .outer
   &.body
@@ -170,7 +176,7 @@ body
 .inner
   &.body
     padding: 20px 0 0 0
-
+    background: #fff
 .sub-header
   &.wrapper
     margin: -20px 0 20px 0
@@ -432,6 +438,7 @@ body
 .show-question
   &.body
     @extend %normal-body
+    padding-bottom: 20px
   &.header
     @extend %boxed-group-title
   &.author
@@ -471,9 +478,6 @@ body
     // @extend .fa-thumbs-o-up
     .fa.fa-waited
     // @extend .fa-clock-o
-    li
-      margin: 0
-      padding: 0
   &.assigned-title
     font-size: $size-title
   &.assigned-user
@@ -486,6 +490,7 @@ body
     border-radius: $radius
     overflow: hidden
     padding: 0
+    font-size: 13px
   &.response-owner
     @extend %boxed-group-title
     font-size: 0.75rem
@@ -494,17 +499,19 @@ body
     margin: -1px 0 0 0
     border-radius: 0
     span
-      @extend .h5
+      font-size: 1.5em
   &.response-comment
     padding: 20px
   &.reply-to-reply-area
-    padding: 10px 20px
-    border-top: 1px dotted $border-color
+    padding: 0 20px 10px
     overflow: hidden
     .preview-area
       min-height: 302px !important
   &.reply-to-reply-button
-    @extend .btn, .float-sm-right, .btn-secondary
+    @extend .float-sm-right
+    background: none
+    padding: 0
+    border: 0
     color: $brand-blue
   &.from-system
     // @extend .flash, .flash-warn
@@ -515,21 +522,25 @@ body
       margin-right: 5px
   &.response
     list-style: none
+    font-size: 13px
     .wrap
       margin: 0 0 0 40px
       border-left: 1px dotted $border-color
       background: #fff
       .response-owner
-      //background: none
+        padding: 10px 20px
+        font-size: 0.8em
       .reply-anchor
         color: $brand-blue
         cursor: pointer
+      .response-comment
+        padding: 10px 20px
     .permalink
       @extend .float-sm-right
       color: #333
       time
         font-weight: normal
-
+  &.foot-respond-area
 .finish
   &.body
     margin: 10px -20px -10px
@@ -597,6 +608,7 @@ body
   &.response
     @extend %boxed-group-inner
     padding: 20px
+    font-size: 13px
   &.response-type-area
     .tabnav
       padding-left: 20px
@@ -680,6 +692,7 @@ body
     @extend %normal-body
   &.box-body
     @extend .row
+    margin-bottom: 20px
   &.editor-area
     @extend .col-xs-8
   &.assigning-area
@@ -829,3 +842,12 @@ body
     margin: 0 -1px
   button.block
     border-radius: 0 $radius $radius 0
+
+.global-footer
+  &.wrapper
+    border-top: 1px solid $border-color
+    padding: 20px 0 0 0
+    background: $gray-lightest
+  &.body
+    @extend %normal-body
+    text-align: center
