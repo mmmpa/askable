@@ -3,3 +3,4 @@
 !/log/.keep
 /tmp
 out/*.js
+dist
