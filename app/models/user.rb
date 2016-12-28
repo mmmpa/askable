@@ -59,6 +59,7 @@ class User < ActiveRecord::Base
     self.state = self.class.states[:deleted]
     self.name = '削除済みユーザー'
     self.email = "deleted #{SecureRandom.uuid}"
+    self.login = SecureRandom.uuid
     save(validate: false)
   end
 

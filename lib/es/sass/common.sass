@@ -81,7 +81,7 @@ a
     border: 1px solid $border-color
     border-width: 1px 0
   &.form-area
-    padding: 20px
+    padding: 20px 20px 0
   &.input-section
     margin: 0 0 20px
     .input-label
@@ -94,11 +94,10 @@ a
       border-color: $brand-red
 
   &.submit-section
-    margin: 0
+    margin: 0 0 20px 0
     text-align: right
   &.message-area
-    padding: 0 20px 20px 20px
-    margin: 0
+    margin: 0 0 20px 0
   &.success-message
     color: $brand-green
     font-weight: bold
@@ -117,6 +116,8 @@ a
   display: inline-block
   padding: 0.5rem 1rem
   vertical-align: bottom
+  background: none
+  border: 0
   color: #333
   margin-bottom: -1px
   &.selected
@@ -616,7 +617,7 @@ body
   &.sorry
     @extend .btn, .btn-sm, .float-sm-right, .btn-danger
   &.wait
-    @extend .btn, .btn-sm, .float-sm-right
+    @extend .btn, .btn-sm, .float-sm-right, .btn-secondary
     margin-right: 5px
   &.opener
     margin: 20px 0 0 0

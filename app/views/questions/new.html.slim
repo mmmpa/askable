@@ -1,4 +1,4 @@
-= stylesheet_link_tag '/css/codemirror.css', media: 'all'
+= stylesheet_link_tag 'codemirror.css', media: 'all'
 div#new-question(data-user=@user.to_json data-group=@group.to_json data-groupId=@group.id data-questionPage=question_path(question_id: ":questionId"))
 
 = javascript_include_tag('new-question')

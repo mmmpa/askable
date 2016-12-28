@@ -2696,7 +2696,7 @@ a.dispose.sending, button.reject.ready,
 a.reject.ready, button.reject.sending,
 a.reject.sending, button.default.ready,
 a.default.ready, button.default.sending,
-a.default.sending, .respond.opener {
+a.default.sending, .respond.wait, .respond.opener {
   color: #373a3c;
   background-color: #fff;
   border-color: #ccc; }
@@ -2704,7 +2704,7 @@ a.default.sending, .respond.opener {
 .btn-secondary:hover, button.sending:hover,
 a.sending:hover, button.reject.ready:hover,
 a.reject.ready:hover, button.default.ready:hover,
-a.default.ready:hover, .respond.opener:hover {
+a.default.ready:hover, .respond.wait:hover, .respond.opener:hover {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2712,10 +2712,10 @@ a.default.ready:hover, .respond.opener:hover {
 .btn-secondary:focus, button.sending:focus,
 a.sending:focus, button.reject.ready:focus,
 a.reject.ready:focus, button.default.ready:focus,
-a.default.ready:focus, .respond.opener:focus, .btn-secondary.focus, button.focus.sending,
+a.default.ready:focus, .respond.wait:focus, .respond.opener:focus, .btn-secondary.focus, button.focus.sending,
 a.focus.sending, button.focus.reject.ready,
 a.focus.reject.ready, button.focus.default.ready,
-a.focus.default.ready, .focus.respond.opener {
+a.focus.default.ready, .focus.respond.wait, .focus.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
   border-color: #adadad; }
@@ -2723,10 +2723,10 @@ a.focus.default.ready, .focus.respond.opener {
 .btn-secondary:active, button.sending:active,
 a.sending:active, button.reject.ready:active,
 a.reject.ready:active, button.default.ready:active,
-a.default.ready:active, .respond.opener:active, .btn-secondary.active, button.active.sending,
+a.default.ready:active, .respond.wait:active, .respond.opener:active, .btn-secondary.active, button.active.sending,
 a.active.sending, button.active.reject.ready,
 a.active.reject.ready, button.active.default.ready,
-a.active.default.ready, .active.respond.opener,
+a.active.default.ready, .active.respond.wait, .active.respond.opener,
 .open > .btn-secondary.dropdown-toggle,
 .open > button.dropdown-toggle.sending,
 .open >
@@ -2737,6 +2737,7 @@ a.dropdown-toggle.reject.ready,
 .open > button.dropdown-toggle.default.ready,
 .open >
 a.dropdown-toggle.default.ready,
+.open > .dropdown-toggle.respond.wait,
 .open > .dropdown-toggle.respond.opener {
   color: #373a3c;
   background-color: #e6e6e6;
@@ -2746,22 +2747,22 @@ a.dropdown-toggle.default.ready,
 .btn-secondary:active:hover, button.sending:active:hover,
 a.sending:active:hover, button.reject.ready:active:hover,
 a.reject.ready:active:hover, button.default.ready:active:hover,
-a.default.ready:active:hover, .respond.opener:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
+a.default.ready:active:hover, .respond.wait:active:hover, .respond.opener:active:hover, .btn-secondary:active:focus, button.sending:active:focus,
 a.sending:active:focus, button.reject.ready:active:focus,
 a.reject.ready:active:focus, button.default.ready:active:focus,
-a.default.ready:active:focus, .respond.opener:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
+a.default.ready:active:focus, .respond.wait:active:focus, .respond.opener:active:focus, .btn-secondary:active.focus, button.sending:active.focus,
 a.sending:active.focus, button.reject.ready:active.focus,
 a.reject.ready:active.focus, button.default.ready:active.focus,
-a.default.ready:active.focus, .respond.opener:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
+a.default.ready:active.focus, .respond.wait:active.focus, .respond.opener:active.focus, .btn-secondary.active:hover, button.active.sending:hover,
 a.active.sending:hover, button.active.reject.ready:hover,
 a.active.reject.ready:hover, button.active.default.ready:hover,
-a.active.default.ready:hover, .active.respond.opener:hover, .btn-secondary.active:focus, button.active.sending:focus,
+a.active.default.ready:hover, .active.respond.wait:hover, .active.respond.opener:hover, .btn-secondary.active:focus, button.active.sending:focus,
 a.active.sending:focus, button.active.reject.ready:focus,
 a.active.reject.ready:focus, button.active.default.ready:focus,
-a.active.default.ready:focus, .active.respond.opener:focus, .btn-secondary.active.focus, button.active.focus.sending,
+a.active.default.ready:focus, .active.respond.wait:focus, .active.respond.opener:focus, .btn-secondary.active.focus, button.active.focus.sending,
 a.active.focus.sending, button.active.focus.reject.ready,
 a.active.focus.reject.ready, button.active.focus.default.ready,
-a.active.focus.default.ready, .active.focus.respond.opener,
+a.active.focus.default.ready, .active.focus.respond.wait, .active.focus.respond.opener,
 .open > .btn-secondary.dropdown-toggle:hover,
 .open > button.dropdown-toggle.sending:hover,
 .open >
@@ -2772,6 +2773,7 @@ a.dropdown-toggle.reject.ready:hover,
 .open > button.dropdown-toggle.default.ready:hover,
 .open >
 a.dropdown-toggle.default.ready:hover,
+.open > .dropdown-toggle.respond.wait:hover,
 .open > .dropdown-toggle.respond.opener:hover,
 .open > .btn-secondary.dropdown-toggle:focus,
 .open > button.dropdown-toggle.sending:focus,
@@ -2783,6 +2785,7 @@ a.dropdown-toggle.reject.ready:focus,
 .open > button.dropdown-toggle.default.ready:focus,
 .open >
 a.dropdown-toggle.default.ready:focus,
+.open > .dropdown-toggle.respond.wait:focus,
 .open > .dropdown-toggle.respond.opener:focus,
 .open > .btn-secondary.dropdown-toggle.focus,
 .open > button.dropdown-toggle.focus.sending,
@@ -2794,6 +2797,7 @@ a.dropdown-toggle.focus.reject.ready,
 .open > button.dropdown-toggle.focus.default.ready,
 .open >
 a.dropdown-toggle.focus.default.ready,
+.open > .dropdown-toggle.focus.respond.wait,
 .open > .dropdown-toggle.focus.respond.opener {
   color: #373a3c;
   background-color: #d4d4d4;
@@ -2802,26 +2806,26 @@ a.dropdown-toggle.focus.default.ready,
 .btn-secondary.disabled:focus, button.disabled.sending:focus,
 a.disabled.sending:focus, button.disabled.reject.ready:focus,
 a.disabled.reject.ready:focus, button.disabled.default.ready:focus,
-a.disabled.default.ready:focus, .disabled.respond.opener:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
+a.disabled.default.ready:focus, .disabled.respond.wait:focus, .disabled.respond.opener:focus, .btn-secondary.disabled.focus, button.disabled.focus.sending,
 a.disabled.focus.sending, button.disabled.focus.reject.ready,
 a.disabled.focus.reject.ready, button.disabled.focus.default.ready,
-a.disabled.focus.default.ready, .disabled.focus.respond.opener, .btn-secondary:disabled:focus, button.sending:disabled:focus,
+a.disabled.focus.default.ready, .disabled.focus.respond.wait, .disabled.focus.respond.opener, .btn-secondary:disabled:focus, button.sending:disabled:focus,
 a.sending:disabled:focus, button.reject.ready:disabled:focus,
 a.reject.ready:disabled:focus, button.default.ready:disabled:focus,
-a.default.ready:disabled:focus, .respond.opener:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
+a.default.ready:disabled:focus, .respond.wait:disabled:focus, .respond.opener:disabled:focus, .btn-secondary:disabled.focus, button.sending:disabled.focus,
 a.sending:disabled.focus, button.reject.ready:disabled.focus,
 a.reject.ready:disabled.focus, button.default.ready:disabled.focus,
-a.default.ready:disabled.focus, .respond.opener:disabled.focus {
+a.default.ready:disabled.focus, .respond.wait:disabled.focus, .respond.opener:disabled.focus {
   background-color: #fff;
   border-color: #ccc; }
 
 .btn-secondary.disabled:hover, button.disabled.sending:hover,
 a.disabled.sending:hover, button.disabled.reject.ready:hover,
 a.disabled.reject.ready:hover, button.disabled.default.ready:hover,
-a.disabled.default.ready:hover, .disabled.respond.opener:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
+a.disabled.default.ready:hover, .disabled.respond.wait:hover, .disabled.respond.opener:hover, .btn-secondary:disabled:hover, button.sending:disabled:hover,
 a.sending:disabled:hover, button.reject.ready:disabled:hover,
 a.reject.ready:disabled:hover, button.default.ready:disabled:hover,
-a.default.ready:disabled:hover, .respond.opener:disabled:hover {
+a.default.ready:disabled:hover, .respond.wait:disabled:hover, .respond.opener:disabled:hover {
   background-color: #fff;
   border-color: #ccc; }
 
@@ -9693,7 +9697,7 @@ a {
   border-width: 1px 0; }
 
 .com.form-area {
-  padding: 20px; }
+  padding: 20px 20px 0; }
 
 .com.input-section {
   margin: 0 0 20px; }
@@ -9704,12 +9708,11 @@ a {
     border-color: #d9534f; }
 
 .com.submit-section {
-  margin: 0;
+  margin: 0 0 20px 0;
   text-align: right; }
 
 .com.message-area {
-  padding: 0 20px 20px 20px;
-  margin: 0; }
+  margin: 0 0 20px 0; }
 
 .com.success-message {
   color: #5cb85c;
@@ -9731,6 +9734,8 @@ a {
   display: inline-block;
   padding: 0.5rem 1rem;
   vertical-align: bottom;
+  background: none;
+  border: 0;
   color: #333;
   margin-bottom: -1px; }
   .tabnav-tab.selected {
