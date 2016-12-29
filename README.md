@@ -4,10 +4,16 @@
 [![Code Climate](https://codeclimate.com/github/mmmpa/askable/badges/gpa.svg)](https://codeclimate.com/github/mmmpa/askable)
 [![Code Climate issues](https://codeclimate.com/github/mmmpa/askable/badges/issue_count.svg)](https://codeclimate.com/github/mmmpa/askable)
 
-# WIP
+# Let me know
 
-TypeScript -> ES2015
+"Let me know" is a groupware. 
 
-# Askable
+This make it easy that one asks anything to others by to make it easy that others answers anything.
 
-Askableは「回答のしやすさ」を以って「質問のしやすさ」を志向したグループウェアです。
+# WIP !
+
+## To do
+
+- Implement user suggestion on UI to invite one to a group UI.
+- Decrease required information on registration.
+
